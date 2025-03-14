@@ -1,11 +1,13 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.sungil.kakao"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 31
@@ -31,7 +33,9 @@ android {
         jvmTarget = "1.8"
     }
 }
-
+kapt {
+    correctErrorTypes = true
+}
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -42,4 +46,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     //KAKAO
     implementation(libs.kakao.common)
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

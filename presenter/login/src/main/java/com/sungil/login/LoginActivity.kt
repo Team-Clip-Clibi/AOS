@@ -1,8 +1,11 @@
 package com.sungil.login
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sungil.domain.model.Router
 import com.sungil.login.ui.LoginScreen
@@ -15,6 +18,7 @@ class LoginActivity : ComponentActivity() {
 
     @Inject
     lateinit var router: Router
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -24,6 +28,16 @@ class LoginActivity : ComponentActivity() {
                 }
             )
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(javaClass.name.toString() , "The view is Pause")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(javaClass.name.toString() , "The view is resume")
     }
 
 }

@@ -1,10 +1,20 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
-
+val properties = Properties()
+val localPropertiesFile = project.rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { inputStream ->
+        properties.load(inputStream)
+    }
+}
 android {
-    namespace = "com.sungil.domain"
+    namespace = "com.sungil.database"
     compileSdk = 35
 
     defaultConfig {
@@ -12,6 +22,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        val sharedPreKey: String = properties.getProperty("shredKey", "")
+        buildConfigField("String", "SHARED_KEY", sharedPreKey)
     }
 
     buildTypes {
@@ -30,8 +42,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
-
+kapt {
+    correctErrorTypes = true
+}
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -40,4 +57,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

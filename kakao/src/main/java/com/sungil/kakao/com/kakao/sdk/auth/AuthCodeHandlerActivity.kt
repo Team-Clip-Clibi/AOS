@@ -7,6 +7,7 @@ import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 
 class AuthCodeHandlerActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startKakaoLogin()
@@ -14,18 +15,11 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
 
     private fun startKakaoLogin() {
         UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
-            if (error != null) {
-                Log.e(javaClass.name.toString(), "로그인 실패", error)
-            } else if (token != null) {
-                Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")
-                getKaKaoData()
-
+            if (error != null || token == null) {
+                return@loginWithKakaoTalk
             }
+            Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")
         }
     }
-    private fun getKaKaoData(){
-        UserApiClient.instance.me { user, error ->
-            Log.e(javaClass.name.toString(), "user : ${user?.kakaoAccount?.email}")
-        }
-    }
+
 }
