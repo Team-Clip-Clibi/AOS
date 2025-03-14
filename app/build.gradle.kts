@@ -96,4 +96,5 @@ dependencies {
     implementation(project(":presenter:login"))
     implementation(project(":kakao"))
     implementation(project(":domain"))
+    implementation(project(":database"))
 }

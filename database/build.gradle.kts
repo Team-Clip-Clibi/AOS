@@ -23,7 +23,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         val sharedPreKey: String = properties.getProperty("shredKey", "")
+        val sharedTokenKey: String = properties.getProperty("tokenKey", "")
         buildConfigField("String", "SHARED_KEY", sharedPreKey)
+        buildConfigField("String", "TOKEN_KEY", sharedTokenKey)
     }
 
     buildTypes {
@@ -60,4 +62,6 @@ dependencies {
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    //gson
+    implementation(libs.google.gson)
 }
