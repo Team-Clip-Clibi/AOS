@@ -10,11 +10,13 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/database" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/kakao" />
             <option value="$PROJECT_DIR$/presenter" />
             <option value="$PROJECT_DIR$/presenter/login" />
+            <option value="$PROJECT_DIR$/presenter/signup" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
