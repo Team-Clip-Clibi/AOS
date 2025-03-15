@@ -49,4 +49,8 @@ dependencies {
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    //project
+    implementation(project(":domain"))
+    //viewModel
+    implementation(libs.lifecycle.viewModel)
 }

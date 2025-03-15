@@ -4,8 +4,8 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
-class GetToken @Inject constructor(private val repo: DatabaseRepository) :
-    UseCase<GetToken.Param, GetToken.Result> {
+class SaveToken @Inject constructor(private val repo: DatabaseRepository) :
+    UseCase<SaveToken.Param, SaveToken.Result> {
     data class Param(
         val token: String,
         val refreshToken: String,

@@ -14,6 +14,7 @@ kakao-sdk = "2.20.6"
 hilt = "2.51.1"
 composeMaterial3 = "1.0.0-alpha33"
 gson = "2.8.8"
+lifecycle = "2.8.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,7 +38,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 kakao-common = {group = "com.kakao.sdk" , name  = "v2-all" , version.ref = "kakao-sdk"}
 google-gson = {group = "com.google.code.gson" , name = "gson" , version.ref ="gson"}
-
+lifecycle-viewModel = {group = "androidx.lifecycle" , name = "lifecycle-viewmodel-ktx" , version.ref = "lifecycle"}
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
