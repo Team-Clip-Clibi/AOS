@@ -12,11 +12,11 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
     private val preference =
         context.getSharedPreferences(BuildConfig.SHARED_KEY, Context.MODE_PRIVATE)
     private val gson = Gson()
-    override suspend fun saveToken(key: String, tokeData: TokenData): Boolean {
+    override suspend fun saveToken(tokeData: TokenData): Boolean {
         return try{
             val editor = preference.edit()
             val json = gson.toJson(tokeData)
-            editor.putString(key , json)
+            editor.putString(BuildConfig.TOKEN_KEY , json)
             editor.apply()
             return true
         }catch (e : Exception){
