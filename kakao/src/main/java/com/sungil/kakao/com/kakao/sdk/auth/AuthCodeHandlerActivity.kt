@@ -2,11 +2,15 @@ package com.sungil.kakao.com.kakao.sdk.auth
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AuthCodeHandlerActivity : AppCompatActivity() {
+    private val viewModel: SMSViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +23,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
                 return@loginWithKakaoTalk
             }
             Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")
+            viewModel.saveToken(token.accessToken, token.refreshToken)
         }
     }
 
