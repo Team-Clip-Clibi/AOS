@@ -98,4 +98,5 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":database"))
     implementation(project(":data"))
+    implementation(project(":presenter:signup"))
 }
