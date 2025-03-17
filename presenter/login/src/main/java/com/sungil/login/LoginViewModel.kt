@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(private val getToken: GetToken) : ViewM
                 }
 
                 is GetToken.Result.Fail -> {
-                    _actionFlow.emit(Action.Error("The token is null"))
+                    _actionFlow.emit(Action.Error("The kakao id is null"))
                 }
             }
         }

@@ -25,7 +25,7 @@ class LoginActivity : ComponentActivity() {
         setContent {
             LoginScreen(
                 kakaoLogin = {
-                    router.navigationToSMS("KAKAO")
+                    viewModel.getToken()
                 }
             )
         }
@@ -33,30 +33,26 @@ class LoginActivity : ComponentActivity() {
         addListener()
     }
 
-    private fun addListener(){
-        CoroutineScope(Dispatchers.Main).launch{
-            viewModel.actionFlow.collect{
-                when(it){
-                    is LoginViewModel.Action.GetSuccess ->{
-                        router.navigationToSMS("SignUp")
+    private fun addListener() {
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.actionFlow.collect {
+                when (it) {
+                    is LoginViewModel.Action.GetSuccess -> {
+//                        router.navigationToSMS("SignUp") 메인으로 가는 루프문
                     }
-                    is LoginViewModel.Action.Error ->{
-                        router.navigationToSMS("SignUp")
+
+                    is LoginViewModel.Action.Error -> {
+                        when (it.errorMessage) {
+                            ERROR_KAKAO_ID_NULL -> {
+                                router.navigationToSMS("SignUp")
+                            }
+
+                            else -> throw IllegalArgumentException("UNKNOW ERROR")
+                        }
                     }
                 }
             }
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.getToken()
-        Log.d(javaClass.name.toString() , "The view is Pause")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(javaClass.name.toString() , "The view is resume")
     }
 
 }
