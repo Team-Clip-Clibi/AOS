@@ -2,14 +2,15 @@ package com.sungil.login
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sungil.domain.model.Router
 import com.sungil.login.ui.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -28,10 +29,28 @@ class LoginActivity : ComponentActivity() {
                 }
             )
         }
+
+        addListener()
+    }
+
+    private fun addListener(){
+        CoroutineScope(Dispatchers.Main).launch{
+            viewModel.actionFlow.collect{
+                when(it){
+                    is LoginViewModel.Action.GetSuccess ->{
+                        router.navigationToSMS("SignUp")
+                    }
+                    is LoginViewModel.Action.Error ->{
+                        router.navigationToSMS("SignUp")
+                    }
+                }
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
+        viewModel.getToken()
         Log.d(javaClass.name.toString() , "The view is Pause")
     }
 

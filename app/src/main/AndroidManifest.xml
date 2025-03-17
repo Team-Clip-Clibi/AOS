@@ -40,6 +40,11 @@
                     android:scheme="kakao${NATIVE_APP_KEY}" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.example.signup.SignUpActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

@@ -17,10 +17,10 @@ class DatabaseRepositoryImpl @Inject constructor(private val database: SharedPre
     }
 
     override suspend fun getToken(): Pair<String, String> {
-        TODO("Not yet implemented")
+        return Pair("1" ," 2")
     }
 
     override suspend fun deleteToken(): Boolean {
-        TODO("Not yet implemented")
+      return true
     }
 }
