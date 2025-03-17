@@ -34,7 +34,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
                 return@loginWithKakaoTalk
             }
             Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")
-            viewModel.saveToken(token.accessToken, token.refreshToken)
+            viewModel.saveToken("testData")
         }
     }
 

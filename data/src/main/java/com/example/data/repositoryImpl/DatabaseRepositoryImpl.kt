@@ -7,20 +7,17 @@ import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(private val database: SharedPreference) :
     DatabaseRepository {
-    override suspend fun saveToken(token: String, refreshToken: String): Boolean {
+    override suspend fun saveToken(token: String): Boolean {
         return database.saveToken(
-            TokenData(
-                token = token,
-                refreshToken = refreshToken
-            )
+            token
         )
     }
 
     override suspend fun getToken(): Pair<String, String> {
-        return Pair("1" ," 2")
+        return Pair("1", " 2")
     }
 
     override suspend fun deleteToken(): Boolean {
-      return true
+        return true
     }
 }

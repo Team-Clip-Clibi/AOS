@@ -8,7 +8,6 @@ class SaveToken @Inject constructor(private val repo: DatabaseRepository) :
     UseCase<SaveToken.Param, SaveToken.Result> {
     data class Param(
         val token: String,
-        val refreshToken: String,
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
@@ -17,7 +16,7 @@ class SaveToken @Inject constructor(private val repo: DatabaseRepository) :
     }
 
     override suspend fun invoke(param: Param): Result {
-        val result = repo.saveToken(param.token, param.refreshToken)
+        val result = repo.saveToken(param.token)
         if (!result) {
             return Result.Fail("fail to save Token")
         }

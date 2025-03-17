@@ -18,9 +18,9 @@ class SMSViewModel @Inject constructor(private val saveToken: SaveToken) : ViewM
     private val _actionFlow = MutableSharedFlow<Action>()
     val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
 
-    fun saveToken(token: String, refreshToken: String) {
+    fun saveToken(token: String) {
         viewModelScope.launch {
-            when (val result = saveToken.invoke(SaveToken.Param(token = token, refreshToken = refreshToken))) {
+            when (val result = saveToken.invoke(SaveToken.Param(token = token))) {
                 is SaveToken.Result.Fail -> {
                     throw IllegalArgumentException(result.errorMessage)
                 }
