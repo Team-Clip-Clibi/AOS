@@ -7,10 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 //import androidx.activity.viewModels
 
@@ -18,6 +20,8 @@ import kotlinx.coroutines.launch
 class AuthCodeHandlerActivity : AppCompatActivity() {
     private val viewModel: SMSViewModel by viewModels()
 
+    @Inject
+    lateinit var router: Router
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startKakaoLogin()
@@ -39,7 +43,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
             viewModel.actionFlow.collect {
                 when (it) {
                     is SMSViewModel.Action.SaveSuccess -> {
-                        finish()
+                        router.navigationToSMS("SignUp")
                     }
 
                     else -> {
