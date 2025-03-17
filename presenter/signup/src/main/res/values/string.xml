@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- topBar   -->
+    <string name="txt_topBar_title">회원가입</string>
+    <!--  Term  -->
     <string name="txt_term_title">원띵 서비스 이용에 \n 동의해주세요</string>
     <string name="txt_term_okay_everyThing">필수 약관 모두 동의</string>
     <string name="txt_term_service">[필수] 서비스 이용약관</string>

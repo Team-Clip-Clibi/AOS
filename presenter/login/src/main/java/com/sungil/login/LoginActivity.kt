@@ -25,7 +25,8 @@ class LoginActivity : ComponentActivity() {
         setContent {
             LoginScreen(
                 kakaoLogin = {
-                    viewModel.getToken()
+//                    viewModel.getToken()
+                    router.navigationToSMS("SignUp")
                 }
             )
         }
