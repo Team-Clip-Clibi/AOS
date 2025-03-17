@@ -4,9 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+//import androidx.activity.viewModels
 
 @AndroidEntryPoint
 class AuthCodeHandlerActivity : AppCompatActivity() {
@@ -15,6 +21,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startKakaoLogin()
+        addListener()
     }
 
     private fun startKakaoLogin() {
@@ -27,4 +34,19 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
         }
     }
 
+    private fun addListener() {
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.actionFlow.collect {
+                when (it) {
+                    is SMSViewModel.Action.SaveSuccess -> {
+                        finish()
+                    }
+
+                    else -> {
+                        Log.e(javaClass.name.toString(), "Error")
+                    }
+                }
+            }
+        }
+    }
 }
