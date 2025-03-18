@@ -64,7 +64,8 @@ internal fun TermScreen(paddingValues: PaddingValues) {
                 onCheckChange = { isChecked ->
                     allChecked = isChecked
                     termsState = termsState.map { _ -> isChecked }
-                }
+                },
+                isIconShow = false
             )
 
             CustomCheckBox(

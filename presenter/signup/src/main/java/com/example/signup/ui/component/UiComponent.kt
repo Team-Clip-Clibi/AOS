@@ -34,10 +34,10 @@ fun CustomCheckBox(
     checked: Boolean,
     modifier: Modifier,
     onCheckChange: (Boolean) -> Unit,
+    isIconShow : Boolean = true
 ) {
     Row(
         modifier = modifier.clickable { onCheckChange(!checked) },
-
         verticalAlignment = Alignment.CenterVertically
     ) {
         CircularCheckBox(
@@ -53,12 +53,14 @@ fun CustomCheckBox(
             fontWeight = FontWeight.Bold,
             color = Color.Gray
         )
-        Icon(
-            painter = painterResource(id = R.drawable.ic_arrow),
-            contentDescription = "자세히 보기",
-            modifier = Modifier.size(24.dp),
-            tint = Color.Gray
-        )
+        if(isIconShow){
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow),
+                contentDescription = "자세히 보기",
+                modifier = Modifier.size(24.dp),
+                tint = Color.Gray
+            )
+        }
     }
 }
 
