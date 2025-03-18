@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 val properties = Properties()
 val localPropertiesFile = project.rootProject.file("local.properties")
@@ -91,6 +92,8 @@ dependencies {
     kapt(libs.hilt.compiler)
     //KAKAO
     implementation(libs.kakao.common)
+    //firebase
+    implementation(platform(libs.firebase.bom))
     //Module
     implementation(project(":presenter"))
     implementation(project(":presenter:login"))

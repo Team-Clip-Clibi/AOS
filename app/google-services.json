@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "187754812363",
+    "project_id": "onething-e6252",
+    "storage_bucket": "onething-e6252.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187754812363:android:069f2d69ac9548f017dc4e",
+        "android_client_info": {
+          "package_name": "com.sungil.onething"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-ZE-FCcrUza1kTUskiT-vdc4IvF2Tk_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
