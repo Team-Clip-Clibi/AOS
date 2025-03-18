@@ -3,9 +3,11 @@
     <!-- topBar   -->
     <string name="txt_topBar_title">회원가입</string>
     <!--  Term  -->
-    <string name="txt_term_title">원띵 서비스 이용에 \n 동의해주세요</string>
+    <string name="txt_term_title">원띵 서비스 이용에 \n동의해주세요</string>
     <string name="txt_term_okay_everyThing">필수 약관 모두 동의</string>
     <string name="txt_term_service">[필수] 서비스 이용약관</string>
     <string name="txt_term_collect_person">[필수] 개인정보 수집/이용 동의</string>
     <string name="txt_term_marketing">[선택] 맞춤형 광고 및 마케팅 수집 동의</string>
+    <!--  button  -->
+    <string name="btn_start_oneThing">원띵 시작하기</string>
 </resources>
