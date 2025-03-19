@@ -19,12 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
+import com.example.signup.SignUpViewModel
 import com.example.signup.ui.uiScreen.TermScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SignUpScreen() {
+internal fun SignUpScreen(viewModel : SignUpViewModel) {
     var pageNum by remember { mutableStateOf("1/5") }
     Scaffold(
         topBar = {
@@ -71,7 +72,7 @@ internal fun SignUpScreen() {
     ) { paddingValues ->
         when (pageNum) {
             "1/5" -> {
-                TermScreen(paddingValues)
+                TermScreen(paddingValues , viewModel)
             }
         }
     }
