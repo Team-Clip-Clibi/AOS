@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.sungil.onething" />
+                  <option name="mobileSdkAppId" value="1:187754812363:android:069f2d69ac9548f017dc4e" />
+                  <option name="projectId" value="onething-e6252" />
+                  <option name="projectNumber" value="187754812363" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

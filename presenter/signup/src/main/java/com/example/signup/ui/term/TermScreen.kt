@@ -1,4 +1,4 @@
-package com.example.signup.ui
+package com.example.signup.ui.term
 
 import androidx.compose.runtime.Composable
 
@@ -20,12 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
-import com.example.signup.ui.uiScreen.TermScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SignUpScreen(viewModel : SignUpViewModel) {
+internal fun TermScreen(viewModel : SignUpViewModel) {
     var pageNum by remember { mutableStateOf("1/5") }
     Scaffold(
         topBar = {
@@ -49,7 +48,9 @@ internal fun SignUpScreen(viewModel : SignUpViewModel) {
                                 .padding(1.dp)
                                 .width(24.dp)
                                 .height(24.dp)
-                                .clickable { }
+                                .clickable {
+
+                                }
                         )
                     },
                     actions = {
@@ -70,11 +71,7 @@ internal fun SignUpScreen(viewModel : SignUpViewModel) {
             }
         }
     ) { paddingValues ->
-        when (pageNum) {
-            "1/5" -> {
-                TermScreen(paddingValues , viewModel)
-            }
-        }
+        TermScreenMain(paddingValues, viewModel)
     }
 }
 

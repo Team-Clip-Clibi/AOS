@@ -1,6 +1,7 @@
 package com.example.signup
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.signup.model.TermItem
@@ -35,4 +36,6 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
         }
         _termItem.value = updateList
     }
+
+
 }

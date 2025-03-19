@@ -1,5 +1,7 @@
-package com.example.signup.ui.uiScreen
+package com.example.signup.ui.term
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -26,11 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
-import com.example.signup.model.TermItem
 import com.example.signup.ui.component.CustomCheckBox
 
 @Composable
-internal fun TermScreen(paddingValues: PaddingValues, viewModel: SignUpViewModel) {
+internal fun TermScreenMain(paddingValues: PaddingValues, viewModel: SignUpViewModel) {
     var allChecked by remember { mutableStateOf(false) }
     val termItems by viewModel.termItem.collectAsState(initial = emptyList())
 
@@ -60,7 +62,15 @@ internal fun TermScreen(paddingValues: PaddingValues, viewModel: SignUpViewModel
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .padding(8.dp),
+                    .padding(8.dp).then(
+                        if(allChecked){
+                            Modifier
+                            .border(2.dp, color = colorResource(R.color.lavender), shape = RoundedCornerShape(12.dp))
+                                .background(color = colorResource(R.color.light_lavender), shape = RoundedCornerShape(12.dp))
+                        }else{
+                            Modifier
+                        }
+                    ),
                 onCheckChange = { isChecked ->
                     allChecked = isChecked
                     termItems.forEach{ terms ->
@@ -131,12 +141,3 @@ internal fun TermScreen(paddingValues: PaddingValues, viewModel: SignUpViewModel
         Spacer(modifier = Modifier.height(21.dp))
     }
 }
-
-
-//data class TermItem(
-//    val termName: String,
-//    val isRequired: Boolean,
-//    val isAllCheck: Boolean = false,
-//    val checked: Boolean = false,
-//)
-

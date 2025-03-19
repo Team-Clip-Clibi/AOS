@@ -2,4 +2,6 @@
 <resources>
     <color name="purple">#6700CE</color>
     <color name="light_gray">#CACACA</color>
+    <color name="lavender">#D3ADF7</color>
+    <color name="light_lavender">#F9F0FF</color>
 </resources>

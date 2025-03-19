@@ -2,6 +2,7 @@ package com.example.signup.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,8 +39,10 @@ fun CustomCheckBox(
 ) {
     Row(
         modifier = modifier.clickable { onCheckChange(!checked) },
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(modifier = Modifier.width(2.dp))
         CircularCheckBox(
             checked = checked,
             onCheckedChange = onCheckChange
@@ -61,6 +64,7 @@ fun CustomCheckBox(
                 tint = Color.Gray
             )
         }
+        Spacer(modifier = Modifier.width(8.dp))
     }
 }
 
@@ -70,7 +74,7 @@ fun CircularCheckBox(
     onCheckedChange : (Boolean) -> Unit
 ){
     Box(
-        modifier = Modifier.size(40.dp)
+        modifier = Modifier.size(32.dp)
             .background(
                 color = if(checked) colorResource(id = R.color.purple) else colorResource(R.color.light_gray),
                 shape = CircleShape
