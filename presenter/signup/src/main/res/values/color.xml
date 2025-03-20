@@ -4,4 +4,5 @@
     <color name="light_gray">#CACACA</color>
     <color name="lavender">#D3ADF7</color>
     <color name="light_lavender">#F9F0FF</color>
+    <color name="bar_light_gray">#EFEFEF</color>
 </resources>

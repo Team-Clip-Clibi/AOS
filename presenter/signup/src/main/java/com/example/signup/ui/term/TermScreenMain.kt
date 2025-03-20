@@ -32,7 +32,11 @@ import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomCheckBox
 
 @Composable
-internal fun TermScreenMain(paddingValues: PaddingValues, viewModel: SignUpViewModel) {
+internal fun TermScreenMain(
+    paddingValues: PaddingValues,
+    viewModel: SignUpViewModel,
+    buttonClick: () -> Unit,
+) {
     var allChecked by remember { mutableStateOf(false) }
     val termItems by viewModel.termItem.collectAsState(initial = emptyList())
 
@@ -62,18 +66,26 @@ internal fun TermScreenMain(paddingValues: PaddingValues, viewModel: SignUpViewM
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .padding(8.dp).then(
-                        if(allChecked){
+                    .padding(8.dp)
+                    .then(
+                        if (allChecked) {
                             Modifier
-                            .border(2.dp, color = colorResource(R.color.lavender), shape = RoundedCornerShape(12.dp))
-                                .background(color = colorResource(R.color.light_lavender), shape = RoundedCornerShape(12.dp))
-                        }else{
+                                .border(
+                                    2.dp,
+                                    color = colorResource(R.color.lavender),
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .background(
+                                    color = colorResource(R.color.light_lavender),
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                        } else {
                             Modifier
                         }
                     ),
                 onCheckChange = { isChecked ->
                     allChecked = isChecked
-                    termItems.forEach{ terms ->
+                    termItems.forEach { terms ->
                         viewModel.changeTermItem(terms.copy(checked = isChecked))
                     }
                 },
@@ -127,14 +139,18 @@ internal fun TermScreenMain(paddingValues: PaddingValues, viewModel: SignUpViewM
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { /* TODO: 회원가입 진행 */ },
+            onClick = { buttonClick() },
             enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
         ) {
-            Text(text = stringResource(R.string.btn_start_oneThing), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(R.string.btn_start_oneThing),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
 
 

@@ -20,55 +20,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
+import com.example.signup.ui.component.TopBar
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-internal fun TermScreen(viewModel : SignUpViewModel) {
-    var pageNum by remember { mutableStateOf("1/5") }
+internal fun TermScreen(
+    viewModel: SignUpViewModel,
+    actionBarClick: () -> Unit,
+    buttonClick: () -> Unit,
+) {
     Scaffold(
         topBar = {
-            Column {
-                TopAppBar(
-                    modifier = Modifier.padding(start = 12.dp, end = 16.dp),
-                    title = {
-                        Text(
-                            text = stringResource(R.string.txt_topBar_title),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            fontSize = 20.sp,
-                            fontFamily = FontFamily(Font(R.font.bold))
-                        )
-                    },
-                    navigationIcon = {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_arrow_back),
-                            contentDescription = "뒤로가기",
-                            modifier = Modifier
-                                .padding(1.dp)
-                                .width(24.dp)
-                                .height(24.dp)
-                                .clickable {
-
-                                }
-                        )
-                    },
-                    actions = {
-                        Text(
-                            text = pageNum,
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 18.sp,
-                                fontFamily = FontFamily(Font(R.font.light)),
-                                fontWeight = FontWeight(600),
-                                color = Color(0xFF9254DE),
-                                textAlign = TextAlign.End
-                            )
-                        )
-                    }
-                )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
-            }
+            TopBar(
+                title = stringResource(R.string.txt_term_title),
+                currentPage = 1,
+                totalPage = 5,
+                onBackClick = {
+                    actionBarClick()
+                }
+            )
         }
     ) { paddingValues ->
         TermScreenMain(paddingValues, viewModel)

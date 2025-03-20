@@ -1,13 +1,17 @@
 package com.example.signup.ui.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -16,18 +20,75 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar(
+    title: String,
+    currentPage: Int,
+    totalPage: Int,
+    onBackClick: () -> Unit
+) {
+    Column {
+        TopAppBar(
+            modifier = Modifier.padding(start = 12.dp, end = 16.dp),
+            title = {
+                Text(
+                    text = title,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.bold))
+                )
+            },
+            navigationIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                    contentDescription = "뒤로가기",
+                    modifier = Modifier
+                        .padding(1.dp)
+                        .width(24.dp)
+                        .height(24.dp)
+                        .clickable { onBackClick() }
+                )
+            },
+            actions = {
+                Text(
+                    text = "$currentPage/$totalPage",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        lineHeight = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.light)),
+                        fontWeight = FontWeight(600),
+                        color = colorResource(R.color.lavender),
+                        textAlign = TextAlign.End
+                    )
+                )
+            }
+        )
+        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
+    }
+}
 
 @Composable
 fun CustomCheckBox(
@@ -74,9 +135,10 @@ fun CircularCheckBox(
     onCheckedChange : (Boolean) -> Unit
 ){
     Box(
-        modifier = Modifier.size(32.dp)
+        modifier = Modifier
+            .size(32.dp)
             .background(
-                color = if(checked) colorResource(id = R.color.purple) else colorResource(R.color.light_gray),
+                color = if (checked) colorResource(id = R.color.purple) else colorResource(R.color.light_gray),
                 shape = CircleShape
             )
             .clickable { onCheckedChange(!checked) },
