@@ -42,7 +42,7 @@ internal fun TermScreen(
             )
         }
     ) { paddingValues ->
-        TermScreenMain(paddingValues, viewModel)
+        TermScreenMain(paddingValues, viewModel, buttonClick)
     }
 }
 
