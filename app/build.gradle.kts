@@ -93,7 +93,8 @@ dependencies {
     //KAKAO
     implementation(libs.kakao.common)
     //firebase
-    implementation(platform(libs.firebase.bom))
+//    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
     //Module
     implementation(project(":presenter"))
     implementation(project(":presenter:login"))

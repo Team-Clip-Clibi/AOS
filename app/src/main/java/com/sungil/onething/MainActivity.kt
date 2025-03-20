@@ -20,4 +20,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
     }
+
+    private fun test(){}
 }
