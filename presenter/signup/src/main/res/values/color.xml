@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple">#6700CE</color>
-    <color name="light_gray">#CACACA</color>
+    <color name="bright_gray">#CACACA</color>
     <color name="lavender">#D3ADF7</color>
     <color name="light_lavender">#F9F0FF</color>
     <color name="bar_light_gray">#EFEFEF</color>
+    <color name="dark_gray">#666666</color>
+    <color name="black_gray">#171717</color>
+    <color name="light_gray">#F7F7F7</color>
+    <color name="gray_text">#989898</color>
+    <color name="white">#FFFFFF</color>
 </resources>

@@ -3,7 +3,6 @@ package com.example.signup.ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,14 +15,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -40,6 +42,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.text.input.KeyboardType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +51,7 @@ fun TopBar(
     title: String,
     currentPage: Int,
     totalPage: Int,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     Column {
         TopAppBar(
@@ -96,7 +100,7 @@ fun CustomCheckBox(
     checked: Boolean,
     modifier: Modifier,
     onCheckChange: (Boolean) -> Unit,
-    isIconShow : Boolean = true
+    isIconShow: Boolean = true,
 ) {
     Row(
         modifier = modifier.clickable { onCheckChange(!checked) },
@@ -117,7 +121,7 @@ fun CustomCheckBox(
             fontWeight = FontWeight.Bold,
             color = Color.Gray
         )
-        if(isIconShow){
+        if (isIconShow) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow),
                 contentDescription = "자세히 보기",
@@ -131,27 +135,27 @@ fun CustomCheckBox(
 
 @Composable
 fun CircularCheckBox(
-    checked : Boolean,
-    onCheckedChange : (Boolean) -> Unit
-){
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
     Box(
         modifier = Modifier
             .size(32.dp)
             .background(
-                color = if (checked) colorResource(id = R.color.purple) else colorResource(R.color.light_gray),
+                color = if (checked) colorResource(id = R.color.purple) else colorResource(R.color.bright_gray),
                 shape = CircleShape
             )
             .clickable { onCheckedChange(!checked) },
         contentAlignment = Alignment.Center
-    ){
-        if(checked){
+    ) {
+        if (checked) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "동의항목",
                 tint = Color.White,
                 modifier = Modifier.size(32.dp)
             )
-        }else{
+        } else {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "비동의항목",
@@ -160,4 +164,65 @@ fun CircularCheckBox(
             )
         }
     }
+}
+
+@Composable
+fun CustomTextField(
+    text: String,
+    modifier: Modifier,
+    onValueChange: (String) -> Unit,
+    inputType : KeyboardType,
+    hint : String,
+    timeCount : String =""
+) {
+    TextField(
+        value = text,
+        onValueChange = onValueChange,
+        modifier = modifier.background(
+            colorResource(R.color.light_gray),
+            shape = RoundedCornerShape(12.dp)
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = inputType),
+        placeholder = {
+            Text(
+                hint,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    lineHeight = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.medium)),
+                    fontWeight = FontWeight(600),
+                    color = colorResource(R.color.dark_gray)
+                )
+            )
+        },
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            lineHeight = 24.sp,
+            fontFamily = FontFamily(Font(R.font.medium)),
+            fontWeight = FontWeight(600),
+            color = colorResource(R.color.black_gray),
+        ),
+        trailingIcon = {
+            Text(
+                text = timeCount,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    lineHeight = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.medium)),
+                    fontWeight = FontWeight(600),
+                    color = colorResource(R.color.gray_text),
+                    textAlign = TextAlign.Right
+                ),
+                modifier = Modifier.padding(end = 16.dp)
+            )
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = colorResource(R.color.light_gray),
+            unfocusedContainerColor = colorResource(R.color.light_gray),
+            disabledContainerColor = colorResource(R.color.light_gray),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
 }

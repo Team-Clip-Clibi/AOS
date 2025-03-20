@@ -1,5 +1,6 @@
 package com.example.signup
 
+import androidx.annotation.NonUiContext
 import androidx.compose.runtime.mutableStateOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,14 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     )
     val termItem: StateFlow<List<TermItem>> = _termItem.asStateFlow()
 
+    private val _phoneNumber = MutableStateFlow("")
+    val phoneNumber : StateFlow<String> = _phoneNumber.asStateFlow()
+
+    private val _smsCode = MutableStateFlow("")
+    val smsCode : StateFlow<String> = _smsCode.asStateFlow()
+
+    private val _smsViewShow = MutableStateFlow(false)
+    val smsViewShow : StateFlow<Boolean> = _smsViewShow.asStateFlow()
     fun changeTermItem(termItem: TermItem) {
         val updateList = _termItem.value.map {
             if (it.termName == termItem.termName) {
@@ -37,5 +46,20 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
         _termItem.value = updateList
     }
 
+    fun inputPhoneNumber(number : String){
+        _phoneNumber.value = number
+    }
+
+    fun signCodeNumber(number : String){
+        _smsCode.value = number
+    }
+
+    fun smsRequest(phoneNumber : String){
+        _smsViewShow.value = true
+    }
+
+    fun checkSmsNumber(smsNumber : String){
+
+    }
 
 }

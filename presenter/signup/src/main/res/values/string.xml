@@ -10,4 +10,16 @@
     <string name="txt_term_marketing">[선택] 맞춤형 광고 및 마케팅 수집 동의</string>
     <!--  button  -->
     <string name="btn_start_oneThing">원띵 시작하기</string>
+
+    <!--  phone number   -->
+    <string name="txt_phone_title">원띵와 함께할 회원님의</string>
+    <string name="txt_phone_title_sub">핸드폰 번호를 알려주세요</string>
+    <string name="hint_input_phone_number">휴대폰 번호</string>
+    <string name="btn_send_message">인증 번호 발송</string>
+    <string name="hint_sms_num">인증번호</string>
+    <string name="btn_check_sms_num">인증번호 확인</string>
+    <string name="txt_sms_not_received">인증 번호를 받지 못하셨나요?</string>
+    <string name="txt_resend_sms">다시 보내기</string>
+    <!--  common  -->
+    <string name="btn_next">다음</string>
 </resources>
