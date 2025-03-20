@@ -13,11 +13,8 @@ class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TermScreen(viewModel)
+//            TermScreen(viewModel)
         }
     }
 
-    private fun addListener(){
-
-    }
 }

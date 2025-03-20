@@ -1,4 +1,4 @@
-package com.example.signup.ui
+package com.example.signup.ui.phone
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
