@@ -123,11 +123,11 @@ internal fun PhoneNumberScreenMain(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // ✅ "인증 번호를 받지 못하셨나요?" & "다시 보내기" 추가
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween // ✅ Button을 End로 정렬
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
@@ -149,7 +149,7 @@ internal fun PhoneNumberScreenMain(
                             lineHeight = 18.sp,
                             fontFamily = FontFamily(Font(R.font.medium)),
                             fontWeight = FontWeight(600),
-                            color = Color.Red, // ✅ 빨간색 강조
+                            color = Color.Red,
                             modifier = Modifier.clickable { viewModel.smsRequest(phoneNumber) }
                         )
                     }
