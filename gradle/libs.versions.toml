@@ -17,6 +17,8 @@ gson = "2.8.8"
 lifecycle = "2.8.7"
 gms-service = "4.4.2"
 firebase-bom = "33.10.0"
+nav = "2.8.9"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -41,6 +43,7 @@ kakao-common = {group = "com.kakao.sdk" , name  = "v2-all" , version.ref = "kaka
 google-gson = {group = "com.google.code.gson" , name = "gson" , version.ref ="gson"}
 lifecycle-viewModel = {group = "androidx.lifecycle" , name = "lifecycle-viewmodel-ktx" , version.ref = "lifecycle"}
 firebase-bom = {group = "com.google.firebase" , name = "firebase-bom" , version.ref = "firebase-bom"}
+compose-nav = {group = "androidx.navigation" , name = "navigation-compose" , version.ref ="nav"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
