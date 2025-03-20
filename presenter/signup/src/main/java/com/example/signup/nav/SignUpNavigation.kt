@@ -29,7 +29,8 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit) {
         }
         composable(NAV_PHONE) {
             PhoneNumberScreen(viewModel,
-                actionClick = { navController.navigate(NAV_TERM) },
+                actionClick = { navController.navigateUp() },
+                smsClick = {},
                 buttonClick = {}
             )
         }
