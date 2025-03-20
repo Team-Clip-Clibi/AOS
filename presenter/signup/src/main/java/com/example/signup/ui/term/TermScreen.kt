@@ -33,7 +33,7 @@ internal fun TermScreen(
     Scaffold(
         topBar = {
             TopBar(
-                title = stringResource(R.string.txt_term_title),
+                title = stringResource(R.string.txt_topBar_title),
                 currentPage = 1,
                 totalPage = 5,
                 onBackClick = {
