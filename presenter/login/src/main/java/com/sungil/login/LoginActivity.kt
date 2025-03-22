@@ -25,8 +25,8 @@ class LoginActivity : ComponentActivity() {
         setContent {
             LoginScreen(
                 kakaoLogin = {
-//                    viewModel.getToken()
-                    router.navigationToSMS("SignUp")
+                    viewModel.getToken()
+//                    router.navigationToSMS("SignUp")
                 }
             )
         }
@@ -39,13 +39,13 @@ class LoginActivity : ComponentActivity() {
             viewModel.actionFlow.collect {
                 when (it) {
                     is LoginViewModel.Action.GetSuccess -> {
-//                        router.navigationToSMS("SignUp") 메인으로 가는 루프문
+                        router.navigationToSMS("SignUp")
                     }
 
                     is LoginViewModel.Action.Error -> {
                         when (it.errorMessage) {
                             ERROR_KAKAO_ID_NULL -> {
-                                router.navigationToSMS("SignUp")
+                                router.navigationToSMS("KAKAO")
                             }
 
                             else -> throw IllegalArgumentException("UNKNOW ERROR")

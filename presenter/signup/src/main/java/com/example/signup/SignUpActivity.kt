@@ -18,7 +18,8 @@ class SignUpActivity : ComponentActivity() {
                 viewModel = viewModel,
                 clear = {
                     finish()
-                }
+                },
+                activity = this
             )
         }
     }

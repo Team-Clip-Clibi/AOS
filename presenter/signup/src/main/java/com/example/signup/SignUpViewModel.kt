@@ -1,22 +1,23 @@
 package com.example.signup
 
-import androidx.annotation.NonUiContext
-import androidx.compose.runtime.mutableStateOf
-import androidx.fragment.app.Fragment
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.signup.model.TermItem
+import com.sungil.domain.useCase.RequestSMS
+import com.sungil.domain.useCase.SendCode
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor() : ViewModel() {
+class SignUpViewModel @Inject constructor(
+    private val sms : RequestSMS,
+    private val code : SendCode
+) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
             TermItem("allChecked", true, isAllCheck = true),
@@ -35,6 +36,7 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
 
     private val _smsViewShow = MutableStateFlow(false)
     val smsViewShow : StateFlow<Boolean> = _smsViewShow.asStateFlow()
+
     fun changeTermItem(termItem: TermItem) {
         val updateList = _termItem.value.map {
             if (it.termName == termItem.termName) {
@@ -54,12 +56,21 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
         _smsCode.value = number
     }
 
-    fun smsRequest(phoneNumber : String){
+    fun smsRequest(phoneNumber : String , activity: Activity){
         _smsViewShow.value = true
+        viewModelScope.launch {
+            sms.invoke(RequestSMS.Param(phoneNumber , activity))
+        }
     }
 
-    fun checkSmsNumber(smsNumber : String){
-
+    fun sendCode(verifyCode: String){
+        viewModelScope.launch {
+            code.invoke(SendCode.Param(verifyCode))
+        }
     }
+
+//    fun startSMS(phoneNumber : String, activity: SignUpActivity){
+//
+//    }
 
 }

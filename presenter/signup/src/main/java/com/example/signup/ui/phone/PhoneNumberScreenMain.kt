@@ -1,6 +1,6 @@
 package com.example.signup.ui.phone
 
-import androidx.compose.foundation.background
+import android.app.Activity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,14 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +40,7 @@ internal fun PhoneNumberScreenMain(
     paddingValues: PaddingValues,
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
+    activity: Activity,
 ) {
     val phoneNumber by viewModel.phoneNumber.collectAsState()
     val smsCode by viewModel.smsCode.collectAsState()
@@ -52,7 +49,12 @@ internal fun PhoneNumberScreenMain(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 17.dp, end = 17.dp, top = paddingValues.calculateTopPadding() + 32.dp , bottom = 21.dp)
+            .padding(
+                start = 17.dp,
+                end = 17.dp,
+                top = paddingValues.calculateTopPadding() + 32.dp,
+                bottom = 21.dp
+            )
     ) {
         Column {
             Text(
@@ -87,7 +89,7 @@ internal fun PhoneNumberScreenMain(
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
-                onClick = { viewModel.smsRequest(phoneNumber) },
+                onClick = { viewModel.smsRequest(phoneNumber, activity) },
                 enabled = phoneNumber.isNotEmpty(),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -150,13 +152,18 @@ internal fun PhoneNumberScreenMain(
                             fontFamily = FontFamily(Font(R.font.medium)),
                             fontWeight = FontWeight(600),
                             color = Color.Red,
-                            modifier = Modifier.clickable { viewModel.smsRequest(phoneNumber) }
+                            modifier = Modifier.clickable {
+                                viewModel.smsRequest(
+                                    phoneNumber,
+                                    activity
+                                )
+                            }
                         )
                     }
 
 
                     Button(
-                        onClick = { viewModel.checkSmsNumber(phoneNumber) },
+                        onClick = { viewModel.sendCode(smsCode) },
                         enabled = smsCode.isNotEmpty(),
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier

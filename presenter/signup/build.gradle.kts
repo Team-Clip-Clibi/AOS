@@ -60,4 +60,6 @@ dependencies {
     kapt(libs.hilt.compiler)
     //nav
     implementation(libs.compose.nav)
+    //project
+    implementation(project(":domain"))
 }

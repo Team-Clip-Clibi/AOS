@@ -1,5 +1,6 @@
 package com.example.signup.ui.phone
 
+import android.app.Activity
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -16,6 +17,7 @@ internal fun PhoneNumberScreen(
     actionClick: () -> Unit,
     smsClick:(String) ->Unit,
     buttonClick: () -> Unit,
+    activity : Activity
 ) {
     Scaffold(
         topBar = {
@@ -29,6 +31,6 @@ internal fun PhoneNumberScreen(
             )
         }
     ) { paddingValues ->
-        PhoneNumberScreenMain(paddingValues, viewModel ,buttonClick)
+        PhoneNumberScreenMain(paddingValues, viewModel ,buttonClick , activity)
     }
 }

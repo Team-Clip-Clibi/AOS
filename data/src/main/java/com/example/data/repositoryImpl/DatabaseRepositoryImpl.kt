@@ -14,7 +14,7 @@ class DatabaseRepositoryImpl @Inject constructor(private val database: SharedPre
     }
 
     override suspend fun getToken(): Pair<String, String> {
-        return Pair("1", " 2")
+        return Pair("", "")
     }
 
     override suspend fun deleteToken(): Boolean {

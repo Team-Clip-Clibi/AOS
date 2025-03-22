@@ -51,4 +51,5 @@ dependencies {
     //project
     implementation(project(":domain"))
     implementation(project(":database"))
+    implementation(project(":network"))
 }

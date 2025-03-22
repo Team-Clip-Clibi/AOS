@@ -1,5 +1,6 @@
 package com.example.signup.nav
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,7 +12,7 @@ import com.example.signup.ui.phone.PhoneNumberScreen
 import com.example.signup.ui.term.TermScreen
 
 @Composable
-internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit) {
+internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit , activity : Activity) {
     val navController = rememberNavController()
 
     NavHost(
@@ -31,7 +32,8 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit) {
             PhoneNumberScreen(viewModel,
                 actionClick = { navController.navigateUp() },
                 smsClick = {},
-                buttonClick = {}
+                buttonClick = {},
+                activity = activity
             )
         }
     }
