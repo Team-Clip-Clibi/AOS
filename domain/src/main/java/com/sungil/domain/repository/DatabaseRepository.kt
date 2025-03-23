@@ -1,7 +1,7 @@
 package com.sungil.domain.repository
 
 interface DatabaseRepository {
-    suspend fun saveToken(token: String): Boolean
-    suspend fun getToken(): Pair<String, String>
-    suspend fun deleteToken(): Boolean
+    suspend fun saveKaKaoId(kakaoId: String): Boolean
+    suspend fun getKaKaoId(): String
+    suspend fun deleteKaKaoId(): Boolean
 }

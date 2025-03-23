@@ -12,7 +12,7 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
     private val preference =
         context.getSharedPreferences(BuildConfig.SHARED_KEY, Context.MODE_PRIVATE)
     private val gson = Gson()
-    override suspend fun saveToken(data : String): Boolean {
+    override suspend fun saveKaKaoId(data : String): Boolean {
         return try{
             val editor = preference.edit()
             val json = gson.toJson(data)
@@ -25,8 +25,14 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
         }
     }
 
-    override suspend fun getToken(): TokenData {
-        TODO("Not yet implemented")
+    override suspend fun getKaKaoId(): String {
+        return try {
+            val json = preference.getString(BuildConfig.TOKEN_KEY, null) ?: return ""
+            json.let { gson.fromJson(it, String::class.java) }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
     }
 
     override suspend fun deleteToken(key: String): Boolean {

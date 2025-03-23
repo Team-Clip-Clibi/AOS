@@ -4,7 +4,7 @@ import com.sungil.database.model.TokenData
 
 interface SharedPreference {
 
-    suspend fun saveToken(data : String): Boolean
-    suspend fun getToken(): TokenData
+    suspend fun saveKaKaoId(data : String): Boolean
+    suspend fun getKaKaoId(): String
     suspend fun deleteToken(key: String): Boolean
 }

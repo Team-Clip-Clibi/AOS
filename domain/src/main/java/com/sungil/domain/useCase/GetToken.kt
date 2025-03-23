@@ -12,10 +12,10 @@ class GetToken @Inject constructor(private val repo: DatabaseRepository) {
     }
 
     suspend fun invoke(): Result {
-        val data = repo.getToken()
-        if (data.first == "" || data.second == "") {
+        val data = repo.getKaKaoId()
+        if (data =="") {
             return Result.Fail("The Data is Error")
         }
-        return Result.Success(data.first)
+        return Result.Success(data)
     }
 }

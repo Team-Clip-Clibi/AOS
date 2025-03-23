@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,10 +29,18 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
     private fun startKakaoLogin() {
         UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
             if (error != null || token == null) {
+                viewModel.saveKaKaoId("testData")
                 return@loginWithKakaoTalk
             }
             Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")
-            viewModel.saveToken("testData")
+            UserApiClient.instance.me { user, error ->
+                if(user == null){
+                    Log.e(javaClass.name.toString() , "the user data is null $error")
+                    return@me
+                }
+                Log.d(javaClass.name.toString(),"userId : ${user.id}")
+                viewModel.saveKaKaoId(user.id.toString())
+            }
         }
     }
 
