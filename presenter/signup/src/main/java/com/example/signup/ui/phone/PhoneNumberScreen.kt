@@ -15,7 +15,6 @@ import com.example.signup.ui.component.TopBar
 internal fun PhoneNumberScreen(
     viewModel: SignUpViewModel,
     actionClick: () -> Unit,
-    smsClick:(String) ->Unit,
     buttonClick: () -> Unit,
     activity : Activity
 ) {

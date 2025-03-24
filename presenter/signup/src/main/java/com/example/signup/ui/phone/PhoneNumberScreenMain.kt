@@ -45,6 +45,9 @@ internal fun PhoneNumberScreenMain(
     val phoneNumber by viewModel.phoneNumber.collectAsState()
     val smsCode by viewModel.smsCode.collectAsState()
     val smsViewShow by viewModel.smsViewShow.collectAsState()
+    val firebaseSMSState by viewModel.firebaseSMSState.collectAsState()
+    val smsTimer by viewModel.smsTime.collectAsState()
+
 
     Box(
         modifier = Modifier
@@ -120,7 +123,7 @@ internal fun PhoneNumberScreenMain(
                     },
                     inputType = KeyboardType.Number,
                     hint = stringResource(R.string.hint_sms_num),
-                    timeCount = "5:00"
+                    timeCount = smsTimer
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -187,7 +190,7 @@ internal fun PhoneNumberScreenMain(
 
         Button(
             onClick = { buttonClick() },
-            enabled = true,
+            enabled = firebaseSMSState is SignUpViewModel.Action.SuccessVerifySMS,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()

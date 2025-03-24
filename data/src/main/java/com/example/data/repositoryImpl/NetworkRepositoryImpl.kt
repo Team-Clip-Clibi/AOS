@@ -17,4 +17,6 @@ class NetworkRepositoryImpl @Inject constructor(private val firebase: FirebaseRe
     }
 
     override suspend fun collectFirebaseResult(): Flow<String> = firebase.smsFlow()
+
+    override suspend fun collectTimer(): Flow<Int> = firebase.timeFlow()
 }

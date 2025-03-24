@@ -7,4 +7,5 @@ interface NetworkRepository {
     suspend fun requestSMS(phoneNumber: String, activity: Activity): Boolean
     suspend fun verifySMS(code: String)
     suspend fun collectFirebaseResult(): Flow<String>
+    suspend fun collectTimer() : Flow<Int>
 }

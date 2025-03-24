@@ -19,6 +19,9 @@ lifecycle = "2.8.7"
 gms-service = "4.4.2"
 firebase-bom = "33.10.0"
 nav = "2.8.9"
+okhttp3 = "4.12.0"
+retrotit2 = "2.11.0"
+serialization = "1.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +49,11 @@ google-gson = {group = "com.google.code.gson" , name = "gson" , version.ref ="gs
 lifecycle-viewModel = {group = "androidx.lifecycle" , name = "lifecycle-viewmodel-ktx" , version.ref = "lifecycle"}
 firebase-bom = {group = "com.google.firebase" , name = "firebase-bom" , version.ref = "firebase-bom"}
 compose-nav = {group = "androidx.navigation" , name = "navigation-compose" , version.ref ="nav"}
+jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+squareup-okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
+squareup-retrofit2-converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrotit2" }
+squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrotit2" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -53,4 +61,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 hilt-project = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-service-gms = {id = "com.google.gms.google-services" , version.ref = "gms-service"}
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 

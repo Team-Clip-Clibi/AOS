@@ -12,7 +12,7 @@ import com.example.signup.ui.phone.PhoneNumberScreen
 import com.example.signup.ui.term.TermScreen
 
 @Composable
-internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit , activity : Activity) {
+internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, activity: Activity) {
     val navController = rememberNavController()
 
     NavHost(
@@ -29,10 +29,12 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit , ac
                 })
         }
         composable(NAV_PHONE) {
-            PhoneNumberScreen(viewModel,
+            PhoneNumberScreen(
+                viewModel,
                 actionClick = { navController.navigateUp() },
-                smsClick = {},
-                buttonClick = {},
+                buttonClick = {
+                    viewModel.checkAlreadySignUpNumber()
+                },
                 activity = activity
             )
         }

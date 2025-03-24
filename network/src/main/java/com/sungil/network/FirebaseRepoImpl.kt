@@ -10,6 +10,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.auth
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +26,10 @@ class FirebaseRepoImpl @Inject constructor(@ApplicationContext private val appli
     private var currentVerificationId: String? = null
 
     private val _smsGranted = MutableStateFlow("")
-    val smsGranted: StateFlow<String> = _smsGranted.asStateFlow()
+    private val smsGranted: StateFlow<String> = _smsGranted.asStateFlow()
+
+    private val _timeFlow = MutableStateFlow(120)
+    private val timeFlow: StateFlow<Int> = _timeFlow.asStateFlow()
 
     private val callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(p0: PhoneAuthCredential) {
@@ -56,16 +60,17 @@ class FirebaseRepoImpl @Inject constructor(@ApplicationContext private val appli
         return try {
             val options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber("+82${phoneNumber}")
-                .setTimeout(120L , TimeUnit.SECONDS)
+                .setTimeout(120L, TimeUnit.SECONDS)
                 .setActivity(activity)
                 .setCallbacks(callback)
                 .build()
 
             PhoneAuthProvider.verifyPhoneNumber(options)
             auth.setLanguageCode("kr")
+            startTimer()
             true
         } catch (e: Exception) {
-            Log.e(javaClass.name.toString() , "error : ${e.message}")
+            Log.e(javaClass.name.toString(), "error : ${e.message}")
             false
         }
     }
@@ -79,5 +84,14 @@ class FirebaseRepoImpl @Inject constructor(@ApplicationContext private val appli
         auth.signInWithCredential(credential).await()
     }
 
+    private suspend fun startTimer() {
+        for (i in 120 downTo 0) {
+            _timeFlow.value = i
+            delay(1000L)
+        }
+    }
+
     override suspend fun smsFlow(): Flow<String> = smsGranted
+
+    override suspend fun timeFlow(): Flow<Int>  = timeFlow
 }
