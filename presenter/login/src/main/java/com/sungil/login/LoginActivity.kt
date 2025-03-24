@@ -42,7 +42,7 @@ class LoginActivity : ComponentActivity() {
                     }
 
                     is LoginViewModel.Action.NotSignUp -> {
-                        router.navigationToSMS("SignUp")
+                        router.navigationToSMS(SIGNUP_VIEW)
                     }
 
                     is LoginViewModel.Action.SignUp -> {
@@ -53,7 +53,7 @@ class LoginActivity : ComponentActivity() {
                     is LoginViewModel.Action.Error -> {
                         when (it.errorMessage) {
                             ERROR_KAKAO_ID_NULL -> {
-                                router.navigationToSMS("KAKAO")
+                                router.navigationToSMS(KAKAO_VIEW)
                             }
 
                             else -> throw IllegalArgumentException("UNKNOW ERROR")
