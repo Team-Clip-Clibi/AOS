@@ -6,7 +6,5 @@ import javax.inject.Inject
 
 class GetFirebaseSMSState @Inject constructor(private val repo: NetworkRepository) {
 
-    suspend fun invoke(): Flow<String> {
-        return repo.collectFirebaseResult()
-    }
+    suspend fun invoke(): Flow<String> = repo.collectFirebaseResult()
 }

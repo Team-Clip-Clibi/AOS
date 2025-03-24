@@ -36,6 +36,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Button
+import com.example.signup.ERROR_ALREADY_SIGN_UP
+import com.example.signup.ERROR_FAIL_SMS
+import com.example.signup.ERROR_TIME_OUT
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomDialog
@@ -55,22 +58,22 @@ internal fun PhoneNumberScreenMain(
     val firebaseSMSState by viewModel.firebaseSMSState.collectAsState()
     val smsTimer by viewModel.smsTime.collectAsState()
 
-    var showDialog by remember { mutableStateOf(false) }
-    var dialogTitle by remember { mutableStateOf("") }
-    var dialogContent by remember { mutableStateOf("") }
-    var dialogButtonText by remember { mutableStateOf("") }
-    var dialogAction: (() -> Unit)? by remember { mutableStateOf(null) }
+    var errorDialog by remember { mutableStateOf(false) }
+    var alreadySignUpDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.firebaseSMSState.collectLatest { state->
             when(state){
                 is SignUpViewModel.Action.Error ->{
                     when(state.message){
-
+                        ERROR_ALREADY_SIGN_UP ->{
+                            alreadySignUpDialog = true
+                        }
+                        else -> errorDialog = true
                     }
                 }
                 is SignUpViewModel.Action.FailVerifySMS ->{
-
+                    errorDialog = true
                 }
                 else ->{
                     Log.d(javaClass.name.toString() , "state is change $state")
@@ -122,7 +125,9 @@ internal fun PhoneNumberScreenMain(
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
-                onClick = { viewModel.smsRequest(phoneNumber, activity) },
+                onClick = {
+                    viewModel.smsRequest(phoneNumber, activity)
+                          },
                 enabled = phoneNumber.isNotEmpty(),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -192,50 +197,69 @@ internal fun PhoneNumberScreenMain(
                                 )
                             }
                         )
-                    }
-
-
-                    Button(
-                        onClick = { viewModel.sendCode(smsCode) },
-                        enabled = smsCode.isNotEmpty(),
-                        shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier
-                            .width(92.dp)
-                            .height(36.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.btn_check_sms_num),
-                            fontSize = 14.sp,
-                            lineHeight = 20.sp,
-                            fontFamily = FontFamily(Font(R.font.medium)),
-                            fontWeight = FontWeight(500),
-                            color = colorResource(R.color.purple),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Button(
+                            onClick = { viewModel.sendCode(smsCode) },
+                            enabled = smsCode.isNotEmpty(),
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier
+                                .width(90.dp)
+                                .height(36.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.btn_check_sms_num),
+                                fontSize = 14.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.medium)),
+                                fontWeight = FontWeight(500),
+                                color = colorResource(R.color.purple),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = { buttonClick() },
+                enabled = firebaseSMSState is SignUpViewModel.Action.VerifyFinish,
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.btn_next),
+                    fontSize = 20.sp,
+                    lineHeight = 28.sp,
+                    fontFamily = FontFamily(Font(R.font.medium)),
+                    fontWeight = FontWeight(600),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = colorResource(R.color.white)
+                )
+            }
         }
 
-        Button(
-            onClick = { buttonClick() },
-            enabled = firebaseSMSState is SignUpViewModel.Action.VerifyFinish,
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .align(Alignment.BottomCenter)
-        ) {
-            Text(
-                text = stringResource(R.string.btn_next),
-                fontSize = 20.sp,
-                lineHeight = 28.sp,
-                fontFamily = FontFamily(Font(R.font.medium)),
-                fontWeight = FontWeight(600),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                color = colorResource(R.color.white)
+        if(errorDialog){
+            CustomDialog(
+                onDismiss = {errorDialog = false},
+                buttonClick = {viewModel.smsRequest(phoneNumber, activity)},
+                titleText = stringResource(R.string.dialog_title_again_input),
+                contentText = stringResource(R.string.dialog_content_again_input),
+                buttonText = stringResource(R.string.dialog_btn_again_input)
+            )
+        }
+
+        if(alreadySignUpDialog){
+            CustomDialog(
+                onDismiss = {alreadySignUpDialog = false},
+                buttonClick = {},
+                titleText = stringResource(R.string.dialog_title_already_signup),
+                contentText = stringResource(R.string.dialog_content_already_signup),
+                buttonText = stringResource(R.string.dialog_btn_already_signup)
             )
         }
     }

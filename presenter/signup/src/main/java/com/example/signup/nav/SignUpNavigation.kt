@@ -33,7 +33,7 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
                 viewModel,
                 actionClick = { navController.navigateUp() },
                 buttonClick = {
-                    viewModel.checkAlreadySignUpNumber()
+
                 },
                 activity = activity
             )

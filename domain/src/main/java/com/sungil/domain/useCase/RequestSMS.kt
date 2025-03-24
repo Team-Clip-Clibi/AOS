@@ -19,7 +19,12 @@ class RequestSMS @Inject constructor(private val repo: NetworkRepository) :
     }
 
     override suspend fun invoke(param: Param): Result {
-        val result = repo.requestSMS(param.phoneNumber , param.activity)
+        val editPhoneNumber = if(param.phoneNumber.startsWith("0")){
+            param.phoneNumber.drop(1)
+        } else{
+            param.phoneNumber
+        }
+        val result = repo.requestSMS(editPhoneNumber , param.activity)
         if(!result){
             return Result.Fail("Fail to request SMS")
         }

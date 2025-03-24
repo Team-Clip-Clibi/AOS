@@ -52,7 +52,7 @@ class SignUpViewModel @Inject constructor(
     private val _firebaseSMSState = MutableStateFlow<Action>(Action.LoadingRequestSMS("Loading"))
     val firebaseSMSState: StateFlow<Action> = _firebaseSMSState.asStateFlow()
 
-    private val _smsTime = MutableStateFlow("")
+    private val _smsTime = MutableStateFlow("0")
     val smsTime: StateFlow<String> = _smsTime.asStateFlow()
 
     fun changeTermItem(termItem: TermItem) {
@@ -77,17 +77,10 @@ class SignUpViewModel @Inject constructor(
     fun smsRequest(phoneNumber: String, activity: Activity) {
         _smsViewShow.value = true
         viewModelScope.launch {
-            when (val result = sms.invoke(RequestSMS.Param(phoneNumber, activity))) {
-                is RequestSMS.Result.Success -> {
-                    _firebaseSMSState.value = Action.SuccessRequestSMS(result.message)
-                    collectFirebaseSMSState()
-                    startSMSTimer()
-                }
-
-                is RequestSMS.Result.Fail -> {
-                    _firebaseSMSState.value = Action.Error(result.errorMessage)
-                }
-            }
+            sms.invoke(RequestSMS.Param(phoneNumber, activity))
+            _firebaseSMSState.value = Action.SuccessRequestSMS("start to request sms")
+            collectFirebaseSMSState()
+            startSMSTimer()
         }
     }
 
@@ -124,7 +117,7 @@ class SignUpViewModel @Inject constructor(
                             checkAlreadySignUpNumber()
                         }
 
-                        "Fail" -> {
+                        "Error" -> {
                             _firebaseSMSState.value = Action.FailVerifySMS("Verification failed")
                         }
                     }
@@ -134,17 +127,11 @@ class SignUpViewModel @Inject constructor(
 
     private fun startSMSTimer() {
         viewModelScope.launch {
-            timer.invoke()
-                .catch { e -> e.printStackTrace() }
-                .collect { time ->
-                    val min = time / 60
-                    val sec = time % 60
-                    _smsTime.value = String.format("%d:%02d", min, sec)
-                    if (time == 0) {
-                        _firebaseSMSState.value = Action.Error("Time out")
-                        this.cancel()
-                    }
-                }
+            timer.invoke().collect { time ->
+                val min = time / 60
+                val sec = time % 60
+                _smsTime.value = String.format("%d:%02d", min, sec)
+            }
         }
     }
 

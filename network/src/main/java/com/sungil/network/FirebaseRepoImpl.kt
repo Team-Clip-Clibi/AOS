@@ -10,11 +10,14 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.auth
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -29,17 +32,21 @@ class FirebaseRepoImpl @Inject constructor(@ApplicationContext private val appli
     private val smsGranted: StateFlow<String> = _smsGranted.asStateFlow()
 
     private val _timeFlow = MutableStateFlow(120)
-    private val timeFlow: StateFlow<Int> = _timeFlow.asStateFlow()
+    private val timeFlow: StateFlow<Int> get() = _timeFlow
 
     private val callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(p0: PhoneAuthCredential) {
             Log.e(javaClass.name.toString(), "success to verification")
-            _smsGranted.value = "Success"
+            CoroutineScope(Dispatchers.Main).launch {
+                _smsGranted.emit("Success")
+            }
         }
 
         override fun onVerificationFailed(p0: FirebaseException) {
             Log.e(javaClass.name.toString(), "Fail to verification")
-            _smsGranted.value = "Error"
+            CoroutineScope(Dispatchers.Main).launch {
+                _smsGranted.emit("Error")
+            }
         }
 
         override fun onCodeSent(
@@ -67,7 +74,9 @@ class FirebaseRepoImpl @Inject constructor(@ApplicationContext private val appli
 
             PhoneAuthProvider.verifyPhoneNumber(options)
             auth.setLanguageCode("kr")
-            startTimer()
+            CoroutineScope(Dispatchers.Default).launch {
+                startTimer()
+            }
             true
         } catch (e: Exception) {
             Log.e(javaClass.name.toString(), "error : ${e.message}")
@@ -86,7 +95,7 @@ class FirebaseRepoImpl @Inject constructor(@ApplicationContext private val appli
 
     private suspend fun startTimer() {
         for (i in 120 downTo 0) {
-            _timeFlow.value = i
+            _timeFlow.emit( i)
             delay(1000L)
         }
     }

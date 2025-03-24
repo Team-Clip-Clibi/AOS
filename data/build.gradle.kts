@@ -52,4 +52,9 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":database"))
     implementation(project(":network"))
+    //retrofit2
+    implementation(libs.squareup.retrofit2.retrofit)
+    implementation(libs.squareup.retrofit2.converter.kotlinx.serialization)
+    implementation(libs.squareup.okhttp3.logging.interceptor)
+    implementation(libs.jetbrains.kotlinx.serialization.json)
 }
