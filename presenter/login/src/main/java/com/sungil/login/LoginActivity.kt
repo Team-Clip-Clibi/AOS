@@ -26,7 +26,6 @@ class LoginActivity : ComponentActivity() {
             LoginScreen(
                 kakaoLogin = {
                     viewModel.getToken()
-//                    router.navigationToSMS("SignUp")
                 }
             )
         }
@@ -39,8 +38,17 @@ class LoginActivity : ComponentActivity() {
             viewModel.actionFlow.collect {
                 when (it) {
                     is LoginViewModel.Action.GetSuccess -> {
+                        viewModel.checkSignUp()
+                    }
+
+                    is LoginViewModel.Action.NotSignUp -> {
                         router.navigationToSMS("SignUp")
                     }
+
+                    is LoginViewModel.Action.SignUp -> {
+                        //TODO 메인화면으로 넘어가야함
+                    }
+
 
                     is LoginViewModel.Action.Error -> {
                         when (it.errorMessage) {

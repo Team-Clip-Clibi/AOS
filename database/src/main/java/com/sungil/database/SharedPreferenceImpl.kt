@@ -2,7 +2,6 @@ package com.sungil.database
 
 import android.content.Context
 import com.google.gson.Gson
-import com.sungil.database.model.TokenData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -12,14 +11,14 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
     private val preference =
         context.getSharedPreferences(BuildConfig.SHARED_KEY, Context.MODE_PRIVATE)
     private val gson = Gson()
-    override suspend fun saveKaKaoId(data : String): Boolean {
-        return try{
+    override suspend fun saveKaKaoId(data: String): Boolean {
+        return try {
             val editor = preference.edit()
             val json = gson.toJson(data)
-            editor.putString(BuildConfig.TOKEN_KEY , json)
+            editor.putString(BuildConfig.TOKEN_KEY, json)
             editor.apply()
             return true
-        }catch (e : Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             false
         }
@@ -35,8 +34,37 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
         }
     }
 
-    override suspend fun deleteToken(key: String): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun deleteToken(): Boolean {
+        return try {
+            val editor = preference.edit()
+            editor.remove(BuildConfig.TOKEN_KEY)
+            editor.apply()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun saveSignUp(data: Boolean): Boolean {
+        return try {
+            val editor = preference.edit()
+            editor.putBoolean(BuildConfig.signUpKey, data)
+            editor.apply()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun getAlreadySignUp(): Boolean {
+        return try {
+            preference.getBoolean(BuildConfig.signUpKey, false)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
 }

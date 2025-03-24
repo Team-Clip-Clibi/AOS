@@ -17,6 +17,14 @@ class DatabaseRepositoryImpl @Inject constructor(private val database: SharedPre
     }
 
     override suspend fun deleteKaKaoId(): Boolean {
-        return true
+        return database.deleteToken()
+    }
+
+    override suspend fun saveSingUpKey(data: Boolean): Boolean {
+       return database.saveSignUp(data)
+    }
+
+    override suspend fun getSingUpData(): Boolean {
+        return database.getAlreadySignUp()
     }
 }

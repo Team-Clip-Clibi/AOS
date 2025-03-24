@@ -24,8 +24,10 @@ android {
         consumerProguardFiles("consumer-rules.pro")
         val sharedPreKey: String = properties.getProperty("shredKey", "")
         val sharedTokenKey: String = properties.getProperty("tokenKey", "")
+        val signKey: String = properties.getProperty("signUpKey", "")
         buildConfigField("String", "SHARED_KEY", sharedPreKey)
         buildConfigField("String", "TOKEN_KEY", sharedTokenKey)
+        buildConfigField("String", "signUpKey", signKey)
     }
 
     buildTypes {
