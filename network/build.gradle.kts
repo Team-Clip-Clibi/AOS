@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -5,7 +7,13 @@ plugins {
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.kotlin.serialization)
 }
-
+val properties = Properties()
+val localPropertiesFile = project.rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { inputStream ->
+        properties.load(inputStream)
+    }
+}
 android {
     namespace = "com.sungil.network"
     compileSdk = 35
@@ -15,6 +23,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        val baseUrl: String = properties.getProperty("base_url", "")
+        val phoneNumberCheck : String = properties.getProperty("phone_number_check" , "")
+        buildConfigField("String", "BASE_URL", baseUrl)
+        buildConfigField("String" , "PHONE_NUMBER_CHECK" , phoneNumberCheck)
     }
 
     buildTypes {
@@ -32,6 +44,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 kapt {

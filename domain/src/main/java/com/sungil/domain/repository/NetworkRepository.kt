@@ -8,4 +8,5 @@ interface NetworkRepository {
     suspend fun verifySMS(code: String)
     suspend fun collectFirebaseResult(): Flow<String>
     suspend fun collectTimer() : Flow<Int>
+    suspend fun checkAlreadySignUpNumber(number : String) : String
 }

@@ -4,12 +4,14 @@ import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.signup.model.TermItem
+import com.sungil.domain.useCase.CheckAlreadySignUpNumber
 import com.sungil.domain.useCase.GetFirebaseSMSState
 import com.sungil.domain.useCase.GetSMSTime
 import com.sungil.domain.useCase.RequestSMS
 import com.sungil.domain.useCase.SendCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -26,6 +28,7 @@ class SignUpViewModel @Inject constructor(
     private val code: SendCode,
     private val firebaseSMS: GetFirebaseSMSState,
     private val timer: GetSMSTime,
+    private val checkNumber: CheckAlreadySignUpNumber,
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
@@ -94,9 +97,18 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun checkAlreadySignUpNumber() {
+    private fun checkAlreadySignUpNumber() {
         viewModelScope.launch(Dispatchers.IO) {
             val phoneNumber: String = _phoneNumber.value
+            when (val result = checkNumber.invoke(CheckAlreadySignUpNumber.Param(phoneNumber))) {
+                is CheckAlreadySignUpNumber.Result.Success -> {
+                    _firebaseSMSState.value = Action.VerifyFinish(result.message)
+                }
+
+                is CheckAlreadySignUpNumber.Result.Fail -> {
+                    _firebaseSMSState.value = Action.Error(result.errorMessage)
+                }
+            }
         }
     }
 
@@ -109,6 +121,7 @@ class SignUpViewModel @Inject constructor(
                         "Success" -> {
                             _firebaseSMSState.value =
                                 Action.SuccessVerifySMS("Verification successful")
+                            checkAlreadySignUpNumber()
                         }
 
                         "Fail" -> {
@@ -127,6 +140,10 @@ class SignUpViewModel @Inject constructor(
                     val min = time / 60
                     val sec = time % 60
                     _smsTime.value = String.format("%d:%02d", min, sec)
+                    if (time == 0) {
+                        _firebaseSMSState.value = Action.Error("Time out")
+                        this.cancel()
+                    }
                 }
         }
     }
@@ -136,7 +153,7 @@ class SignUpViewModel @Inject constructor(
         data class LoadingRequestSMS(val message: String) : Action
         data class SuccessRequestSMS(val message: String) : Action
         data class SuccessVerifySMS(val message: String) : Action
-        data class VerifyFinish(val message:  String) : Action
+        data class VerifyFinish(val message: String) : Action
         data class FailVerifySMS(val message: String) : Action
         data class Error(val message: String) : Action
     }

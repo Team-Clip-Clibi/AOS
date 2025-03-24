@@ -2,6 +2,7 @@ package com.example.signup.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,7 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.window.Dialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -225,4 +228,85 @@ fun CustomTextField(
             disabledIndicatorColor = Color.Transparent
         )
     )
+}
+
+@Composable
+fun CustomDialog(
+    onDismiss: () -> Unit,
+    buttonClick: () -> Unit,
+    titleText: String,
+    contentText: String,
+    buttonText: String,
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = colorResource(R.color.light_gray),
+                    shape = RoundedCornerShape(size = 24.dp)
+                )
+                .width(324.dp)
+                .height(174.dp)
+                .background(
+                    color = colorResource(R.color.white),
+                    shape = RoundedCornerShape(size = 24.dp)
+                )
+                .padding(24.dp),
+
+            ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = titleText,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        lineHeight = 28.sp,
+                        fontFamily = FontFamily(Font(R.font.medium)),
+                        fontWeight = FontWeight(600),
+                        color = colorResource(R.color.black_gray),
+                        textAlign = TextAlign.Center
+                    )
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Text(
+                    text = contentText,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        lineHeight = 20.sp,
+                        fontFamily = FontFamily(Font(R.font.medium)),
+                        fontWeight = FontWeight(500),
+                        color = colorResource(R.color.dark_gray),
+                        textAlign = TextAlign.Center
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = buttonClick,
+                    modifier = Modifier
+                        .width(276.dp)
+                        .height(48.dp)
+                        .background(
+                            color = colorResource(R.color.purple),
+                            shape = RoundedCornerShape(size = 12.dp)
+                        )
+                        .padding(start = 40.dp, end = 40.dp)
+                ) {
+                    Text(
+                        text = buttonText,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            lineHeight = 24.sp,
+                            fontFamily = FontFamily(Font(R.font.medium)),
+                            fontWeight = FontWeight(600),
+                            color = colorResource(R.color.white)
+                        )
+                    )
+                }
+            }
+        }
+    }
 }

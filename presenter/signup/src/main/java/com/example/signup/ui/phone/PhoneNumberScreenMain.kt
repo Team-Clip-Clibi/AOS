@@ -1,6 +1,7 @@
 package com.example.signup.ui.phone
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +17,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +38,9 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Button
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
+import com.example.signup.ui.component.CustomDialog
 import com.example.signup.ui.component.CustomTextField
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun PhoneNumberScreenMain(
@@ -48,6 +55,29 @@ internal fun PhoneNumberScreenMain(
     val firebaseSMSState by viewModel.firebaseSMSState.collectAsState()
     val smsTimer by viewModel.smsTime.collectAsState()
 
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogContent by remember { mutableStateOf("") }
+    var dialogButtonText by remember { mutableStateOf("") }
+    var dialogAction: (() -> Unit)? by remember { mutableStateOf(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.firebaseSMSState.collectLatest { state->
+            when(state){
+                is SignUpViewModel.Action.Error ->{
+                    when(state.message){
+
+                    }
+                }
+                is SignUpViewModel.Action.FailVerifySMS ->{
+
+                }
+                else ->{
+                    Log.d(javaClass.name.toString() , "state is change $state")
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -190,7 +220,7 @@ internal fun PhoneNumberScreenMain(
 
         Button(
             onClick = { buttonClick() },
-            enabled = firebaseSMSState is SignUpViewModel.Action.SuccessVerifySMS,
+            enabled = firebaseSMSState is SignUpViewModel.Action.VerifyFinish,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()

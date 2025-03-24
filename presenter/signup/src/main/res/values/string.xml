@@ -22,4 +22,11 @@
     <string name="txt_resend_sms">다시 보내기</string>
     <!--  common  -->
     <string name="btn_next">다음</string>
+    <!--  dialog  -->
+    <string name="dialog_title_again_input">인증번호를 다시 입력해주세요</string>
+    <string name="dialog_content_again_input">재전송하시겠어요?</string>
+    <string name="dialog_btn_again_input">인증번호 재전송</string>
+    <string name="dialog_title_already_signup">이미 가입되어있는 번호에요</string>
+    <string name="dialog_content_already_signup">로그인하러 가시겠어요?</string>
+    <string name="dialog_btn_already_signup">로그인하러 가기</string>
 </resources>
