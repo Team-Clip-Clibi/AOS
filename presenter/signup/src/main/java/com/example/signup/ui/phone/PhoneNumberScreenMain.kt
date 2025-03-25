@@ -37,8 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Button
 import com.example.signup.ERROR_ALREADY_SIGN_UP
-import com.example.signup.ERROR_FAIL_SMS
-import com.example.signup.ERROR_TIME_OUT
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomDialog
@@ -99,7 +97,7 @@ internal fun PhoneNumberScreenMain(
     ) {
         Column {
             Text(
-                text = stringResource(R.string.txt_phone_title),
+                text = stringResource(R.string.txt_sign_up_title),
                 fontSize = 16.sp,
                 fontFamily = FontFamily(Font(R.font.medium)),
                 fontWeight = FontWeight(600),

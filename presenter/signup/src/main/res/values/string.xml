@@ -12,7 +12,7 @@
     <string name="btn_start_oneThing">원띵 시작하기</string>
 
     <!--  phone number   -->
-    <string name="txt_phone_title">원띵와 함께할 회원님의</string>
+    <string name="txt_sign_up_title">원띵와 함께할 회원님의</string>
     <string name="txt_phone_title_sub">핸드폰 번호를 알려주세요</string>
     <string name="hint_input_phone_number">휴대폰 번호</string>
     <string name="btn_send_message">인증 번호 발송</string>
@@ -20,8 +20,28 @@
     <string name="btn_check_sms_num">인증번호 확인</string>
     <string name="txt_sms_not_received">인증 번호를 받지 못하셨나요?</string>
     <string name="txt_resend_sms">다시 보내기</string>
+
     <!--  common  -->
     <string name="btn_next">다음</string>
+
+    <!-- InputName   -->
+    <string name="txt_name_title">원띵에 오신 당신, 환영해요!</string>
+    <string name="txt_name_content">실명을 입력해주세요</string>
+    <string name="txt_name_safe">실명은 서비스 내에서 공개되지 않으니,\n안심하고 입력해주세요</string>
+    <string name="txt_name_korean_english">*국문과 영문 외의 문자를 사용할 수 없습니다.</string>
+    <string name="hint_name">ex) 홍길동</string>
+
+    <!-- InputNickName   -->
+    <string name="txt_nick_title">원띵에서 뭐라고 부를까요?</string>
+    <string name="txt_nick_content">닉네임을 입력해주세요</string>
+    <string name="hint_nick">닉네임</string>
+    <string name="txt_nick_length">최소 2자~8자(엉어,국문 가능)</string>
+    <string name="btn_nick_check">중복 확인</string>
+    <string name="txt_nick_length_over">*최대 8자까지 가능해요.</string>
+    <string name="txt_nick_length_low">*2자 이상 입력해주세요</string>
+    <string name="txt_nick_no_special">*특수문자를 사용할 수 없습니다.</string>
+    <string name="txt_nick_name_okay">사용 가능한 닉네임입니다.</string>
+
     <!--  dialog  -->
     <string name="dialog_title_again_input">인증번호를 다시 입력해주세요</string>
     <string name="dialog_content_again_input">재전송하시겠어요?</string>
@@ -29,4 +49,5 @@
     <string name="dialog_title_already_signup">이미 가입되어있는 번호에요</string>
     <string name="dialog_content_already_signup">로그인하러 가시겠어요?</string>
     <string name="dialog_btn_already_signup">로그인하러 가기</string>
+
 </resources>

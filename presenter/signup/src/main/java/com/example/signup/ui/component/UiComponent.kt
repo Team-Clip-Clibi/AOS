@@ -186,6 +186,7 @@ fun CustomTextField(
             shape = RoundedCornerShape(12.dp)
         ),
         keyboardOptions = KeyboardOptions(keyboardType = inputType),
+        singleLine = true,
         placeholder = {
             Text(
                 hint,
@@ -305,5 +306,64 @@ fun CustomDialog(
                 }
             }
         }
+    }
+}
+@Composable
+fun CustomTitleText(text : String){
+    Text(
+        text = text,
+        fontSize = 16.sp,
+        fontFamily = FontFamily(Font(R.font.medium)),
+        fontWeight = FontWeight(600),
+        modifier = Modifier.fillMaxWidth(),
+        color = colorResource(R.color.dark_gray)
+    )
+}
+
+@Composable
+fun CustomContentText(text : String){
+    Text(
+        text = text,
+        fontSize = 28.sp,
+        lineHeight = 40.sp,
+        fontFamily = FontFamily(Font(R.font.medium)),
+        fontWeight = FontWeight(700),
+        modifier = Modifier.fillMaxWidth(),
+        color = colorResource(R.color.black_gray)
+    )
+}
+
+@Composable
+fun CustomUnderTextFieldText(text : String , color : Color){
+    Text(
+        text = text,
+        fontSize = 12.sp,
+        lineHeight = 18.sp,
+        fontFamily =  FontFamily(Font(R.font.medium)),
+        fontWeight = FontWeight(400),
+        color = color
+    )
+}
+
+@Composable
+fun CustomButton(
+    text: String,
+    onclick: () -> Unit,
+    enable: Boolean,
+) {
+    Button(
+        onClick = { onclick() },
+        enabled = enable
+    ) {
+        Text(
+            text = text,
+            fontSize = 20.sp,
+            lineHeight = 28.sp,
+            fontFamily = FontFamily(Font(R.font.medium)),
+            fontWeight = FontWeight(600),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+            color = colorResource(R.color.white)
+        )
     }
 }

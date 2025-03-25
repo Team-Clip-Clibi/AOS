@@ -55,6 +55,11 @@ class SignUpViewModel @Inject constructor(
     private val _smsTime = MutableStateFlow("0")
     val smsTime: StateFlow<String> = _smsTime.asStateFlow()
 
+    private val _name = MutableStateFlow("")
+    val name : StateFlow<String> = _name.asStateFlow()
+
+    private val _nickName = MutableStateFlow("")
+    val nickName : StateFlow<String> =_nickName.asStateFlow()
 
     fun changeTermItem(termItem: TermItem) {
         val updateList = _termItem.value.map {
@@ -73,6 +78,14 @@ class SignUpViewModel @Inject constructor(
 
     fun signCodeNumber(number: String) {
         _smsCode.value = number
+    }
+
+    fun inputName(data : String){
+        _name.value = data
+    }
+
+    fun inputNickName(data : String){
+        _nickName.value = data
     }
 
     fun smsRequest(phoneNumber: String, activity: Activity) {
