@@ -284,16 +284,13 @@ fun CustomDialog(
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
+
                 Button(
                     onClick = buttonClick,
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
-                        .width(276.dp)
+                        .fillMaxWidth()
                         .height(48.dp)
-                        .background(
-                            color = colorResource(R.color.purple),
-                            shape = RoundedCornerShape(size = 12.dp)
-                        )
-                        .padding(start = 40.dp, end = 40.dp)
                 ) {
                     Text(
                         text = buttonText,

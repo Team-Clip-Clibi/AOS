@@ -22,7 +22,7 @@ internal fun PhoneNumberScreen(
         topBar = {
             TopBar(
                 title = stringResource(R.string.txt_topBar_title),
-                currentPage = 2,
+                currentPage = 1,
                 totalPage = 5,
                 onBackClick = {
                     actionClick()

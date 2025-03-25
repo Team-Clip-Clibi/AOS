@@ -55,6 +55,7 @@ class SignUpViewModel @Inject constructor(
     private val _smsTime = MutableStateFlow("0")
     val smsTime: StateFlow<String> = _smsTime.asStateFlow()
 
+
     fun changeTermItem(termItem: TermItem) {
         val updateList = _termItem.value.map {
             if (it.termName == termItem.termName) {
@@ -130,7 +131,13 @@ class SignUpViewModel @Inject constructor(
             timer.invoke().collect { time ->
                 val min = time / 60
                 val sec = time % 60
-                _smsTime.value = String.format("%d:%02d", min, sec)
+                val formatted = String.format("%d:%02d", min, sec)
+                _smsTime.value = formatted.trim()
+
+                if (formatted == "0:00") {
+                    _firebaseSMSState.value = Action.Error("error")
+                    this.cancel()
+                }
             }
         }
     }

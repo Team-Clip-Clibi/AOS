@@ -60,6 +60,10 @@ internal fun PhoneNumberScreenMain(
 
     var errorDialog by remember { mutableStateOf(false) }
     var alreadySignUpDialog by remember { mutableStateOf(false) }
+    val buttonIsEnable = when(firebaseSMSState){
+        is SignUpViewModel.Action.VerifyFinish -> true
+        else -> false
+    }
 
     LaunchedEffect(Unit) {
         viewModel.firebaseSMSState.collectLatest { state->
@@ -75,6 +79,7 @@ internal fun PhoneNumberScreenMain(
                 is SignUpViewModel.Action.FailVerifySMS ->{
                     errorDialog = true
                 }
+
                 else ->{
                     Log.d(javaClass.name.toString() , "state is change $state")
                 }
@@ -224,7 +229,7 @@ internal fun PhoneNumberScreenMain(
 
             Button(
                 onClick = { buttonClick() },
-                enabled = firebaseSMSState is SignUpViewModel.Action.VerifyFinish,
+                enabled = buttonIsEnable,
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -246,7 +251,10 @@ internal fun PhoneNumberScreenMain(
         if(errorDialog){
             CustomDialog(
                 onDismiss = {errorDialog = false},
-                buttonClick = {viewModel.smsRequest(phoneNumber, activity)},
+                buttonClick = {
+                    errorDialog = false
+                    viewModel.smsRequest(phoneNumber, activity)
+                              },
                 titleText = stringResource(R.string.dialog_title_again_input),
                 contentText = stringResource(R.string.dialog_content_again_input),
                 buttonText = stringResource(R.string.dialog_btn_again_input)
@@ -256,7 +264,9 @@ internal fun PhoneNumberScreenMain(
         if(alreadySignUpDialog){
             CustomDialog(
                 onDismiss = {alreadySignUpDialog = false},
-                buttonClick = {},
+                buttonClick = {
+                    alreadySignUpDialog = false
+                },
                 titleText = stringResource(R.string.dialog_title_already_signup),
                 contentText = stringResource(R.string.dialog_content_already_signup),
                 buttonText = stringResource(R.string.dialog_btn_already_signup)
