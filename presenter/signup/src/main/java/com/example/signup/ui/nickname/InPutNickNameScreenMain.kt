@@ -72,7 +72,7 @@ internal fun InPutNickNameScreenMain(
                 text = nickName,
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { nickName ->
-                    viewModel.inputName(nickName)
+                    viewModel.inputNickName(nickName)
                 },
                 inputType = KeyboardType.Password,
                 hint = stringResource(R.string.hint_nick)
