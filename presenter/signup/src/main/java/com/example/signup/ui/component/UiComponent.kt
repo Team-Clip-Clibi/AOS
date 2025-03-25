@@ -367,3 +367,19 @@ fun CustomButton(
         )
     }
 }
+
+@Composable
+fun CustomTextLittle(text : String){
+    Text(
+        text = text,
+        modifier = Modifier.fillMaxWidth(),
+        style = TextStyle(
+            fontSize = 14.sp,
+            lineHeight = 20.sp,
+            fontFamily = FontFamily(Font(R.font.medium)),
+            fontWeight = FontWeight(700),
+            color = colorResource(R.color.black_gray)
+
+        )
+    )
+}

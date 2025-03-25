@@ -21,7 +21,7 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
 
     NavHost(
         navController = navController,
-        startDestination = NAV_TERM
+        startDestination = NAV_NAME
     ) {
         composable(NAV_TERM) {
             TermScreen(
