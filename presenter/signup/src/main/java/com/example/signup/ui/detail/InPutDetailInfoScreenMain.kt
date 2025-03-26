@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -65,7 +67,9 @@ internal fun InPutDetailInfoScreenMain(
                 bottom = 21.dp
             )
     ) {
-        Column {
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
             CustomTitleText(stringResource(R.string.txt_info_title))
             CustomContentText(stringResource(R.string.txt_info_content))
 
@@ -209,7 +213,7 @@ internal fun InPutDetailInfoScreenMain(
                     )
                 }
             }
-
+            Spacer(modifier = Modifier.height(10.dp))
             Spacer(modifier = Modifier.weight(1f))
 
             CustomButton(
