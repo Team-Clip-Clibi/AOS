@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,6 +44,15 @@ class LoginViewModel @Inject constructor(
                 is CheckAlreadySignUp.Result.Fail -> {
                     _actionFlow.emit(Action.NotSignUp(result.errorMessage))
                 }
+            }
+        }
+    }
+
+    fun setNotification(data: Boolean) {
+        viewModelScope.launch {
+            if (!data) {
+                _actionFlow.emit(Action.Error("error permission"))
+                return@launch
             }
         }
     }

@@ -1,9 +1,13 @@
 package com.sungil.login
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sungil.domain.model.Router
 import com.sungil.login.ui.LoginScreen
@@ -20,6 +24,7 @@ class LoginActivity : ComponentActivity() {
     @Inject
     lateinit var router: Router
 
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -29,7 +34,8 @@ class LoginActivity : ComponentActivity() {
                 }
             )
         }
-
+        setupNotificationPermission()
+        requestNotification()
         addListener()
     }
 
@@ -56,6 +62,10 @@ class LoginActivity : ComponentActivity() {
                                 router.navigationToSMS(KAKAO_VIEW)
                             }
 
+                            ERROR_NOTIFICATION ->{
+                                finish()
+                            }
+
                             else -> throw IllegalArgumentException("UNKNOW ERROR")
                         }
                     }
@@ -64,4 +74,19 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
+    private fun setupNotificationPermission(){
+        permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ){ isGranted ->
+            viewModel.setNotification(isGranted)
+        }
+    }
+
+    private fun requestNotification(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            viewModel.setNotification(true)
+        }
+    }
 }
