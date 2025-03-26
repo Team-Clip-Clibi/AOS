@@ -2,6 +2,7 @@ package com.example.signup.ui.term
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -42,27 +43,36 @@ internal fun TermScreenMain(
     var allChecked by remember { mutableStateOf(false) }
     val termItems by viewModel.termItem.collectAsState(initial = emptyList())
 
-
     LaunchedEffect(termItems) {
         allChecked = termItems.drop(1).all { it.checked }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 17.dp, end = 17.dp, top = paddingValues.calculateTopPadding() + 32.dp).verticalScroll(rememberScrollState())
-
+            .padding(
+                start = 17.dp,
+                end = 17.dp,
+                top = paddingValues.calculateTopPadding() + 32.dp,
+                bottom = 21.dp
+            )
     ) {
-        Text(
-            text = stringResource(R.string.txt_term_title),
-            fontSize = 28.sp,
-            fontFamily = FontFamily(Font(R.font.bold)),
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Text(
+                text = stringResource(R.string.txt_term_title),
+                fontSize = 28.sp,
+                fontFamily = FontFamily(Font(R.font.bold)),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp)
+            )
 
 
-        Column(modifier = Modifier.weight(1f)) {
             CustomCheckBox(
                 text = stringResource(R.string.txt_term_okay_everyThing),
                 checked = allChecked,
@@ -136,27 +146,23 @@ internal fun TermScreenMain(
                     }
                 }
             )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = { buttonClick() },
+                enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.btn_start_oneThing),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
-
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = { buttonClick() },
-            enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.btn_start_oneThing),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-
-        Spacer(modifier = Modifier.height(21.dp))
     }
 }
