@@ -1,6 +1,9 @@
 package com.example.signup.nav
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -36,7 +39,19 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
                 })
         }
 
-        composable(NAV_PHONE) {
+        composable(NAV_PHONE,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(700)
+                )
+            }) {
             PhoneNumberScreen(
                 viewModel = viewModel,
                 actionClick = { navController.navigateUp() },
@@ -47,7 +62,18 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
             )
         }
 
-        composable(NAV_NAME) {
+        composable(NAV_NAME,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            }, popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(700)
+                )
+            }) {
             InputNameScreen(
                 viewModel = viewModel,
                 actionClick = { navController.navigateUp() },
@@ -57,7 +83,18 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
             )
         }
 
-        composable(NAV_NICK) {
+        composable(NAV_NICK,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            }, popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(700)
+                )
+            }) {
             InputNickNameScreen(
                 viewModel = viewModel,
                 actionClick = { navController.navigateUp() },
@@ -67,10 +104,21 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
             )
         }
 
-        composable(NAV_INFO){
+        composable(NAV_INFO,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            }, popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(700)
+                )
+            }) {
             InputDetailInfoScreen(
                 viewModel = viewModel,
-                actionClick = {navController.navigateUp()},
+                actionClick = { navController.navigateUp() },
                 buttonClick = {
 
                 }

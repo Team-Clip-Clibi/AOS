@@ -97,7 +97,11 @@ fun TopBar(
             },
             actions = {
                 Text(
-                    text = "$currentPage/$totalPage",
+                    text = if(currentPage == 0 || totalPage == 0){
+                        ""
+                    }else{
+                        "$currentPage/$totalPage"
+                    },
                     style = TextStyle(
                         fontSize = 12.sp,
                         lineHeight = 18.sp,

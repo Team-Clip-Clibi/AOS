@@ -48,7 +48,7 @@ internal fun InputNameScreenMain(
             )
     ) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize() . verticalScroll(rememberScrollState())
         ) {
             CustomTitleText(stringResource(R.string.txt_sign_up_title))
 
@@ -89,12 +89,13 @@ internal fun InputNameScreenMain(
                     )
                 }
             }
+
             Spacer(modifier = Modifier.weight(1f))
 
             CustomButton(
                 stringResource(R.string.btn_next),
                 onclick = {buttonClick()},
-                enable = name.isNotEmpty()
+                enable = name.isNotEmpty(),
             )
         }
     }

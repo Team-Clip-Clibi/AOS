@@ -65,7 +65,7 @@ internal fun InPutNickNameScreenMain(
             )
     ) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize() . verticalScroll(rememberScrollState())
         ) {
             CustomTitleText(stringResource(R.string.txt_nick_title))
             CustomContentText(stringResource(R.string.txt_nick_content))

@@ -68,7 +68,7 @@ internal fun InPutDetailInfoScreenMain(
             )
     ) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize() . verticalScroll(rememberScrollState())
         ) {
             CustomTitleText(stringResource(R.string.txt_info_title))
             CustomContentText(stringResource(R.string.txt_info_content))
@@ -219,7 +219,7 @@ internal fun InPutDetailInfoScreenMain(
             CustomButton(
                 stringResource(R.string.btn_finish),
                 onclick = { buttonClick() },
-                enable = true
+                enable = true,
             )
 
             BottomSheetSelector(
