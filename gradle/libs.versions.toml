@@ -22,7 +22,8 @@ nav = "2.8.9"
 okhttp3 = "4.12.0"
 retrotit2 = "2.11.0"
 serialization = "1.6.0"
-
+firebase-analytics = "21.5.0"
+firebase-messaging = "23.4.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
@@ -53,7 +54,8 @@ jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name =
 squareup-okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
 squareup-retrofit2-converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrotit2" }
 squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrotit2" }
-
+firebase-analytics = {group = "com.google.firebase" , name = "firebase-analytics" , version.ref = "firebase-analytics"}
+firebase-message = {group = "com.google.firebase" , name = "firebase-messaging" , version.ref = "firebase-messaging"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -62,4 +64,3 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 hilt-project = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-service-gms = {id = "com.google.gms.google-services" , version.ref = "gms-service"}
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
