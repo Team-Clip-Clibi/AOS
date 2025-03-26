@@ -5,11 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.signup.NAV_INFO
 import com.example.signup.NAV_NAME
 import com.example.signup.NAV_NICK
 import com.example.signup.NAV_PHONE
 import com.example.signup.NAV_TERM
 import com.example.signup.SignUpViewModel
+import com.example.signup.ui.detail.InputDetailInfoScreen
 import com.example.signup.ui.name.InputNameScreen
 import com.example.signup.ui.nickname.InputNickNameScreen
 import com.example.signup.ui.phone.PhoneNumberScreen
@@ -21,7 +23,7 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
 
     NavHost(
         navController = navController,
-        startDestination = NAV_NAME
+        startDestination = NAV_INFO
     ) {
         composable(NAV_TERM) {
             TermScreen(
@@ -59,6 +61,16 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
             InputNickNameScreen(
                 viewModel = viewModel,
                 actionClick = { navController.navigateUp() },
+                buttonClick = {
+                    navController.navigate(NAV_INFO)
+                }
+            )
+        }
+
+        composable(NAV_INFO){
+            InputDetailInfoScreen(
+                viewModel = viewModel,
+                actionClick = {navController.navigateUp()},
                 buttonClick = {
 
                 }

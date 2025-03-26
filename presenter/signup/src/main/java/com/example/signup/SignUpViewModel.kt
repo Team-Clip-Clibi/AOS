@@ -1,6 +1,7 @@
 package com.example.signup
 
 import android.app.Activity
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.signup.model.TermItem
@@ -56,37 +57,13 @@ class SignUpViewModel @Inject constructor(
     val smsTime: StateFlow<String> = _smsTime.asStateFlow()
 
     private val _name = MutableStateFlow("")
-    val name : StateFlow<String> = _name.asStateFlow()
+    val name: StateFlow<String> = _name.asStateFlow()
 
     private val _nickName = MutableStateFlow("")
-    val nickName : StateFlow<String> =_nickName.asStateFlow()
+    val nickName: StateFlow<String> = _nickName.asStateFlow()
 
-    fun changeTermItem(termItem: TermItem) {
-        val updateList = _termItem.value.map {
-            if (it.termName == termItem.termName) {
-                termItem
-            } else {
-                it
-            }
-        }
-        _termItem.value = updateList
-    }
-
-    fun inputPhoneNumber(number: String) {
-        _phoneNumber.value = number
-    }
-
-    fun signCodeNumber(number: String) {
-        _smsCode.value = number
-    }
-
-    fun inputName(data : String){
-        _name.value = data
-    }
-
-    fun inputNickName(data : String){
-        _nickName.value = data
-    }
+    private val _gender = MutableStateFlow(MALE)
+    val gender: StateFlow<String> = _gender.asStateFlow()
 
     fun smsRequest(phoneNumber: String, activity: Activity) {
         _smsViewShow.value = true
@@ -155,6 +132,39 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Set function
+     */
+    fun changeTermItem(termItem: TermItem) {
+        val updateList = _termItem.value.map {
+            if (it.termName == termItem.termName) {
+                termItem
+            } else {
+                it
+            }
+        }
+        _termItem.value = updateList
+    }
+
+    fun inputPhoneNumber(number: String) {
+        _phoneNumber.value = number
+    }
+
+    fun signCodeNumber(number: String) {
+        _smsCode.value = number
+    }
+
+    fun inputName(data: String) {
+        _name.value = data
+    }
+
+    fun inputNickName(data: String) {
+        _nickName.value = data
+    }
+
+    fun inputGender(data: String) {
+        _gender.value = data
+    }
 
     sealed interface Action {
         data class LoadingRequestSMS(val message: String) : Action

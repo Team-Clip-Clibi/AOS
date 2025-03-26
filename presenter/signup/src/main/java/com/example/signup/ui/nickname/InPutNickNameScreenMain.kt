@@ -112,16 +112,16 @@ internal fun InPutNickNameScreenMain(
                             }
                         )
                     )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    CustomButton(
-                        stringResource(R.string.btn_next),
-                        onclick = { buttonClick() },
-                        enable = true
-                    )
                 }
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+            CustomButton(
+                stringResource(R.string.btn_next),
+                onclick = { buttonClick() },
+                enable = if(nickName.isNotEmpty()) true else false
+            )
+
         }
     }
 }

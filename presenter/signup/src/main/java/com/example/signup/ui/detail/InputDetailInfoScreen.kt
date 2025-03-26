@@ -6,6 +6,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.TopBar
+import com.example.signup.ui.name.InputNameScreen
 
 @Composable
 internal fun InputDetailInfoScreen(
@@ -24,6 +25,10 @@ internal fun InputDetailInfoScreen(
         )
     }
     ) { paddingValues ->
-
+        InPutDetailInfoScreenMain(
+            paddingValues = paddingValues,
+            viewModel = viewModel,
+            buttonClick = buttonClick
+        )
     }
 }

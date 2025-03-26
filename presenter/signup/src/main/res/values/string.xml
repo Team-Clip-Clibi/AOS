@@ -23,6 +23,7 @@
 
     <!--  common  -->
     <string name="btn_next">다음</string>
+    <string name="btn_finish">완료</string>
 
     <!-- InputName   -->
     <string name="txt_name_title">원띵에 오신 당신, 환영해요!</string>

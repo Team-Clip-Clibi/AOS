@@ -4,10 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,7 +27,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -34,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -45,6 +45,8 @@ import androidx.compose.ui.unit.sp
 import com.example.signup.R
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.remember
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
 
@@ -174,9 +176,9 @@ fun CustomTextField(
     text: String,
     modifier: Modifier,
     onValueChange: (String) -> Unit,
-    inputType : KeyboardType,
-    hint : String,
-    timeCount : String =""
+    inputType: KeyboardType,
+    hint: String,
+    timeCount: String = "",
 ) {
     TextField(
         value = text,
@@ -308,8 +310,9 @@ fun CustomDialog(
         }
     }
 }
+
 @Composable
-fun CustomTitleText(text : String){
+fun CustomTitleText(text: String) {
     Text(
         text = text,
         fontSize = 16.sp,
@@ -321,7 +324,7 @@ fun CustomTitleText(text : String){
 }
 
 @Composable
-fun CustomContentText(text : String){
+fun CustomContentText(text: String) {
     Text(
         text = text,
         fontSize = 28.sp,
@@ -334,12 +337,12 @@ fun CustomContentText(text : String){
 }
 
 @Composable
-fun CustomUnderTextFieldText(text : String , color : Color){
+fun CustomUnderTextFieldText(text: String, color: Color) {
     Text(
         text = text,
         fontSize = 12.sp,
         lineHeight = 18.sp,
-        fontFamily =  FontFamily(Font(R.font.medium)),
+        fontFamily = FontFamily(Font(R.font.medium)),
         fontWeight = FontWeight(400),
         color = color
     )
@@ -352,6 +355,23 @@ fun CustomButton(
     enable: Boolean,
 ) {
     Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            colorResource(
+                when (enable) {
+                    true -> {
+                        R.color.purple
+                    }
+
+                    false -> {
+                        R.color.bar_light_gray
+                    }
+                }
+            )
+        ),
         onClick = { onclick() },
         enabled = enable
     ) {
@@ -369,7 +389,7 @@ fun CustomButton(
 }
 
 @Composable
-fun CustomTextLittle(text : String){
+fun CustomTextLittle(text: String) {
     Text(
         text = text,
         modifier = Modifier.fillMaxWidth(),
@@ -382,4 +402,73 @@ fun CustomTextLittle(text : String){
 
         )
     )
+}
+
+@Composable
+fun CustomGenderPick(
+    text: String,
+    modifier: Modifier = Modifier,
+    clickable: () -> Unit,
+) {
+    Box(
+        modifier = modifier.clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }
+        ) {
+            clickable()
+        },
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(
+                fontSize = 14.sp,
+                lineHeight = 20.sp,
+                fontFamily = FontFamily(Font(R.font.medium)),
+                fontWeight = FontWeight(500),
+                color = colorResource(R.color.black_gray)
+            )
+        )
+    }
+}
+
+@Composable
+fun RowScope.CustomSpinnerBox(text: String, onclick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .weight(1f) // 이제 에러 안 남
+            .height(60.dp)
+            .background(colorResource(R.color.light_gray), shape = RoundedCornerShape(size = 12.dp))
+            .padding(start = 17.dp, end = 16.dp)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onclick()
+            },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(
+                fontSize = 14.sp,
+                lineHeight = 20.sp,
+                fontFamily = FontFamily(Font(R.font.medium)),
+                fontWeight = FontWeight(600),
+                color = colorResource(R.color.black_gray)
+            )
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            modifier = Modifier
+                .padding(1.dp)
+                .width(24.dp)
+                .height(24.dp),
+            painter = painterResource(R.drawable.ic_down),
+            contentDescription = "select$text",
+            contentScale = ContentScale.None
+        )
+    }
 }
