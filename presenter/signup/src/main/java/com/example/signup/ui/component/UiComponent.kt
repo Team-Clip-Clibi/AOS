@@ -13,14 +13,18 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -44,11 +48,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
+import com.example.signup.ISArea
+import com.example.signup.ISCity
+import com.example.signup.ISDay
+import com.example.signup.ISMonth
+import com.example.signup.ISYear
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -470,5 +484,159 @@ fun RowScope.CustomSpinnerBox(text: String, onclick: () -> Unit) {
             contentDescription = "select$text",
             contentScale = ContentScale.None
         )
+    }
+}
+
+@Composable
+fun BottomSheetSelector(
+    yearBottomSheet: Boolean,
+    monthBottomSheet: Boolean,
+    dayBottomSheet: Boolean,
+    cityBottomSheet: Boolean,
+    areaBottomSheet: Boolean,
+    onSelect: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    when {
+        yearBottomSheet -> {
+            CustomBottomSheet(
+                kind = ISYear,
+                onSelect = onSelect,
+                onDismiss = onDismiss
+            )
+        }
+        monthBottomSheet -> {
+            CustomBottomSheet(
+                kind = ISMonth,
+                onSelect = onSelect,
+                onDismiss = onDismiss
+            )
+        }
+        dayBottomSheet -> {
+            CustomBottomSheet(
+                kind = ISDay,
+                onSelect = onSelect,
+                onDismiss = onDismiss
+            )
+        }
+        cityBottomSheet -> {
+            CustomBottomSheet(
+                kind = ISCity,
+                onSelect = onSelect,
+                onDismiss = onDismiss
+            )
+        }
+        areaBottomSheet -> {
+            CustomBottomSheet(
+                kind = ISArea,
+                onSelect = onSelect,
+                onDismiss = onDismiss
+            )
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomBottomSheet(
+    kind: String,
+    onSelect: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val coroutineScope = rememberCoroutineScope()
+
+    val dataList: List<String> = when (kind) {
+        ISYear -> (2025 downTo 1926).map { "${it}년" }
+        ISMonth -> (1..12).map { "${it}월" }
+        ISDay -> (1..31).map { "${it}일" }
+        ISCity -> listOf("서울시")
+        ISArea -> listOf(
+            "강남구", "강동구", "강북구", "강서구",
+            "관악구", "광진구", "구로구", "금천구", "노원구",
+            "도봉구", "동대문구", "동작구", "마포구", "서대문구",
+            "서초구", "성동구", "성북구", "송파구", "양천구",
+            "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"
+        )
+        else -> throw IllegalArgumentException("Invalid kind: $kind")
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = {
+            coroutineScope.launch {
+                sheetState.hide()
+                onDismiss()
+            }
+        },
+        sheetState = sheetState,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        containerColor = Color.White
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .heightIn(min = 200.dp, max = 400.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_close),
+                    contentDescription = "닫기",
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.TopEnd)
+                        .clickable {
+                            coroutineScope.launch {
+                                sheetState.hide()
+                                onDismiss()
+                            }
+                        }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 400.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(dataList) { item ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color.White,
+                                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                            )
+                            .clickable {
+                                coroutineScope.launch {
+                                    onSelect(item)
+                                    sheetState.hide()
+                                    onDismiss()
+                                }
+                            }
+                            .padding(start = 17.dp, end = 16.dp)
+                    ) {
+                        Text(
+                            text = item,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.medium)),
+                                fontWeight = FontWeight(500),
+                                color = colorResource(R.color.black_gray),
+                                textAlign = TextAlign.Center
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp)
+                        )
+                    }
+                }
+            }
+        }
     }
 }

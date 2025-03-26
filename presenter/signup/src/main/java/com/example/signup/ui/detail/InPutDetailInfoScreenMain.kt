@@ -16,15 +16,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.signup.FEMALE
+import com.example.signup.ISArea
+import com.example.signup.ISCity
+import com.example.signup.ISDay
+import com.example.signup.ISMonth
+import com.example.signup.ISYear
 import com.example.signup.MALE
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
+import com.example.signup.ui.component.BottomSheetSelector
+import com.example.signup.ui.component.CustomBottomSheet
 import com.example.signup.ui.component.CustomButton
 import com.example.signup.ui.component.CustomContentText
 import com.example.signup.ui.component.CustomGenderPick
@@ -39,6 +49,12 @@ internal fun InPutDetailInfoScreenMain(
     buttonClick: () -> Unit,
 ) {
     val gender by viewModel.gender.collectAsState()
+    var yearBottomSheet by remember { mutableStateOf(false) }
+    var dayBottomSheet by remember { mutableStateOf(false) }
+    var monthBottomSheet by remember { mutableStateOf(false) }
+    var cityBottomSheet by remember { mutableStateOf(false) }
+    var areaBottomSheet by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -77,14 +93,15 @@ internal fun InPutDetailInfoScreenMain(
                             }
                         ),
                         shape = RoundedCornerShape(12.dp)
-                    ).padding(start = 17.dp, end = 16.dp),
+                    )
+                    .padding(start = 17.dp, end = 16.dp),
                 text = stringResource(R.string.txt_info_male),
-                clickable = {viewModel.inputGender(MALE)}
+                clickable = { viewModel.inputGender(MALE) }
             )
             Spacer(modifier = Modifier.height(10.dp))
             //여성버튼
             CustomGenderPick(
-                modifier =  Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
                     .background(
@@ -102,9 +119,10 @@ internal fun InPutDetailInfoScreenMain(
                             }
                         ),
                         shape = RoundedCornerShape(12.dp)
-                    ).padding(start = 17.dp, end = 16.dp),
+                    )
+                    .padding(start = 17.dp, end = 16.dp),
                 text = stringResource(R.string.txt_info_female),
-                clickable = {viewModel.inputGender(FEMALE)}
+                clickable = { viewModel.inputGender(FEMALE) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -121,17 +139,35 @@ internal fun InPutDetailInfoScreenMain(
                 ) {
                     CustomSpinnerBox(
                         text = stringResource(R.string.txt_info_year),
-                        onclick = {}
+                        onclick = {
+                            yearBottomSheet = true
+                            monthBottomSheet = false
+                            dayBottomSheet = false
+                            cityBottomSheet = false
+                            areaBottomSheet = false
+                        }
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomSpinnerBox(
                         text = stringResource(R.string.txt_info_month),
-                        onclick = {}
+                        onclick = {
+                            yearBottomSheet = false
+                            monthBottomSheet = true
+                            dayBottomSheet = false
+                            cityBottomSheet = false
+                            areaBottomSheet = false
+                        }
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomSpinnerBox(
                         text = stringResource(R.string.txt_info_day),
-                        onclick = {}
+                        onclick = {
+                            yearBottomSheet = false
+                            monthBottomSheet = false
+                            dayBottomSheet = true
+                            cityBottomSheet = false
+                            areaBottomSheet = false
+                        }
                     )
                 }
             }
@@ -150,14 +186,26 @@ internal fun InPutDetailInfoScreenMain(
                 ) {
                     CustomSpinnerBox(
                         text = stringResource(R.string.txt_info_city),
-                        onclick = {}
+                        onclick = {
+                            yearBottomSheet = false
+                            monthBottomSheet = false
+                            dayBottomSheet = false
+                            cityBottomSheet = true
+                            areaBottomSheet = false
+                        }
                     )
 
                     Spacer(modifier = Modifier.width(10.dp))
 
                     CustomSpinnerBox(
                         text = stringResource(R.string.txt_info_area),
-                        onclick = {}
+                        onclick = {
+                            yearBottomSheet = false
+                            monthBottomSheet = false
+                            dayBottomSheet = false
+                            cityBottomSheet = false
+                            areaBottomSheet = true
+                        }
                     )
                 }
             }
@@ -166,10 +214,27 @@ internal fun InPutDetailInfoScreenMain(
 
             CustomButton(
                 stringResource(R.string.btn_finish),
-                onclick = {buttonClick()},
+                onclick = { buttonClick() },
                 enable = true
             )
 
+            BottomSheetSelector(
+                yearBottomSheet = yearBottomSheet,
+                monthBottomSheet = monthBottomSheet,
+                dayBottomSheet = dayBottomSheet,
+                cityBottomSheet = cityBottomSheet,
+                areaBottomSheet = areaBottomSheet,
+                onSelect = {
+                    println("선택된 값: $it")
+                },
+                onDismiss = {
+                    yearBottomSheet = false
+                    monthBottomSheet = false
+                    dayBottomSheet = false
+                    cityBottomSheet = false
+                    areaBottomSheet = false
+                }
+            )
         }
     }
 }
