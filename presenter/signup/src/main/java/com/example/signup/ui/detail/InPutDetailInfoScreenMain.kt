@@ -57,6 +57,11 @@ internal fun InPutDetailInfoScreenMain(
     var cityBottomSheet by remember { mutableStateOf(false) }
     var areaBottomSheet by remember { mutableStateOf(false) }
 
+    val year by viewModel.birthYear.collectAsState()
+    val month by viewModel.birthMonth.collectAsState()
+    val day by viewModel.birthDay.collectAsState()
+    val city by viewModel.city.collectAsState()
+    val area by viewModel.area.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -142,7 +147,7 @@ internal fun InPutDetailInfoScreenMain(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CustomSpinnerBox(
-                        text = stringResource(R.string.txt_info_year),
+                        text = year.ifEmpty { stringResource(R.string.txt_info_year) },
                         onclick = {
                             yearBottomSheet = true
                             monthBottomSheet = false
@@ -153,7 +158,7 @@ internal fun InPutDetailInfoScreenMain(
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomSpinnerBox(
-                        text = stringResource(R.string.txt_info_month),
+                        text = month.ifEmpty { stringResource(R.string.txt_info_month) },
                         onclick = {
                             yearBottomSheet = false
                             monthBottomSheet = true
@@ -164,7 +169,7 @@ internal fun InPutDetailInfoScreenMain(
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomSpinnerBox(
-                        text = stringResource(R.string.txt_info_day),
+                        text = day.ifEmpty { stringResource(R.string.txt_info_day) },
                         onclick = {
                             yearBottomSheet = false
                             monthBottomSheet = false
@@ -189,7 +194,7 @@ internal fun InPutDetailInfoScreenMain(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CustomSpinnerBox(
-                        text = stringResource(R.string.txt_info_city),
+                        text = city.ifEmpty { stringResource(R.string.txt_info_city) },
                         onclick = {
                             yearBottomSheet = false
                             monthBottomSheet = false
@@ -202,7 +207,7 @@ internal fun InPutDetailInfoScreenMain(
                     Spacer(modifier = Modifier.width(10.dp))
 
                     CustomSpinnerBox(
-                        text = stringResource(R.string.txt_info_area),
+                        text = area.ifEmpty { stringResource(R.string.txt_info_area) },
                         onclick = {
                             yearBottomSheet = false
                             monthBottomSheet = false
@@ -228,8 +233,14 @@ internal fun InPutDetailInfoScreenMain(
                 dayBottomSheet = dayBottomSheet,
                 cityBottomSheet = cityBottomSheet,
                 areaBottomSheet = areaBottomSheet,
-                onSelect = {
-                    println("선택된 값: $it")
+                onSelect = { selectedValue ->
+                    when {
+                        yearBottomSheet -> viewModel.setBirthYear(selectedValue)
+                        monthBottomSheet -> viewModel.setBirthMonth(selectedValue)
+                        dayBottomSheet -> viewModel.setBirthDay(selectedValue)
+                        cityBottomSheet -> viewModel.setCity(selectedValue)
+                        areaBottomSheet -> viewModel.setArea(selectedValue)
+                    }
                 },
                 onDismiss = {
                     yearBottomSheet = false

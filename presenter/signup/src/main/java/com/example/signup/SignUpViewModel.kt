@@ -1,6 +1,7 @@
 package com.example.signup
 
 import android.app.Activity
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.sungil.domain.useCase.GetSMSTime
 import com.sungil.domain.useCase.RequestSMS
 import com.sungil.domain.useCase.SendCode
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -31,6 +33,7 @@ class SignUpViewModel @Inject constructor(
     private val firebaseSMS: GetFirebaseSMSState,
     private val timer: GetSMSTime,
     private val checkNumber: CheckAlreadySignUpNumber,
+    @ApplicationContext private val context : Context
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
@@ -65,6 +68,27 @@ class SignUpViewModel @Inject constructor(
 
     private val _gender = MutableStateFlow(MALE)
     val gender: StateFlow<String> = _gender.asStateFlow()
+
+    private val _birthYear = MutableStateFlow("")
+    val birthYear: StateFlow<String> = _birthYear.asStateFlow()
+
+    private val _birthMonth = MutableStateFlow("")
+    val birthMonth: StateFlow<String> = _birthMonth.asStateFlow()
+
+    private val _birthDay = MutableStateFlow("")
+    val birthDay: StateFlow<String> = _birthDay.asStateFlow()
+
+    private val _city = MutableStateFlow("")
+    val city: StateFlow<String> = _city.asStateFlow()
+
+    private val _area = MutableStateFlow("")
+    val area: StateFlow<String> = _area.asStateFlow()
+
+    fun setBirthYear(value: String) { _birthYear.value = value }
+    fun setBirthMonth(value: String) { _birthMonth.value = value }
+    fun setBirthDay(value: String) { _birthDay.value = value }
+    fun setCity(value: String) { _city.value = value }
+    fun setArea(value: String) { _area.value = value }
 
     private var smsTimerJob: Job? = null
 
