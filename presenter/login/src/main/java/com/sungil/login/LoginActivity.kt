@@ -30,7 +30,7 @@ class LoginActivity : ComponentActivity() {
         setContent {
             LoginScreen(
                 kakaoLogin = {
-                    viewModel.getToken()
+                    viewModel.getKAKAOId()
                 }
             )
         }
@@ -55,6 +55,9 @@ class LoginActivity : ComponentActivity() {
                         //TODO 메인화면으로 넘어가야함
                     }
 
+                    is LoginViewModel.Action.FCMToken -> {
+                        Log.d(javaClass.name.toString(), it.message)
+                    }
 
                     is LoginViewModel.Action.Error -> {
                         when (it.errorMessage) {
@@ -62,7 +65,11 @@ class LoginActivity : ComponentActivity() {
                                 router.navigationToSMS(KAKAO_VIEW)
                             }
 
-                            ERROR_NOTIFICATION ->{
+                            ERROR_NOTIFICATION -> {
+                                finish()
+                            }
+
+                            ERROR_FCM_TOKEN -> {
                                 finish()
                             }
 
@@ -74,15 +81,15 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
-    private fun setupNotificationPermission(){
+    private fun setupNotificationPermission() {
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ){ isGranted ->
+        ) { isGranted ->
             viewModel.setNotification(isGranted)
         }
     }
 
-    private fun requestNotification(){
+    private fun requestNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else {

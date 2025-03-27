@@ -9,4 +9,5 @@ interface NetworkRepository {
     suspend fun collectFirebaseResult(): Flow<String>
     suspend fun collectTimer() : Flow<Int>
     suspend fun checkAlreadySignUpNumber(number : String) : String
+    suspend fun getFCMToken() : String
 }

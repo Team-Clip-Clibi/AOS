@@ -24,9 +24,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         val baseUrl: String = properties.getProperty("base_url", "")
-        val phoneNumberCheck : String = properties.getProperty("phone_number_check" , "")
+        val phoneNumberCheckFirst : String = properties.getProperty("phone_number_check_first" , "")
+        val phoneNumberCheckLast : String = properties.getProperty("phone_number_check_last" , "")
         buildConfigField("String", "BASE_URL", baseUrl)
-        buildConfigField("String" , "PHONE_NUMBER_CHECK" , phoneNumberCheck)
+        buildConfigField("String" , "PHONE_NUMBER_CHECK_FIRST" , phoneNumberCheckFirst)
+        buildConfigField("String" , "PHONE_NUMBER_CHECK_LAST", phoneNumberCheckLast)
     }
 
     buildTypes {

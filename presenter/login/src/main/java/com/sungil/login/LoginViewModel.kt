@@ -3,12 +3,13 @@ package com.sungil.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.CheckAlreadySignUp
+import com.sungil.domain.useCase.GetFcmToken
 import com.sungil.domain.useCase.GetKakaoId
+import com.sungil.domain.useCase.UpdateAndSaveToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,11 +17,13 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val getKakaoId: GetKakaoId,
     private val signUp: CheckAlreadySignUp,
+    private val fcm: GetFcmToken,
+    private val updateAndSaveToken: UpdateAndSaveToken,
 ) : ViewModel() {
     private val _actionFlow = MutableSharedFlow<Action>()
     val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
 
-    fun getToken() {
+    fun getKAKAOId() {
         viewModelScope.launch {
             when (val result = getKakaoId.invoke()) {
                 is GetKakaoId.Result.Success -> {
@@ -54,14 +57,35 @@ class LoginViewModel @Inject constructor(
                 _actionFlow.emit(Action.Error("error permission"))
                 return@launch
             }
+            getToken()
         }
     }
 
+    private fun getToken() {
+        viewModelScope.launch {
+            val result = fcm.invoke()
+            if (result == ERROR_FCM_TOKEN) {
+                _actionFlow.emit(Action.Error(ERROR_FCM_TOKEN))
+                return@launch
+            }
+            when (val saveOrUpdateToken =
+                updateAndSaveToken.invoke(UpdateAndSaveToken.Param(result))) {
+                is UpdateAndSaveToken.Result.Success -> {
+                    _actionFlow.emit(Action.FCMToken(saveOrUpdateToken.message))
+                }
+
+                is UpdateAndSaveToken.Result.Fail -> {
+                    _actionFlow.emit(Action.Error(ERROR_FCM_TOKEN))
+                }
+            }
+        }
+    }
 
     sealed interface Action {
         data class GetSuccess(val message: String) : Action
         data class SignUp(val message: String) : Action
         data class NotSignUp(val message: String) : Action
+        data class FCMToken(val message: String) : Action
         data class Error(val errorMessage: String) : Action
     }
 }

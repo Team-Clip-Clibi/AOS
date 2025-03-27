@@ -22,7 +22,7 @@ class CheckAlreadySignUpNumber @Inject constructor(private val repo: NetworkRepo
             param.phoneNumber.trim()
         }
         val resultCode = repo.checkAlreadySignUpNumber(editorNumber)
-        if (resultCode != "204") {
+        if (resultCode == "200") {
             return Result.Fail("Already SignUp")
         }
         return Result.Success("okay SignUp")

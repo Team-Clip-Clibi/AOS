@@ -22,8 +22,8 @@ import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class FirebaseRepoImpl @Inject constructor(@ApplicationContext private val applicationContext: Context) :
-    FirebaseRepo {
+class FirebaseSMSRepoImpl @Inject constructor(@ApplicationContext private val applicationContext: Context) :
+    FirebaseSMSRepo {
     private val auth = Firebase.auth
     private var currentToken: PhoneAuthProvider.ForceResendingToken? = null
     private var currentVerificationId: String? = null
@@ -89,8 +89,15 @@ class FirebaseRepoImpl @Inject constructor(@ApplicationContext private val appli
             Log.e(javaClass.name.toString(), "Error the verification id is null")
             return
         }
-        val credential = PhoneAuthProvider.getCredential(currentVerificationId!!, code)
-        auth.signInWithCredential(credential).await()
+        try {
+            val credential = PhoneAuthProvider.getCredential(currentVerificationId!!, code)
+            auth.signInWithCredential(credential).await() // 여기서 실패하면 예외 발생
+            _smsGranted.emit("Success") // 인증 성공
+        } catch (e: Exception) {
+            Log.e(javaClass.name.toString(), "verifyCode error: ${e.message}") // 실패 로그
+            _smsGranted.emit("Error") // 인증 실패 처리
+        }
+
     }
 
     private suspend fun startTimer() {

@@ -1,8 +1,8 @@
 package com.sungil.onething.di
 
 import android.content.Context
-import com.sungil.network.FirebaseRepo
-import com.sungil.network.FirebaseRepoImpl
+import com.sungil.network.FirebaseSMSRepo
+import com.sungil.network.FirebaseSMSRepoImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +16,7 @@ class FirebaseRepoModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseRepo(@ApplicationContext context : Context) : FirebaseRepo{
-        return FirebaseRepoImpl(context)
+    fun provideFirebaseRepo(@ApplicationContext context : Context) : FirebaseSMSRepo{
+        return FirebaseSMSRepoImpl(context)
     }
 }

@@ -4,7 +4,11 @@ interface SharedPreference {
 
     suspend fun saveKaKaoId(data: String): Boolean
     suspend fun getKaKaoId(): String
-    suspend fun deleteToken(): Boolean
+    suspend fun deleteKAKAOId(): Boolean
     suspend fun saveSignUp(data: Boolean): Boolean
     suspend fun getAlreadySignUp(): Boolean
+    suspend fun saveFcmToken(data: String): Boolean
+    suspend fun getFcmToken(): String
+    suspend fun updateFcmToken(data: String): Boolean
+
 }

@@ -12,6 +12,7 @@ import com.sungil.domain.useCase.RequestSMS
 import com.sungil.domain.useCase.SendCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,6 +66,8 @@ class SignUpViewModel @Inject constructor(
     private val _gender = MutableStateFlow(MALE)
     val gender: StateFlow<String> = _gender.asStateFlow()
 
+    private var smsTimerJob: Job? = null
+
     fun smsRequest(phoneNumber: String, activity: Activity) {
         _smsViewShow.value = true
         viewModelScope.launch {
@@ -87,6 +90,7 @@ class SignUpViewModel @Inject constructor(
             when (val result = checkNumber.invoke(CheckAlreadySignUpNumber.Param(phoneNumber))) {
                 is CheckAlreadySignUpNumber.Result.Success -> {
                     _firebaseSMSState.value = Action.VerifyFinish(result.message)
+                    smsTimerJob?.cancel()
                 }
 
                 is CheckAlreadySignUpNumber.Result.Fail -> {
@@ -117,7 +121,9 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun startSMSTimer() {
-        viewModelScope.launch {
+        smsTimerJob?.cancel() // 이전 타이머 취소 (중복 방지)
+
+        smsTimerJob = viewModelScope.launch {
             timer.invoke().collect { time ->
                 val min = time / 60
                 val sec = time % 60
@@ -125,7 +131,7 @@ class SignUpViewModel @Inject constructor(
                 _smsTime.value = formatted.trim()
 
                 if (formatted == "0:00") {
-                    _firebaseSMSState.value = Action.Error("error")
+                    _firebaseSMSState.value = Action.Error("인증 시간이 만료되었습니다.")
                     this.cancel()
                 }
             }

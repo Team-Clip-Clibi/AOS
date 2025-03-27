@@ -1,15 +1,15 @@
 package com.sungil.network.http
 
 import com.sungil.network.BuildConfig
-import com.sungil.network.model.PhoneNumberRequest
+import com.sungil.network.model.UserInfoResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.PATCH
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface HttpApi {
 
-    @PATCH(BuildConfig.PHONE_NUMBER_CHECK)
+    @GET(BuildConfig.PHONE_NUMBER_CHECK_FIRST + "{phoneNumber}" + BuildConfig.PHONE_NUMBER_CHECK_LAST)
     suspend fun checkAlreadySignUpNumber(
-        @Body phoneNumber: PhoneNumberRequest,
-    ): Response<Unit>
+        @Path("phoneNumber") userId: String
+    ): Response<UserInfoResponse>
 }

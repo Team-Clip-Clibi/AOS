@@ -6,6 +6,7 @@ import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(private val database: SharedPreference) :
     DatabaseRepository {
+
     override suspend fun saveKaKaoId(kakaoId: String): Boolean {
         return database.saveKaKaoId(
             kakaoId
@@ -17,14 +18,27 @@ class DatabaseRepositoryImpl @Inject constructor(private val database: SharedPre
     }
 
     override suspend fun deleteKaKaoId(): Boolean {
-        return database.deleteToken()
+        return database.deleteKAKAOId()
     }
 
     override suspend fun saveSingUpKey(data: Boolean): Boolean {
-       return database.saveSignUp(data)
+        return database.saveSignUp(data)
     }
 
     override suspend fun getSingUpData(): Boolean {
         return database.getAlreadySignUp()
     }
+
+    override suspend fun saveFcmToken(data: String): Boolean {
+        return database.saveFcmToken(data)
+    }
+
+    override suspend fun getFcmToken(): String {
+        return database.getFcmToken()
+    }
+
+    override suspend fun updateFcmToken(data: String): Boolean {
+        return database.updateFcmToken(data)
+    }
+
 }

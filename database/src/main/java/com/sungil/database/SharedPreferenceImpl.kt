@@ -34,7 +34,7 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
         }
     }
 
-    override suspend fun deleteToken(): Boolean {
+    override suspend fun deleteKAKAOId(): Boolean {
         return try {
             val editor = preference.edit()
             editor.remove(BuildConfig.TOKEN_KEY)
@@ -61,6 +61,41 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
     override suspend fun getAlreadySignUp(): Boolean {
         return try {
             preference.getBoolean(BuildConfig.signUpKey, false)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun saveFcmToken(data: String): Boolean {
+        return try {
+            val editor = preference.edit()
+            editor.putString(BuildConfig.fcmKey, data)
+            editor.apply()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun getFcmToken(): String {
+        return try {
+            val data = preference.getString(BuildConfig.fcmKey, "")
+            if (data.isNullOrEmpty()) {
+                return ""
+            }
+            return data
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
+    override suspend fun updateFcmToken(data: String): Boolean {
+        return try {
+            preference.edit().putString(BuildConfig.fcmKey, data).apply()
+            true
         } catch (e: Exception) {
             e.printStackTrace()
             false

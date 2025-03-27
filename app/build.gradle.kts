@@ -103,4 +103,5 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":presenter:signup"))
     implementation(project(":network"))
+    implementation(project(":fcm"))
 }
