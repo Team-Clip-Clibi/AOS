@@ -38,9 +38,9 @@ class SignUpViewModel @Inject constructor(
     private val _termItem = MutableStateFlow(
         listOf(
             TermItem("allChecked", true, isAllCheck = true),
-            TermItem("serviceChecked", true),
-            TermItem("collectPerson", true),
-            TermItem("marketing", false)
+            TermItem("servicePermission", true),
+            TermItem("privatePermission", true),
+            TermItem("marketingPermission", false)
         )
     )
     val termItem: StateFlow<List<TermItem>> = _termItem.asStateFlow()
