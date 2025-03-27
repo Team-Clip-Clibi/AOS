@@ -33,7 +33,6 @@ class SignUpViewModel @Inject constructor(
     private val firebaseSMS: GetFirebaseSMSState,
     private val timer: GetSMSTime,
     private val checkNumber: CheckAlreadySignUpNumber,
-    @ApplicationContext private val context : Context
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
