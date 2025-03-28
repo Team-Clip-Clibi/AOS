@@ -1,5 +1,6 @@
 package com.example.signup.ui.detail
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +45,7 @@ import com.example.signup.ui.component.CustomGenderPick
 import com.example.signup.ui.component.CustomSpinnerBox
 import com.example.signup.ui.component.CustomTextLittle
 import com.example.signup.ui.component.CustomTitleText
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun InPutDetailInfoScreenMain(
@@ -62,6 +65,22 @@ internal fun InPutDetailInfoScreenMain(
     val day by viewModel.birthDay.collectAsState()
     val city by viewModel.city.collectAsState()
     val area by viewModel.area.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.signUpState.collectLatest { state ->
+            when(state){
+                is SignUpViewModel.SignUp.Error -> {
+                    Log.e(javaClass.name.toString() , "error ${state.errorMessage}")
+                }
+                is SignUpViewModel.SignUp.Loading -> {
+                    Log.d(javaClass.name.toString() , "Loading ${state.message}")
+                }
+                is SignUpViewModel.SignUp.Success -> {
+                    Log.d(javaClass.name.toString() , "Success")
+                    buttonClick()
+                }
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -223,7 +242,7 @@ internal fun InPutDetailInfoScreenMain(
 
             CustomButton(
                 stringResource(R.string.btn_finish),
-                onclick = { buttonClick() },
+                onclick = { viewModel.signUp() },
                 enable = true,
             )
 

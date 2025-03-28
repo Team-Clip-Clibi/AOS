@@ -1,8 +1,11 @@
 package com.sungil.network.model
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AuthToken(
-    @SerializedName("accessToken") val accessToken: String,
-    @SerializedName("refreshToken") val refreshToken: String
+    @SerialName("accessToken") val accessToken: String,
+    @SerialName("refreshToken") val refreshToken: String
 )

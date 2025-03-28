@@ -9,4 +9,18 @@ interface DatabaseRepository {
     suspend fun saveFcmToken(data: String): Boolean
     suspend fun getFcmToken(): String
     suspend fun updateFcmToken(data: String): Boolean
+    suspend fun saveUserInfo(
+        termAllCheck : Boolean,
+        servicePermission : Boolean,
+        privatePermission : Boolean,
+        marketingPermission : Boolean,
+        name : String,
+        nickName : String,
+        birthYear : String,
+        birthMonth : String,
+        birthDay : String,
+        city : String,
+        area : String,
+        gender : String
+    ) : Boolean
 }

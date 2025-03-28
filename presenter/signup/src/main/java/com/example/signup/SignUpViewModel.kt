@@ -1,6 +1,7 @@
 package com.example.signup
 
 import android.app.Activity
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.signup.model.TermItem
@@ -10,6 +11,7 @@ import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetFirebaseSMSState
 import com.sungil.domain.useCase.GetSMSTime
 import com.sungil.domain.useCase.RequestSMS
+import com.sungil.domain.useCase.RequestSignUp
 import com.sungil.domain.useCase.SendCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +32,8 @@ class SignUpViewModel @Inject constructor(
     private val timer: GetSMSTime,
     private val checkNumber: CheckAlreadySignUpNumber,
     private val checkNickName : CheckNickName,
-    private val checkName : CheckNameOkay
+    private val checkName : CheckNameOkay,
+    private val signUp : RequestSignUp
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
@@ -86,6 +89,9 @@ class SignUpViewModel @Inject constructor(
 
     private val _nameCheck = MutableStateFlow<NameCheck>(NameCheck.NameStandby(NAME_STANDBY))
     val nameCheck : StateFlow<NameCheck> = _nameCheck.asStateFlow()
+
+    private val _signUp = MutableStateFlow<SignUp>(SignUp.Loading("Loading"))
+    val signUpState : StateFlow<SignUp> = _signUp.asStateFlow()
 
     fun setBirthYear(value: String) { _birthYear.value = value }
     fun setBirthMonth(value: String) { _birthMonth.value = value }
@@ -234,6 +240,38 @@ class SignUpViewModel @Inject constructor(
             _nameCheck.value = NameCheck.NameStandby(NAME_STANDBY)
         }
     }
+    fun signUp() {
+        viewModelScope.launch {
+            val result = signUp.invoke(
+                RequestSignUp.Param(
+                    termAllChecked = _termItem.value.firstOrNull { it.termName == "allChecked" }?.checked ?: false,
+                    termServicePermission = _termItem.value.firstOrNull { it.termName == "servicePermission" }?.checked ?: false,
+                    privatePermission = _termItem.value.firstOrNull { it.termName == "privatePermission" }?.checked ?: false,
+                    marketingPermission = _termItem.value.firstOrNull { it.termName == "marketingPermission" }?.checked ?: false,
+                    name = _name.value,
+                    nickName = _nickName.value,
+                    birtYear = _birthYear.value,
+                    birthMonth = _birthMonth.value,
+                    birthDay = _birthDay.value,
+                    city = _city.value,
+                    area = _area.value,
+                    gender = _gender.value
+                )
+            )
+
+            when (result) {
+                is RequestSignUp.Result.Success -> {
+                    Log.d("SignUp", "회원가입 성공: ${result.message}")
+                    _signUp.value = SignUp.Success(result.message)
+                }
+                is RequestSignUp.Result.Fail -> {
+                    Log.e("SignUp", "회원가입 실패: ${result.errorMessage}")
+                    _signUp.value = SignUp.Error(result.errorMessage)
+                }
+            }
+        }
+    }
+
 
     sealed interface Action {
         data class LoadingRequestSMS(val message: String) : Action
@@ -243,6 +281,13 @@ class SignUpViewModel @Inject constructor(
         data class FailVerifySMS(val message: String) : Action
         data class Error(val message: String) : Action
     }
+
+    sealed interface SignUp{
+        data class Loading(val message : String) : SignUp
+        data class Success(val message : String) : SignUp
+        data class Error(val errorMessage : String) : SignUp
+    }
+
     sealed interface NameCheck{
         data class NameStandby(val message : String) : NameCheck
         data class NameIsNotOkay(val errorMessage: String) : NameCheck

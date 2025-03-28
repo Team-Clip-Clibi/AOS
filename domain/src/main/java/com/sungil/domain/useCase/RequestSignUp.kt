@@ -54,6 +54,23 @@ class RequestSignUp @Inject constructor(
         if (apiResult.first.isNullOrEmpty() || apiResult.second.isNullOrEmpty()) {
             return Result.Fail("Fail to get Token accessToken : ${apiResult.first} , refreshToken : ${apiResult.second}")
         }
+        val saveResult = database.saveUserInfo(
+            termAllCheck = param.termAllChecked,
+            servicePermission = param.termServicePermission,
+            privatePermission = param.privatePermission,
+            marketingPermission = param.marketingPermission,
+            name = param.name,
+            nickName = param.nickName,
+            birthYear = param.birtYear,
+            birthMonth = param.birthMonth,
+            birthDay = param.birthDay,
+            city = param.city,
+            area = param.area,
+            gender = param.gender
+        )
+        if(!saveResult){
+            return Result.Fail("Fail to save UserInfo")
+        }
         return Result.Success("SignUp Success")
     }
 

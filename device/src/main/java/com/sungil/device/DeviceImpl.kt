@@ -23,7 +23,15 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
     }
 
     override suspend fun getOsVersion(): Int {
-        return android.os.Build.VERSION.SDK_INT
+        return when(android.os.Build.VERSION.SDK_INT){
+            29 -> 10
+            30 -> 11
+            31, 32 -> 12
+            33 -> 13
+            34 -> 14
+            35 -> 15
+            else -> 0
+        }
     }
 
 }
