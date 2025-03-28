@@ -53,6 +53,8 @@ dependencies {
     implementation(project(":database"))
     implementation(project(":network"))
     implementation(project(":fcm"))
+    implementation(project(":device"))
+    implementation(project(":device"))
     //retrofit2
     implementation(libs.squareup.retrofit2.retrofit)
     implementation(libs.squareup.retrofit2.converter.kotlinx.serialization)
