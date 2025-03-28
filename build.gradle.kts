@@ -5,5 +5,4 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.hilt.project) apply false
     alias(libs.plugins.google.service.gms) apply false
-
 }

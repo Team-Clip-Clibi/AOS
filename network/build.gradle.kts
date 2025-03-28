@@ -1,4 +1,5 @@
 import java.util.Properties
+import kotlin.math.sign
 
 plugins {
     alias(libs.plugins.android.library)
@@ -23,12 +24,16 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
         val baseUrl: String = properties.getProperty("base_url", "")
         val phoneNumberCheckFirst : String = properties.getProperty("phone_number_check_first" , "")
         val phoneNumberCheckLast : String = properties.getProperty("phone_number_check_last" , "")
+        val signUp : String = properties.getProperty("signUp" ,"")
+
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String" , "PHONE_NUMBER_CHECK_FIRST" , phoneNumberCheckFirst)
         buildConfigField("String" , "PHONE_NUMBER_CHECK_LAST", phoneNumberCheckLast)
+        buildConfigField("String" ,"USER_SIGNUP" , signUp)
     }
 
     buildTypes {
@@ -73,5 +78,6 @@ dependencies {
     implementation(libs.squareup.retrofit2.converter.kotlinx.serialization)
     implementation(libs.squareup.okhttp3.logging.interceptor)
     implementation(libs.jetbrains.kotlinx.serialization.json)
-
+    //gson
+    implementation(libs.google.gson)
 }

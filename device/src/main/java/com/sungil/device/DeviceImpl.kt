@@ -22,4 +22,8 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
         vibrator.vibrate(vibrationEffect)
     }
 
+    override suspend fun getOsVersion(): Int {
+        return android.os.Build.VERSION.SDK_INT
+    }
+
 }

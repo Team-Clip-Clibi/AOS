@@ -24,6 +24,8 @@ retrotit2 = "2.11.0"
 serialization = "1.6.0"
 firebase-analytics = "21.5.0"
 firebase-messaging = "23.4.1"
+room-database = "2.6.1"
+ksp = "1.9.0-1.0.11"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
@@ -56,6 +58,9 @@ squareup-retrofit2-converter-kotlinx-serialization = { group = "com.squareup.ret
 squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrotit2" }
 firebase-analytics = {group = "com.google.firebase" , name = "firebase-analytics" , version.ref = "firebase-analytics"}
 firebase-message = {group = "com.google.firebase" , name = "firebase-messaging" , version.ref = "firebase-messaging"}
+room-database-runtime = {group = "androidx.room" , name = "room-runtime" , version.ref = "room-database"}
+room-database-ktx = {group = "androidx.room" , name = "room-ktx" , version.ref = "room-database"}
+room-database-compiler = { group = "androidx.room" , name = "room-compiler" , version.ref = "room-database"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -64,3 +69,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 hilt-project = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-service-gms = {id = "com.google.gms.google-services" , version.ref = "gms-service"}
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+devtool-ksp = {id = "com.google.devtools.ksp" , version.ref = "ksp"}

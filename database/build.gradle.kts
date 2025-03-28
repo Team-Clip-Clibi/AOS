@@ -70,4 +70,9 @@ dependencies {
     kapt(libs.hilt.compiler)
     //gson
     implementation(libs.google.gson)
+    //roomDatabase
+    implementation(libs.room.database.runtime)
+    implementation(libs.room.database.ktx)
+    kapt(libs.room.database.compiler)
+
 }
