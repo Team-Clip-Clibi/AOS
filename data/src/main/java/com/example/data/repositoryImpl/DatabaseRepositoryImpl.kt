@@ -1,10 +1,14 @@
 package com.example.data.repositoryImpl
 
 import com.sungil.database.SharedPreference
+import com.sungil.database.room.UserInfoDao
 import com.sungil.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
-class DatabaseRepositoryImpl @Inject constructor(private val database: SharedPreference) :
+class DatabaseRepositoryImpl @Inject constructor(
+    private val database: SharedPreference,
+    private val userInfoDao: UserInfoDao,
+) :
     DatabaseRepository {
 
     override suspend fun saveKaKaoId(kakaoId: String): Boolean {
