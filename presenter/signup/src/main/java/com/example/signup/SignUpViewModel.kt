@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.signup.model.TermItem
 import com.sungil.domain.useCase.CheckAlreadySignUpNumber
+import com.sungil.domain.useCase.CheckNameOkay
 import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetFirebaseSMSState
 import com.sungil.domain.useCase.GetSMSTime
@@ -28,7 +29,8 @@ class SignUpViewModel @Inject constructor(
     private val firebaseSMS: GetFirebaseSMSState,
     private val timer: GetSMSTime,
     private val checkNumber: CheckAlreadySignUpNumber,
-    private val checkNameOkay : CheckNickName
+    private val checkNickName : CheckNickName,
+    private val checkName : CheckNameOkay
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
@@ -78,6 +80,9 @@ class SignUpViewModel @Inject constructor(
 
     private val _area = MutableStateFlow("")
     val area: StateFlow<String> = _area.asStateFlow()
+
+    private val _nickNameCheck = MutableStateFlow<NameCheck>(NameCheck.NameStandby(NAME_STANDBY))
+    val nickNameCheck : StateFlow<NameCheck> = _nickNameCheck.asStateFlow()
 
     private val _nameCheck = MutableStateFlow<NameCheck>(NameCheck.NameStandby(NAME_STANDBY))
     val nameCheck : StateFlow<NameCheck> = _nameCheck.asStateFlow()
@@ -196,15 +201,37 @@ class SignUpViewModel @Inject constructor(
 
     fun checkNickName(data: String) {
         viewModelScope.launch {
-            when (val result = checkNameOkay.invoke(CheckNickName.Param(data))) {
+            when (val result = checkNickName.invoke(CheckNickName.Param(data))) {
                 is CheckNickName.Result.Success -> {
-                    _nameCheck.value = NameCheck.NameIsOkay(result.message)
+                    _nickNameCheck.value = NameCheck.NameIsOkay(result.message)
                 }
 
                 is CheckNickName.Result.Fail -> {
-                    _nameCheck.value = NameCheck.NameIsNotOkay(result.message)
+                    _nickNameCheck.value = NameCheck.NameIsNotOkay(result.message)
                 }
             }
+        }
+    }
+    fun resetNickName(){
+        viewModelScope.launch {
+            _nickNameCheck.value = NameCheck.NameStandby(NAME_STANDBY)
+        }
+    }
+    fun checkName(data : String){
+        viewModelScope.launch {
+            when(val result = checkName.invoke(CheckNameOkay.Param(data))){
+                is CheckNameOkay.Result.Success ->{
+                    _nameCheck.value = NameCheck.NameIsOkay(result.message)
+                }
+                is CheckNameOkay.Result.Fail ->{
+                    _nameCheck.value = NameCheck.NameIsNotOkay(result.errorMessage)
+                }
+            }
+        }
+    }
+    fun resetName(){
+        viewModelScope.launch {
+            _nameCheck.value = NameCheck.NameStandby(NAME_STANDBY)
         }
     }
 

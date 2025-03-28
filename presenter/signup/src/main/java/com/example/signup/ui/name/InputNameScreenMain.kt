@@ -13,8 +13,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -28,6 +33,7 @@ import com.example.signup.ui.component.CustomContentText
 import com.example.signup.ui.component.CustomTextField
 import com.example.signup.ui.component.CustomTitleText
 import com.example.signup.ui.component.CustomUnderTextFieldText
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun InputNameScreenMain(
@@ -36,6 +42,24 @@ internal fun InputNameScreenMain(
     buttonClick: () -> Unit,
 ) {
     val name by viewModel.name.collectAsState()
+    var isValidName by remember { mutableIntStateOf(R.string.txt_name_safe) }
+
+    LaunchedEffect(Unit) {
+        viewModel.nameCheck.collectLatest { state ->
+            when(state){
+                is SignUpViewModel.NameCheck.NameStandby -> {
+                    isValidName = R.string.txt_name_safe
+                }
+                is SignUpViewModel.NameCheck.NameIsNotOkay -> {
+                    isValidName = R.string.txt_name_korean_english
+                }
+                is SignUpViewModel.NameCheck.NameIsOkay -> {
+                    buttonClick()
+                    viewModel.resetName()
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -76,15 +100,13 @@ internal fun InputNameScreenMain(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val isValidName = name.matches(Regex("^[a-zA-Z가-힣]*$"))
                     CustomUnderTextFieldText(
                         text = stringResource(
-                            if (isValidName) R.string.txt_name_korean_english
-                            else R.string.txt_name_safe
+                            isValidName
                         ),
                         color = colorResource(
-                            if (isValidName) R.color.red
-                            else R.color.dark_gray
+                            if (isValidName == R.string.txt_name_safe) R.color.dark_gray
+                            else R.color.red
                         )
                     )
                 }
@@ -94,7 +116,7 @@ internal fun InputNameScreenMain(
 
             CustomButton(
                 stringResource(R.string.btn_next),
-                onclick = {buttonClick()},
+                onclick = {viewModel.checkName(name)},
                 enable = name.isNotEmpty(),
             )
         }

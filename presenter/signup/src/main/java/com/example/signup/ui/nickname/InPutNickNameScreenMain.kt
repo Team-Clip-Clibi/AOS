@@ -16,6 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -42,10 +46,10 @@ internal fun InPutNickNameScreenMain(
 ) {
     val nickName by viewModel.nickName.collectAsState()
 
-    var nicknameValidationMessage = -1
+    var nicknameValidationMessage by remember { mutableIntStateOf(R.string.txt_nick_length) }
 
     LaunchedEffect(Unit) {
-        viewModel.nameCheck.collectLatest { state ->
+        viewModel.nickNameCheck.collectLatest { state ->
             when (state) {
                 is SignUpViewModel.NameCheck.NameStandby -> {
                     nicknameValidationMessage = R.string.txt_nick_length
@@ -71,6 +75,7 @@ internal fun InPutNickNameScreenMain(
 
                 is SignUpViewModel.NameCheck.NameIsOkay -> {
                     buttonClick()
+                    viewModel.resetNickName()
                 }
             }
         }
