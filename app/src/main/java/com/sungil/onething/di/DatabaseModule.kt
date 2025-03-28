@@ -1,19 +1,38 @@
 package com.sungil.onething.di
 
 import android.content.Context
+import androidx.room.Room
 import com.sungil.database.SharedPreference
 import com.sungil.database.SharedPreferenceImpl
+import com.sungil.database.room.AppDatabase
+import com.sungil.database.room.UserInfoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class DatabaseModule {
     @Provides
-    fun provideDatabase(@ApplicationContext context : Context) : SharedPreference{
+    fun provideSharedPreference(@ApplicationContext context : Context) : SharedPreference{
         return SharedPreferenceImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_database"
+        ).build()
+    }
+
+    @Provides
+    fun provideUserInfoDao(appDatabase: AppDatabase): UserInfoDao {
+        return appDatabase.userInfoDao()
     }
 }

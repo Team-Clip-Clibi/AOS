@@ -1,0 +1,21 @@
+package com.sungil.database.room
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.sungil.database.TABLE_USER_INFO
+
+@Entity(tableName = TABLE_USER_INFO)
+data class UserInfo(
+    @PrimaryKey val name: String,
+    val termAllChecked: Boolean,
+    val termServicePermission: Boolean,
+    val privatePermission: Boolean,
+    val marketingPermission: Boolean,
+    val nickName: String,
+    val birtYear: String,
+    val birthMonth: String,
+    val birthDay: String,
+    val city: String,
+    val area: String,
+    val gender: String
+)
