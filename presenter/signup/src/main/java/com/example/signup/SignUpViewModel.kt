@@ -1,26 +1,21 @@
 package com.example.signup
 
 import android.app.Activity
-import android.content.Context
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.signup.model.TermItem
 import com.sungil.domain.useCase.CheckAlreadySignUpNumber
+import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetFirebaseSMSState
 import com.sungil.domain.useCase.GetSMSTime
 import com.sungil.domain.useCase.RequestSMS
 import com.sungil.domain.useCase.SendCode
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -33,6 +28,7 @@ class SignUpViewModel @Inject constructor(
     private val firebaseSMS: GetFirebaseSMSState,
     private val timer: GetSMSTime,
     private val checkNumber: CheckAlreadySignUpNumber,
+    private val checkNameOkay : CheckNickName
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
@@ -82,6 +78,9 @@ class SignUpViewModel @Inject constructor(
 
     private val _area = MutableStateFlow("")
     val area: StateFlow<String> = _area.asStateFlow()
+
+    private val _nameCheck = MutableStateFlow<NameCheck>(NameCheck.NameStandby(NAME_STANDBY))
+    val nameCheck : StateFlow<NameCheck> = _nameCheck.asStateFlow()
 
     fun setBirthYear(value: String) { _birthYear.value = value }
     fun setBirthMonth(value: String) { _birthMonth.value = value }
@@ -195,6 +194,20 @@ class SignUpViewModel @Inject constructor(
         _gender.value = data
     }
 
+    fun checkNickName(data: String) {
+        viewModelScope.launch {
+            when (val result = checkNameOkay.invoke(CheckNickName.Param(data))) {
+                is CheckNickName.Result.Success -> {
+                    _nameCheck.value = NameCheck.NameIsOkay(result.message)
+                }
+
+                is CheckNickName.Result.Fail -> {
+                    _nameCheck.value = NameCheck.NameIsNotOkay(result.message)
+                }
+            }
+        }
+    }
+
     sealed interface Action {
         data class LoadingRequestSMS(val message: String) : Action
         data class SuccessRequestSMS(val message: String) : Action
@@ -202,6 +215,11 @@ class SignUpViewModel @Inject constructor(
         data class VerifyFinish(val message: String) : Action
         data class FailVerifySMS(val message: String) : Action
         data class Error(val message: String) : Action
+    }
+    sealed interface NameCheck{
+        data class NameStandby(val message : String) : NameCheck
+        data class NameIsNotOkay(val errorMessage: String) : NameCheck
+        data class NameIsOkay(val message: String) : NameCheck
     }
 
 }

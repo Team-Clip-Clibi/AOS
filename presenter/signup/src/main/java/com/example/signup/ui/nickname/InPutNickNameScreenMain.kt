@@ -1,6 +1,5 @@
 package com.example.signup.ui.nickname
 
-import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,6 +22,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.signup.NAME_LONG
+import com.example.signup.NAME_SHORT
+import com.example.signup.NAME_SPECIAL
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomButton
@@ -29,6 +32,7 @@ import com.example.signup.ui.component.CustomContentText
 import com.example.signup.ui.component.CustomTextField
 import com.example.signup.ui.component.CustomTitleText
 import com.example.signup.ui.component.CustomUnderTextFieldText
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun InPutNickNameScreenMain(
@@ -37,23 +41,41 @@ internal fun InPutNickNameScreenMain(
     buttonClick: () -> Unit,
 ) {
     val nickName by viewModel.nickName.collectAsState()
-    val nicknameValidationMessage = when {
-        nickName.contains(Regex("[^a-zA-Z가-힣0-9]")) -> {
-            R.string.txt_nick_no_special
-        }
 
-        nickName.length <= 8 -> {
-            R.string.txt_nick_length
-        }
+    var nicknameValidationMessage = -1
 
-        nickName.length > 8 -> {
-            R.string.txt_nick_length_over
-        }
+    LaunchedEffect(Unit) {
+        viewModel.nameCheck.collectLatest { state ->
+            when (state) {
+                is SignUpViewModel.NameCheck.NameStandby -> {
+                    nicknameValidationMessage = R.string.txt_nick_length
+                }
 
-        else -> {
-            R.string.txt_nick_length_low
+                is SignUpViewModel.NameCheck.NameIsNotOkay -> {
+                    nicknameValidationMessage = when (state.errorMessage) {
+                        NAME_LONG -> {
+                            R.string.txt_nick_length_over
+                        }
+
+                        NAME_SHORT -> {
+                            R.string.txt_nick_length_low
+                        }
+
+                        NAME_SPECIAL -> {
+                            R.string.txt_nick_no_special
+                        }
+
+                        else -> throw IllegalArgumentException("UNKNOW ERROR")
+                    }
+                }
+
+                is SignUpViewModel.NameCheck.NameIsOkay -> {
+                    buttonClick()
+                }
+            }
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -65,7 +87,9 @@ internal fun InPutNickNameScreenMain(
             )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize() . verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             CustomTitleText(stringResource(R.string.txt_nick_title))
             CustomContentText(stringResource(R.string.txt_nick_content))
@@ -97,22 +121,10 @@ internal fun InPutNickNameScreenMain(
                         ),
 
                         color = colorResource(
-                            when {
-                                nickName.contains(Regex("[^a-zA-Z가-힣0-9]")) -> {
-                                    R.color.red
-                                }
-
-                                nickName.length <= 8 -> {
-                                    R.color.red
-                                }
-
-                                nickName.length > 8 -> {
-                                    R.color.red
-                                }
-
-                                else -> {
-                                    R.color.dark_gray
-                                }
+                            if (nicknameValidationMessage == R.string.txt_nick_length) {
+                                R.color.dark_gray
+                            } else {
+                                R.color.red
                             }
                         )
                     )
@@ -120,12 +132,13 @@ internal fun InPutNickNameScreenMain(
             }
 
             Spacer(modifier = Modifier.weight(1f))
+
             CustomButton(
                 stringResource(R.string.btn_next),
-                onclick = { buttonClick() },
-                enable = if(nickName.isNotEmpty()) true else false
+                onclick = { viewModel.checkNickName(nickName) },
+                enable = nickName.isNotEmpty()
             )
-
         }
+
     }
 }
