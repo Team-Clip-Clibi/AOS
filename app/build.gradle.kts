@@ -105,6 +105,7 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":fcm"))
     implementation(project(":device"))
+    implementation(project(":core"))
     //roomDatabase
     implementation(libs.room.database.runtime)
     implementation(libs.room.database.ktx)
