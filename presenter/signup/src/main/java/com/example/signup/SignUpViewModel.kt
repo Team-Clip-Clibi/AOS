@@ -158,13 +158,12 @@ class SignUpViewModel @Inject constructor(
             when (result) {
                 is SendTermData.Result.Success -> {
                     Log.d("SignUp", "회원가입 성공: ${result.message}")
-                    _userInfoState.value.termSendState = CheckState.ValueOkay(result.message)
+                    _userInfoState.update { it.copy(termSendState = CheckState.ValueOkay(result.message) ) }
                 }
 
                 is SendTermData.Result.Fail -> {
                     Log.e("SignUp", "회원가입 실패: ${result.errorMessage}")
-                    _userInfoState.value.termSendState =
-                        CheckState.ValueNotOkay(result.errorMessage)
+                    _userInfoState.update { it.copy(termSendState =CheckState.ValueNotOkay(result.errorMessage) ) }
                 }
             }
         }

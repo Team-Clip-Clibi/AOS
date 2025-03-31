@@ -26,16 +26,24 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         val baseUrl: String = properties.getProperty("base_url", "")
-        val phoneNumberCheckFirst : String = properties.getProperty("phone_number_check_first" , "")
-        val phoneNumberCheckLast : String = properties.getProperty("phone_number_check_last" , "")
-        val signUp : String = properties.getProperty("signUp" ,"")
-        val nickNameCheck : String = properties.getProperty("nickNameCheck" ,"")
+        val phoneNumberCheckFirst: String = properties.getProperty("phone_number_check_first", "")
+        val phoneNumberCheckLast: String = properties.getProperty("phone_number_check_last", "")
+        val signUp: String = properties.getProperty("signUp", "")
+        val nickNameCheck: String = properties.getProperty("nickNameCheck", "")
+        val nameUlr: String = properties.getProperty("nameUrl", "")
+        val nickNameSend: String = properties.getProperty("nickNameSendUrl", "")
+        val userDetailUrl: String = properties.getProperty("userDetailUrl", "")
+        val userPhoneNumber: String = properties.getProperty("userPhoneNumberUrl", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
-        buildConfigField("String" , "PHONE_NUMBER_CHECK_FIRST" , phoneNumberCheckFirst)
-        buildConfigField("String" , "PHONE_NUMBER_CHECK_LAST", phoneNumberCheckLast)
-        buildConfigField("String" ,"USER_SIGNUP" , signUp)
-        buildConfigField("String" , "NICK_NAME_URL",nickNameCheck)
+        buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
+        buildConfigField("String", "PHONE_NUMBER_CHECK_LAST", phoneNumberCheckLast)
+        buildConfigField("String", "USER_SIGNUP", signUp)
+        buildConfigField("String", "NICK_NAME_URL", nickNameCheck)
+        buildConfigField("String", "NICK_NAME_SEND_URL", nickNameSend)
+        buildConfigField("String", "NAME_SEND_URL", nameUlr)
+        buildConfigField("String", "USER_DETAIL_URL", userDetailUrl)
+        buildConfigField("String", "USER_PHONE_SEND_URL", userPhoneNumber)
     }
 
     buildTypes {

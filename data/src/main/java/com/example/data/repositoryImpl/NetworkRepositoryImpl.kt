@@ -28,8 +28,8 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun collectTimer(): Flow<Int> = firebase.timeFlow()
 
-    override suspend fun checkAlreadySignUpNumber(number: String): String {
-        val response = api.checkAlreadySignUpNumber(number)
+    override suspend fun checkAlreadySignUpNumber(number: String, token: String): String {
+        val response = api.checkAlreadySignUpNumber(token,number)
         return response.code().toString()
     }
 
@@ -64,8 +64,8 @@ class NetworkRepositoryImpl @Inject constructor(
         return accessToken to refreshToken
     }
 
-    override suspend fun checkNickName(data: String): Int {
-        val response = api.requestCheckNickName(NickNameCheckRequest(data))
+    override suspend fun checkNickName(data: String , token : String): Int {
+        val response = api.requestCheckNickName(token,NickNameCheckRequest(data))
         return response.code()
     }
 

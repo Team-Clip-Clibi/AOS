@@ -8,6 +8,8 @@ import com.sungil.network.model.UserInfoResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -18,6 +20,7 @@ interface HttpApi {
      */
     @GET(BuildConfig.PHONE_NUMBER_CHECK_FIRST + "{phoneNumber}" + BuildConfig.PHONE_NUMBER_CHECK_LAST)
     suspend fun checkAlreadySignUpNumber(
+        @Header("Authorization") bearerToken: String,
         @Path("phoneNumber") userId: String,
     ): Response<UserInfoResponse>
 
@@ -34,7 +37,46 @@ interface HttpApi {
      */
     @POST(BuildConfig.NICK_NAME_URL)
     suspend fun requestCheckNickName(
-        @Body request : NickNameCheckRequest
+        @Header("Authorization") bearerToken: String,
+        @Body request: NickNameCheckRequest,
+    ): Response<Unit>
+
+    /**
+     * 핸드폰 입력 API
+     */
+    @PATCH(BuildConfig.USER_PHONE_SEND_URL)
+    suspend fun requestSendPhoneNumber(
+        @Header("Authorization") bearerToken: String,
+        @Body phoneNumber: String,
+    ): Response<Unit>
+
+    /**
+     * 이름 입력 API
+     */
+    @PATCH(BuildConfig.NAME_SEND_URL)
+    suspend fun requestSendName(
+        @Header("Authorization") bearerToken: String,
+        @Body userName : String
     ) : Response<Unit>
 
+    /**
+     * 닉네임 입력 API
+     */
+    @PATCH(BuildConfig.NICK_NAME_SEND_URL)
+    suspend fun requestSendNickName(
+        @Header("Authorization") bearerToken: String,
+        @Body nickname : String
+    ) : Response<Unit>
+
+    /**
+     * 회원정보 상세 입력 API
+     */
+    @PATCH(BuildConfig.USER_DETAIL_URL)
+    suspend fun requestSendDetail(
+        @Header("Authorization") bearerToken: String,
+        @Body gender : String,
+        @Body birth : String,
+        @Body city : String,
+        @Body county : String
+    ): Response<Unit>
 }

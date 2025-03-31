@@ -1,10 +1,11 @@
 package com.sungil.domain.useCase
 
 import com.sungil.domain.UseCase
+import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
 
-class CheckAlreadySignUpNumber @Inject constructor(private val repo: NetworkRepository) :
+class CheckAlreadySignUpNumber @Inject constructor(private val repo: NetworkRepository,private val database : DatabaseRepository) :
     UseCase<CheckAlreadySignUpNumber.Param, CheckAlreadySignUpNumber.Result> {
     data class Param(
         val phoneNumber: String,
@@ -21,7 +22,11 @@ class CheckAlreadySignUpNumber @Inject constructor(private val repo: NetworkRepo
         } else {
             param.phoneNumber.trim()
         }
-        val resultCode = repo.checkAlreadySignUpNumber(editorNumber)
+        val token = database.getToken()
+        if(token.first == null){
+            return Result.Fail("token is null")
+        }
+        val resultCode = repo.checkAlreadySignUpNumber(editorNumber,"Bearer"+" "+token.first!!)
         if (resultCode == "200") {
             return Result.Fail("Already SignUp")
         }

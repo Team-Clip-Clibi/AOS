@@ -1,6 +1,7 @@
 package com.sungil.domain.useCase
 
 import com.sungil.domain.UseCase
+import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.DeviceRepository
 import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
@@ -8,6 +9,7 @@ import javax.inject.Inject
 class CheckNickName @Inject constructor(
     private val deviceRepo: DeviceRepository,
     private val networkRepo: NetworkRepository,
+    private val database : DatabaseRepository
 ) :
     UseCase<CheckNickName.Param, CheckNickName.Result> {
 
@@ -34,7 +36,11 @@ class CheckNickName @Inject constructor(
             deviceRepo.requestVibrate()
             return Result.Fail("no special")
         }
-        val apiResult = networkRepo.checkNickName(name)
+        val token = database.getToken()
+        if(token.first == null || token.second == null){
+            return Result.Fail("token is null")
+        }
+        val apiResult = networkRepo.checkNickName(name , "Bearer"+" "+token.first!!)
         if (apiResult != 200) {
             deviceRepo.requestVibrate()
             return Result.Fail("Already use")
