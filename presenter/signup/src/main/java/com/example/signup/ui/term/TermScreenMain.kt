@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,13 +24,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.AppTextStyles
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomCheckBox
@@ -64,9 +69,7 @@ internal fun TermScreenMain(
         ) {
             Text(
                 text = stringResource(R.string.txt_term_title),
-                fontSize = 28.sp,
-                fontFamily = FontFamily(Font(R.font.bold)),
-                fontWeight = FontWeight.Bold,
+                style = AppTextStyles.HEAD_24_34_BOLD,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp)
@@ -76,26 +79,28 @@ internal fun TermScreenMain(
             CustomCheckBox(
                 text = stringResource(R.string.txt_term_okay_everyThing),
                 checked = allChecked,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(8.dp)
-                    .then(
-                        if (allChecked) {
-                            Modifier
-                                .border(
-                                    2.dp,
-                                    color = colorResource(R.color.lavender),
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                                .background(
-                                    color = colorResource(R.color.light_lavender),
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                        } else {
-                            Modifier
-                        }
-                    ),
+                modifier =if (allChecked) {
+                    Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .border(
+                            1.dp,
+                            color = Color(0xFF6700CE),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background(
+                            color = Color(0xFFF9F0FF),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                } else {
+                    Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .background(
+                            color = Color(0xFFF7F7F7),
+                            shape = RoundedCornerShape(size = 12.dp)
+                        )
+                },
                 onCheckChange = { isChecked ->
                     allChecked = isChecked
                     termItems.forEach { terms ->
@@ -110,8 +115,7 @@ internal fun TermScreenMain(
                 checked = termItems.getOrNull(1)?.checked ?: false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(top = 12.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
+                    .height(60.dp),
                 onCheckChange = { isChecked ->
                     termItems.getOrNull(1)?.let { termItem ->
                         viewModel.changeTermItem(termItem.copy(checked = isChecked))
@@ -124,8 +128,7 @@ internal fun TermScreenMain(
                 checked = termItems.getOrNull(2)?.checked ?: false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(8.dp),
+                    .height(60.dp),
                 onCheckChange = { isChecked ->
                     termItems.getOrNull(2)?.let { termItem ->
                         viewModel.changeTermItem(termItem.copy(checked = isChecked))
@@ -138,8 +141,7 @@ internal fun TermScreenMain(
                 checked = termItems.getOrNull(3)?.checked ?: false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(8.dp),
+                    .height(60.dp),
                 onCheckChange = { isChecked ->
                     termItems.getOrNull(3)?.let { termItem ->
                         viewModel.changeTermItem(termItem.copy(checked = isChecked))
@@ -152,15 +154,21 @@ internal fun TermScreenMain(
             Button(
                 onClick = { buttonClick() },
                 enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
+                    .height(60.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (termItems.getOrNull(1)?.checked == true &&
+                        termItems.getOrNull(2)?.checked == true
+                    ) Color(0xFF6700CE) else Color(0xFFEFEFEF)
+                )
             ) {
                 Text(
                     text = stringResource(R.string.btn_start_oneThing),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = Color(0xFFFFFFFF),
+                    textAlign = TextAlign.Center
                 )
             }
         }

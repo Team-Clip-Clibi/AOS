@@ -57,6 +57,7 @@ import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
+import com.example.core.AppTextStyles
 import com.example.signup.ISArea
 import com.example.signup.ISCity
 import com.example.signup.ISDay
@@ -102,14 +103,8 @@ fun TopBar(
                     }else{
                         "$currentPage/$totalPage"
                     },
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        lineHeight = 18.sp,
-                        fontFamily = FontFamily(Font(R.font.light)),
-                        fontWeight = FontWeight(600),
-                        color = colorResource(R.color.lavender),
-                        textAlign = TextAlign.End
-                    )
+                    style = AppTextStyles.CAPTION_12_18_SEMI,
+                    color = Color(0xFF9254DE)
                 )
             }
         )
@@ -127,10 +122,9 @@ fun CustomCheckBox(
 ) {
     Row(
         modifier = modifier.clickable { onCheckChange(!checked) },
-        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(16.dp))
         CircularCheckBox(
             checked = checked,
             onCheckedChange = onCheckChange
@@ -140,11 +134,10 @@ fun CustomCheckBox(
         Text(
             modifier = Modifier.weight(1f),
             text = text,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
+            style = AppTextStyles.SUBTITLE_16_24_SEMI
         )
         if (isIconShow) {
+
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow),
                 contentDescription = "자세히 보기",
@@ -152,6 +145,7 @@ fun CustomCheckBox(
                 tint = Color.Gray
             )
         }
+
         Spacer(modifier = Modifier.width(8.dp))
     }
 }

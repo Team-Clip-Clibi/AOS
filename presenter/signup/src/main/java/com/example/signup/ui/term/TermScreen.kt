@@ -34,8 +34,8 @@ internal fun TermScreen(
         topBar = {
             TopBar(
                 title = stringResource(R.string.txt_topBar_title),
-                currentPage = 0,
-                totalPage = 0,
+                currentPage = 1,
+                totalPage = 5,
                 onBackClick = {
                     actionBarClick()
                 }
