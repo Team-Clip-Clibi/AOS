@@ -54,6 +54,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
@@ -602,10 +603,7 @@ fun CustomBottomSheet(
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.TopEnd)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = LocalIndication.current
-                        ) {
+                        .clickable{
                             coroutineScope.launch {
                                 sheetState.hide()
                                 onDismiss()
@@ -626,6 +624,7 @@ fun CustomBottomSheet(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
                             .background(
                                 color = Color(0xFFF7F7F7),
                                 shape = RoundedCornerShape(size = 8.dp)
