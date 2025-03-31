@@ -62,4 +62,5 @@ dependencies {
     implementation(libs.compose.nav)
     //project
     implementation(project(":domain"))
+    implementation(project(":core"))
 }

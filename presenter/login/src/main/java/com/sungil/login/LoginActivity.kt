@@ -48,7 +48,7 @@ class LoginActivity : ComponentActivity() {
                     }
 
                     is LoginViewModel.Action.NotSignUp -> {
-                        router.navigationToSMS(SIGNUP_VIEW)
+                        router.navigation(SIGNUP_VIEW)
                     }
 
                     is LoginViewModel.Action.SignUp -> {
@@ -62,7 +62,7 @@ class LoginActivity : ComponentActivity() {
                     is LoginViewModel.Action.Error -> {
                         when (it.errorMessage) {
                             ERROR_KAKAO_ID_NULL -> {
-                                router.navigationToSMS(KAKAO_VIEW)
+                                router.navigation(KAKAO_VIEW)
                             }
 
                             ERROR_NOTIFICATION -> {

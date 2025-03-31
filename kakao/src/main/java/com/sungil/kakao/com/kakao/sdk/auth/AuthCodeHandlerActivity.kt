@@ -49,7 +49,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
             viewModel.actionFlow.collect {
                 when (it) {
                     is SMSViewModel.Action.SaveSuccess -> {
-                        router.navigationToSMS("SignUp")
+                        router.navigation("SignUp")
                     }
 
                     else -> {
