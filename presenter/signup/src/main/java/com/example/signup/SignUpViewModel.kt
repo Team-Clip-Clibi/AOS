@@ -131,11 +131,11 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = checkName.invoke(CheckNameOkay.Param(data))) {
                 is CheckNameOkay.Result.Success -> {
-                    _userInfoState.value.nameCheck = CheckState.ValueOkay(result.message)
+                    _userInfoState.update { it.copy(nameCheck = CheckState.ValueOkay(result.message)) }
                 }
 
                 is CheckNameOkay.Result.Fail -> {
-                    _userInfoState.value.nameCheck = CheckState.ValueNotOkay(result.errorMessage)
+                    _userInfoState.update { it.copy(nameCheck =CheckState.ValueNotOkay(result.errorMessage) ) }
                 }
             }
         }

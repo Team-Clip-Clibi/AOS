@@ -16,8 +16,8 @@ internal fun InputNameScreen(
     Scaffold(topBar = {
         TopBar(
             title = stringResource(R.string.txt_topBar_title),
-            currentPage = 2,
-            totalPage = 4,
+            currentPage = 3,
+            totalPage = 5,
             onBackClick = {
                 actionClick()
             }

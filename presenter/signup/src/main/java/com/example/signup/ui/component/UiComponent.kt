@@ -315,11 +315,9 @@ fun CustomDialog(
 fun CustomTitleText(text: String) {
     Text(
         text = text,
-        fontSize = 16.sp,
-        fontFamily = FontFamily(Font(R.font.medium)),
-        fontWeight = FontWeight(600),
+        style = AppTextStyles.SUBTITLE_16_24_SEMI,
         modifier = Modifier.fillMaxWidth(),
-        color = colorResource(R.color.dark_gray)
+        color = Color(0xFF666666)
     )
 }
 
@@ -327,12 +325,9 @@ fun CustomTitleText(text: String) {
 fun CustomContentText(text: String) {
     Text(
         text = text,
-        fontSize = 28.sp,
-        lineHeight = 40.sp,
-        fontFamily = FontFamily(Font(R.font.medium)),
-        fontWeight = FontWeight(700),
+        style = AppTextStyles.HEAD_28_40_BOLD,
         modifier = Modifier.fillMaxWidth(),
-        color = colorResource(R.color.black_gray)
+        color = Color(0xFF171717)
     )
 }
 
@@ -340,10 +335,7 @@ fun CustomContentText(text: String) {
 fun CustomUnderTextFieldText(text: String, color: Color) {
     Text(
         text = text,
-        fontSize = 12.sp,
-        lineHeight = 18.sp,
-        fontFamily = FontFamily(Font(R.font.medium)),
-        fontWeight = FontWeight(400),
+        style = AppTextStyles.CAPTION_12_18_SEMI,
         color = color
     )
 }

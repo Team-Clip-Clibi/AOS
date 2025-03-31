@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -73,7 +74,7 @@ internal fun InputNameScreenMain(
         Column(
             modifier = Modifier.fillMaxSize() . verticalScroll(rememberScrollState())
         ) {
-            CustomTitleText(stringResource(R.string.txt_sign_up_title))
+            CustomTitleText(stringResource(R.string.txt_name_title))
 
             CustomContentText(stringResource(R.string.txt_name_content))
 
@@ -103,10 +104,10 @@ internal fun InputNameScreenMain(
                         text = stringResource(
                             isValidName
                         ),
-                        color = colorResource(
-                            if (isValidName == R.string.txt_name_safe) R.color.dark_gray
-                            else R.color.red
-                        )
+                        color =
+                            if (isValidName == R.string.txt_name_safe) Color(0xFF666666)
+                            else Color(0xFFFB4F4F)
+
                     )
                 }
             }
