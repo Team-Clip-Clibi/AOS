@@ -5,6 +5,7 @@ import com.example.fcm.FirebaseFCM
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
+import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.TermData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -62,4 +63,10 @@ class NetworkRepositoryImpl @Inject constructor(
         val refreshToken = response.body()?.refreshToken
         return accessToken to refreshToken
     }
+
+    override suspend fun checkNickName(data: String): Int {
+        val response = api.requestCheckNickName(NickNameCheckRequest(data))
+        return response.code()
+    }
+
 }

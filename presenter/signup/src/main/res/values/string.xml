@@ -42,7 +42,8 @@
     <string name="txt_nick_length_low">*2자 이상 입력해주세요</string>
     <string name="txt_nick_no_special">*특수문자를 사용할 수 없습니다.</string>
     <string name="txt_nick_name_okay">사용 가능한 닉네임입니다.</string>
-
+    <string name="txt_nick_name_already_use">이미 사용중인 닉네임입니다. 다시 입력해주세요.</string>
+    <string name="btn_check_nick_name">중복 확인</string>
     <!-- InputDetailInfo   -->
     <string name="txt_info_title">가입 후에도 언제든지 변경할 수 있어요</string>
     <string name="txt_info_content">당신에 대해 조금더\n알려주세요!</string>

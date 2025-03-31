@@ -56,6 +56,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
 import com.example.core.AppTextStyles
 import com.example.signup.ISArea
@@ -376,6 +377,48 @@ fun CustomButton(
                 Color(0xFFFFFFFF)
             }else{
                 Color(0xFF171717)
+            }
+        )
+    }
+}
+
+@Composable
+fun CustomSmallButton(
+    text: String,
+    onclick: () -> Unit,
+    enable: Boolean,
+){
+    Button(
+        modifier = Modifier
+            .width(104.dp)
+            .height(36.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            when (enable) {
+                true -> {
+                    Color(0xFFF9F0FF)
+                }
+
+                false -> {
+                    Color(0xFFEFEFEF)
+                }
+            }
+
+        ),
+        onClick = { onclick() },
+        enabled = enable
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+            color = if(enable){
+                Color(0xFF6700CE)
+            }else{
+                Color(0xFF666666)
             }
         )
     }

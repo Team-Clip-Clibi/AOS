@@ -2,9 +2,13 @@ package com.sungil.domain.useCase
 
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DeviceRepository
+import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
 
-class CheckNickName @Inject constructor(private val deviceRepo : DeviceRepository) :
+class CheckNickName @Inject constructor(
+    private val deviceRepo: DeviceRepository,
+    private val networkRepo: NetworkRepository,
+) :
     UseCase<CheckNickName.Param, CheckNickName.Result> {
 
     data class Param(
@@ -29,6 +33,11 @@ class CheckNickName @Inject constructor(private val deviceRepo : DeviceRepositor
         if (!name.matches(Regex("^[a-zA-Z가-힣]+$"))) {
             deviceRepo.requestVibrate()
             return Result.Fail("no special")
+        }
+        val apiResult = networkRepo.checkNickName(name)
+        if (apiResult != 200) {
+            deviceRepo.requestVibrate()
+            return Result.Fail("Already use")
         }
         return Result.Success("name okay")
     }

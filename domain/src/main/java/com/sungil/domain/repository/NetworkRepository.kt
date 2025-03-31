@@ -19,4 +19,5 @@ interface NetworkRepository {
         firebaseToken: String,
         isAllowNotify: Boolean,
     ): Pair<String?, String?>
+    suspend fun checkNickName(data : String) : Int
 }

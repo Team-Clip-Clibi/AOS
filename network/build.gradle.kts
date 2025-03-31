@@ -29,11 +29,13 @@ android {
         val phoneNumberCheckFirst : String = properties.getProperty("phone_number_check_first" , "")
         val phoneNumberCheckLast : String = properties.getProperty("phone_number_check_last" , "")
         val signUp : String = properties.getProperty("signUp" ,"")
+        val nickNameCheck : String = properties.getProperty("nickNameCheck" ,"")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String" , "PHONE_NUMBER_CHECK_FIRST" , phoneNumberCheckFirst)
         buildConfigField("String" , "PHONE_NUMBER_CHECK_LAST", phoneNumberCheckLast)
         buildConfigField("String" ,"USER_SIGNUP" , signUp)
+        buildConfigField("String" , "NICK_NAME_URL",nickNameCheck)
     }
 
     buildTypes {
