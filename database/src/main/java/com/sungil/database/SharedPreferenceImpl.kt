@@ -102,4 +102,24 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
         }
     }
 
+    override suspend fun setNotificationState(data: Boolean): Boolean {
+        return try {
+            preference.edit().putBoolean(BuildConfig.NOTIFYKEY, data).apply()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun getNotificationState(): Boolean {
+        return try {
+            val data = preference.getBoolean(BuildConfig.NOTIFYKEY, false)
+            return data
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }

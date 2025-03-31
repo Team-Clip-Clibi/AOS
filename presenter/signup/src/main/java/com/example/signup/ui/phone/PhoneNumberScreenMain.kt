@@ -53,35 +53,28 @@ internal fun PhoneNumberScreenMain(
     buttonClick: () -> Unit,
     activity: Activity,
 ) {
-    val phoneNumber by viewModel.phoneNumber.collectAsState()
-    val firebaseSMSState by viewModel.firebaseSMSState.collectAsState()
-    var errorDialog by remember { mutableStateOf(false) }
+    val phoneNumber by viewModel.userInfoState.collectAsState()
     var alreadySignUpDialog by remember { mutableStateOf(false) }
 
-    val buttonIsEnable = when (firebaseSMSState) {
-        is SignUpViewModel.Action.VerifyFinish -> true
-        else -> false
-    }
+    var buttonIsEnable = false
 
     LaunchedEffect(Unit) {
-        viewModel.firebaseSMSState.collectLatest { state ->
-            when (state) {
-                is SignUpViewModel.Action.Error -> {
-                    when (state.message) {
-                        ERROR_ALREADY_SIGN_UP -> {
+        viewModel.userInfoState.collectLatest { userInfo ->
+            when(val phoneState = userInfo.phoneNumberCheckState){
+                is SignUpViewModel.CheckState.StanBy ->{
+                    Log.d(javaClass.name.toString() , "stand by check phone Number")
+                }
+                is SignUpViewModel.CheckState.ValueOkay ->{
+                    Log.d(javaClass.name.toString() , "Success to set Phone Number")
+                    buttonIsEnable = true
+                }
+                is SignUpViewModel.CheckState.ValueNotOkay ->{
+                    when(phoneState.errorMessage){
+                        ERROR_ALREADY_SIGN_UP ->{
+                            buttonIsEnable = true
                             alreadySignUpDialog = true
                         }
-
-                        else -> errorDialog = true
                     }
-                }
-
-                is SignUpViewModel.Action.FailVerifySMS -> {
-                    errorDialog = true
-                }
-
-                else -> {
-                    Log.d(javaClass.name.toString(), "state is change $state")
                 }
             }
         }
@@ -97,7 +90,6 @@ internal fun PhoneNumberScreenMain(
                 bottom = 21.dp
             )
     ) {
-        // ✅ 스크롤 가능한 입력 영역
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -123,7 +115,7 @@ internal fun PhoneNumberScreenMain(
             Spacer(modifier = Modifier.height(32.dp))
 
             CustomTextField(
-                text = phoneNumber,
+                text = phoneNumber.phoneNumber,
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { number ->
                     viewModel.inputPhoneNumber(number)
@@ -136,7 +128,7 @@ internal fun PhoneNumberScreenMain(
 
             Button(
                 onClick = { buttonClick() },
-                enabled = true,
+                enabled = buttonIsEnable,
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(
@@ -169,5 +161,6 @@ internal fun PhoneNumberScreenMain(
                 )
             }
         }
+
     }
 }

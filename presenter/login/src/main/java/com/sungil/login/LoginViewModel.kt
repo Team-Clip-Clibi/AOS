@@ -1,10 +1,12 @@
 package com.sungil.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.CheckAlreadySignUp
 import com.sungil.domain.useCase.GetFcmToken
 import com.sungil.domain.useCase.GetKakaoId
+import com.sungil.domain.useCase.SetNotifyState
 import com.sungil.domain.useCase.UpdateAndSaveToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,6 +21,7 @@ class LoginViewModel @Inject constructor(
     private val signUp: CheckAlreadySignUp,
     private val fcm: GetFcmToken,
     private val updateAndSaveToken: UpdateAndSaveToken,
+    private val notifyState : SetNotifyState
 ) : ViewModel() {
     private val _actionFlow = MutableSharedFlow<Action>()
     val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
@@ -53,9 +56,14 @@ class LoginViewModel @Inject constructor(
 
     fun setNotification(data: Boolean) {
         viewModelScope.launch {
-            if (!data) {
-                _actionFlow.emit(Action.Error("error permission"))
-                return@launch
+            when (val result = notifyState.invoke(SetNotifyState.Param(data))) {
+                is SetNotifyState.Result.Success -> {
+                    Log.d(javaClass.name.toString(), "Success ${result.message}")
+                }
+
+                is SetNotifyState.Result.Fail -> {
+                    _actionFlow.emit(Action.Error(result.errorMessage))
+                }
             }
             getToken()
         }

@@ -63,7 +63,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         val userInfo = UserInfo(
             name = name,
             termAllChecked = termAllCheck,
-            termServicePermission =  servicePermission,
+            termServicePermission = servicePermission,
             privatePermission = privatePermission,
             marketingPermission = marketingPermission,
             nickName = nickName,
@@ -74,13 +74,21 @@ class DatabaseRepositoryImpl @Inject constructor(
             area = area,
             gender = gender
         )
-        try{
+        try {
             userInfoDao.insert(userInfo)
             return true
-        }catch (e : Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             return false
         }
+    }
+
+    override suspend fun getNotifyState(): Boolean {
+        return database.getNotificationState()
+    }
+
+    override suspend fun setNotifyState(data: Boolean): Boolean {
+        return database.setNotificationState(data)
     }
 
 }

@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,19 +40,19 @@ internal fun InputNameScreenMain(
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
 ) {
-    val name by viewModel.name.collectAsState()
-    var isValidName by remember { mutableIntStateOf(R.string.txt_name_safe) }
 
+    var isValidName by remember { mutableIntStateOf(R.string.txt_name_safe) }
+    val name by viewModel.userInfoState.collectAsState()
     LaunchedEffect(Unit) {
-        viewModel.nameCheck.collectLatest { state ->
-            when(state){
-                is SignUpViewModel.NameCheck.NameStandby -> {
+        viewModel.userInfoState.collectLatest { userInfoState ->
+            when(userInfoState.nameCheck){
+                is SignUpViewModel.CheckState.StanBy -> {
                     isValidName = R.string.txt_name_safe
                 }
-                is SignUpViewModel.NameCheck.NameIsNotOkay -> {
+                is SignUpViewModel.CheckState.ValueNotOkay -> {
                     isValidName = R.string.txt_name_korean_english
                 }
-                is SignUpViewModel.NameCheck.NameIsOkay -> {
+                is SignUpViewModel.CheckState.ValueOkay -> {
                     buttonClick()
                     viewModel.resetName()
                 }
@@ -81,7 +80,7 @@ internal fun InputNameScreenMain(
             Spacer(modifier = Modifier.height(32.dp))
 
             CustomTextField(
-                text = name,
+                text = name.name,
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { name ->
                     viewModel.inputName(name)
@@ -116,8 +115,8 @@ internal fun InputNameScreenMain(
 
             CustomButton(
                 stringResource(R.string.btn_next),
-                onclick = {viewModel.checkName(name)},
-                enable = name.isNotEmpty(),
+                onclick = {viewModel.checkName(name.name)},
+                enable = name.name.isNotEmpty(),
             )
         }
     }

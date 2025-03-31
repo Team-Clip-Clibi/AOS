@@ -27,11 +27,13 @@ android {
         val sharedTokenKey: String = properties.getProperty("tokenKey", "")
         val signKey: String = properties.getProperty("signUpKey", "")
         val fcmKey : String = properties.getProperty("fcmKey","")
+        val notify : String = properties.getProperty("notifiyKey","")
 
         buildConfigField("String", "SHARED_KEY", sharedPreKey)
         buildConfigField("String", "TOKEN_KEY", sharedTokenKey)
         buildConfigField("String", "signUpKey", signKey)
         buildConfigField("String" , "fcmKey" , fcmKey)
+        buildConfigField("String" , "NOTIFYKEY" , notify)
     }
 
     buildTypes {

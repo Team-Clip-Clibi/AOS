@@ -1,5 +1,6 @@
 package com.example.signup.ui.nickname
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,19 +44,27 @@ internal fun InPutNickNameScreenMain(
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
 ) {
-    val nickName by viewModel.nickName.collectAsState()
+
 
     var nicknameValidationMessage by remember { mutableIntStateOf(R.string.txt_nick_length) }
+    val nickName by viewModel.userInfoState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.nickNameCheck.collectLatest { state ->
-            when (state) {
-                is SignUpViewModel.NameCheck.NameStandby -> {
+        viewModel.userInfoState.collectLatest { userInfo ->
+            when (val nickNameState = userInfo.nickCheckStanBy) {
+                is SignUpViewModel.CheckState.StanBy -> {
+                    Log.d(javaClass.name.toString(), "Stand by check NickName")
                     nicknameValidationMessage = R.string.txt_nick_length
                 }
 
-                is SignUpViewModel.NameCheck.NameIsNotOkay -> {
-                    nicknameValidationMessage = when (state.errorMessage) {
+                is SignUpViewModel.CheckState.ValueOkay -> {
+                    Log.d(javaClass.name.toString(), "Success to set NickName")
+                    buttonClick()
+                    viewModel.resetNickName()
+                }
+
+                is SignUpViewModel.CheckState.ValueNotOkay -> {
+                    nicknameValidationMessage = when (nickNameState.errorMessage) {
                         NAME_LONG -> {
                             R.string.txt_nick_length_over
                         }
@@ -71,11 +79,6 @@ internal fun InPutNickNameScreenMain(
 
                         else -> throw IllegalArgumentException("UNKNOW ERROR")
                     }
-                }
-
-                is SignUpViewModel.NameCheck.NameIsOkay -> {
-                    buttonClick()
-                    viewModel.resetNickName()
                 }
             }
         }
@@ -102,7 +105,7 @@ internal fun InPutNickNameScreenMain(
             Spacer(modifier = Modifier.height(10.dp))
 
             CustomTextField(
-                text = nickName,
+                text = nickName.nickName,
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { nickName ->
                     viewModel.inputNickName(nickName)
@@ -112,6 +115,7 @@ internal fun InPutNickNameScreenMain(
             )
 
             Spacer(modifier = Modifier.height(10.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -140,10 +144,10 @@ internal fun InPutNickNameScreenMain(
 
             CustomButton(
                 stringResource(R.string.btn_next),
-                onclick = { viewModel.checkNickName(nickName) },
-                enable = nickName.isNotEmpty()
+                onclick = { viewModel.checkNickName(nickName.nickName) },
+                enable = nickName.nickName.isNotEmpty()
             )
         }
-
     }
+
 }

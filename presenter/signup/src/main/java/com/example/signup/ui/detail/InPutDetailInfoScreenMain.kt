@@ -53,34 +53,14 @@ internal fun InPutDetailInfoScreenMain(
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
 ) {
-    val gender by viewModel.gender.collectAsState()
     var yearBottomSheet by remember { mutableStateOf(false) }
     var dayBottomSheet by remember { mutableStateOf(false) }
     var monthBottomSheet by remember { mutableStateOf(false) }
     var cityBottomSheet by remember { mutableStateOf(false) }
     var areaBottomSheet by remember { mutableStateOf(false) }
 
-    val year by viewModel.birthYear.collectAsState()
-    val month by viewModel.birthMonth.collectAsState()
-    val day by viewModel.birthDay.collectAsState()
-    val city by viewModel.city.collectAsState()
-    val area by viewModel.area.collectAsState()
-    LaunchedEffect(Unit) {
-        viewModel.signUpState.collectLatest { state ->
-            when(state){
-                is SignUpViewModel.SignUp.Error -> {
-                    Log.e(javaClass.name.toString() , "error ${state.errorMessage}")
-                }
-                is SignUpViewModel.SignUp.Loading -> {
-                    Log.d(javaClass.name.toString() , "Loading ${state.message}")
-                }
-                is SignUpViewModel.SignUp.Success -> {
-                    Log.d(javaClass.name.toString() , "Success")
-                    buttonClick()
-                }
-            }
-        }
-    }
+    val userInfo by viewModel.userInfoState.collectAsState()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,7 +72,9 @@ internal fun InPutDetailInfoScreenMain(
             )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize() . verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             CustomTitleText(stringResource(R.string.txt_info_title))
             CustomContentText(stringResource(R.string.txt_info_content))
@@ -108,7 +90,7 @@ internal fun InPutDetailInfoScreenMain(
                     .height(60.dp)
                     .background(
                         colorResource(
-                            when (gender) {
+                            when (userInfo.gender) {
                                 MALE -> {
                                     R.color.light_lavender
                                 }
@@ -134,7 +116,7 @@ internal fun InPutDetailInfoScreenMain(
                     .height(60.dp)
                     .background(
                         colorResource(
-                            when (gender) {
+                            when (userInfo.gender) {
                                 MALE -> {
                                     R.color.light_gray
                                 }
@@ -166,7 +148,7 @@ internal fun InPutDetailInfoScreenMain(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CustomSpinnerBox(
-                        text = year.ifEmpty { stringResource(R.string.txt_info_year) },
+                        text = userInfo.birtDay.ifEmpty { stringResource(R.string.txt_info_year) },
                         onclick = {
                             yearBottomSheet = true
                             monthBottomSheet = false
@@ -177,7 +159,7 @@ internal fun InPutDetailInfoScreenMain(
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomSpinnerBox(
-                        text = month.ifEmpty { stringResource(R.string.txt_info_month) },
+                        text = userInfo.birthMonth.ifEmpty { stringResource(R.string.txt_info_month) },
                         onclick = {
                             yearBottomSheet = false
                             monthBottomSheet = true
@@ -188,7 +170,7 @@ internal fun InPutDetailInfoScreenMain(
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     CustomSpinnerBox(
-                        text = day.ifEmpty { stringResource(R.string.txt_info_day) },
+                        text = userInfo.birtDay.ifEmpty { stringResource(R.string.txt_info_day) },
                         onclick = {
                             yearBottomSheet = false
                             monthBottomSheet = false
@@ -213,7 +195,7 @@ internal fun InPutDetailInfoScreenMain(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CustomSpinnerBox(
-                        text = city.ifEmpty { stringResource(R.string.txt_info_city) },
+                        text = userInfo.city.ifEmpty { stringResource(R.string.txt_info_city) },
                         onclick = {
                             yearBottomSheet = false
                             monthBottomSheet = false
@@ -226,7 +208,7 @@ internal fun InPutDetailInfoScreenMain(
                     Spacer(modifier = Modifier.width(10.dp))
 
                     CustomSpinnerBox(
-                        text = area.ifEmpty { stringResource(R.string.txt_info_area) },
+                        text = userInfo.area.ifEmpty { stringResource(R.string.txt_info_area) },
                         onclick = {
                             yearBottomSheet = false
                             monthBottomSheet = false
@@ -242,7 +224,7 @@ internal fun InPutDetailInfoScreenMain(
 
             CustomButton(
                 stringResource(R.string.btn_finish),
-                onclick = { viewModel.signUp() },
+                onclick = {  },
                 enable = true,
             )
 

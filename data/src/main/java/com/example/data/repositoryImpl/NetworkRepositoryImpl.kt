@@ -3,7 +3,6 @@ package com.example.data.repositoryImpl
 import android.app.Activity
 import com.example.fcm.FirebaseFCM
 import com.sungil.domain.repository.NetworkRepository
-import com.sungil.domain.useCase.RequestSignUp
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
 import com.sungil.network.model.SignUpRequest

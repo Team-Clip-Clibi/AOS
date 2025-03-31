@@ -1,6 +1,5 @@
 package com.example.signup
 
-import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,16 +10,13 @@ import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetFirebaseSMSState
 import com.sungil.domain.useCase.GetSMSTime
 import com.sungil.domain.useCase.RequestSMS
-import com.sungil.domain.useCase.RequestSignUp
+import com.sungil.domain.useCase.SendTermData
 import com.sungil.domain.useCase.SendCode
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,9 +27,9 @@ class SignUpViewModel @Inject constructor(
     private val firebaseSMS: GetFirebaseSMSState,
     private val timer: GetSMSTime,
     private val checkNumber: CheckAlreadySignUpNumber,
-    private val checkNickName : CheckNickName,
-    private val checkName : CheckNameOkay,
-    private val signUp : RequestSignUp
+    private val checkNickName: CheckNickName,
+    private val checkName: CheckNameOkay,
+    private val sendTermData: SendTermData,
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
@@ -45,130 +41,53 @@ class SignUpViewModel @Inject constructor(
     )
     val termItem: StateFlow<List<TermItem>> = _termItem.asStateFlow()
 
-    private val _phoneNumber = MutableStateFlow("")
-    val phoneNumber: StateFlow<String> = _phoneNumber.asStateFlow()
+    private val _userInfoState = MutableStateFlow(UserInfoState())
+    val userInfoState: StateFlow<UserInfoState> = _userInfoState
 
-    private val _smsCode = MutableStateFlow("")
-    val smsCode: StateFlow<String> = _smsCode.asStateFlow()
+    fun setBirthYear(value: String) {
+        _userInfoState.update { it.copy(birthYear = value) }
+    }
 
-    private val _smsViewShow = MutableStateFlow(false)
-    val smsViewShow: StateFlow<Boolean> = _smsViewShow.asStateFlow()
+    fun setBirthMonth(value: String) {
+        _userInfoState.update { it.copy(birthMonth = value) }
+    }
 
-    private val _firebaseSMSState = MutableStateFlow<Action>(Action.LoadingRequestSMS("Loading"))
-    val firebaseSMSState: StateFlow<Action> = _firebaseSMSState.asStateFlow()
+    fun setBirthDay(value: String) {
+        _userInfoState.update { it.copy(birtDay = value) }
+    }
 
-    private val _smsTime = MutableStateFlow("0")
-    val smsTime: StateFlow<String> = _smsTime.asStateFlow()
+    fun setCity(value: String) {
+        _userInfoState.update { it.copy(city = value) }
+    }
 
-    private val _name = MutableStateFlow("")
-    val name: StateFlow<String> = _name.asStateFlow()
+    fun setArea(value: String) {
+        _userInfoState.update { it.copy(area = value) }
+    }
 
-    private val _nickName = MutableStateFlow("")
-    val nickName: StateFlow<String> = _nickName.asStateFlow()
+    fun inputPhoneNumber(number: String) {
+        _userInfoState.update { it.copy(phoneNumber = number) }
+    }
 
-    private val _gender = MutableStateFlow(MALE)
-    val gender: StateFlow<String> = _gender.asStateFlow()
+    fun inputName(data: String) {
+        _userInfoState.update { it.copy(name = data) }
+    }
 
-    private val _birthYear = MutableStateFlow("")
-    val birthYear: StateFlow<String> = _birthYear.asStateFlow()
+    fun inputNickName(data: String) {
+        _userInfoState.update { it.copy(nickName = data) }
+    }
 
-    private val _birthMonth = MutableStateFlow("")
-    val birthMonth: StateFlow<String> = _birthMonth.asStateFlow()
+    fun inputGender(data: String) {
+        _userInfoState.update { it.copy(gender = data) }
+    }
 
-    private val _birthDay = MutableStateFlow("")
-    val birthDay: StateFlow<String> = _birthDay.asStateFlow()
-
-    private val _city = MutableStateFlow("")
-    val city: StateFlow<String> = _city.asStateFlow()
-
-    private val _area = MutableStateFlow("")
-    val area: StateFlow<String> = _area.asStateFlow()
-
-    private val _nickNameCheck = MutableStateFlow<NameCheck>(NameCheck.NameStandby(NAME_STANDBY))
-    val nickNameCheck : StateFlow<NameCheck> = _nickNameCheck.asStateFlow()
-
-    private val _nameCheck = MutableStateFlow<NameCheck>(NameCheck.NameStandby(NAME_STANDBY))
-    val nameCheck : StateFlow<NameCheck> = _nameCheck.asStateFlow()
-
-    private val _signUp = MutableStateFlow<SignUp>(SignUp.Loading("Loading"))
-    val signUpState : StateFlow<SignUp> = _signUp.asStateFlow()
-
-    fun setBirthYear(value: String) { _birthYear.value = value }
-    fun setBirthMonth(value: String) { _birthMonth.value = value }
-    fun setBirthDay(value: String) { _birthDay.value = value }
-    fun setCity(value: String) { _city.value = value }
-    fun setArea(value: String) { _area.value = value }
-
-    private var smsTimerJob: Job? = null
-
-    fun smsRequest(phoneNumber: String, activity: Activity) {
-        _smsViewShow.value = true
+    fun resetNickName() {
         viewModelScope.launch {
-            sms.invoke(RequestSMS.Param(phoneNumber, activity))
-            _firebaseSMSState.value = Action.SuccessRequestSMS("start to request sms")
-            collectFirebaseSMSState()
-            startSMSTimer()
+            _userInfoState.update { it.copy(nickCheckStanBy = CheckState.StanBy(STANDBY)) }
         }
     }
 
-    fun sendCode(verifyCode: String) {
-        viewModelScope.launch {
-            code.invoke(SendCode.Param(verifyCode))
-        }
-    }
-
-    private fun checkAlreadySignUpNumber() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val phoneNumber: String = _phoneNumber.value
-            when (val result = checkNumber.invoke(CheckAlreadySignUpNumber.Param(phoneNumber))) {
-                is CheckAlreadySignUpNumber.Result.Success -> {
-                    _firebaseSMSState.value = Action.VerifyFinish(result.message)
-                    smsTimerJob?.cancel()
-                }
-
-                is CheckAlreadySignUpNumber.Result.Fail -> {
-                    _firebaseSMSState.value = Action.Error(result.errorMessage)
-                }
-            }
-        }
-    }
-
-    private fun collectFirebaseSMSState() {
-        viewModelScope.launch {
-            firebaseSMS.invoke()
-                .catch { e -> e.printStackTrace() }
-                .collect { state ->
-                    when (state) {
-                        "Success" -> {
-                            _firebaseSMSState.value =
-                                Action.SuccessVerifySMS("Verification successful")
-                            checkAlreadySignUpNumber()
-                        }
-
-                        "Error" -> {
-                            _firebaseSMSState.value = Action.FailVerifySMS("Verification failed")
-                        }
-                    }
-                }
-        }
-    }
-
-    private fun startSMSTimer() {
-        smsTimerJob?.cancel() // 이전 타이머 취소 (중복 방지)
-
-        smsTimerJob = viewModelScope.launch {
-            timer.invoke().collect { time ->
-                val min = time / 60
-                val sec = time % 60
-                val formatted = String.format("%d:%02d", min, sec)
-                _smsTime.value = formatted.trim()
-
-                if (formatted == "0:00") {
-                    _firebaseSMSState.value = Action.Error("인증 시간이 만료되었습니다.")
-                    this.cancel()
-                }
-            }
-        }
+    fun resetName() {
+        _userInfoState.update { it.copy(nameCheck = CheckState.StanBy(STANDBY)) }
     }
 
     /**
@@ -185,113 +104,94 @@ class SignUpViewModel @Inject constructor(
         _termItem.value = updateList
     }
 
-    fun inputPhoneNumber(number: String) {
-        _phoneNumber.value = number
-    }
-
-    fun signCodeNumber(number: String) {
-        _smsCode.value = number
-    }
-
-    fun inputName(data: String) {
-        _name.value = data
-    }
-
-    fun inputNickName(data: String) {
-        _nickName.value = data
-    }
-
-    fun inputGender(data: String) {
-        _gender.value = data
-    }
 
     fun checkNickName(data: String) {
         viewModelScope.launch {
             when (val result = checkNickName.invoke(CheckNickName.Param(data))) {
                 is CheckNickName.Result.Success -> {
-                    _nickNameCheck.value = NameCheck.NameIsOkay(result.message)
+                    _userInfoState.value.nickCheckStanBy = CheckState.ValueOkay(result.message)
                 }
 
                 is CheckNickName.Result.Fail -> {
-                    _nickNameCheck.value = NameCheck.NameIsNotOkay(result.message)
+                    _userInfoState.value.nickCheckStanBy = CheckState.ValueNotOkay(result.message)
                 }
             }
         }
     }
-    fun resetNickName(){
+
+
+    fun checkName(data: String) {
         viewModelScope.launch {
-            _nickNameCheck.value = NameCheck.NameStandby(NAME_STANDBY)
-        }
-    }
-    fun checkName(data : String){
-        viewModelScope.launch {
-            when(val result = checkName.invoke(CheckNameOkay.Param(data))){
-                is CheckNameOkay.Result.Success ->{
-                    _nameCheck.value = NameCheck.NameIsOkay(result.message)
+            when (val result = checkName.invoke(CheckNameOkay.Param(data))) {
+                is CheckNameOkay.Result.Success -> {
+                    _userInfoState.value.nameCheck = CheckState.ValueOkay(result.message)
                 }
-                is CheckNameOkay.Result.Fail ->{
-                    _nameCheck.value = NameCheck.NameIsNotOkay(result.errorMessage)
+
+                is CheckNameOkay.Result.Fail -> {
+                    _userInfoState.value.nameCheck = CheckState.ValueNotOkay(result.errorMessage)
                 }
             }
         }
     }
-    fun resetName(){
-        viewModelScope.launch {
-            _nameCheck.value = NameCheck.NameStandby(NAME_STANDBY)
-        }
-    }
+
+
     fun signUp() {
         viewModelScope.launch {
-            val result = signUp.invoke(
-                RequestSignUp.Param(
-                    termAllChecked = _termItem.value.firstOrNull { it.termName == "allChecked" }?.checked ?: false,
-                    termServicePermission = _termItem.value.firstOrNull { it.termName == "servicePermission" }?.checked ?: false,
-                    privatePermission = _termItem.value.firstOrNull { it.termName == "privatePermission" }?.checked ?: false,
-                    marketingPermission = _termItem.value.firstOrNull { it.termName == "marketingPermission" }?.checked ?: false,
-                    name = _name.value,
-                    nickName = _nickName.value,
-                    birtYear = _birthYear.value,
-                    birthMonth = _birthMonth.value,
-                    birthDay = _birthDay.value,
-                    city = _city.value,
-                    area = _area.value,
-                    gender = _gender.value
+            val result = sendTermData.invoke(
+                SendTermData.Param(
+                    termServicePermission = _termItem.value.firstOrNull { it.termName == "servicePermission" }?.checked
+                        ?: false,
+                    privatePermission = _termItem.value.firstOrNull { it.termName == "privatePermission" }?.checked
+                        ?: false,
+                    marketingPermission = _termItem.value.firstOrNull { it.termName == "marketingPermission" }?.checked
+                        ?: false,
                 )
             )
 
             when (result) {
-                is RequestSignUp.Result.Success -> {
+                is SendTermData.Result.Success -> {
                     Log.d("SignUp", "회원가입 성공: ${result.message}")
-                    _signUp.value = SignUp.Success(result.message)
+                    _userInfoState.value.termSendState = CheckState.ValueOkay(result.message)
                 }
-                is RequestSignUp.Result.Fail -> {
+
+                is SendTermData.Result.Fail -> {
                     Log.e("SignUp", "회원가입 실패: ${result.errorMessage}")
-                    _signUp.value = SignUp.Error(result.errorMessage)
+                    _userInfoState.value.termSendState =
+                        CheckState.ValueNotOkay(result.errorMessage)
                 }
             }
         }
     }
 
 
-    sealed interface Action {
-        data class LoadingRequestSMS(val message: String) : Action
-        data class SuccessRequestSMS(val message: String) : Action
-        data class SuccessVerifySMS(val message: String) : Action
-        data class VerifyFinish(val message: String) : Action
-        data class FailVerifySMS(val message: String) : Action
-        data class Error(val message: String) : Action
+    sealed interface CheckState {
+        data class StanBy(val message: String) : CheckState
+        data class ValueNotOkay(val errorMessage: String) : CheckState
+        data class ValueOkay(val message: String) : CheckState
     }
-
-    sealed interface SignUp{
-        data class Loading(val message : String) : SignUp
-        data class Success(val message : String) : SignUp
-        data class Error(val errorMessage : String) : SignUp
-    }
-
-    sealed interface NameCheck{
-        data class NameStandby(val message : String) : NameCheck
-        data class NameIsNotOkay(val errorMessage: String) : NameCheck
-        data class NameIsOkay(val message: String) : NameCheck
-    }
-
 }
+
+data class UserInfoState(
+    val name: String = "",
+    val nickName: String = "",
+    val gender: String = MALE,
+    val birthYear: String = "",
+    val birthMonth: String = "",
+    val birtDay: String = "",
+    val city: String = "",
+    val area: String = "",
+    val phoneNumber: String = "",
+
+    var nickCheckStanBy: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
+        STANDBY
+    ),
+    var nameCheck: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
+        STANDBY
+    ),
+    var phoneNumberCheckState: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
+        STANDBY
+    ),
+    var termSendState: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
+        STANDBY
+    ),
+)
