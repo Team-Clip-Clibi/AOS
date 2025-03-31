@@ -26,4 +26,6 @@ interface DatabaseRepository {
 
     suspend fun getNotifyState(): Boolean
     suspend fun setNotifyState(data: Boolean): Boolean
+    suspend fun setToken(accessToken : String , refreshToken : String) : Boolean
+    suspend fun getToken() : Pair<String?, String?>
 }

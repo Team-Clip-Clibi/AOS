@@ -1,4 +1,4 @@
-package com.sungil.database.room
+package com.sungil.database.room.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

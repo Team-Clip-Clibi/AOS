@@ -5,7 +5,9 @@ import androidx.room.Room
 import com.sungil.database.SharedPreference
 import com.sungil.database.SharedPreferenceImpl
 import com.sungil.database.room.AppDatabase
-import com.sungil.database.room.UserInfoDao
+import com.sungil.database.room.dao.TokenDao
+import com.sungil.database.room.dao.UserInfoDao
+import com.sungil.database.room.model.Token
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,5 +36,10 @@ class DatabaseModule {
     @Provides
     fun provideUserInfoDao(appDatabase: AppDatabase): UserInfoDao {
         return appDatabase.userInfoDao()
+    }
+
+    @Provides
+    fun provideTokenDao(appDatabase: AppDatabase): TokenDao {
+        return appDatabase.tokenDao()
     }
 }

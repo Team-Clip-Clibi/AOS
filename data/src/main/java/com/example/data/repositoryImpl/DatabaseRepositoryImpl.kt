@@ -1,14 +1,17 @@
 package com.example.data.repositoryImpl
 
 import com.sungil.database.SharedPreference
-import com.sungil.database.room.UserInfo
-import com.sungil.database.room.UserInfoDao
+import com.sungil.database.room.dao.TokenDao
+import com.sungil.database.room.model.UserInfo
+import com.sungil.database.room.dao.UserInfoDao
+import com.sungil.database.room.model.Token
 import com.sungil.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(
     private val database: SharedPreference,
     private val userInfoDao: UserInfoDao,
+    private val tokenDao: TokenDao,
 ) :
     DatabaseRepository {
 
@@ -89,6 +92,26 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun setNotifyState(data: Boolean): Boolean {
         return database.setNotificationState(data)
+    }
+
+    override suspend fun setToken(accessToken: String, refreshToken: String): Boolean {
+        return try {
+            tokenDao.insertToken(
+                Token(
+                    accessToken = accessToken,
+                    refreshToken = refreshToken
+                )
+            )
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun getToken(): Pair<String?, String?> {
+        val token = tokenDao.getToken()
+        return Pair(token?.accessToken, token?.refreshToken)
     }
 
 }

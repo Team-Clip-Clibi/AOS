@@ -2,7 +2,7 @@ package com.example.data.di
 
 import com.example.data.repositoryImpl.DatabaseRepositoryImpl
 import com.sungil.database.SharedPreference
-import com.sungil.database.room.UserInfoDao
+import com.sungil.database.room.dao.UserInfoDao
 import com.sungil.domain.repository.DatabaseRepository
 import dagger.Module
 import dagger.Provides
