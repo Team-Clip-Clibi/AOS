@@ -17,8 +17,8 @@ internal fun InputNickNameScreen(
         topBar = {
             TopBar(
                 title = stringResource(R.string.txt_topBar_title),
-                currentPage = 3,
-                totalPage = 4,
+                currentPage = 4,
+                totalPage = 5,
                 onBackClick = {
                     actionClick()
                 }
