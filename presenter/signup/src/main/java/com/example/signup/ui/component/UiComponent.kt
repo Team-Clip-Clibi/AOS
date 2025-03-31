@@ -81,8 +81,7 @@ fun TopBar(
                     text = title,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.bold))
+                    style = AppTextStyles.TITLE_20_28_SEMI
                 )
             },
             navigationIcon = {
