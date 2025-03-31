@@ -1,5 +1,6 @@
 package com.example.signup.ui.term
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -25,19 +26,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.core.AppTextStyles
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomCheckBox
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun TermScreenMain(
@@ -50,6 +46,25 @@ internal fun TermScreenMain(
 
     LaunchedEffect(termItems) {
         allChecked = termItems.drop(1).all { it.checked }
+        viewModel.userInfoState.collectLatest { userInfo ->
+            when (val termState = userInfo.termSendState) {
+                is SignUpViewModel.CheckState.StanBy -> {
+                    Log.d(javaClass.name.toString(), "wait for send Term")
+                }
+
+                is SignUpViewModel.CheckState.ValueNotOkay -> {
+                    Log.d(
+                        javaClass.name.toString(),
+                        "Error to send Term Data ${termState.errorMessage}"
+                    )
+                }
+
+                is SignUpViewModel.CheckState.ValueOkay -> {
+                    viewModel.resetTermData()
+                    buttonClick()
+                }
+            }
+        }
     }
 
     Box(
@@ -79,7 +94,7 @@ internal fun TermScreenMain(
             CustomCheckBox(
                 text = stringResource(R.string.txt_term_okay_everyThing),
                 checked = allChecked,
-                modifier =if (allChecked) {
+                modifier = if (allChecked) {
                     Modifier
                         .fillMaxWidth()
                         .height(60.dp)
@@ -152,7 +167,7 @@ internal fun TermScreenMain(
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                onClick = { buttonClick() },
+                onClick = { viewModel.sendTerm() },
                 enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier

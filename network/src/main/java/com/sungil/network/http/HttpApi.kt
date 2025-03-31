@@ -2,7 +2,7 @@ package com.sungil.network.http
 
 import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
-import com.sungil.network.model.SignUpRequest
+import com.sungil.network.model.TermData
 import com.sungil.network.model.UserInfoResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,8 +18,8 @@ interface HttpApi {
     ): Response<UserInfoResponse>
 
     @POST(BuildConfig.USER_SIGNUP)
-    suspend fun requestSignUp(
-        @Body signUpRequest: SignUpRequest,
+    suspend fun requestSendTerm(
+        @Body signUpRequest: TermData,
     ): Response<AuthToken>
 
 }

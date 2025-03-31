@@ -5,7 +5,7 @@ import com.example.fcm.FirebaseFCM
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
-import com.sungil.network.model.SignUpRequest
+import com.sungil.network.model.TermData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -45,8 +45,8 @@ class NetworkRepositoryImpl @Inject constructor(
         firebaseToken: String,
         isAllowNotify: Boolean,
     ): Pair<String?, String?> {
-        val response = api.requestSignUp(
-            SignUpRequest(
+        val response = api.requestSendTerm(
+            TermData(
                 servicePermission = servicePermission,
                 privatePermission = privatePermission,
                 marketingPermission = marketingPermission,

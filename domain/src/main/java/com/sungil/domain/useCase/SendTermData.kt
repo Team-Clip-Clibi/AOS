@@ -29,10 +29,12 @@ class SendTermData @Inject constructor(
         if (firebaseToken.isEmpty() || socialId.isEmpty()) {
             return Result.Fail("Token is Null firebase : $firebaseToken , kakao : $socialId")
         }
+
         val osVersion = device.getAndroidOsVersion()
         if (osVersion.toString().isEmpty()) {
             return Result.Fail("Android os version is null")
         }
+
         val apiResult = network.requestSignUp(
             servicePermission = param.termServicePermission,
             privatePermission = param.privatePermission,
@@ -47,6 +49,10 @@ class SendTermData @Inject constructor(
             return Result.Fail("Fail to get Token accessToken : ${apiResult.first} , refreshToken : ${apiResult.second}")
         }
 
+        val saveToken = database.setToken(apiResult.first!!, apiResult.second!!)
+        if(!saveToken){
+            return Result.Fail("Fail to save Token")
+        }
         return Result.Success("SignUp Success")
     }
 

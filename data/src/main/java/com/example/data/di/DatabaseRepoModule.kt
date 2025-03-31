@@ -2,6 +2,7 @@ package com.example.data.di
 
 import com.example.data.repositoryImpl.DatabaseRepositoryImpl
 import com.sungil.database.SharedPreference
+import com.sungil.database.room.dao.TokenDao
 import com.sungil.database.room.dao.UserInfoDao
 import com.sungil.domain.repository.DatabaseRepository
 import dagger.Module
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 class DatabaseRepoModule {
     @Provides
     @Singleton
-    fun provideDatabaseRepo(sharedPreference: SharedPreference , userInfo : UserInfoDao) : DatabaseRepository{
-        return DatabaseRepositoryImpl(sharedPreference , userInfo)
+    fun provideDatabaseRepo(sharedPreference: SharedPreference , userInfo : UserInfoDao , tokenDao : TokenDao) : DatabaseRepository{
+        return DatabaseRepositoryImpl(sharedPreference , userInfo,tokenDao)
     }
 }

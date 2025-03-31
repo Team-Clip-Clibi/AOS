@@ -29,6 +29,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
     private fun startKakaoLogin() {
         UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
             if (error != null || token == null) {
+                Log.e(javaClass.name.toString() , "error $error")
                 viewModel.saveKaKaoId("testData")
                 return@loginWithKakaoTalk
             }

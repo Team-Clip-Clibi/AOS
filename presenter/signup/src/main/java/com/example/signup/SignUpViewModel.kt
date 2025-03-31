@@ -90,6 +90,9 @@ class SignUpViewModel @Inject constructor(
         _userInfoState.update { it.copy(nameCheck = CheckState.StanBy(STANDBY)) }
     }
 
+    fun resetTermData(){
+        _userInfoState.update { it.copy(termSendState = CheckState.StanBy(STANDBY)) }
+    }
     /**
      * Set function
      */
@@ -135,7 +138,7 @@ class SignUpViewModel @Inject constructor(
     }
 
 
-    fun signUp() {
+    fun sendTerm() {
         viewModelScope.launch {
             val result = sendTermData.invoke(
                 SendTermData.Param(
