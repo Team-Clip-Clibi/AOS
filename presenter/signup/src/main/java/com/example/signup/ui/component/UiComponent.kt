@@ -195,7 +195,7 @@ fun CustomTextField(
         value = text,
         onValueChange = onValueChange,
         modifier = modifier.background(
-            colorResource(R.color.light_gray),
+            color = Color(0xFFF7F7F7),
             shape = RoundedCornerShape(12.dp)
         ),
         keyboardOptions = KeyboardOptions(keyboardType = inputType),
@@ -203,22 +203,11 @@ fun CustomTextField(
         placeholder = {
             Text(
                 hint,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    lineHeight = 24.sp,
-                    fontFamily = FontFamily(Font(R.font.medium)),
-                    fontWeight = FontWeight(600),
-                    color = colorResource(R.color.dark_gray)
-                )
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+               color = Color(0xFF666666)
             )
         },
-        textStyle = TextStyle(
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-            fontFamily = FontFamily(Font(R.font.medium)),
-            fontWeight = FontWeight(600),
-            color = colorResource(R.color.black_gray),
-        ),
+        textStyle = AppTextStyles.SUBTITLE_16_24_SEMI,
         trailingIcon = {
             Text(
                 text = timeCount,
@@ -371,30 +360,31 @@ fun CustomButton(
             .height(60.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
-            colorResource(
+
                 when (enable) {
                     true -> {
-                        R.color.purple
+                        Color(0xFF6700CE)
                     }
 
                     false -> {
-                        R.color.bar_light_gray
+                        Color(0xFFEFEFEF)
                     }
                 }
-            )
+
         ),
         onClick = { onclick() },
         enabled = enable
     ) {
         Text(
             text = text,
-            fontSize = 20.sp,
-            lineHeight = 28.sp,
-            fontFamily = FontFamily(Font(R.font.medium)),
-            fontWeight = FontWeight(600),
+            style = AppTextStyles.TITLE_20_28_SEMI,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
-            color = colorResource(R.color.white)
+            color = if(enable){
+                Color(0xFFFFFFFF)
+            }else{
+                Color(0xFF171717)
+            }
         )
     }
 }

@@ -10,7 +10,7 @@ import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.TopBar
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 internal fun PhoneNumberScreen(
     viewModel: SignUpViewModel,
@@ -22,8 +22,8 @@ internal fun PhoneNumberScreen(
         topBar = {
             TopBar(
                 title = stringResource(R.string.txt_topBar_title),
-                currentPage = 1,
-                totalPage = 4,
+                currentPage = 2,
+                totalPage = 5,
                 onBackClick = {
                     actionClick()
                 }

@@ -13,6 +13,7 @@ import com.sungil.domain.useCase.RequestSMS
 import com.sungil.domain.useCase.SendTermData
 import com.sungil.domain.useCase.SendCode
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -93,6 +94,9 @@ class SignUpViewModel @Inject constructor(
     fun resetTermData(){
         _userInfoState.update { it.copy(termSendState = CheckState.StanBy(STANDBY)) }
     }
+    fun resetPhoneNumberState(){
+        _userInfoState.update { it.copy(phoneNumberCheckState =CheckState.StanBy(STANDBY) ) }
+    }
     /**
      * Set function
      */
@@ -166,6 +170,18 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    fun checkSignUpNumber(){
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val result = checkNumber.invoke(CheckAlreadySignUpNumber.Param(_userInfoState.value.phoneNumber))){
+                is CheckAlreadySignUpNumber.Result.Success ->{
+                    _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueOkay(result.message)) }
+                }
+                is CheckAlreadySignUpNumber.Result.Fail ->{
+                    _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueNotOkay(result.errorMessage)) }
+                }
+            }
+        }
+    }
 
     sealed interface CheckState {
         data class StanBy(val message: String) : CheckState

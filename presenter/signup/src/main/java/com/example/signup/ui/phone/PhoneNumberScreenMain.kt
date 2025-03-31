@@ -39,9 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.ButtonDefaults
+import com.example.core.AppTextStyles
 import com.example.signup.ERROR_ALREADY_SIGN_UP
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
+import com.example.signup.ui.component.CustomButton
 import com.example.signup.ui.component.CustomDialog
 import com.example.signup.ui.component.CustomTextField
 import kotlinx.coroutines.flow.collectLatest
@@ -66,12 +68,12 @@ internal fun PhoneNumberScreenMain(
                 }
                 is SignUpViewModel.CheckState.ValueOkay ->{
                     Log.d(javaClass.name.toString() , "Success to set Phone Number")
-                    buttonIsEnable = true
+                    viewModel.resetPhoneNumberState()
+                    buttonClick()
                 }
                 is SignUpViewModel.CheckState.ValueNotOkay ->{
                     when(phoneState.errorMessage){
                         ERROR_ALREADY_SIGN_UP ->{
-                            buttonIsEnable = true
                             alreadySignUpDialog = true
                         }
                     }
@@ -97,20 +99,15 @@ internal fun PhoneNumberScreenMain(
         ) {
             Text(
                 text = stringResource(R.string.txt_sign_up_title),
-                fontSize = 16.sp,
-                fontFamily = FontFamily(Font(R.font.medium)),
-                fontWeight = FontWeight(600),
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
                 modifier = Modifier.fillMaxWidth(),
-                color = colorResource(R.color.dark_gray)
+                color = Color(0xFF666666)
             )
             Text(
                 text = stringResource(R.string.txt_phone_title_sub),
-                fontSize = 28.sp,
-                lineHeight = 40.sp,
-                fontFamily = FontFamily(Font(R.font.medium)),
-                fontWeight = FontWeight(700),
+                style = AppTextStyles.HEAD_28_40_BOLD,
                 modifier = Modifier.fillMaxWidth(),
-                color = colorResource(R.color.black_gray)
+                color = Color(0xFF171717)
             )
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -126,30 +123,11 @@ internal fun PhoneNumberScreenMain(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Button(
-                onClick = { buttonClick() },
-                enabled = buttonIsEnable,
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(
-                        R.color.purple
-                    ),
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.btn_next),
-                    fontSize = 20.sp,
-                    lineHeight = 28.sp,
-                    fontFamily = FontFamily(Font(R.font.medium)),
-                    fontWeight = FontWeight(600),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    color = colorResource(R.color.white)
-                )
-            }
+            CustomButton(
+                stringResource(R.string.btn_next),
+                onclick = {viewModel.checkSignUpNumber()},
+                enable = phoneNumber.phoneNumber.isNotEmpty(),
+            )
 
             if (alreadySignUpDialog) {
                 CustomDialog(
