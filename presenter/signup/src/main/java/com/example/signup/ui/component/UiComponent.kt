@@ -1,6 +1,7 @@
 package com.example.signup.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -429,14 +430,7 @@ fun CustomTextLittle(text: String) {
     Text(
         text = text,
         modifier = Modifier.fillMaxWidth(),
-        style = TextStyle(
-            fontSize = 14.sp,
-            lineHeight = 20.sp,
-            fontFamily = FontFamily(Font(R.font.medium)),
-            fontWeight = FontWeight(700),
-            color = colorResource(R.color.black_gray)
-
-        )
+        style = AppTextStyles.BODY_14_20_MEDIUM
     )
 }
 
@@ -608,7 +602,10 @@ fun CustomBottomSheet(
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.TopEnd)
-                        .clickable {
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = LocalIndication.current
+                        ) {
                             coroutineScope.launch {
                                 sheetState.hide()
                                 onDismiss()
@@ -630,10 +627,13 @@ fun CustomBottomSheet(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
-                                color = Color.White,
-                                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                                color = Color(0xFFF7F7F7),
+                                shape = RoundedCornerShape(size = 8.dp)
                             )
-                            .clickable {
+                            .clickable (
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = LocalIndication.current
+                            ){
                                 coroutineScope.launch {
                                     onSelect(item)
                                     sheetState.hide()
@@ -641,6 +641,8 @@ fun CustomBottomSheet(
                                 }
                             }
                             .padding(start = 17.dp, end = 16.dp)
+                            .height(48.dp),
+                        contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = item,
@@ -654,7 +656,7 @@ fun CustomBottomSheet(
                             ),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(48.dp)
+
                         )
                     }
                 }

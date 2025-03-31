@@ -17,8 +17,8 @@ internal fun InputDetailInfoScreen(
     Scaffold(topBar = {
         TopBar(
             title = stringResource(R.string.txt_topBar_title),
-            currentPage = 4,
-            totalPage = 4,
+            currentPage = 5,
+            totalPage = 5,
             onBackClick = {
                 actionClick()
             }

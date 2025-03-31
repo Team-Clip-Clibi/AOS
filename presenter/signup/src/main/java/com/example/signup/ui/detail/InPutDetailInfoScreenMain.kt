@@ -101,8 +101,7 @@ internal fun InPutDetailInfoScreenMain(
 
                                 else -> R.color.light_gray
                             }
-                        ),
-                        shape = RoundedCornerShape(12.dp)
+                        ), shape = RoundedCornerShape(12.dp)
                     )
                     .padding(start = 17.dp, end = 16.dp),
                 text = stringResource(R.string.txt_info_male),
@@ -127,8 +126,7 @@ internal fun InPutDetailInfoScreenMain(
 
                                 else -> R.color.light_gray
                             }
-                        ),
-                        shape = RoundedCornerShape(12.dp)
+                        ), shape = RoundedCornerShape(12.dp)
                     )
                     .padding(start = 17.dp, end = 16.dp),
                 text = stringResource(R.string.txt_info_female),
@@ -148,7 +146,7 @@ internal fun InPutDetailInfoScreenMain(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CustomSpinnerBox(
-                        text = userInfo.birtDay.ifEmpty { stringResource(R.string.txt_info_year) },
+                        text = userInfo.birthYear.ifEmpty { stringResource(R.string.txt_info_year) },
                         onclick = {
                             yearBottomSheet = true
                             monthBottomSheet = false
@@ -224,8 +222,8 @@ internal fun InPutDetailInfoScreenMain(
 
             CustomButton(
                 stringResource(R.string.btn_finish),
-                onclick = {  },
-                enable = true,
+                onclick = { },
+                enable = userInfo.birthYear.isNotEmpty() && userInfo.birthMonth.isNotEmpty() && userInfo.birtDay.isNotEmpty() && userInfo.city.isNotEmpty() && userInfo.area.isNotEmpty() && userInfo.gender.isNotEmpty(),
             )
 
             BottomSheetSelector(
