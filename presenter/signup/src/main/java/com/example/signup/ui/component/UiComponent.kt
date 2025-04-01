@@ -78,7 +78,8 @@ fun TopBar(
 ) {
     Column {
         TopAppBar(
-            modifier = Modifier.border(width = 1.dp, color = Color(0xFFEFEFEF))
+            modifier = Modifier
+                .border(width = 1.dp, color = Color(0xFFEFEFEF))
                 .fillMaxWidth()
                 .padding(start = 5.dp, end = 16.dp)
                 ,
@@ -210,7 +211,8 @@ fun CustomTextField(
             Text(
                 hint,
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
-               color = Color(0xFF666666)
+                color = Color(0xFF666666),
+                modifier = Modifier.padding(end = 16.dp)
             )
         },
         textStyle = AppTextStyles.SUBTITLE_16_24_SEMI,
@@ -225,13 +227,13 @@ fun CustomTextField(
                     color = colorResource(R.color.gray_text),
                     textAlign = TextAlign.Right
                 ),
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             )
         },
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = colorResource(R.color.light_gray),
-            unfocusedContainerColor = colorResource(R.color.light_gray),
-            disabledContainerColor = colorResource(R.color.light_gray),
+            focusedContainerColor = Color(0xFFF7F7F7),
+            unfocusedContainerColor = Color(0xFFF7F7F7),
+            disabledContainerColor = Color(0xFFF7F7F7),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
@@ -355,19 +357,23 @@ fun CustomButton(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp),
+            .height(60.dp)
+            .padding(
+                start = 17.dp,
+                end = 17.dp
+            ),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
 
-                when (enable) {
-                    true -> {
-                        Color(0xFF6700CE)
-                    }
-
-                    false -> {
-                        Color(0xFFEFEFEF)
-                    }
+            when (enable) {
+                true -> {
+                    Color(0xFF6700CE)
                 }
+
+                false -> {
+                    Color(0xFFEFEFEF)
+                }
+            }
 
         ),
         onClick = { onclick() },
@@ -378,9 +384,9 @@ fun CustomButton(
             style = AppTextStyles.TITLE_20_28_SEMI,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
-            color = if(enable){
+            color = if (enable) {
                 Color(0xFFFFFFFF)
-            }else{
+            } else {
                 Color(0xFF171717)
             }
         )
@@ -606,7 +612,7 @@ fun CustomBottomSheet(
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.TopEnd)
-                        .clickable{
+                        .clickable {
                             coroutineScope.launch {
                                 sheetState.hide()
                                 onDismiss()
@@ -632,10 +638,10 @@ fun CustomBottomSheet(
                                 color = Color(0xFFF7F7F7),
                                 shape = RoundedCornerShape(size = 8.dp)
                             )
-                            .clickable (
+                            .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = LocalIndication.current
-                            ){
+                            ) {
                                 coroutineScope.launch {
                                     onSelect(item)
                                     sheetState.hide()

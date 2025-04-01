@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -81,13 +82,10 @@ internal fun PhoneNumberScreenMain(
             }
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = 17.dp,
-                end = 17.dp,
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 21.dp
             )
@@ -100,34 +98,34 @@ internal fun PhoneNumberScreenMain(
             Text(
                 text = stringResource(R.string.txt_sign_up_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 17.dp),
                 color = Color(0xFF666666)
             )
+
             Text(
                 text = stringResource(R.string.txt_phone_title_sub),
                 style = AppTextStyles.HEAD_28_40_BOLD,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 17.dp),
                 color = Color(0xFF171717)
             )
+
             Spacer(modifier = Modifier.height(32.dp))
 
             CustomTextField(
                 text = phoneNumber.phoneNumber,
-                modifier = Modifier.fillMaxWidth(),
-                onValueChange = { number ->
-                    viewModel.inputPhoneNumber(number)
-                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 17.dp),
+                onValueChange = { number -> viewModel.inputPhoneNumber(number) },
                 inputType = KeyboardType.Phone,
                 hint = stringResource(R.string.hint_input_phone_number)
             )
 
             Spacer(modifier = Modifier.weight(1f))
-
-            CustomButton(
-                stringResource(R.string.btn_next),
-                onclick = {viewModel.checkSignUpNumber()},
-                enable = phoneNumber.phoneNumber.isNotEmpty(),
-            )
 
             if (alreadySignUpDialog) {
                 CustomDialog(
@@ -140,5 +138,21 @@ internal fun PhoneNumberScreenMain(
             }
         }
 
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+        ) {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = Color(0xFFEFEFEF)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            CustomButton(
+                text = stringResource(R.string.btn_next),
+                onclick = { viewModel.checkSignUpNumber() },
+                enable = phoneNumber.phoneNumber.isNotEmpty(),
+            )
+        }
     }
 }
