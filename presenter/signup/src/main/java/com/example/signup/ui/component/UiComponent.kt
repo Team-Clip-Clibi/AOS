@@ -255,13 +255,13 @@ fun CustomDialog(
             modifier = Modifier
                 .border(
                     width = 1.dp,
-                    color = colorResource(R.color.light_gray),
+                    color = Color(0xFFF7F7F7),
                     shape = RoundedCornerShape(size = 24.dp)
                 )
                 .width(324.dp)
                 .height(174.dp)
                 .background(
-                    color = colorResource(R.color.white),
+                    color = Color(0xFFFFFFFF),
                     shape = RoundedCornerShape(size = 24.dp)
                 )
                 .padding(24.dp),
@@ -272,27 +272,17 @@ fun CustomDialog(
             ) {
                 Text(
                     text = titleText,
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        lineHeight = 28.sp,
-                        fontFamily = FontFamily(Font(R.font.medium)),
-                        fontWeight = FontWeight(600),
-                        color = colorResource(R.color.black_gray),
-                        textAlign = TextAlign.Center
-                    )
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = Color(0xFF171717),
+                    textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
                     text = contentText,
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        lineHeight = 20.sp,
-                        fontFamily = FontFamily(Font(R.font.medium)),
-                        fontWeight = FontWeight(500),
-                        color = colorResource(R.color.dark_gray),
-                        textAlign = TextAlign.Center
-                    )
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = Color(0xFF666666),
+                    textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -306,13 +296,8 @@ fun CustomDialog(
                 ) {
                     Text(
                         text = buttonText,
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            lineHeight = 24.sp,
-                            fontFamily = FontFamily(Font(R.font.medium)),
-                            fontWeight = FontWeight(600),
-                            color = colorResource(R.color.white)
-                        )
+                        style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                        color = Color(0xFFFFFFFF),
                     )
                 }
             }
