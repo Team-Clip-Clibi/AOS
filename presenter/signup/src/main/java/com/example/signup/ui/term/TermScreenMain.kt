@@ -3,6 +3,7 @@ package com.example.signup.ui.term
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -72,10 +75,11 @@ internal fun TermScreenMain(
             .fillMaxSize()
             .padding(
                 start = 17.dp,
-                end = 17.dp,
+                end = 16.dp,
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 21.dp
             )
+            .background(color = Color(0xFFFFFFFF))
     ) {
         Column(
             modifier = Modifier
@@ -84,7 +88,7 @@ internal fun TermScreenMain(
         ) {
             Text(
                 text = stringResource(R.string.txt_term_title),
-                style = AppTextStyles.HEAD_24_34_BOLD,
+                style = AppTextStyles.HEAD_28_40_BOLD,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp)
@@ -100,7 +104,7 @@ internal fun TermScreenMain(
                         .height(60.dp)
                         .border(
                             1.dp,
-                            color = Color(0xFF6700CE),
+                            color = Color(0xFFD3ADF7),
                             shape = RoundedCornerShape(12.dp)
                         )
                         .background(
@@ -166,6 +170,8 @@ internal fun TermScreenMain(
 
             Spacer(modifier = Modifier.weight(1f))
 
+            HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
+            Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = { viewModel.sendTerm() },
                 enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
@@ -182,7 +188,11 @@ internal fun TermScreenMain(
                 Text(
                     text = stringResource(R.string.btn_start_oneThing),
                     style = AppTextStyles.TITLE_20_28_SEMI,
-                    color = Color(0xFFFFFFFF),
+                    color =if(termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true){
+                        Color(0xFFFFFFFF)
+                    }else{
+                        Color(0xFF171717)
+                    },
                     textAlign = TextAlign.Center
                 )
             }

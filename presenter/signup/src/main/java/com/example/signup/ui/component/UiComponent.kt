@@ -78,21 +78,24 @@ fun TopBar(
 ) {
     Column {
         TopAppBar(
-            modifier = Modifier.padding(start = 12.dp, end = 16.dp),
+            modifier = Modifier.border(width = 1.dp, color = Color(0xFFEFEFEF))
+                .fillMaxWidth()
+                .padding(start = 5.dp, end = 16.dp)
+                ,
             title = {
                 Text(
                     text = title,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    style = AppTextStyles.TITLE_20_28_SEMI
+                    style = AppTextStyles.TITLE_20_28_SEMI,
                 )
             },
             navigationIcon = {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                    painter = painterResource(id = R.drawable.ic_back_gray),
                     contentDescription = "뒤로가기",
                     modifier = Modifier
-                        .padding(1.dp)
+                        .padding(12.dp)
                         .width(24.dp)
                         .height(24.dp)
                         .clickable { onBackClick() }
@@ -106,11 +109,11 @@ fun TopBar(
                         "$currentPage/$totalPage"
                     },
                     style = AppTextStyles.CAPTION_12_18_SEMI,
-                    color = Color(0xFF9254DE)
+                    color = Color(0xFF6700CE)
                 )
             }
         )
-        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
+//        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
     }
 }
 
@@ -161,7 +164,7 @@ fun CircularCheckBox(
         modifier = Modifier
             .size(32.dp)
             .background(
-                color = if (checked) colorResource(id = R.color.purple) else colorResource(R.color.bright_gray),
+                color = if (checked) Color(0xFF6700CE) else Color(0xFFCACACA),
                 shape = CircleShape
             )
             .clickable { onCheckedChange(!checked) },
