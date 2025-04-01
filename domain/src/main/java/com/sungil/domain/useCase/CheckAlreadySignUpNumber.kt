@@ -1,11 +1,15 @@
 package com.sungil.domain.useCase
 
+import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
 
-class CheckAlreadySignUpNumber @Inject constructor(private val repo: NetworkRepository,private val database : DatabaseRepository) :
+class CheckAlreadySignUpNumber @Inject constructor(
+    private val repo: NetworkRepository,
+    private val database: DatabaseRepository,
+) :
     UseCase<CheckAlreadySignUpNumber.Param, CheckAlreadySignUpNumber.Result> {
     data class Param(
         val phoneNumber: String,
@@ -17,18 +21,18 @@ class CheckAlreadySignUpNumber @Inject constructor(private val repo: NetworkRepo
     }
 
     override suspend fun invoke(param: Param): Result {
-        val editorNumber = if (param.phoneNumber.contains("-")) {
-            param.phoneNumber.replace("-", "").trim()
-        } else {
-            param.phoneNumber.trim()
-        }
+        val editorNumber = param.phoneNumber.replace(Regex("[^0-9]"), "").trim()
         val token = database.getToken()
-        if(token.first == null){
+        if (token.first == null) {
             return Result.Fail("token is null")
         }
-        val resultCode = repo.checkAlreadySignUpNumber(editorNumber,"Bearer"+" "+token.first!!)
+        val resultCode = repo.checkAlreadySignUpNumber(editorNumber, TOKEN_FORM + token.first!!)
         if (resultCode == "200") {
             return Result.Fail("Already SignUp")
+        }
+        val inputResultCode = repo.inputPhoneNumber(editorNumber, TOKEN_FORM + token.first)
+        if (inputResultCode != 204) {
+            return Result.Fail("network error")
         }
         return Result.Success("okay SignUp")
     }

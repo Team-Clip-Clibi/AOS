@@ -8,7 +8,7 @@ interface NetworkRepository {
     suspend fun verifySMS(code: String)
     suspend fun collectFirebaseResult(): Flow<String>
     suspend fun collectTimer(): Flow<Int>
-    suspend fun checkAlreadySignUpNumber(number: String ,token : String): String
+    suspend fun checkAlreadySignUpNumber(number: String, token: String): String
     suspend fun getFCMToken(): String
     suspend fun requestSignUp(
         servicePermission: Boolean,
@@ -19,5 +19,10 @@ interface NetworkRepository {
         firebaseToken: String,
         isAllowNotify: Boolean,
     ): Pair<String?, String?>
-    suspend fun checkNickName(data : String , token : String) : Int
+
+    suspend fun checkNickName(data: String, token: String): Int
+    suspend fun inputPhoneNumber(data: String, token: String): Int
+    suspend fun inputName(data: String, token: String): Int
+    suspend fun inputNickName(data: String, token: String): Int
+    suspend fun inputUserDetail(token : String,gender: String, birth: String, city: String, county: String): Int
 }

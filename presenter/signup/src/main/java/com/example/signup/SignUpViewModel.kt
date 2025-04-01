@@ -12,6 +12,7 @@ import com.sungil.domain.useCase.GetSMSTime
 import com.sungil.domain.useCase.RequestSMS
 import com.sungil.domain.useCase.SendTermData
 import com.sungil.domain.useCase.SendCode
+import com.sungil.domain.useCase.SendUserDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +32,7 @@ class SignUpViewModel @Inject constructor(
     private val checkNickName: CheckNickName,
     private val checkName: CheckNameOkay,
     private val sendTermData: SendTermData,
+    private val detail : SendUserDetail
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
@@ -45,6 +47,125 @@ class SignUpViewModel @Inject constructor(
     private val _userInfoState = MutableStateFlow(UserInfoState())
     val userInfoState: StateFlow<UserInfoState> = _userInfoState
 
+    /**
+     * Set function
+     */
+    fun changeTermItem(termItem: TermItem) {
+        val updateList = _termItem.value.map {
+            if (it.termName == termItem.termName) {
+                termItem
+            } else {
+                it
+            }
+        }
+        _termItem.value = updateList
+    }
+
+    /**
+     * 닉네임 중복 확인 및 입력
+     */
+    fun checkNickName(data: String) {
+        viewModelScope.launch {
+            when (val result = checkNickName.invoke(CheckNickName.Param(data))) {
+                is CheckNickName.Result.Success -> {
+                    _userInfoState.update { it.copy(nickCheckStanBy = CheckState.ValueOkay(result.message)) }
+                }
+
+                is CheckNickName.Result.Fail -> {
+                    _userInfoState.update { it.copy(nickCheckStanBy = CheckState.ValueNotOkay(result.message)) }
+                }
+            }
+        }
+    }
+
+    /**
+     * 이름 양식 확인 및입력
+     */
+    fun checkName(data: String) {
+        viewModelScope.launch {
+            when (val result = checkName.invoke(CheckNameOkay.Param(data))) {
+                is CheckNameOkay.Result.Success -> {
+                    _userInfoState.update { it.copy(nameCheck = CheckState.ValueOkay(result.message)) }
+                }
+
+                is CheckNameOkay.Result.Fail -> {
+                    _userInfoState.update { it.copy(nameCheck =CheckState.ValueNotOkay(result.errorMessage) ) }
+                }
+            }
+        }
+    }
+
+    /**
+     * 동의항목 전송
+     */
+    fun sendTerm() {
+        viewModelScope.launch {
+            val result = sendTermData.invoke(
+                SendTermData.Param(
+                    termServicePermission = _termItem.value.firstOrNull { it.termName == "servicePermission" }?.checked
+                        ?: false,
+                    privatePermission = _termItem.value.firstOrNull { it.termName == "privatePermission" }?.checked
+                        ?: false,
+                    marketingPermission = _termItem.value.firstOrNull { it.termName == "marketingPermission" }?.checked
+                        ?: false,
+                )
+            )
+
+            when (result) {
+                is SendTermData.Result.Success -> {
+                    Log.d("SignUp", "회원가입 성공: ${result.message}")
+                    _userInfoState.update { it.copy(termSendState = CheckState.ValueOkay(result.message) ) }
+                }
+
+                is SendTermData.Result.Fail -> {
+                    Log.e("SignUp", "회원가입 실패: ${result.errorMessage}")
+                    _userInfoState.update { it.copy(termSendState =CheckState.ValueNotOkay(result.errorMessage) ) }
+                }
+            }
+        }
+    }
+
+    /**
+     * 이미 가입된 번호인지 확인
+     */
+    fun checkSignUpNumber(){
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val result = checkNumber.invoke(CheckAlreadySignUpNumber.Param(_userInfoState.value.phoneNumber))){
+                is CheckAlreadySignUpNumber.Result.Success ->{
+                    _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueOkay(result.message)) }
+                }
+                is CheckAlreadySignUpNumber.Result.Fail ->{
+                    _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueNotOkay(result.errorMessage)) }
+                }
+            }
+        }
+    }
+
+    /**
+     * 자세한 회원정보 입력
+     */
+    fun sendDetail() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = detail.invoke(
+                SendUserDetail.Param(
+                    gender = _userInfoState.value.gender,
+                    birthYear = _userInfoState.value.birthYear,
+                    birthMonth = _userInfoState.value.birthMonth,
+                    birthDay = _userInfoState.value.birtDay,
+                    city = _userInfoState.value.city,
+                    county = _userInfoState.value.area
+                )
+            )) {
+                is SendUserDetail.Result.Success -> {
+                    _userInfoState.update { it.copy(detailState = CheckState.ValueOkay(result.message)) }
+                }
+
+                is SendUserDetail.Result.Fail -> {
+                    _userInfoState.update { it.copy(detailState = CheckState.ValueNotOkay(result.errorMessage)) }
+                }
+            }
+        }
+    }
     fun setBirthYear(value: String) {
         _userInfoState.update { it.copy(birthYear = value) }
     }
@@ -97,90 +218,7 @@ class SignUpViewModel @Inject constructor(
     fun resetPhoneNumberState(){
         _userInfoState.update { it.copy(phoneNumberCheckState =CheckState.StanBy(STANDBY) ) }
     }
-    /**
-     * Set function
-     */
-    fun changeTermItem(termItem: TermItem) {
-        val updateList = _termItem.value.map {
-            if (it.termName == termItem.termName) {
-                termItem
-            } else {
-                it
-            }
-        }
-        _termItem.value = updateList
-    }
 
-
-    fun checkNickName(data: String) {
-        viewModelScope.launch {
-            when (val result = checkNickName.invoke(CheckNickName.Param(data))) {
-                is CheckNickName.Result.Success -> {
-                    _userInfoState.update { it.copy(nickCheckStanBy = CheckState.ValueOkay(result.message)) }
-                }
-
-                is CheckNickName.Result.Fail -> {
-                    _userInfoState.update { it.copy(nickCheckStanBy = CheckState.ValueNotOkay(result.message)) }
-                }
-            }
-        }
-    }
-
-
-    fun checkName(data: String) {
-        viewModelScope.launch {
-            when (val result = checkName.invoke(CheckNameOkay.Param(data))) {
-                is CheckNameOkay.Result.Success -> {
-                    _userInfoState.update { it.copy(nameCheck = CheckState.ValueOkay(result.message)) }
-                }
-
-                is CheckNameOkay.Result.Fail -> {
-                    _userInfoState.update { it.copy(nameCheck =CheckState.ValueNotOkay(result.errorMessage) ) }
-                }
-            }
-        }
-    }
-
-
-    fun sendTerm() {
-        viewModelScope.launch {
-            val result = sendTermData.invoke(
-                SendTermData.Param(
-                    termServicePermission = _termItem.value.firstOrNull { it.termName == "servicePermission" }?.checked
-                        ?: false,
-                    privatePermission = _termItem.value.firstOrNull { it.termName == "privatePermission" }?.checked
-                        ?: false,
-                    marketingPermission = _termItem.value.firstOrNull { it.termName == "marketingPermission" }?.checked
-                        ?: false,
-                )
-            )
-
-            when (result) {
-                is SendTermData.Result.Success -> {
-                    Log.d("SignUp", "회원가입 성공: ${result.message}")
-                    _userInfoState.update { it.copy(termSendState = CheckState.ValueOkay(result.message) ) }
-                }
-
-                is SendTermData.Result.Fail -> {
-                    Log.e("SignUp", "회원가입 실패: ${result.errorMessage}")
-                    _userInfoState.update { it.copy(termSendState =CheckState.ValueNotOkay(result.errorMessage) ) }
-                }
-            }
-        }
-    }
-
-    fun checkSignUpNumber(){
-        viewModelScope.launch(Dispatchers.IO) {
-            when(val result = checkNumber.invoke(CheckAlreadySignUpNumber.Param(_userInfoState.value.phoneNumber))){
-                is CheckAlreadySignUpNumber.Result.Success ->{
-                    _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueOkay(result.message)) }
-                }
-                is CheckAlreadySignUpNumber.Result.Fail ->{
-                    _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueNotOkay(result.errorMessage)) }
-                }
-            }
-        }
-    }
 
     sealed interface CheckState {
         data class StanBy(val message: String) : CheckState
@@ -212,4 +250,7 @@ data class UserInfoState(
     var termSendState: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
         STANDBY
     ),
+    var detailState : SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
+        STANDBY
+    )
 )

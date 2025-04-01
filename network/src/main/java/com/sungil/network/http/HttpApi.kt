@@ -4,6 +4,7 @@ import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.TermData
+import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -47,7 +48,7 @@ interface HttpApi {
     @PATCH(BuildConfig.USER_PHONE_SEND_URL)
     suspend fun requestSendPhoneNumber(
         @Header("Authorization") bearerToken: String,
-        @Body phoneNumber: String,
+        @Body body: Map<String, String>
     ): Response<Unit>
 
     /**
@@ -56,8 +57,8 @@ interface HttpApi {
     @PATCH(BuildConfig.NAME_SEND_URL)
     suspend fun requestSendName(
         @Header("Authorization") bearerToken: String,
-        @Body userName : String
-    ) : Response<Unit>
+        @Body body: Map<String, String>,
+    ): Response<Unit>
 
     /**
      * 닉네임 입력 API
@@ -65,8 +66,8 @@ interface HttpApi {
     @PATCH(BuildConfig.NICK_NAME_SEND_URL)
     suspend fun requestSendNickName(
         @Header("Authorization") bearerToken: String,
-        @Body nickname : String
-    ) : Response<Unit>
+        @Body body: Map<String, String>,
+    ): Response<Unit>
 
     /**
      * 회원정보 상세 입력 API
@@ -74,9 +75,6 @@ interface HttpApi {
     @PATCH(BuildConfig.USER_DETAIL_URL)
     suspend fun requestSendDetail(
         @Header("Authorization") bearerToken: String,
-        @Body gender : String,
-        @Body birth : String,
-        @Body city : String,
-        @Body county : String
+        @Body request: UserDetailRequest,
     ): Response<Unit>
 }

@@ -1,6 +1,7 @@
 package com.example.signup.ui.detail
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,6 +62,21 @@ internal fun InPutDetailInfoScreenMain(
 
     val userInfo by viewModel.userInfoState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.userInfoState.collectLatest { userInfoState ->
+            when(val detailState = userInfoState.detailState){
+                is SignUpViewModel.CheckState.StanBy ->{
+                    Log.d(javaClass.name.toString() , "Stand by send Detail")
+                }
+                is SignUpViewModel.CheckState.ValueNotOkay -> {
+                    Log.e(javaClass.name.toString() ,detailState.errorMessage )
+                }
+                is SignUpViewModel.CheckState.ValueOkay -> {
+                    Log.e(javaClass.name.toString() , "Success to signUp")
+                }
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -222,7 +238,7 @@ internal fun InPutDetailInfoScreenMain(
 
             CustomButton(
                 stringResource(R.string.btn_finish),
-                onclick = { },
+                onclick = {viewModel.sendDetail()},
                 enable = userInfo.birthYear.isNotEmpty() && userInfo.birthMonth.isNotEmpty() && userInfo.birtDay.isNotEmpty() && userInfo.city.isNotEmpty() && userInfo.area.isNotEmpty() && userInfo.gender.isNotEmpty(),
             )
 

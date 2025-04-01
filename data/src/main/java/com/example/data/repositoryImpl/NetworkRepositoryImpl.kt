@@ -7,6 +7,7 @@ import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.TermData
+import com.sungil.network.model.UserDetailRequest
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -29,7 +30,7 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun collectTimer(): Flow<Int> = firebase.timeFlow()
 
     override suspend fun checkAlreadySignUpNumber(number: String, token: String): String {
-        val response = api.checkAlreadySignUpNumber(token,number)
+        val response = api.checkAlreadySignUpNumber(token, number)
         return response.code().toString()
     }
 
@@ -64,8 +65,41 @@ class NetworkRepositoryImpl @Inject constructor(
         return accessToken to refreshToken
     }
 
-    override suspend fun checkNickName(data: String , token : String): Int {
-        val response = api.requestCheckNickName(token,NickNameCheckRequest(data))
+    override suspend fun checkNickName(data: String, token: String): Int {
+        val response = api.requestCheckNickName(token, NickNameCheckRequest(data))
+        return response.code()
+    }
+
+    override suspend fun inputPhoneNumber(data: String, token: String): Int {
+        val response = api.requestSendPhoneNumber(token, mapOf("phoneNumber" to data))
+        return response.code()
+    }
+
+    override suspend fun inputName(data: String, token: String): Int {
+        val response = api.requestSendName(token, mapOf("userName" to data))
+        return response.code()
+    }
+
+    override suspend fun inputNickName(data: String, token: String): Int {
+        val response = api.requestSendNickName(token, mapOf("nickname" to data))
+        return response.code()
+    }
+
+    override suspend fun inputUserDetail(
+        token: String,
+        gender: String,
+        birth: String,
+        city: String,
+        county: String,
+    ): Int {
+        val response = api.requestSendDetail(
+            token, UserDetailRequest(
+                gender = gender,
+                birth = birth,
+                city = city,
+                county = county
+            )
+        )
         return response.code()
     }
 
