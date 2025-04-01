@@ -466,13 +466,8 @@ fun CustomGenderPick(
         Text(
             text = text,
             modifier = Modifier.padding(start = 17.dp),
-            style = TextStyle(
-                fontSize = 14.sp,
-                lineHeight = 20.sp,
-                fontFamily = FontFamily(Font(R.font.medium)),
-                fontWeight = FontWeight(500),
-                color = colorResource(R.color.black_gray)
-            )
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = Color(0xFF171717)
         )
     }
 }
@@ -483,7 +478,7 @@ fun RowScope.CustomSpinnerBox(text: String, onclick: () -> Unit) {
         modifier = Modifier
             .weight(1f) // 이제 에러 안 남
             .height(60.dp)
-            .background(colorResource(R.color.light_gray), shape = RoundedCornerShape(size = 12.dp))
+            .background(Color(0xFFF7F7F7), shape = RoundedCornerShape(size = 12.dp))
             .padding(start = 17.dp, end = 16.dp)
             .clickable(
                 indication = null,
@@ -495,13 +490,7 @@ fun RowScope.CustomSpinnerBox(text: String, onclick: () -> Unit) {
     ) {
         Text(
             text = text,
-            style = TextStyle(
-                fontSize = 14.sp,
-                lineHeight = 20.sp,
-                fontFamily = FontFamily(Font(R.font.medium)),
-                fontWeight = FontWeight(600),
-                color = colorResource(R.color.black_gray)
-            )
+            style = AppTextStyles.BODY_14_20_MEDIUM
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -659,17 +648,9 @@ fun CustomBottomSheet(
                     ) {
                         Text(
                             text = item,
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                lineHeight = 20.sp,
-                                fontFamily = FontFamily(Font(R.font.medium)),
-                                fontWeight = FontWeight(500),
-                                color = colorResource(R.color.black_gray),
-                                textAlign = TextAlign.Center
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-
+                            style = AppTextStyles.BODY_14_20_MEDIUM,
+                            color = Color(0xFF171717),
+                            textAlign = TextAlign.Center,
                         )
                     }
                 }

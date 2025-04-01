@@ -3,6 +3,7 @@ package com.example.signup.ui.detail
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -124,12 +125,22 @@ internal fun InPutDetailInfoScreenMain(
                     .height(60.dp)
                     .padding(start = 17.dp, end = 17.dp)
                     .background(
-                        colorResource(
+                        color = colorResource(
                             if (userInfo.gender == MALE) R.color.light_lavender else R.color.light_gray
                         ),
                         shape = RoundedCornerShape(12.dp)
                     )
-                    ,
+                    .then(
+                        if (userInfo.gender == MALE) {
+                            Modifier.border(
+                                width = 1.dp,
+                                color = Color(0xFFD3ADF7),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                        } else {
+                            Modifier
+                        }
+                    ),
                 text = stringResource(R.string.txt_info_male),
                 clickable = { viewModel.inputGender(MALE) }
             )
@@ -146,6 +157,17 @@ internal fun InPutDetailInfoScreenMain(
                             if (userInfo.gender == FEMALE) R.color.light_lavender else R.color.light_gray
                         ),
                         shape = RoundedCornerShape(12.dp)
+                    )
+                    .then(
+                        if (userInfo.gender == FEMALE) {
+                            Modifier.border(
+                                width = 1.dp,
+                                color = Color(0xFFD3ADF7),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                        } else {
+                            Modifier
+                        }
                     ),
                 text = stringResource(R.string.txt_info_female),
                 clickable = { viewModel.inputGender(FEMALE) }
