@@ -74,8 +74,6 @@ internal fun TermScreenMain(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = 17.dp,
-                end = 16.dp,
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 21.dp
             )
@@ -91,7 +89,8 @@ internal fun TermScreenMain(
                 style = AppTextStyles.HEAD_28_40_BOLD,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 32.dp,         start = 17.dp,
+                        end = 16.dp,)
             )
 
 
@@ -102,6 +101,8 @@ internal fun TermScreenMain(
                     Modifier
                         .fillMaxWidth()
                         .height(60.dp)
+                        .padding(         start = 17.dp,
+                            end = 16.dp,)
                         .border(
                             1.dp,
                             color = Color(0xFFD3ADF7),
@@ -115,10 +116,13 @@ internal fun TermScreenMain(
                     Modifier
                         .fillMaxWidth()
                         .height(60.dp)
+                        .padding(         start = 17.dp,
+                            end = 16.dp,)
                         .background(
                             color = Color(0xFFF7F7F7),
                             shape = RoundedCornerShape(size = 12.dp)
                         )
+
                 },
                 onCheckChange = { isChecked ->
                     allChecked = isChecked
@@ -134,7 +138,9 @@ internal fun TermScreenMain(
                 checked = termItems.getOrNull(1)?.checked ?: false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp),
+                    .height(60.dp)
+                    .padding(         start = 17.dp,
+                        end = 16.dp,),
                 onCheckChange = { isChecked ->
                     termItems.getOrNull(1)?.let { termItem ->
                         viewModel.changeTermItem(termItem.copy(checked = isChecked))
@@ -147,7 +153,9 @@ internal fun TermScreenMain(
                 checked = termItems.getOrNull(2)?.checked ?: false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp),
+                    .height(60.dp)
+                    .padding(         start = 17.dp,
+                        end = 16.dp,),
                 onCheckChange = { isChecked ->
                     termItems.getOrNull(2)?.let { termItem ->
                         viewModel.changeTermItem(termItem.copy(checked = isChecked))
@@ -160,7 +168,9 @@ internal fun TermScreenMain(
                 checked = termItems.getOrNull(3)?.checked ?: false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp),
+                    .height(60.dp)
+                    .padding(         start = 17.dp,
+                        end = 16.dp,),
                 onCheckChange = { isChecked ->
                     termItems.getOrNull(3)?.let { termItem ->
                         viewModel.changeTermItem(termItem.copy(checked = isChecked))
@@ -171,33 +181,42 @@ internal fun TermScreenMain(
             Spacer(modifier = Modifier.weight(1f))
 
         }
-        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            onClick = { viewModel.sendTerm() },
-            enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
-            shape = RoundedCornerShape(12.dp),
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .height(60.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (termItems.getOrNull(1)?.checked == true &&
-                    termItems.getOrNull(2)?.checked == true
-                ) Color(0xFF6700CE) else Color(0xFFEFEFEF)
-            )
+                .fillMaxWidth()
         ) {
-            Text(
-                text = stringResource(R.string.btn_start_oneThing),
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color =if(termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true){
-                    Color(0xFFFFFFFF)
-                }else{
-                    Color(0xFF171717)
-                },
-                textAlign = TextAlign.Center
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = Color(0xFFEFEFEF)
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = { viewModel.sendTerm() },
+                enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .padding(         start = 17.dp,
+                        end = 16.dp,),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (termItems.getOrNull(1)?.checked == true &&
+                        termItems.getOrNull(2)?.checked == true
+                    ) Color(0xFF6700CE) else Color(0xFFEFEFEF)
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.btn_start_oneThing),
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = if (termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true) {
+                        Color(0xFFFFFFFF)
+                    } else {
+                        Color(0xFF171717)
+                    },
+                    textAlign = TextAlign.Center
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(21.dp))
     }
 }
