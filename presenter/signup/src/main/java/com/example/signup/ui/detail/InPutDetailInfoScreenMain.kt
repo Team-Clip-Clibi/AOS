@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -64,25 +66,26 @@ internal fun InPutDetailInfoScreenMain(
 
     LaunchedEffect(Unit) {
         viewModel.userInfoState.collectLatest { userInfoState ->
-            when(val detailState = userInfoState.detailState){
-                is SignUpViewModel.CheckState.StanBy ->{
-                    Log.d(javaClass.name.toString() , "Stand by send Detail")
+            when (val detailState = userInfoState.detailState) {
+                is SignUpViewModel.CheckState.StanBy -> {
+                    Log.d(javaClass.name.toString(), "Stand by send Detail")
                 }
+
                 is SignUpViewModel.CheckState.ValueNotOkay -> {
-                    Log.e(javaClass.name.toString() ,detailState.errorMessage )
+                    Log.e(javaClass.name.toString(), detailState.errorMessage)
                 }
+
                 is SignUpViewModel.CheckState.ValueOkay -> {
-                    Log.e(javaClass.name.toString() , "Success to signUp")
+                    Log.e(javaClass.name.toString(), "Success to signUp")
                 }
             }
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = 17.dp,
-                end = 17.dp,
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 21.dp
             )
@@ -92,154 +95,179 @@ internal fun InPutDetailInfoScreenMain(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            CustomTitleText(stringResource(R.string.txt_info_title))
-            CustomContentText(stringResource(R.string.txt_info_content))
+            CustomTitleText(
+                stringResource(R.string.txt_info_title),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 17.dp)
+            )
+
+            CustomContentText(
+                stringResource(R.string.txt_info_content),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 17.dp)
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
-            CustomTextLittle(stringResource(R.string.txt_info_gender))
+
+            CustomTextLittle(
+                stringResource(R.string.txt_info_gender),
+                modifier = Modifier.fillMaxWidth().padding(start = 17.dp, end = 17.dp)
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
-            //남성버튼
+
             CustomGenderPick(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
+                    .padding(start = 17.dp, end = 17.dp)
                     .background(
                         colorResource(
-                            when (userInfo.gender) {
-                                MALE -> {
-                                    R.color.light_lavender
-                                }
-
-                                FEMALE -> {
-                                    R.color.light_gray
-                                }
-
-                                else -> R.color.light_gray
-                            }
-                        ), shape = RoundedCornerShape(12.dp)
+                            if (userInfo.gender == MALE) R.color.light_lavender else R.color.light_gray
+                        ),
+                        shape = RoundedCornerShape(12.dp)
                     )
-                    .padding(start = 17.dp, end = 16.dp),
+                    ,
                 text = stringResource(R.string.txt_info_male),
                 clickable = { viewModel.inputGender(MALE) }
             )
+
             Spacer(modifier = Modifier.height(10.dp))
-            //여성버튼
+
             CustomGenderPick(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
+                    .padding(start = 17.dp, end = 17.dp)
                     .background(
                         colorResource(
-                            when (userInfo.gender) {
-                                MALE -> {
-                                    R.color.light_gray
-                                }
-
-                                FEMALE -> {
-                                    R.color.light_lavender
-                                }
-
-                                else -> R.color.light_gray
-                            }
-                        ), shape = RoundedCornerShape(12.dp)
-                    )
-                    .padding(start = 17.dp, end = 16.dp),
+                            if (userInfo.gender == FEMALE) R.color.light_lavender else R.color.light_gray
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ),
                 text = stringResource(R.string.txt_info_female),
                 clickable = { viewModel.inputGender(FEMALE) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-            CustomTextLittle(stringResource(R.string.txt_info_birth))
+
+            CustomTextLittle(
+                stringResource(R.string.txt_info_birth),
+                modifier = Modifier.fillMaxWidth().padding(start = 17.dp, end = 17.dp)
+            )
+
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 17.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CustomSpinnerBox(
-                        text = userInfo.birthYear.ifEmpty { stringResource(R.string.txt_info_year) },
-                        onclick = {
-                            yearBottomSheet = true
-                            monthBottomSheet = false
-                            dayBottomSheet = false
-                            cityBottomSheet = false
-                            areaBottomSheet = false
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    CustomSpinnerBox(
-                        text = userInfo.birthMonth.ifEmpty { stringResource(R.string.txt_info_month) },
-                        onclick = {
-                            yearBottomSheet = false
-                            monthBottomSheet = true
-                            dayBottomSheet = false
-                            cityBottomSheet = false
-                            areaBottomSheet = false
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    CustomSpinnerBox(
-                        text = userInfo.birtDay.ifEmpty { stringResource(R.string.txt_info_day) },
-                        onclick = {
-                            yearBottomSheet = false
-                            monthBottomSheet = false
-                            dayBottomSheet = true
-                            cityBottomSheet = false
-                            areaBottomSheet = false
-                        }
-                    )
-                }
+                CustomSpinnerBox(
+                    text = userInfo.birthYear.ifEmpty { stringResource(R.string.txt_info_year) },
+                    onclick = {
+                        yearBottomSheet = true
+                        monthBottomSheet = false
+                        dayBottomSheet = false
+                        cityBottomSheet = false
+                        areaBottomSheet = false
+                    }
+                )
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                CustomSpinnerBox(
+                    text = userInfo.birthMonth.ifEmpty { stringResource(R.string.txt_info_month) },
+                    onclick = {
+                        yearBottomSheet = false
+                        monthBottomSheet = true
+                        dayBottomSheet = false
+                        cityBottomSheet = false
+                        areaBottomSheet = false
+                    }
+                )
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                CustomSpinnerBox(
+                    text = userInfo.birtDay.ifEmpty { stringResource(R.string.txt_info_day) },
+                    onclick = {
+                        yearBottomSheet = false
+                        monthBottomSheet = false
+                        dayBottomSheet = true
+                        cityBottomSheet = false
+                        areaBottomSheet = false
+                    }
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-            //시군구
-            CustomTextLittle(stringResource(R.string.txt_info_activate))
+
+            CustomTextLittle(
+                stringResource(R.string.txt_info_activate),
+                modifier = Modifier.padding(start = 17.dp, end = 17.dp)
+            )
+
             Spacer(modifier = Modifier.height(10.dp))
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 17.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CustomSpinnerBox(
-                        text = userInfo.city.ifEmpty { stringResource(R.string.txt_info_city) },
-                        onclick = {
-                            yearBottomSheet = false
-                            monthBottomSheet = false
-                            dayBottomSheet = false
-                            cityBottomSheet = true
-                            areaBottomSheet = false
-                        }
-                    )
+                CustomSpinnerBox(
+                    text = userInfo.city.ifEmpty { stringResource(R.string.txt_info_city) },
+                    onclick = {
+                        yearBottomSheet = false
+                        monthBottomSheet = false
+                        dayBottomSheet = false
+                        cityBottomSheet = true
+                        areaBottomSheet = false
+                    }
+                )
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(10.dp))
 
-                    CustomSpinnerBox(
-                        text = userInfo.area.ifEmpty { stringResource(R.string.txt_info_area) },
-                        onclick = {
-                            yearBottomSheet = false
-                            monthBottomSheet = false
-                            dayBottomSheet = false
-                            cityBottomSheet = false
-                            areaBottomSheet = true
-                        }
-                    )
-                }
+                CustomSpinnerBox(
+                    text = userInfo.area.ifEmpty { stringResource(R.string.txt_info_area) },
+                    onclick = {
+                        yearBottomSheet = false
+                        monthBottomSheet = false
+                        dayBottomSheet = false
+                        cityBottomSheet = false
+                        areaBottomSheet = true
+                    }
+                )
             }
+
             Spacer(modifier = Modifier.height(10.dp))
             Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Divider만 예외! 패딩 없음
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = Color(0xFFEFEFEF)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             CustomButton(
                 stringResource(R.string.btn_finish),
-                onclick = {viewModel.sendDetail()},
-                enable = userInfo.birthYear.isNotEmpty() && userInfo.birthMonth.isNotEmpty() && userInfo.birtDay.isNotEmpty() && userInfo.city.isNotEmpty() && userInfo.area.isNotEmpty() && userInfo.gender.isNotEmpty(),
+                onclick = { viewModel.sendDetail() },
+                enable = userInfo.birthYear.isNotEmpty() &&
+                        userInfo.birthMonth.isNotEmpty() &&
+                        userInfo.birtDay.isNotEmpty() &&
+                        userInfo.city.isNotEmpty() &&
+                        userInfo.area.isNotEmpty() &&
+                        userInfo.gender.isNotEmpty(),
+
             )
 
             BottomSheetSelector(

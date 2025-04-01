@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -85,24 +86,24 @@ internal fun InPutNickNameScreenMain(
                         NAME_SPECIAL -> {
                             R.string.txt_nick_no_special
                         }
-                        NICKNAME_ALREADY_USE ->{
+
+                        NICKNAME_ALREADY_USE -> {
                             R.string.txt_nick_name_already_use
                         }
+
                         else -> throw IllegalArgumentException("UNKNOW ERROR")
                     }
                 }
             }
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = 17.dp,
-                end = 17.dp,
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 21.dp
+
             )
     ) {
         Column(
@@ -110,17 +111,25 @@ internal fun InPutNickNameScreenMain(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            CustomTitleText(stringResource(R.string.txt_nick_title))
-            CustomContentText(stringResource(R.string.txt_nick_content))
+            CustomTitleText(
+                stringResource(R.string.txt_nick_title),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 16.dp)
+            )
+            CustomContentText(
+                stringResource(R.string.txt_nick_content),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 16.dp)
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             CustomTextField(
                 text = nickName.nickName,
-                modifier = Modifier.fillMaxWidth(),
-                onValueChange = { nickName ->
-                    viewModel.inputNickName(nickName)
-                },
+                modifier = Modifier.fillMaxWidth()        .padding(start = 17.dp, end = 16.dp),
+                onValueChange = { value -> viewModel.inputNickName(value) },
                 inputType = KeyboardType.Password,
                 hint = stringResource(R.string.hint_nick)
             )
@@ -128,36 +137,40 @@ internal fun InPutNickNameScreenMain(
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()        .padding(start = 17.dp, end = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     CustomUnderTextFieldText(
-                        text = stringResource(
-                            nicknameValidationMessage
-                        ),
-
-                        color =
-                            if (nicknameValidationMessage == R.string.txt_nick_length) {
-                                Color(0xFF171717)
-                            } else {
-                                Color(0xFFFB4F4F)
-                            }
+                        text = stringResource(nicknameValidationMessage),
+                        color = if (nicknameValidationMessage == R.string.txt_nick_length)
+                            Color(0xFF171717)
+                        else
+                            Color(0xFFFB4F4F)
                     )
                 }
 
                 CustomSmallButton(
                     stringResource(R.string.btn_check_nick_name),
-                    onclick = {viewModel.checkNickName(nickName.nickName)},
+                    onclick = { viewModel.checkNickName(nickName.nickName) },
                     enable = nickName.nickName.isNotEmpty() && !isCheck
                 )
+
+
             }
 
-            Spacer(modifier = Modifier.weight(1f))
-
+        }
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+        ) {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = Color(0xFFEFEFEF)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             CustomButton(
                 stringResource(R.string.btn_next),
                 onclick = { buttonClick() },
@@ -165,5 +178,4 @@ internal fun InPutNickNameScreenMain(
             )
         }
     }
-
 }

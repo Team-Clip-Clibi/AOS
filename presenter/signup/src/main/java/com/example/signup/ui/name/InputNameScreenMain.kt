@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -60,31 +61,42 @@ internal fun InputNameScreenMain(
             }
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = 17.dp,
-                end = 17.dp,
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 21.dp
             )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize() . verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            CustomTitleText(stringResource(R.string.txt_name_title))
+            CustomTitleText(
+                stringResource(R.string.txt_name_title),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 16.dp)
+            )
 
-            CustomContentText(stringResource(R.string.txt_name_content))
+            CustomContentText(
+                stringResource(R.string.txt_name_content),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 16.dp)
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             CustomTextField(
                 text = name.name,
-                modifier = Modifier.fillMaxWidth(),
-                onValueChange = { name ->
-                    viewModel.inputName(name)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                onValueChange = { input ->
+                    viewModel.inputName(input)
                 },
                 inputType = KeyboardType.Password,
                 hint = stringResource(R.string.hint_name)
@@ -97,27 +109,35 @@ internal fun InputNameScreenMain(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     CustomUnderTextFieldText(
-                        text = stringResource(
-                            isValidName
-                        ),
-                        color =
-                            if (isValidName == R.string.txt_name_safe) Color(0xFF666666)
-                            else Color(0xFFFB4F4F)
-
+                        text = stringResource(isValidName),
+                        color = if (isValidName == R.string.txt_name_safe)
+                            Color(0xFF666666)
+                        else
+                            Color(0xFFFB4F4F)
                     )
                 }
             }
 
             Spacer(modifier = Modifier.weight(1f))
+        }
 
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+        ) {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = Color(0xFFEFEFEF)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             CustomButton(
                 stringResource(R.string.btn_next),
-                onclick = {viewModel.checkName(name.name)},
-                enable = name.name.isNotEmpty(),
+                onclick = { viewModel.checkName(name.name) },
+                enable = name.name.isNotEmpty()
             )
         }
     }

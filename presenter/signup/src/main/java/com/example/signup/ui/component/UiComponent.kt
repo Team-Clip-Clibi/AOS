@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -320,21 +321,21 @@ fun CustomDialog(
 }
 
 @Composable
-fun CustomTitleText(text: String) {
+fun CustomTitleText(text: String , modifier: Modifier) {
     Text(
         text = text,
         style = AppTextStyles.SUBTITLE_16_24_SEMI,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         color = Color(0xFF666666)
     )
 }
 
 @Composable
-fun CustomContentText(text: String) {
+fun CustomContentText(text: String, modifier: Modifier) {
     Text(
         text = text,
         style = AppTextStyles.HEAD_28_40_BOLD,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         color = Color(0xFF171717)
     )
 }
@@ -402,7 +403,8 @@ fun CustomSmallButton(
     Button(
         modifier = Modifier
             .width(104.dp)
-            .height(36.dp),
+            .height(36.dp)
+            ,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             when (enable) {
@@ -425,7 +427,9 @@ fun CustomSmallButton(
             overflow = TextOverflow.Ellipsis,
             style = AppTextStyles.BODY_14_20_MEDIUM,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .width(52.dp)
+                .height(20.dp),
             color = if(enable){
                 Color(0xFF6700CE)
             }else{
@@ -436,10 +440,10 @@ fun CustomSmallButton(
 }
 
 @Composable
-fun CustomTextLittle(text: String) {
+fun CustomTextLittle(text: String , modifier: Modifier) {
     Text(
         text = text,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         style = AppTextStyles.BODY_14_20_MEDIUM
     )
 }
@@ -461,6 +465,7 @@ fun CustomGenderPick(
     ) {
         Text(
             text = text,
+            modifier = Modifier.padding(start = 17.dp),
             style = TextStyle(
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
