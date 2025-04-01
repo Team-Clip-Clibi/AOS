@@ -170,32 +170,34 @@ internal fun TermScreenMain(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                onClick = { viewModel.sendTerm() },
-                enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (termItems.getOrNull(1)?.checked == true &&
-                        termItems.getOrNull(2)?.checked == true
-                    ) Color(0xFF6700CE) else Color(0xFFEFEFEF)
-                )
-            ) {
-                Text(
-                    text = stringResource(R.string.btn_start_oneThing),
-                    style = AppTextStyles.TITLE_20_28_SEMI,
-                    color =if(termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true){
-                        Color(0xFFFFFFFF)
-                    }else{
-                        Color(0xFF171717)
-                    },
-                    textAlign = TextAlign.Center
-                )
-            }
         }
+        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            onClick = { viewModel.sendTerm() },
+            enabled = termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true,
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .height(60.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (termItems.getOrNull(1)?.checked == true &&
+                    termItems.getOrNull(2)?.checked == true
+                ) Color(0xFF6700CE) else Color(0xFFEFEFEF)
+            )
+        ) {
+            Text(
+                text = stringResource(R.string.btn_start_oneThing),
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color =if(termItems.getOrNull(1)?.checked == true && termItems.getOrNull(2)?.checked == true){
+                    Color(0xFFFFFFFF)
+                }else{
+                    Color(0xFF171717)
+                },
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(modifier = Modifier.height(21.dp))
     }
 }
