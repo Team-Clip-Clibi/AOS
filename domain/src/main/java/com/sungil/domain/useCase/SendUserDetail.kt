@@ -18,6 +18,14 @@ class SendUserDetail @Inject constructor(
         val birthDay: String,
         val city: String,
         val county: String,
+        val cityDisplayName: String,
+        val countyDisplayName: String,
+        val servicePermission: Boolean,
+        val privatePermission: Boolean,
+        val marketingPermission: Boolean,
+        val name: String,
+        val nickName: String,
+        val phoneNumber: String,
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
@@ -43,6 +51,24 @@ class SendUserDetail @Inject constructor(
         )
         if (sendResult != 204) {
             return Result.Fail("network error")
+        }
+        val saveResult = database.saveUserInfo(
+            servicePermission = param.servicePermission,
+            privatePermission = param.privatePermission,
+            marketingPermission = param.marketingPermission,
+            name = param.name,
+            nickName = param.nickName,
+            birthYear = param.birthYear,
+            birthMonth = param.birthMonth,
+            birthDay = param.birthDay,
+            city = param.city,
+            area = param.county,
+            gender = param.gender,
+            platform = "KAKAO",
+            phoneNumber = param.phoneNumber
+        )
+        if (!saveResult) {
+            return Result.Fail("Save Fail")
         }
         return Result.Success("okay detail")
     }

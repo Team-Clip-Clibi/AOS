@@ -37,24 +37,21 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import com.example.core.AppTextStyles
 import com.sungil.login.R
 import kotlin.math.absoluteValue
 
 @Composable
 fun CustomText(
     text: String,
-    font: FontFamily,
-    textSize: TextUnit,
+    style : TextStyle,
     textColor: Color,
     maxLine : Int
 ) {
     Text(
         text = text,
-        style = TextStyle(
-            fontSize = textSize,
-            fontFamily = font,
-            color = textColor
-        ),
+        style = style,
+        color = textColor,
         maxLines = maxLine
     )
 }
@@ -88,12 +85,9 @@ fun CustomButton(
         }
         Text(
             text = text,
-            style = TextStyle(
-                fontSize = textSize,
-                fontFamily = font,
-                color = textColor,
-                textDecoration = if(textUnderLine) TextDecoration.Underline else null
-            )
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = textColor,
+            textDecoration = if(textUnderLine) TextDecoration.Underline else null
         )
     }
 }

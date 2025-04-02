@@ -7,7 +7,6 @@ import com.sungil.database.TABLE_USER_INFO
 @Entity(tableName = TABLE_USER_INFO)
 data class UserInfo(
     @PrimaryKey val name: String,
-    val termAllChecked: Boolean,
     val termServicePermission: Boolean,
     val privatePermission: Boolean,
     val marketingPermission: Boolean,
@@ -17,5 +16,7 @@ data class UserInfo(
     val birthDay: String,
     val city: String,
     val area: String,
-    val gender: String
+    val gender: String,
+    val platform : String,
+    val phoneNumber : String
 )

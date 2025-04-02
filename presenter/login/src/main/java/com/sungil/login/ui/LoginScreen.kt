@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import com.example.core.AppTextStyles
 import com.sungil.login.R
 import com.sungil.login.component.CustomButton
 import com.sungil.login.component.CustomText
@@ -39,18 +40,20 @@ import kotlin.math.absoluteValue
 
 @Composable
 internal fun LoginScreen(
-    kakaoLogin: () -> Unit
+    kakaoLogin: () -> Unit,
 ) {
     val test = listOf(
         "한 가지 주제로 깊이 있게",
-        "고민 없이 딱 맞는 모임 추천"
+        "고민 없이 딱 맞는 모임 추천",
+        "긿 잃을 필요 없이, 바로 연결",
     )
-    val testImage = listOf(
-        R.drawable.ic_cat,
-        R.drawable.ic_dog
+    val test2 = listOf(
+        "원하는 대화, 원하는 사람과 함께해요.",
+        "원띵에서 추천해드려요",
+        "나와 맞는 모임을 찾아드려요."
     )
     val pageState = rememberPagerState(pageCount = {
-        2
+        3
     })
     Box(
         modifier = Modifier
@@ -72,17 +75,15 @@ internal fun LoginScreen(
                 // 제목
                 CustomText(
                     text = stringResource(R.string.txt_login_title),
-                    font = FontFamily(Font(R.font.bold)),
-                    textSize = 20.sp,
-                    textColor = colorResource(R.color.black),
+                    style = AppTextStyles.HEAD_28_40_BOLD,
+                    textColor = Color(0xFF171717),
                     maxLine = 1
                 )
 
                 CustomText(
                     text = stringResource(R.string.txt_login_content),
-                    font = FontFamily(Font(R.font.light)),
-                    textSize = 16.sp,
-                    textColor = colorResource(R.color.dark_gray),
+                    style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                    textColor = Color(0xFF666666),
                     maxLine = 1
                 )
 
@@ -91,7 +92,8 @@ internal fun LoginScreen(
                     state = pageState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f) // Adjust weight to allocate space properly
+                        .weight(1f)
+
                 ) { page ->
                     Card(
                         modifier = Modifier
@@ -110,23 +112,29 @@ internal fun LoginScreen(
                     ) {
                         Box(
                             modifier = Modifier.fillMaxSize()
+                                .background(color  =Color(0xFFF7F7F7))
+                                .padding(bottom = 44.dp)
                         ) {
-                            Image(
-                                painter = painterResource(id = testImage[page]),
-                                contentDescription = "page$page Image",
-                                contentScale = ContentScale.FillBounds,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                            Text(
-                                text = test[page],
-                                fontSize = 24.sp,
-                                fontFamily = FontFamily(Font(R.font.light)),
-                                color = Color.Black,
-                                textAlign = TextAlign.Center,
+                            Column(
                                 modifier = Modifier
                                     .align(Alignment.BottomCenter)
-                                    .padding(16.dp)
-                            )
+                                    .padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = test[page],
+                                    style = AppTextStyles.HEAD_24_34_BOLD,
+                                    color = Color(0xFF171717),
+                                    textAlign = TextAlign.Center,
+                                )
+
+                                Text(
+                                    text = test2[page],
+                                    style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                                    color = Color(0xFF383838),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
                 }

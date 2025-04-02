@@ -50,7 +50,6 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveUserInfo(
-        termAllCheck: Boolean,
         servicePermission: Boolean,
         privatePermission: Boolean,
         marketingPermission: Boolean,
@@ -62,10 +61,11 @@ class DatabaseRepositoryImpl @Inject constructor(
         city: String,
         area: String,
         gender: String,
+        platform: String,
+        phoneNumber: String,
     ): Boolean {
         val userInfo = UserInfo(
             name = name,
-            termAllChecked = termAllCheck,
             termServicePermission = servicePermission,
             privatePermission = privatePermission,
             marketingPermission = marketingPermission,
@@ -75,7 +75,9 @@ class DatabaseRepositoryImpl @Inject constructor(
             birthDay = birthDay,
             city = city,
             area = area,
-            gender = gender
+            gender = gender,
+            platform = platform,
+            phoneNumber = phoneNumber
         )
         try {
             userInfoDao.insert(userInfo)
