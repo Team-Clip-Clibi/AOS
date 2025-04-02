@@ -4,6 +4,7 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class CheckAlreadySignUpNumber @Inject constructor(
@@ -35,9 +36,9 @@ class CheckAlreadySignUpNumber @Inject constructor(
         if (resultCode.code == 200) {
             return Result.Fail(
                 "Already SignUp",
-                resultCode.userName!!,
-                resultCode.platform!!,
-                resultCode.createdAt!!
+                userName = maskName(resultCode.userName!!),
+                platform = reformPlatform(resultCode.platform!!),
+                createdAt = extractDateOnly(resultCode.createdAt!!)
             )
         }
         val inputResultCode = repo.inputPhoneNumber(editorNumber, TOKEN_FORM + token.first)
@@ -47,4 +48,29 @@ class CheckAlreadySignUpNumber @Inject constructor(
         return Result.Success("okay SignUp")
     }
 
+    private fun maskName(name: String): String {
+        return if (name.length >= 3) {
+            name.first() + "*" + name.last()
+        } else if (name.length == 2) {
+            name.first() + "*"
+        } else {
+            name
+        }
+    }
+
+    private fun extractDateOnly(createdAt: String): String {
+        return try {
+            val zonedDateTime = ZonedDateTime.parse(createdAt)
+            zonedDateTime.toLocalDate().toString()
+        } catch (e: Exception) {
+            createdAt
+        }
+    }
+
+    private fun reformPlatform(data: String): String {
+        if (data == "KAKAO") {
+            return "카카오톡"
+        }
+        return data
+    }
 }

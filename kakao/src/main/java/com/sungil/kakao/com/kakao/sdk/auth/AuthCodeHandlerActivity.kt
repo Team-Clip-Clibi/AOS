@@ -50,14 +50,17 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
             viewModel.actionFlow.collect {
                 when (it) {
                     is SMSViewModel.Action.SaveSuccess -> {
-                        router.navigation("SignUp")
+                        viewModel.checkAlreadySignUp()
                     }
-
-                    else -> {
-                        Log.e(javaClass.name.toString(), "Error")
+                    is SMSViewModel.Action.AlreadySignUp -> {
+                        //TODO 로그인 해야해~
+                    }
+                    is SMSViewModel.Action.NotSignUp ->{
+                        router.navigation("SignUp")
                     }
                 }
             }
         }
     }
+
 }

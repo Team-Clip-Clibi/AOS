@@ -34,6 +34,7 @@ android {
         val nickNameSend: String = properties.getProperty("nickNameSendUrl", "")
         val userDetailUrl: String = properties.getProperty("userDetailUrl", "")
         val userPhoneNumber: String = properties.getProperty("userPhoneNumberUrl", "")
+        val signInUrl: String = properties.getProperty("login", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -44,6 +45,7 @@ android {
         buildConfigField("String", "NAME_SEND_URL", nameUlr)
         buildConfigField("String", "USER_DETAIL_URL", userDetailUrl)
         buildConfigField("String", "USER_PHONE_SEND_URL", userPhoneNumber)
+        buildConfigField("String", "LOGIN_URL", signInUrl)
     }
 
     buildTypes {

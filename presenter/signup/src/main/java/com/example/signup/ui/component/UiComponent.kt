@@ -65,6 +65,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
 import com.example.core.AppTextStyles
@@ -93,12 +94,14 @@ fun TopBar(
                 .fillMaxWidth()
                 .padding(start = 5.dp, end = 16.dp),
             title = {
-                Text(
-                    text = title,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    style = AppTextStyles.TITLE_20_28_SEMI,
-                )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = title,
+                        style = AppTextStyles.TITLE_20_28_SEMI,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
             },
             navigationIcon = {
                 Image(
@@ -614,7 +617,9 @@ fun CustomBottomSheet(
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().heightIn(max = 400.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 400.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(dataList) { item ->
@@ -645,4 +650,59 @@ fun CustomBottomSheet(
             }
         }
     }
+}
+
+@Composable
+fun ElementTitle(
+    text: String,
+    color: Long,
+) {
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = text,
+        style = AppTextStyles.CAPTION_12_18_SEMI,
+        color = Color(color)
+    )
+}
+@Composable
+fun ElementCategory(
+    text : String,
+    color : Long,
+    modifier : Modifier
+){
+    Text(
+        modifier = modifier,
+        text = text,
+        style = AppTextStyles.SUBTITLE_16_24_SEMI,
+        color = Color(color)
+    )
+}
+
+@Composable
+fun ElementValue(
+    text : String,
+    color : Long,
+    modifier : Modifier
+){
+    Text(
+        modifier = modifier,
+        text = text,
+        style = AppTextStyles.BODY_14_20_MEDIUM,
+        color = Color(color)
+    )
+}
+
+@Composable
+fun UnderLineText(
+    text: String,
+    color: Long,
+    modifier: Modifier,
+) {
+    Text(
+        text = text,
+        style = AppTextStyles.BODY_14_20_MEDIUM,
+        color = Color(color),
+        textDecoration = TextDecoration.Underline,
+        modifier = modifier
+    )
 }

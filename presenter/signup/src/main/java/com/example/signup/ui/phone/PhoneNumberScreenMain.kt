@@ -55,6 +55,7 @@ internal fun PhoneNumberScreenMain(
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
     activity: Activity,
+    signUpPage: () -> Unit,
 ) {
     val phoneNumber by viewModel.userInfoState.collectAsState()
     var alreadySignUpDialog by remember { mutableStateOf(false) }
@@ -63,18 +64,20 @@ internal fun PhoneNumberScreenMain(
 
     LaunchedEffect(Unit) {
         viewModel.userInfoState.collectLatest { userInfo ->
-            when(val phoneState = userInfo.phoneNumberCheckState){
-                is SignUpViewModel.CheckState.StanBy ->{
-                    Log.d(javaClass.name.toString() , "stand by check phone Number")
+            when (val phoneState = userInfo.phoneNumberCheckState) {
+                is SignUpViewModel.CheckState.StanBy -> {
+                    Log.d(javaClass.name.toString(), "stand by check phone Number")
                 }
-                is SignUpViewModel.CheckState.ValueOkay ->{
-                    Log.d(javaClass.name.toString() , "Success to set Phone Number")
+
+                is SignUpViewModel.CheckState.ValueOkay -> {
+                    Log.d(javaClass.name.toString(), "Success to set Phone Number")
                     viewModel.resetPhoneNumberState()
                     buttonClick()
                 }
-                is SignUpViewModel.CheckState.ValueNotOkay ->{
-                    when(phoneState.errorMessage){
-                        ERROR_ALREADY_SIGN_UP ->{
+
+                is SignUpViewModel.CheckState.ValueNotOkay -> {
+                    when (phoneState.errorMessage) {
+                        ERROR_ALREADY_SIGN_UP -> {
                             alreadySignUpDialog = true
                         }
                     }
@@ -130,7 +133,10 @@ internal fun PhoneNumberScreenMain(
             if (alreadySignUpDialog) {
                 CustomDialog(
                     onDismiss = { alreadySignUpDialog = false },
-                    buttonClick = { alreadySignUpDialog = false },
+                    buttonClick = {
+                        alreadySignUpDialog = false
+                        signUpPage()
+                    },
                     titleText = stringResource(R.string.dialog_title_already_signup),
                     contentText = stringResource(R.string.dialog_content_already_signup),
                     buttonText = stringResource(R.string.dialog_btn_already_signup)

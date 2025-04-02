@@ -10,6 +10,7 @@ import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetFirebaseSMSState
 import com.sungil.domain.useCase.GetSMSTime
 import com.sungil.domain.useCase.RequestSMS
+import com.sungil.domain.useCase.SendAlreadySignUp
 import com.sungil.domain.useCase.SendTermData
 import com.sungil.domain.useCase.SendCode
 import com.sungil.domain.useCase.SendUserDetail
@@ -32,7 +33,8 @@ class SignUpViewModel @Inject constructor(
     private val checkNickName: CheckNickName,
     private val checkName: CheckNameOkay,
     private val sendTermData: SendTermData,
-    private val detail : SendUserDetail
+    private val detail: SendUserDetail,
+    private val saveSignUp: SendAlreadySignUp,
 ) : ViewModel() {
     private val _termItem = MutableStateFlow(
         listOf(
@@ -89,7 +91,7 @@ class SignUpViewModel @Inject constructor(
                 }
 
                 is CheckNameOkay.Result.Fail -> {
-                    _userInfoState.update { it.copy(nameCheck =CheckState.ValueNotOkay(result.errorMessage) ) }
+                    _userInfoState.update { it.copy(nameCheck = CheckState.ValueNotOkay(result.errorMessage)) }
                 }
             }
         }
@@ -114,12 +116,12 @@ class SignUpViewModel @Inject constructor(
             when (result) {
                 is SendTermData.Result.Success -> {
                     Log.d("SignUp", "회원가입 성공: ${result.message}")
-                    _userInfoState.update { it.copy(termSendState = CheckState.ValueOkay(result.message) ) }
+                    _userInfoState.update { it.copy(termSendState = CheckState.ValueOkay(result.message)) }
                 }
 
                 is SendTermData.Result.Fail -> {
                     Log.e("SignUp", "회원가입 실패: ${result.errorMessage}")
-                    _userInfoState.update { it.copy(termSendState =CheckState.ValueNotOkay(result.errorMessage) ) }
+                    _userInfoState.update { it.copy(termSendState = CheckState.ValueNotOkay(result.errorMessage)) }
                 }
             }
         }
@@ -128,21 +130,37 @@ class SignUpViewModel @Inject constructor(
     /**
      * 이미 가입된 번호인지 확인
      */
-    fun checkSignUpNumber(){
+    fun checkSignUpNumber() {
         viewModelScope.launch(Dispatchers.IO) {
-            when(val result = checkNumber.invoke(CheckAlreadySignUpNumber.Param(_userInfoState.value.phoneNumber))){
-                is CheckAlreadySignUpNumber.Result.Success ->{
-                    _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueOkay(result.message)) }
-                }
-                is CheckAlreadySignUpNumber.Result.Fail ->{
-                    if(result.errorMessage == ERROR_ALREADY_SIGN_UP){
-                        _userInfoState.update { it.copy(
-                            name = result.userName,
-                            platform = result.platform,
-                            createdAt = result.createdAt
-                        ) }
+            when (val result =
+                checkNumber.invoke(CheckAlreadySignUpNumber.Param(_userInfoState.value.phoneNumber))) {
+                is CheckAlreadySignUpNumber.Result.Success -> {
+                    _userInfoState.update {
+                        it.copy(
+                            phoneNumberCheckState = CheckState.ValueOkay(
+                                result.message
+                            )
+                        )
                     }
-                    _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueNotOkay(result.errorMessage)) }
+                }
+
+                is CheckAlreadySignUpNumber.Result.Fail -> {
+                    if (result.errorMessage == ERROR_ALREADY_SIGN_UP) {
+                        _userInfoState.update {
+                            it.copy(
+                                name = result.userName,
+                                platform = result.platform,
+                                createdAt = result.createdAt
+                            )
+                        }
+                    }
+                    _userInfoState.update {
+                        it.copy(
+                            phoneNumberCheckState = CheckState.ValueNotOkay(
+                                result.errorMessage
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -184,6 +202,26 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 이미 가입된 번호가 있을 시 회원가입 설정 후 out
+     */
+    fun setSignUp() {
+        viewModelScope.launch {
+            when (val result = saveSignUp.invoke()) {
+                is SendAlreadySignUp.Result.Success -> {
+                    Log.d(javaClass.name.toString(), result.message)
+                    _userInfoState.update { it.copy(setSignUpState = CheckState.ValueOkay(result.message)) }
+                }
+
+                is SendAlreadySignUp.Result.Fail -> {
+                    Log.e(javaClass.name.toString(), result.errorMessage)
+                    _userInfoState.update { it.copy(setSignUpState = CheckState.ValueOkay(result.errorMessage)) }
+                }
+            }
+        }
+    }
+
 
     fun setBirthYear(value: String) {
         _userInfoState.update { it.copy(birthYear = value) }
@@ -233,11 +271,12 @@ class SignUpViewModel @Inject constructor(
         _userInfoState.update { it.copy(nameCheck = CheckState.StanBy(STANDBY)) }
     }
 
-    fun resetTermData(){
+    fun resetTermData() {
         _userInfoState.update { it.copy(termSendState = CheckState.StanBy(STANDBY)) }
     }
-    fun resetPhoneNumberState(){
-        _userInfoState.update { it.copy(phoneNumberCheckState =CheckState.StanBy(STANDBY) ) }
+
+    fun resetPhoneNumberState() {
+        _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.StanBy(STANDBY)) }
     }
 
 
@@ -275,6 +314,9 @@ data class UserInfoState(
         STANDBY
     ),
     var detailState: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
+        STANDBY
+    ),
+    var setSignUpState: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
         STANDBY
     ),
 )

@@ -16,7 +16,8 @@ internal fun PhoneNumberScreen(
     viewModel: SignUpViewModel,
     actionClick: () -> Unit,
     buttonClick: () -> Unit,
-    activity : Activity
+    activity: Activity,
+    signUpPage: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -30,6 +31,6 @@ internal fun PhoneNumberScreen(
             )
         }
     ) { paddingValues ->
-        PhoneNumberScreenMain(paddingValues, viewModel ,buttonClick , activity)
+        PhoneNumberScreenMain(paddingValues, viewModel, buttonClick, activity, signUpPage)
     }
 }

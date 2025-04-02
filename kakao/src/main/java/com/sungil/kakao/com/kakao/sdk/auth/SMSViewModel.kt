@@ -2,6 +2,7 @@ package com.sungil.kakao.com.kakao.sdk.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sungil.domain.useCase.CheckAlreadySignUp
 import com.sungil.domain.useCase.SaveKaKaoId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,7 +12,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SMSViewModel @Inject constructor(private val saveToken: SaveKaKaoId) : ViewModel() {
+class SMSViewModel @Inject constructor(
+    private val saveToken: SaveKaKaoId,
+    private val signUp: CheckAlreadySignUp,
+) : ViewModel() {
 
     private val _actionFlow = MutableSharedFlow<Action>()
     val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
@@ -30,7 +34,23 @@ class SMSViewModel @Inject constructor(private val saveToken: SaveKaKaoId) : Vie
         }
     }
 
+    fun checkAlreadySignUp() {
+        viewModelScope.launch {
+            when (val result = signUp.invoke()) {
+                is CheckAlreadySignUp.Result.Success -> {
+                    _actionFlow.emit(Action.AlreadySignUp(result.message))
+                }
+
+                is CheckAlreadySignUp.Result.Fail -> {
+                    _actionFlow.emit(Action.NotSignUp(result.errorMessage))
+                }
+            }
+        }
+    }
+
     sealed interface Action {
         data class SaveSuccess(val message: String) : Action
+        data class AlreadySignUp(val message: String) : Action
+        data class NotSignUp(val message: String) : Action
     }
 }

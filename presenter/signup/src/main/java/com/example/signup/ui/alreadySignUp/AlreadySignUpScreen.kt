@@ -23,6 +23,10 @@ internal fun AlreadySignUpScreen(
             }
         )
     }) { paddingValues ->
-
+        AlreadySignUpScreenMain(
+            paddingValues = paddingValues,
+            viewModel = viewModel,
+            buttonClick = buttonClick
+        )
     }
 }

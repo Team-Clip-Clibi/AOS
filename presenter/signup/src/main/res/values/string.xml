@@ -61,6 +61,13 @@
 
     <!-- Already Sign Up   -->
     <string name="txt_signUp_title">해당 계정이 본인 것인지 확인해 주세요.</string>
+    <string name="txt_signUp_content">이미 가입된 계정이 있어요</string>
+    <string name="txt_signUp_id">계정 정보</string>
+    <string name="txt_signUp_name">이름</string>
+    <string name="txt_signUp_account">연동계정</string>
+    <string name="txt_signUp_day">가입 날짜</string>
+    <string name="btn_signUp">이 계정으로 로그인</string>
+    <string name="btn_signUp_not_mine">내 계정이 아니에요</string>
     <!--  dialog  -->
     <string name="dialog_title_again_input">인증번호를 다시 입력해주세요</string>
     <string name="dialog_content_again_input">재전송하시겠어요?</string>
