@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,9 +54,13 @@ import com.example.signup.R
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.layout.ContentScale
@@ -62,11 +68,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
 import com.example.core.AppTextStyles
+import com.example.signup.City
 import com.example.signup.ISArea
 import com.example.signup.ISCity
 import com.example.signup.ISDay
 import com.example.signup.ISMonth
 import com.example.signup.ISYear
+import com.example.signup.cityToCountyMap
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,13 +85,13 @@ fun TopBar(
     totalPage: Int,
     onBackClick: () -> Unit,
 ) {
+
     Column {
         TopAppBar(
             modifier = Modifier
                 .border(width = 1.dp, color = Color(0xFFEFEFEF))
                 .fillMaxWidth()
-                .padding(start = 5.dp, end = 16.dp)
-                ,
+                .padding(start = 5.dp, end = 16.dp),
             title = {
                 Text(
                     text = title,
@@ -105,17 +113,18 @@ fun TopBar(
             },
             actions = {
                 Text(
-                    text = if(currentPage == 0 || totalPage == 0){
-                        ""
-                    }else{
-                        "$currentPage/$totalPage"
-                    },
+                    text = if (currentPage == 0 || totalPage == 0) "" else "$currentPage/$totalPage",
                     style = AppTextStyles.CAPTION_12_18_SEMI,
                     color = Color(0xFF6700CE)
                 )
-            }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.White, // or your preferred background color
+                titleContentColor = Color.Black,
+                navigationIconContentColor = Color.Black,
+                actionIconContentColor = Color.Black
+            )
         )
-//        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
     }
 }
 
@@ -502,41 +511,39 @@ fun BottomSheetSelector(
     onSelect: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
+    var selectedCity by remember { mutableStateOf<City?>(null) }
+
     when {
-        yearBottomSheet -> {
-            CustomBottomSheet(
-                kind = ISYear,
-                onSelect = onSelect,
-                onDismiss = onDismiss
-            )
-        }
-        monthBottomSheet -> {
-            CustomBottomSheet(
-                kind = ISMonth,
-                onSelect = onSelect,
-                onDismiss = onDismiss
-            )
-        }
-        dayBottomSheet -> {
-            CustomBottomSheet(
-                kind = ISDay,
-                onSelect = onSelect,
-                onDismiss = onDismiss
-            )
-        }
         cityBottomSheet -> {
             CustomBottomSheet(
                 kind = ISCity,
+                onSelect = { selectedName ->
+                    selectedCity = City.values().find { it.displayName == selectedName }
+                    onSelect(selectedName)
+                },
+                onDismiss = onDismiss
+            )
+        }
+
+        areaBottomSheet -> {
+            CustomBottomSheet(
+                kind = ISArea,
+                selectedCity = selectedCity, // 이 줄이 핵심!
                 onSelect = onSelect,
                 onDismiss = onDismiss
             )
         }
-        areaBottomSheet -> {
-            CustomBottomSheet(
-                kind = ISArea,
-                onSelect = onSelect,
-                onDismiss = onDismiss
-            )
+
+        yearBottomSheet -> {
+            CustomBottomSheet(kind = ISYear, onSelect = onSelect, onDismiss = onDismiss)
+        }
+
+        monthBottomSheet -> {
+            CustomBottomSheet(kind = ISMonth, onSelect = onSelect, onDismiss = onDismiss)
+        }
+
+        dayBottomSheet -> {
+            CustomBottomSheet(kind = ISDay, onSelect = onSelect, onDismiss = onDismiss)
         }
     }
 }
@@ -546,6 +553,7 @@ fun CustomBottomSheet(
     kind: String,
     onSelect: (String) -> Unit,
     onDismiss: () -> Unit,
+    selectedCity: City? = null // ISArea일 때 사용
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -554,17 +562,19 @@ fun CustomBottomSheet(
         ISYear -> (2025 downTo 1926).map { "${it}년" }
         ISMonth -> (1..12).map { "${it}월" }
         ISDay -> (1..31).map { "${it}일" }
-        ISCity -> listOf("서울시")
-        ISArea -> listOf(
-            "강남구", "강동구", "강북구", "강서구",
-            "관악구", "광진구", "구로구", "금천구", "노원구",
-            "도봉구", "동대문구", "동작구", "마포구", "서대문구",
-            "서초구", "성동구", "성북구", "송파구", "양천구",
-            "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"
-        )
+
+        ISCity -> City.values().map { it.displayName } // 사용자에겐 한글
+
+        ISArea -> {
+            selectedCity?.let { city ->
+                cityToCountyMap[city]?.map { it.displayName } ?: emptyList()
+            } ?: emptyList()
+        }
+
         else -> throw IllegalArgumentException("Invalid kind: $kind")
     }
 
+    // 아래는 그대로 사용
     ModalBottomSheet(
         onDismissRequest = {
             coroutineScope.launch {
@@ -582,8 +592,9 @@ fun CustomBottomSheet(
                 .background(Color.White)
                 .heightIn(min = 200.dp, max = 400.dp)
                 .padding(horizontal = 16.dp, vertical = 8.dp)
+                .navigationBarsPadding()
         ) {
-
+            // Close Icon
             Box(modifier = Modifier.fillMaxWidth()) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_close),
@@ -603,9 +614,7 @@ fun CustomBottomSheet(
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 400.dp),
+                modifier = Modifier.fillMaxWidth().heightIn(max = 400.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(dataList) { item ->
@@ -613,14 +622,8 @@ fun CustomBottomSheet(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(8.dp))
-                            .background(
-                                color = Color(0xFFF7F7F7),
-                                shape = RoundedCornerShape(size = 8.dp)
-                            )
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = LocalIndication.current
-                            ) {
+                            .background(Color(0xFFF7F7F7))
+                            .clickable {
                                 coroutineScope.launch {
                                     onSelect(item)
                                     sheetState.hide()
