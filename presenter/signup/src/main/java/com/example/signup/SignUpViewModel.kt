@@ -152,8 +152,8 @@ class SignUpViewModel @Inject constructor(
                     birthYear = _userInfoState.value.birthYear,
                     birthMonth = _userInfoState.value.birthMonth,
                     birthDay = _userInfoState.value.birtDay,
-                    city = _userInfoState.value.city,
-                    county = _userInfoState.value.area
+                    city = _userInfoState.value.cityRealValue,
+                    county = _userInfoState.value.areaRealValue
                 )
             )) {
                 is SendUserDetail.Result.Success -> {
@@ -179,10 +179,12 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun setCity(value: String) {
+        _userInfoState.update { it.copy(cityRealValue = City.fromDisplayName(value).toString()) }
         _userInfoState.update { it.copy(city = value) }
     }
 
     fun setArea(value: String) {
+        _userInfoState.update { it.copy(areaRealValue = County.fromDisplayName(value).toString()) }
         _userInfoState.update { it.copy(area = value) }
     }
 
@@ -235,7 +237,9 @@ data class UserInfoState(
     val birthMonth: String = "",
     val birtDay: String = "",
     val city: String = "",
+    val cityRealValue : String = "",
     val area: String = "",
+    val areaRealValue : String ="",
     val phoneNumber: String = "",
 
     var nickCheckStanBy: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(

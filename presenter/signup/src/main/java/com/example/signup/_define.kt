@@ -40,7 +40,14 @@ enum class City(val displayName: String) {
     JEONNAM("전라남도"),
     GYEONGBUK("경상북도"),
     GYEONGNAM("경상남도"),
-    JEJU("제주도")
+    JEJU("제주도");
+
+    companion object {
+        fun fromDisplayName(displayName: String): City? {
+            return entries.find { it.displayName == displayName }
+        }
+    }
+
 }
 
 enum class County(val displayName: String) {
@@ -254,8 +261,13 @@ enum class County(val displayName: String) {
     SANCHEONG_GUN("산청군"),
     HAMYANG_GUN("함양군"),
     GEOCHANG_GUN("거창군"),
-    HAPCHEON_GUN("합천군")
+    HAPCHEON_GUN("합천군");
 
+    companion object {
+        fun fromDisplayName(displayName: String): County? {
+            return County.entries.find { it.displayName == displayName }
+        }
+    }
 
 }
 
