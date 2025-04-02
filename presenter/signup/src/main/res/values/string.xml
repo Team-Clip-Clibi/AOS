@@ -44,6 +44,7 @@
     <string name="txt_nick_name_okay">사용 가능한 닉네임입니다.</string>
     <string name="txt_nick_name_already_use">이미 사용중인 닉네임입니다. 다시 입력해주세요.</string>
     <string name="btn_check_nick_name">중복 확인</string>
+
     <!-- InputDetailInfo   -->
     <string name="txt_info_title">가입 후에도 언제든지 변경할 수 있어요</string>
     <string name="txt_info_content">당신에 대해 조금더\n알려주세요!</string>
@@ -58,6 +59,8 @@
     <string name="txt_info_city">시</string>
     <string name="txt_info_area">군/구</string>
 
+    <!-- Already Sign Up   -->
+    <string name="txt_signUp_title">해당 계정이 본인 것인지 확인해 주세요.</string>
     <!--  dialog  -->
     <string name="dialog_title_again_input">인증번호를 다시 입력해주세요</string>
     <string name="dialog_content_again_input">재전송하시겠어요?</string>

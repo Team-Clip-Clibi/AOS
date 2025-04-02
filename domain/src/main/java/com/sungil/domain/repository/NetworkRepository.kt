@@ -1,6 +1,7 @@
 package com.sungil.domain.repository
 
 import android.app.Activity
+import com.sungil.domain.model.PhoneNumberCheckResult
 import kotlinx.coroutines.flow.Flow
 
 interface NetworkRepository {
@@ -8,7 +9,7 @@ interface NetworkRepository {
     suspend fun verifySMS(code: String)
     suspend fun collectFirebaseResult(): Flow<String>
     suspend fun collectTimer(): Flow<Int>
-    suspend fun checkAlreadySignUpNumber(number: String, token: String): String
+    suspend fun checkAlreadySignUpNumber(number: String, token: String): PhoneNumberCheckResult
     suspend fun getFCMToken(): String
     suspend fun requestSignUp(
         servicePermission: Boolean,

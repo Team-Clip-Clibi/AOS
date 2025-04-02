@@ -2,6 +2,7 @@ package com.example.data.repositoryImpl
 
 import android.app.Activity
 import com.example.fcm.FirebaseFCM
+import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
@@ -29,9 +30,20 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun collectTimer(): Flow<Int> = firebase.timeFlow()
 
-    override suspend fun checkAlreadySignUpNumber(number: String, token: String): String {
+    override suspend fun checkAlreadySignUpNumber(
+        number: String,
+        token: String,
+    ): PhoneNumberCheckResult {
         val response = api.checkAlreadySignUpNumber(token, number)
-        return response.code().toString()
+        val userName = response.body()?.userName
+        val platform = response.body()?.platform
+        val createdAt = response.body()?.createdAt
+        return PhoneNumberCheckResult(
+            code = response.code(),
+            userName = userName,
+            platform = platform,
+            createdAt = createdAt
+        )
     }
 
     override suspend fun getFCMToken(): String {
@@ -77,6 +89,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun inputName(data: String, token: String): Int {
         val response = api.requestSendName(token, mapOf("userName" to data))
+
         return response.code()
     }
 

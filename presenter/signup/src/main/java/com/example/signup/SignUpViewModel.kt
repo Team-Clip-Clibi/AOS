@@ -135,6 +135,13 @@ class SignUpViewModel @Inject constructor(
                     _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueOkay(result.message)) }
                 }
                 is CheckAlreadySignUpNumber.Result.Fail ->{
+                    if(result.errorMessage == ERROR_ALREADY_SIGN_UP){
+                        _userInfoState.update { it.copy(
+                            name = result.userName,
+                            platform = result.platform,
+                            createdAt = result.createdAt
+                        ) }
+                    }
                     _userInfoState.update { it.copy(phoneNumberCheckState = CheckState.ValueNotOkay(result.errorMessage)) }
                 }
             }
@@ -249,11 +256,12 @@ data class UserInfoState(
     val birthMonth: String = "",
     val birtDay: String = "",
     val city: String = "",
-    val cityRealValue : String = "",
+    val cityRealValue: String = "",
     val area: String = "",
-    val areaRealValue : String ="",
+    val areaRealValue: String = "",
     val phoneNumber: String = "",
-
+    val platform: String = "",
+    val createdAt: String = "",
     var nickCheckStanBy: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
         STANDBY
     ),
@@ -266,7 +274,7 @@ data class UserInfoState(
     var termSendState: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
         STANDBY
     ),
-    var detailState : SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
+    var detailState: SignUpViewModel.CheckState = SignUpViewModel.CheckState.StanBy(
         STANDBY
-    )
+    ),
 )

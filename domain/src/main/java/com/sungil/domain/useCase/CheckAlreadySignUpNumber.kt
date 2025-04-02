@@ -17,7 +17,12 @@ class CheckAlreadySignUpNumber @Inject constructor(
 
     sealed interface Result : UseCase.Result {
         data class Success(val message: String) : Result
-        data class Fail(val errorMessage: String) : Result
+        data class Fail(
+            val errorMessage: String,
+            val userName: String = "",
+            val platform: String = "",
+            val createdAt: String = "",
+        ) : Result
     }
 
     override suspend fun invoke(param: Param): Result {
@@ -27,8 +32,13 @@ class CheckAlreadySignUpNumber @Inject constructor(
             return Result.Fail("token is null")
         }
         val resultCode = repo.checkAlreadySignUpNumber(editorNumber, TOKEN_FORM + token.first!!)
-        if (resultCode == "200") {
-            return Result.Fail("Already SignUp")
+        if (resultCode.code == 200) {
+            return Result.Fail(
+                "Already SignUp",
+                resultCode.userName!!,
+                resultCode.platform!!,
+                resultCode.createdAt!!
+            )
         }
         val inputResultCode = repo.inputPhoneNumber(editorNumber, TOKEN_FORM + token.first)
         if (inputResultCode != 204) {
