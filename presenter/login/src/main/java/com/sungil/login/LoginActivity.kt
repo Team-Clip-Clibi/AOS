@@ -52,11 +52,15 @@ class LoginActivity : ComponentActivity() {
                     }
 
                     is LoginViewModel.Action.SignUp -> {
-                        //TODO 메인화면으로 넘어가야함
+                        viewModel.requestLogin()
                     }
 
                     is LoginViewModel.Action.FCMToken -> {
                         Log.d(javaClass.name.toString(), it.message)
+                    }
+
+                    is LoginViewModel.Action.Login -> {
+                        Log.d(javaClass.name.toString() , it.message)
                     }
 
                     is LoginViewModel.Action.Error -> {

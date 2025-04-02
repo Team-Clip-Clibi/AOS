@@ -6,6 +6,7 @@ import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
+import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
@@ -114,6 +115,27 @@ class NetworkRepositoryImpl @Inject constructor(
             )
         )
         return response.code()
+    }
+
+    override suspend fun login(
+        socialId: String,
+        osVersion: String,
+        firebaseToken: String,
+        isAllowNotify: Boolean,
+    ): Pair<String?, String?> {
+        val tokenData = api.requestLogin(
+            LoginRequest(
+                socialId = socialId,
+                platform = "KAKAO",
+                deviceType = "ANDROID",
+                osVersion = osVersion,
+                firebaseToken = firebaseToken,
+                isAllowNotify = isAllowNotify
+            )
+        )
+        val accessToken = tokenData.body()?.accessToken
+        val refreshToken = tokenData.body()?.refreshToken
+        return accessToken to refreshToken
     }
 
 }

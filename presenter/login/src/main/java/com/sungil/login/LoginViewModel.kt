@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.CheckAlreadySignUp
 import com.sungil.domain.useCase.GetFcmToken
 import com.sungil.domain.useCase.GetKakaoId
+import com.sungil.domain.useCase.RequestLogin
 import com.sungil.domain.useCase.SetNotifyState
 import com.sungil.domain.useCase.UpdateAndSaveToken
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,7 +23,8 @@ class LoginViewModel @Inject constructor(
     private val signUp: CheckAlreadySignUp,
     private val fcm: GetFcmToken,
     private val updateAndSaveToken: UpdateAndSaveToken,
-    private val notifyState : SetNotifyState
+    private val notifyState: SetNotifyState,
+    private val login: RequestLogin,
 ) : ViewModel() {
     private val _actionFlow = MutableSharedFlow<Action>()
     val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
@@ -89,11 +92,26 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun requestLogin() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = login.invoke()) {
+                is RequestLogin.Result.Success -> {
+                    _actionFlow.emit(Action.Login(result.message))
+                }
+
+                is RequestLogin.Result.Fail -> {
+                    _actionFlow.emit(Action.Error(result.errorMessage))
+                }
+            }
+        }
+    }
+
     sealed interface Action {
         data class GetSuccess(val message: String) : Action
         data class SignUp(val message: String) : Action
         data class NotSignUp(val message: String) : Action
         data class FCMToken(val message: String) : Action
+        data class Login(val message: String) : Action
         data class Error(val errorMessage: String) : Action
     }
 }

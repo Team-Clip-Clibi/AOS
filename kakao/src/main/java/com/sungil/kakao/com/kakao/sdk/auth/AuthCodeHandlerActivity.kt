@@ -53,10 +53,16 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
                         viewModel.checkAlreadySignUp()
                     }
                     is SMSViewModel.Action.AlreadySignUp -> {
-                        //TODO 로그인 해야해~
+                        viewModel.requestLogin()
                     }
                     is SMSViewModel.Action.NotSignUp ->{
                         router.navigation("SignUp")
+                    }
+                    is SMSViewModel.Action.LoginSuccess -> {
+                        Log.d(javaClass.name.toString() , it.message)
+                    }
+                    is SMSViewModel.Action.Error ->{
+                        Log.e(javaClass.name.toString() , it.errorMessage)
                     }
                 }
             }

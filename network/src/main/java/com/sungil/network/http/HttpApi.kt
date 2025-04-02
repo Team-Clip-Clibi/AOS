@@ -2,6 +2,7 @@ package com.sungil.network.http
 
 import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
+import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
@@ -48,7 +49,7 @@ interface HttpApi {
     @PATCH(BuildConfig.USER_PHONE_SEND_URL)
     suspend fun requestSendPhoneNumber(
         @Header("Authorization") bearerToken: String,
-        @Body body: Map<String, String>
+        @Body body: Map<String, String>,
     ): Response<Unit>
 
     /**
@@ -77,4 +78,12 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Body request: UserDetailRequest,
     ): Response<Unit>
+
+    /**
+     * 로그인
+     */
+    @POST(BuildConfig.LOGIN_URL)
+    suspend fun requestLogin(
+        @Body loginData: LoginRequest,
+    ): Response<AuthToken>
 }

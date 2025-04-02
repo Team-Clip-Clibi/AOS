@@ -25,5 +25,18 @@ interface NetworkRepository {
     suspend fun inputPhoneNumber(data: String, token: String): Int
     suspend fun inputName(data: String, token: String): Int
     suspend fun inputNickName(data: String, token: String): Int
-    suspend fun inputUserDetail(token : String,gender: String, birth: String, city: String, county: String): Int
+    suspend fun inputUserDetail(
+        token: String,
+        gender: String,
+        birth: String,
+        city: String,
+        county: String,
+    ): Int
+
+    suspend fun login(
+        socialId: String,
+        osVersion: String,
+        firebaseToken: String,
+        isAllowNotify: Boolean,
+    ): Pair<String?, String?>
 }
