@@ -153,7 +153,18 @@ class SignUpViewModel @Inject constructor(
                     birthMonth = _userInfoState.value.birthMonth,
                     birthDay = _userInfoState.value.birtDay,
                     city = _userInfoState.value.cityRealValue,
-                    county = _userInfoState.value.areaRealValue
+                    county = _userInfoState.value.areaRealValue,
+                    cityDisplayName = _userInfoState.value.city,
+                    countyDisplayName = _userInfoState.value.area,
+                    servicePermission = _termItem.value.firstOrNull { it.termName == "servicePermission" }?.checked
+                        ?: false,
+                    privatePermission = _termItem.value.firstOrNull { it.termName == "privatePermission" }?.checked
+                        ?: false,
+                    marketingPermission = _termItem.value.firstOrNull { it.termName == "marketingPermission" }?.checked
+                        ?: false,
+                    name = _userInfoState.value.name,
+                    nickName = _userInfoState.value.nickName,
+                    phoneNumber = _userInfoState.value.phoneNumber
                 )
             )) {
                 is SendUserDetail.Result.Success -> {
@@ -166,6 +177,7 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
+
     fun setBirthYear(value: String) {
         _userInfoState.update { it.copy(birthYear = value) }
     }
