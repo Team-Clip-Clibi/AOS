@@ -20,7 +20,6 @@
             <option value="$PROJECT_DIR$/network" />
             <option value="$PROJECT_DIR$/presenter" />
             <option value="$PROJECT_DIR$/presenter/login" />
-            <option value="$PROJECT_DIR$/presenter/mypage" />
             <option value="$PROJECT_DIR$/presenter/signup" />
           </set>
         </option>
