@@ -70,6 +70,10 @@ class SendUserDetail @Inject constructor(
         if (!saveResult) {
             return Result.Fail("Save Fail")
         }
+        val saveSignUpResult = database.saveSingUpKey(true)
+        if(!saveSignUpResult){
+            return Result.Fail("Save SignUp Result")
+        }
         return Result.Success("okay detail")
     }
 
