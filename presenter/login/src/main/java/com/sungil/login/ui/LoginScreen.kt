@@ -92,7 +92,7 @@ internal fun LoginScreen(
                     state = pageState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
+                        .height(400.dp)
 
                 ) { page ->
                     Card(
@@ -138,9 +138,7 @@ internal fun LoginScreen(
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(16.dp))
-
                 // 인디케이터 추가
                 PageIndicator(
                     numberOfPages = pageState.pageCount,
@@ -154,6 +152,8 @@ internal fun LoginScreen(
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                 )
+                Spacer(modifier = Modifier.weight(1f))
+
             }
 
             CustomButton(
@@ -164,8 +164,6 @@ internal fun LoginScreen(
                 buttonColor = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.yellow)),
                 textColor = colorResource(R.color.black),
                 text = stringResource(R.string.btn_kako),
-                textSize = 14.sp,
-                font = FontFamily(Font(R.font.regular)),
                 onclick = kakaoLogin,
                 textUnderLine = false,
                 imageId = R.drawable.ic_kako,
@@ -182,8 +180,6 @@ internal fun LoginScreen(
                 buttonColor = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.transparent)),
                 textColor = colorResource(R.color.dark_gray),
                 text = stringResource(R.string.btn_one_thing_preview),
-                textSize = 14.sp,
-                font = FontFamily(Font(R.font.regular)),
                 onclick = {},
                 textUnderLine = true
             )

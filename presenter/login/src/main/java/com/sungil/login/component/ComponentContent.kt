@@ -63,8 +63,6 @@ fun CustomButton(
     buttonColor : ButtonColors,
     textColor : Color,
     text : String,
-    textSize : TextUnit,
-    font : FontFamily,
     onclick :() -> Unit,
     textUnderLine : Boolean,
     imageId : Int = -1,
