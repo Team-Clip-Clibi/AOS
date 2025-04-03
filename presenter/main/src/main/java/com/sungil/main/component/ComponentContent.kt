@@ -72,11 +72,7 @@ fun BottomNavItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) Color(0xFFF9F0FF) else Color.Transparent,
-        animationSpec = tween(250)
-    )
-
+    val backgroundColor = if (isSelected) Color(0xFFF9F0FF) else Color.Transparent
     val contentColor = if (isSelected) Color(0xFF6700CE) else Color(0xFF989898)
 
     Box(
@@ -85,13 +81,22 @@ fun BottomNavItem(
             .noVisualFeedbackClickable(onClick),
         contentAlignment = Alignment.Center
     ) {
-        Row(
+
+        Box(
             modifier = Modifier
-                .width(100.dp)
                 .height(48.dp)
+                .widthIn(min = 100.dp, max = 120.dp)
+                .align(Alignment.Center)
                 .clip(RoundedCornerShape(40.dp))
                 .background(backgroundColor)
-                .padding(horizontal = 12.dp),
+        )
+
+
+        Row(
+            modifier = Modifier
+                .height(48.dp)
+                .padding(horizontal = 12.dp)
+                .wrapContentWidth(unbounded = true),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -101,10 +106,10 @@ fun BottomNavItem(
                 modifier = Modifier.size(20.dp),
                 tint = contentColor
             )
+            Spacer(modifier = Modifier.width(6.dp))
 
             Crossfade(targetState = isSelected, animationSpec = tween(250), label = "") { selected ->
                 if (selected) {
-                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(id = item.title),
                         color = contentColor,
