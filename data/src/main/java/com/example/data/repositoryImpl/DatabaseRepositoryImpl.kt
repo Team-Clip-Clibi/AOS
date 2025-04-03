@@ -5,6 +5,7 @@ import com.sungil.database.room.dao.TokenDao
 import com.sungil.database.room.model.UserInfo
 import com.sungil.database.room.dao.UserInfoDao
 import com.sungil.database.room.model.Token
+import com.sungil.domain.model.UserInfoUseCase
 import com.sungil.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
@@ -114,6 +115,26 @@ class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun getToken(): Pair<String?, String?> {
         val token = tokenDao.getToken()
         return Pair(token?.accessToken, token?.refreshToken)
+    }
+
+    override suspend fun getUserInfo(): UserInfoUseCase? {
+        return userInfoDao.getAll().firstOrNull()?.toDomain()
+    }
+
+    private fun UserInfo.toDomain(): UserInfoUseCase {
+        return UserInfoUseCase(
+            userName = name,
+            gender = gender,
+            birthYear = birtYear,
+            birthMonth = birthMonth,
+            city = city,
+            county = area,
+            servicePermission = termServicePermission,
+            privatePermission = privatePermission,
+            marketingPermission = marketingPermission,
+            nickName = nickName,
+            phoneNumber = phoneNumber
+        )
     }
 
 }

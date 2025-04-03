@@ -4,6 +4,7 @@ import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
+import com.sungil.network.model.RequestUserInfo
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
@@ -86,4 +87,12 @@ interface HttpApi {
     suspend fun requestLogin(
         @Body loginData: LoginRequest,
     ): Response<AuthToken>
+
+    /**
+     * 사용자 정보 조회
+     */
+    @GET(BuildConfig.USERINFO_URL)
+    suspend fun requestUserInfo(
+        @Header("Authorization") bearerToken: String,
+    ): Response<RequestUserInfo>
 }

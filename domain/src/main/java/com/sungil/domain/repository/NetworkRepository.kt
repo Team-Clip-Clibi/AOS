@@ -2,6 +2,7 @@ package com.sungil.domain.repository
 
 import android.app.Activity
 import com.sungil.domain.model.PhoneNumberCheckResult
+import com.sungil.domain.model.UserInfoUseCase
 import kotlinx.coroutines.flow.Flow
 
 interface NetworkRepository {
@@ -39,4 +40,6 @@ interface NetworkRepository {
         firebaseToken: String,
         isAllowNotify: Boolean,
     ): Pair<String?, String?>
+
+    suspend fun requestUserData(accessToken : String) : UserInfoUseCase?
 }

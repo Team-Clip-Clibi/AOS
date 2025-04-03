@@ -29,4 +29,5 @@ interface UserInfoDao {
     @Query("DELETE FROM userinfo")
     suspend fun deleteAll()
 
+
 }
