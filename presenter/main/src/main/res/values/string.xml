@@ -3,4 +3,17 @@
     <string name="nav_home">홈</string>
     <string name="nav_calendar">일정</string>
     <string name="nav_my">마이</string>
+
+    <!--  my page  -->
+    <string name="txt_mayPage_hi">안녕하세요!</string>
+    <string name="txt_myPage_sir">%1$s님</string>
+    <string name="txt_myPage_count">지금까지 총 %1$d번 모임에 참여했어요!</string>
+    <string name="btn_myPage_edit_profile">프로필 수정</string>
+    <string name="txt_myPage_notify">알림 설정</string>
+    <string name="txt_myPage_notice">공지사항</string>
+    <string name="txt_myPage_customer">고객센터</string>
+    <string name="txt_myPage_police">신고하기</string>
+    <string name="txt_myPage_term">약관 및 정책</string>
+    <string name="txt_myPage_guide">원띵 이용가이드</string>
+
 </resources>

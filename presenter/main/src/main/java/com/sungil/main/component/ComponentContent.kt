@@ -3,6 +3,7 @@ package com.sungil.main.component
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,7 +35,7 @@ fun BottomNavigation(navController: NavHostController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(78.dp)
+            .height(48.dp)
             .border(1.dp, Color(0xFFF7F7F7))
             .background(Color.White),
         verticalAlignment = Alignment.CenterVertically,
@@ -128,4 +130,78 @@ fun Modifier.noVisualFeedbackClickable(onClick: () -> Unit): Modifier = composed
             detectTapGestures(onTap = { onClick() })
         }
     )
+}
+@Composable
+fun CustomMyPageAppBar(text: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(Color(0xFFF7F7F7))
+            .padding(start = 17.dp , end = 12.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.fillMaxWidth(),
+            style = AppTextStyles.TITLE_20_28_SEMI,
+            color = Color(0xFF000000)
+        )
+    }
+}
+
+@Composable
+fun CustomMyPageButton(
+    text: String,
+    color: Long,
+    textColor: Long,
+    onClick: () -> Unit,
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color(color),
+            contentColor = Color(textColor)
+        ),
+        elevation = null // ✅ 그림자 제거하고 싶을 경우
+    ) {
+        Text(
+            text = text,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+@Composable
+fun MyPageItem(text: String, icon: Int) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(
+                color = Color(0xFFFFFFFF),
+                shape = RoundedCornerShape(size = 8.dp)
+            )
+            .padding(start = 17.dp, end = 16.dp, top = 10.dp, bottom = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = icon),
+            contentDescription = "icon",
+        )
+
+        Spacer(modifier = Modifier.width(14.dp))
+
+        Text(
+            text = text,
+            modifier = Modifier.weight(1f),
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = Color(0xFF171717),
+            textAlign = TextAlign.Start
+        )
+    }
 }
