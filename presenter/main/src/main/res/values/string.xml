@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home">홈</string>
+    <string name="nav_calendar">일정</string>
+    <string name="nav_my">마이</string>
+</resources>

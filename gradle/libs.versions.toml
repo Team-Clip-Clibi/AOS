@@ -26,6 +26,7 @@ firebase-analytics = "21.5.0"
 firebase-messaging = "23.4.1"
 room-database = "2.6.1"
 ksp = "1.9.0-1.0.11"
+compose-material = "1.7.8"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
@@ -61,6 +62,7 @@ firebase-message = {group = "com.google.firebase" , name = "firebase-messaging" 
 room-database-runtime = {group = "androidx.room" , name = "room-runtime" , version.ref = "room-database"}
 room-database-ktx = {group = "androidx.room" , name = "room-ktx" , version.ref = "room-database"}
 room-database-compiler = { group = "androidx.room" , name = "room-compiler" , version.ref = "room-database"}
+androidx-compose-material = { group = "androidx.compose.material", name = "material", version = "compose-material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

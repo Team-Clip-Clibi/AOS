@@ -66,6 +66,9 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
 }
 kapt {
     correctErrorTypes = true
@@ -97,11 +100,12 @@ dependencies {
     //Module
     implementation(project(":presenter"))
     implementation(project(":presenter:login"))
+    implementation(project(":presenter:signup"))
+    implementation(project(":presenter:main"))
     implementation(project(":kakao"))
     implementation(project(":domain"))
     implementation(project(":database"))
     implementation(project(":data"))
-    implementation(project(":presenter:signup"))
     implementation(project(":network"))
     implementation(project(":fcm"))
     implementation(project(":device"))
