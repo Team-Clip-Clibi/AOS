@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.signup.R
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
@@ -86,49 +87,39 @@ fun TopBar(
     totalPage: Int,
     onBackClick: () -> Unit,
 ) {
-
-    Column {
-        TopAppBar(
-            modifier = Modifier
-                .border(width = 1.dp, color = Color(0xFFEFEFEF))
-                .fillMaxWidth()
-                .padding(start = 5.dp, end = 16.dp),
-            title = {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = title,
-                        style = AppTextStyles.TITLE_20_28_SEMI,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            },
-            navigationIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_back_gray),
-                    contentDescription = "뒤로가기",
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .width(24.dp)
-                        .height(24.dp)
-                        .clickable { onBackClick() }
-                )
-            },
-            actions = {
-                Text(
-                    text = if (currentPage == 0 || totalPage == 0) "" else "$currentPage/$totalPage",
-                    style = AppTextStyles.CAPTION_12_18_SEMI,
-                    color = Color(0xFF6700CE)
-                )
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.White, // or your preferred background color
-                titleContentColor = Color.Black,
-                navigationIconContentColor = Color.Black,
-                actionIconContentColor = Color.Black
+    CenterAlignedTopAppBar(
+        modifier = Modifier
+            .border(width = 1.dp, color = Color(0xFFEFEFEF))
+            .fillMaxWidth()
+            .padding(start = 5.dp, end = 16.dp),
+        title = {
+            Text(
+                text = title,
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                textAlign = TextAlign.Center
             )
+        },
+        navigationIcon = {
+            Image(
+                painter = painterResource(id = R.drawable.ic_back_gray),
+                contentDescription = "뒤로가기",
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(24.dp)
+                    .clickable { onBackClick() }
+            )
+        },
+        actions = {
+            Text(
+                text = if (currentPage == 0 || totalPage == 0) "" else "$currentPage/$totalPage",
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = Color(0xFF6700CE)
+            )
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.White
         )
-    }
+    )
 }
 
 @Composable
