@@ -81,14 +81,14 @@ enum class County(val displayName: String) {
     GANGDONG_GU("강동구"),
 
     // 부산광역시
-    BUSAN_JUNG_GU("중구"), //-> 빠져있음
-    BUSAN_SEO_GU("서구"), // -> 빠져있음
+//    JUNG_GU("중구"), //-> 빠져있음
+//    SEO_GU("서구"), // -> 빠져있음
     DONG_GU("동구"),
     YEONGDO_GU("영도구"),
     BUSANJIN_GU("부산진구"),
     DONGNAE_GU("동래구"),
-    NAM_GU("남구"),
-    BUK_GU("북구"),
+//    NAM_GU("남구"),
+//    BUK_GU("북구"),
     HAEUNDAE_GU("해운대구"),
     SAHA_GU("사하구"),
     GEUMJEONG_GU("금정구"),
@@ -102,8 +102,8 @@ enum class County(val displayName: String) {
 //    JUNG_GU("중구"),
 //    DONG_GU("동구"),
     SEO_GU("서구"),
-    DAEGU_NAM_GU("남구"),
-    DAEGU_BUK_GU("북구"),
+    NAM_GU("남구"),
+    BUK_GU("북구"),
     SUSEONG_GU("수성구"),
     DALSEO_GU("달서구"),
     DALSEONG_GUN("달성군"),
@@ -302,8 +302,8 @@ val cityToCountyMap: Map<City, List<County>> = mapOf(
         County.GANGDONG_GU
     ),
     City.BUSAN to listOf(
-        County.BUSAN_JUNG_GU,
-        County.BUSAN_SEO_GU,
+        County.JUNG_GU,
+        County.SEO_GU,
         County.DONG_GU,
         County.YEONGDO_GU,
         County.BUSANJIN_GU,
@@ -320,8 +320,8 @@ val cityToCountyMap: Map<City, List<County>> = mapOf(
         County.GIJANG_GUN
     ),
     City.DAEGU to listOf(
-        County.JUNG_GU, County.DONG_GU, County.SEO_GU, County.DAEGU_NAM_GU,
-        County.DAEGU_BUK_GU, County.SUSEONG_GU, County.DALSEO_GU, County.DALSEONG_GUN
+        County.JUNG_GU, County.DONG_GU, County.SEO_GU, County.NAM_GU,
+        County.BUK_GU, County.SUSEONG_GU, County.DALSEO_GU, County.DALSEONG_GUN
     ),
     City.INCHEON to listOf(
         County.JUNG_GU, County.DONG_GU, County.MICHUHOL_GU, County.YEONSUGU,

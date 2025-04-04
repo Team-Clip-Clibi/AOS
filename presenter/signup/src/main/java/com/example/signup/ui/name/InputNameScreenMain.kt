@@ -96,7 +96,8 @@ internal fun InputNameScreenMain(
                 text = name.name,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp),
+                    .height(60.dp)
+                    .padding(start = 17.dp , end = 16.dp),
                 onValueChange = { input ->
                     viewModel.inputName(input)
                 },
@@ -107,7 +108,7 @@ internal fun InputNameScreenMain(
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(start = 17.dp , end = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {

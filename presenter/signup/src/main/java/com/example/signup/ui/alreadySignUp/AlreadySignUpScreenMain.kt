@@ -65,7 +65,7 @@ internal fun AlreadySignUpScreenMain(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                top = paddingValues.calculateTopPadding() + 32.dp, bottom = 21.dp
+                top = paddingValues.calculateTopPadding() + 32.dp, bottom = 31.dp
             )
             .background(color = Color(0xFFFFFFFF))
             .verticalScroll(scrollState)
