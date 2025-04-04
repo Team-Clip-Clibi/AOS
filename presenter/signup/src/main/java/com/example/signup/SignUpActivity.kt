@@ -12,8 +12,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SignUpActivity : ComponentActivity() {
     private val viewModel: SignUpViewModel by viewModels()
+
     @Inject
     lateinit var router: Router
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,9 +24,10 @@ class SignUpActivity : ComponentActivity() {
                 clear = {
                     router.navigation(NAV_LOGIN)
                 },
-                activity = this
+                main = {
+                    router.navigation(NAV_MAIN)
+                }
             )
         }
     }
-
 }

@@ -4,6 +4,7 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -60,10 +61,14 @@ class CheckAlreadySignUpNumber @Inject constructor(
 
     private fun extractDateOnly(createdAt: String): String {
         return try {
-            val zonedDateTime = ZonedDateTime.parse(createdAt)
-            zonedDateTime.toLocalDate().toString()
+            LocalDateTime.parse(createdAt).toLocalDate().toString()
         } catch (e: Exception) {
-            createdAt
+            try {
+                ZonedDateTime.parse(createdAt).toLocalDate().toString()
+            } catch (e: Exception) {
+                createdAt
+
+            }
         }
     }
 

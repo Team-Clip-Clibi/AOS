@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -92,7 +94,7 @@ internal fun LoginScreen(
                     state = pageState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(400.dp)
+                        .weight(1f)
 
                 ) { page ->
                     Card(
@@ -138,7 +140,9 @@ internal fun LoginScreen(
                         }
                     }
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
+
                 // 인디케이터 추가
                 PageIndicator(
                     numberOfPages = pageState.pageCount,
@@ -152,8 +156,8 @@ internal fun LoginScreen(
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                 )
-                Spacer(modifier = Modifier.weight(1f))
 
+                Spacer(modifier = Modifier.height(22.dp))
             }
 
             CustomButton(
@@ -186,7 +190,6 @@ internal fun LoginScreen(
         }
     }
 }
-
 //@Preview
 //@Composable
 //private fun preview() {

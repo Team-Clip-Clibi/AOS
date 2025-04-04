@@ -60,7 +60,7 @@ class LoginActivity : ComponentActivity() {
                     }
 
                     is LoginViewModel.Action.Login -> {
-                        Log.d(javaClass.name.toString() , it.message)
+                        router.navigation(MAIN_VIEW)
                     }
 
                     is LoginViewModel.Action.Error -> {

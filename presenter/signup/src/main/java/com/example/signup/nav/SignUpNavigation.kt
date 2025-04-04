@@ -23,7 +23,7 @@ import com.example.signup.ui.phone.PhoneNumberScreen
 import com.example.signup.ui.term.TermScreen
 
 @Composable
-internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, activity: Activity) {
+internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, main : () -> Unit) {
     val navController = rememberNavController()
 
     NavHost(
@@ -61,7 +61,6 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
                     navController.navigate(NAV_NAME)
                 },
                 signUpPage = { navController.navigate(NAV_ALREADY_SIGN_UP) },
-                activity = activity
             )
         }
 
@@ -123,10 +122,11 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, act
                 viewModel = viewModel,
                 actionClick = { navController.navigateUp() },
                 buttonClick = {
-
+                    main()
                 }
             )
         }
+
         composable(
             NAV_ALREADY_SIGN_UP,
             enterTransition = {

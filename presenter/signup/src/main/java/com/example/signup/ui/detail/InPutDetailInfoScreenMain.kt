@@ -84,6 +84,7 @@ internal fun InPutDetailInfoScreenMain(
 
                 is SignUpViewModel.CheckState.ValueOkay -> {
                     Log.e(javaClass.name.toString(), "Success to signUp")
+                    buttonClick()
                 }
             }
         }

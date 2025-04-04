@@ -54,7 +54,6 @@ internal fun PhoneNumberScreenMain(
     paddingValues: PaddingValues,
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
-    activity: Activity,
     signUpPage: () -> Unit,
 ) {
     val phoneNumber by viewModel.userInfoState.collectAsState()
