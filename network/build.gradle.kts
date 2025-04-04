@@ -35,7 +35,8 @@ android {
         val userDetailUrl: String = properties.getProperty("userDetailUrl", "")
         val userPhoneNumber: String = properties.getProperty("userPhoneNumberUrl", "")
         val signInUrl: String = properties.getProperty("login", "")
-        val userInfoUrl : String = properties.getProperty("userInfo" ,"")
+        val userInfoUrl: String = properties.getProperty("userInfo", "")
+        val fcmToken: String = properties.getProperty("fcmToken", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -47,7 +48,8 @@ android {
         buildConfigField("String", "USER_DETAIL_URL", userDetailUrl)
         buildConfigField("String", "USER_PHONE_SEND_URL", userPhoneNumber)
         buildConfigField("String", "LOGIN_URL", signInUrl)
-        buildConfigField("String","USERINFO_URL",userInfoUrl)
+        buildConfigField("String", "USERINFO_URL", userInfoUrl)
+        buildConfigField("String", "UPDATE_FCM_TOKEN", fcmToken)
     }
 
     buildTypes {

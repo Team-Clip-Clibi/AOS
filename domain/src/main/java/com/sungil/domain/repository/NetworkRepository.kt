@@ -42,4 +42,6 @@ interface NetworkRepository {
     ): Pair<String?, String?>
 
     suspend fun requestUserData(accessToken : String) : UserInfo?
+
+    suspend fun requestUpdateFcmToken(accessToken : String) : Int
 }

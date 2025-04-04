@@ -95,4 +95,12 @@ interface HttpApi {
     suspend fun requestUserInfo(
         @Header("Authorization") bearerToken: String,
     ): Response<RequestUserInfo>
+
+    /**
+     * FCM Token 업데이트
+     */
+    @PATCH(BuildConfig.UPDATE_FCM_TOKEN)
+    suspend fun requestUpdateFcmToken(
+        @Header("Authorization") bearerToken: String,
+    ) : Response<Unit>
 }

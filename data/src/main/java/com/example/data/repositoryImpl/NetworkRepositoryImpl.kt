@@ -145,6 +145,11 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.body()?.toDomain()
     }
 
+    override suspend fun requestUpdateFcmToken(accessToken: String): Int {
+        val result = api.requestUpdateFcmToken(accessToken)
+        return result.code()
+    }
+
     private fun RequestUserInfo.toDomain() : UserInfo{
         return UserInfo(
             userName =  username,

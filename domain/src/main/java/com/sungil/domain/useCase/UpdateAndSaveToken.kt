@@ -1,10 +1,15 @@
 package com.sungil.domain.useCase
 
+import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
+import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
 
-class UpdateAndSaveToken @Inject constructor(private val repo: DatabaseRepository) :
+class UpdateAndSaveToken @Inject constructor(
+    private val repo: DatabaseRepository,
+    private val api: NetworkRepository,
+) :
     UseCase<UpdateAndSaveToken.Param, UpdateAndSaveToken.Result> {
 
     data class Param(
@@ -18,7 +23,7 @@ class UpdateAndSaveToken @Inject constructor(private val repo: DatabaseRepositor
 
     override suspend fun invoke(param: Param): Result {
         val beforeToken = repo.getFcmToken()
-
+        val token = repo.getToken()
         return when {
             beforeToken.isEmpty() -> {
                 val result = repo.saveFcmToken(param.fcmToken)
@@ -33,13 +38,20 @@ class UpdateAndSaveToken @Inject constructor(private val repo: DatabaseRepositor
                 Result.Success("Already same token")
             }
 
-            else -> {
+            beforeToken != param.fcmToken && token.first != null && token.second != null -> {
                 val result = repo.updateFcmToken(param.fcmToken)
-                if (result) {
-                    Result.Success("Success to update token")
-                } else {
-                    Result.Fail("Failed to update token")
+                if (!result) {
+                    return Result.Fail("Failed to update token")
                 }
+                val updateFcmTokenResult = api.requestUpdateFcmToken(TOKEN_FORM + token.first)
+                if (updateFcmTokenResult != 204) {
+                    return Result.Fail("Fail to update Fcm Token")
+                }
+                return Result.Success("Success to save data")
+            }
+
+            else -> {
+                Result.Fail("Unknown Error")
             }
         }
     }
