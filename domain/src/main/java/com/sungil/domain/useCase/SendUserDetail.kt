@@ -35,13 +35,15 @@ class SendUserDetail @Inject constructor(
 
     override suspend fun invoke(param: Param): Result {
         val year = param.birthYear.filter { it.isDigit() }
-        val month = param.birthMonth.filter { it.isDigit() }
+        val month = param.birthMonth.filter { it.isDigit() }.toIntOrNull()?.let {
+            if (it < 10) "0$it" else "$it"
+        } ?: ""
         val day = param.birthDay.filter { it.isDigit() }
 
         if (year.isEmpty() || month.isEmpty() || day.isEmpty()) {
             return Result.Fail("Data is Not input")
         }
-        val editBirthDay = reformBirth(param.birthYear, param.birthMonth, param.birthDay)
+        val editBirthDay = reformBirth(year, month, day)
         val token = database.getToken()
         if (token.first == null || token.second == null) {
             return Result.Fail("Token is null")
