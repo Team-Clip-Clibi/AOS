@@ -129,7 +129,7 @@ internal fun LoginScreen(
                                     color = Color(0xFF171717),
                                     textAlign = TextAlign.Center,
                                 )
-
+                                Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = test2[page],
                                     style = AppTextStyles.SUBTITLE_16_24_SEMI,
@@ -147,11 +147,11 @@ internal fun LoginScreen(
                 PageIndicator(
                     numberOfPages = pageState.pageCount,
                     selectedPage = pageState.currentPage,
-                    selectedColor = colorResource(R.color.purple),
-                    defaultColor = colorResource(R.color.dark_gray),
-                    defaultRadius = 8.dp,
+                    selectedColor = Color(0xFF9254DE) ,
+                    defaultColor = Color(0xFFDCDCDC),
+                    defaultRadius = 10.dp,
                     selectedLength = 16.dp,
-                    space = 4.dp,
+                    space = 8.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
@@ -169,7 +169,6 @@ internal fun LoginScreen(
                 textColor = colorResource(R.color.black),
                 text = stringResource(R.string.btn_kako),
                 onclick = kakaoLogin,
-                textUnderLine = false,
                 imageId = R.drawable.ic_kako,
                 imageDescription = "snsLogin"
             )
@@ -185,7 +184,6 @@ internal fun LoginScreen(
                 textColor = colorResource(R.color.dark_gray),
                 text = stringResource(R.string.btn_one_thing_preview),
                 onclick = {},
-                textUnderLine = true
             )
         }
     }

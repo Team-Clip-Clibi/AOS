@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -64,7 +65,6 @@ fun CustomButton(
     textColor : Color,
     text : String,
     onclick :() -> Unit,
-    textUnderLine : Boolean,
     imageId : Int = -1,
     imageDescription : String = "noData"
 ){
@@ -81,11 +81,11 @@ fun CustomButton(
                 modifier = Modifier.padding(end = 8.dp)
             )
         }
+
         Text(
             text = text,
             style = AppTextStyles.BODY_14_20_MEDIUM,
             color = textColor,
-            textDecoration = if(textUnderLine) TextDecoration.Underline else null
         )
     }
 }
