@@ -32,40 +32,41 @@ import com.sungil.main.bottomNavItems
 fun BottomNavigation(navController: NavHostController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .border(1.dp, Color(0xFFF7F7F7))
+            .height(56.dp) // 살짝 넉넉하게
+            .border(1.dp, Color(0xFFEFEFEF))
             .background(Color.White),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        contentAlignment = Alignment.Center
     ) {
-        bottomNavItems.forEachIndexed { index, item ->
-            val isSelected = currentRoute == item.screenRoute
-            BottomNavItem(
-                item = item,
-                isSelected = isSelected,
-                onClick = {
-                    if (currentRoute != item.screenRoute) {
-                        navController.navigate(item.screenRoute) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
+        Row(
+            modifier = Modifier
+                .wrapContentWidth(Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(36.dp) // 아이템 간 간격
+        ) {
+            bottomNavItems.forEach { item ->
+                val isSelected = currentRoute == item.screenRoute
+                BottomNavItem(
+                    item = item,
+                    isSelected = isSelected,
+                    onClick = {
+                        if (currentRoute != item.screenRoute) {
+                            navController.navigate(item.screenRoute) {
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) { saveState = true }
+                                }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                            launchSingleTop = true
-                            restoreState = true
                         }
                     }
-                },
-                modifier = Modifier.weight(1f)
-            )
-            if (index != bottomNavItems.lastIndex) {
-                Spacer(modifier = Modifier.width(8.dp))
+                )
             }
         }
     }
 }
-
 
 @Composable
 fun BottomNavItem(
@@ -74,33 +75,21 @@ fun BottomNavItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor = if (isSelected) Color(0xFFF9F0FF) else Color.Transparent
-    val contentColor = if (isSelected) Color(0xFF6700CE) else Color(0xFF989898)
+    val contentColor = if (isSelected) Color(0xFF171717) else Color(0xFF989898)
 
     Box(
         modifier = modifier
-            .fillMaxHeight()
+            .width(64.dp)
+            .height(56.dp)
             .noVisualFeedbackClickable(onClick),
         contentAlignment = Alignment.Center
     ) {
-
-        Box(
+        Column(
             modifier = Modifier
-                .height(48.dp)
-                .widthIn(min = 100.dp, max = 120.dp)
-                .align(Alignment.Center)
-                .clip(RoundedCornerShape(40.dp))
-                .background(backgroundColor)
-        )
-
-
-        Row(
-            modifier = Modifier
-                .height(48.dp)
-                .padding(horizontal = 12.dp)
-                .wrapContentWidth(unbounded = true),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+                .wrapContentSize()
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Icon(
                 painter = painterResource(id = item.icon),
@@ -108,21 +97,16 @@ fun BottomNavItem(
                 modifier = Modifier.size(20.dp),
                 tint = contentColor
             )
-            Spacer(modifier = Modifier.width(6.dp))
-
-            Crossfade(targetState = isSelected, animationSpec = tween(250), label = "") { selected ->
-                if (selected) {
-                    Text(
-                        text = stringResource(id = item.title),
-                        color = contentColor,
-                        style = AppTextStyles.SUBTITLE_16_24_SEMI
-                    )
-                }
-            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(id = item.title),
+                color = contentColor,
+                style = AppTextStyles.CAPTION_12_14_MEDIUM,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
-
 
 fun Modifier.noVisualFeedbackClickable(onClick: () -> Unit): Modifier = composed {
     this.then(
