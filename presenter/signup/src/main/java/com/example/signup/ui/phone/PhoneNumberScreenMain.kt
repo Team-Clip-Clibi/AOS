@@ -57,7 +57,6 @@ internal fun PhoneNumberScreenMain(
     signUpPage: () -> Unit,
 ) {
     val phoneNumber by viewModel.userInfoState.collectAsState()
-    var alreadySignUpDialog by remember { mutableStateOf(false) }
 
     var buttonIsEnable = false
 
@@ -77,7 +76,7 @@ internal fun PhoneNumberScreenMain(
                 is SignUpViewModel.CheckState.ValueNotOkay -> {
                     when (phoneState.errorMessage) {
                         ERROR_ALREADY_SIGN_UP -> {
-                            alreadySignUpDialog = true
+                            signUpPage()
                         }
                     }
                 }
@@ -129,18 +128,6 @@ internal fun PhoneNumberScreenMain(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            if (alreadySignUpDialog) {
-                CustomDialog(
-                    onDismiss = { alreadySignUpDialog = false },
-                    buttonClick = {
-                        alreadySignUpDialog = false
-                        signUpPage()
-                    },
-                    titleText = stringResource(R.string.dialog_title_already_signup),
-                    contentText = stringResource(R.string.dialog_content_already_signup),
-                    buttonText = stringResource(R.string.dialog_btn_already_signup)
-                )
-            }
         }
 
         Column(
