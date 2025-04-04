@@ -1,7 +1,7 @@
 package com.sungil.domain.useCase
 
 import com.sungil.domain.UseCase
-import com.sungil.domain.model.UserInfoUseCase
+import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
@@ -11,7 +11,7 @@ class GetUserInfo @Inject constructor(
     private val network: NetworkRepository,
 ) {
     sealed interface Result : UseCase.Result {
-        data class Success(val data: UserInfoUseCase) : Result
+        data class Success(val data: UserInfo) : Result
         data class Fail(val errorMessage: String) : Result
     }
 

@@ -6,18 +6,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.sungil.main.MainViewModel
 import com.sungil.main.component.BottomNavigation
 import com.sungil.main.nav.MainNavigation
 
 
 @Composable
-fun MainScreenView() {
+fun MainScreenView(viewModel: MainViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) }
     ) {
         Box(Modifier.padding(it)) {
-            MainNavigation(navController = navController)
+            MainNavigation(navController = navController ,viewModel)
         }
     }
 }

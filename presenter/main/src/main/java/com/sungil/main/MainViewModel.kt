@@ -1,21 +1,22 @@
 package com.sungil.main
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sungil.domain.model.UserInfoUseCase
+import com.sungil.domain.model.UserInfo
 import com.sungil.domain.useCase.GetUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val userInfo: GetUserInfo) : ViewModel() {
-    private val _mainViewState = MutableSharedFlow<MainState>()
-    val mainViewState: SharedFlow<MainState> = _mainViewState.asSharedFlow()
 
+    private val _userState = MutableStateFlow<UserUiState>(UserUiState.Loading)
+    val userState: StateFlow<UserUiState> = _userState.asStateFlow()
 
     init {
         requestUserInfo()
@@ -25,19 +26,19 @@ class MainViewModel @Inject constructor(private val userInfo: GetUserInfo) : Vie
         viewModelScope.launch {
             when (val result = userInfo.invoke()) {
                 is GetUserInfo.Result.Success -> {
-                    _mainViewState.emit(MainState.SuccessUserInfo(result.data))
+                    _userState.value = UserUiState.Success(result.data)
                 }
 
                 is GetUserInfo.Result.Fail -> {
-                    _mainViewState.emit(MainState.Error(result.errorMessage))
+                    _userState.value = UserUiState.Error(result.errorMessage)
                 }
             }
         }
     }
 
-    sealed interface MainState {
-        data class Loading(val message: String) : MainState
-        data class SuccessUserInfo(val data: UserInfoUseCase) : MainState
-        data class Error(val errorMessage: String) : MainState
+    sealed interface UserUiState {
+        object Loading : UserUiState
+        data class Success(val userData: UserInfo) : UserUiState
+        data class Error(val message: String) : UserUiState
     }
 }

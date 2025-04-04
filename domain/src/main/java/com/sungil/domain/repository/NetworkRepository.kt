@@ -2,7 +2,7 @@ package com.sungil.domain.repository
 
 import android.app.Activity
 import com.sungil.domain.model.PhoneNumberCheckResult
-import com.sungil.domain.model.UserInfoUseCase
+import com.sungil.domain.model.UserInfo
 import kotlinx.coroutines.flow.Flow
 
 interface NetworkRepository {
@@ -41,5 +41,5 @@ interface NetworkRepository {
         isAllowNotify: Boolean,
     ): Pair<String?, String?>
 
-    suspend fun requestUserData(accessToken : String) : UserInfoUseCase?
+    suspend fun requestUserData(accessToken : String) : UserInfo?
 }

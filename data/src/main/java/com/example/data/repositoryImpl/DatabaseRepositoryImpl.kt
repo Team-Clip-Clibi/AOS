@@ -2,10 +2,8 @@ package com.example.data.repositoryImpl
 
 import com.sungil.database.SharedPreference
 import com.sungil.database.room.dao.TokenDao
-import com.sungil.database.room.model.UserInfo
 import com.sungil.database.room.dao.UserInfoDao
 import com.sungil.database.room.model.Token
-import com.sungil.domain.model.UserInfoUseCase
 import com.sungil.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
@@ -65,7 +63,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         platform: String,
         phoneNumber: String,
     ): Boolean {
-        val userInfo = UserInfo(
+        val userInfo = com.sungil.database.room.model.UserInfo(
             name = name,
             termServicePermission = servicePermission,
             privatePermission = privatePermission,
@@ -117,20 +115,19 @@ class DatabaseRepositoryImpl @Inject constructor(
         return Pair(token?.accessToken, token?.refreshToken)
     }
 
-    override suspend fun getUserInfo(): UserInfoUseCase? {
+    override suspend fun getUserInfo(): com.sungil.domain.model.UserInfo? {
         return userInfoDao.getAll().firstOrNull()?.toDomain()
     }
 
-    private fun UserInfo.toDomain(): UserInfoUseCase {
-        return UserInfoUseCase(
+    private fun com.sungil.database.room.model.UserInfo.toDomain(): com.sungil.domain.model.UserInfo {
+        return com.sungil.domain.model.UserInfo(
             userName = name,
             gender = gender,
             birthYear = birtYear,
             birthMonth = birthMonth,
+            birthDay = birthDay,
             city = city,
             county = area,
-            servicePermission = termServicePermission,
-            privatePermission = privatePermission,
             marketingPermission = marketingPermission,
             nickName = nickName,
             phoneNumber = phoneNumber

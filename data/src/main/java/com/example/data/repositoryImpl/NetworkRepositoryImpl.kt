@@ -3,7 +3,7 @@ package com.example.data.repositoryImpl
 import android.app.Activity
 import com.example.fcm.FirebaseFCM
 import com.sungil.domain.model.PhoneNumberCheckResult
-import com.sungil.domain.model.UserInfoUseCase
+import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
@@ -140,21 +140,20 @@ class NetworkRepositoryImpl @Inject constructor(
         return accessToken to refreshToken
     }
 
-    override suspend fun requestUserData(accessToken: String): UserInfoUseCase? {
+    override suspend fun requestUserData(accessToken: String): UserInfo? {
         val result = api.requestUserInfo(accessToken)
         return result.body()?.toDomain()
     }
 
-    private fun RequestUserInfo.toDomain() : UserInfoUseCase{
-        return UserInfoUseCase(
+    private fun RequestUserInfo.toDomain() : UserInfo{
+        return UserInfo(
             userName =  username,
             gender = "MALE",
             birthYear = "1996",
             birthMonth = "07",
+            birthDay = "25",
             city = "SEOUL",
-            county = "SSS",
-            servicePermission = true,
-            privatePermission = true,
+            county = "JUNG_GU",
             marketingPermission = false,
             nickName = nickname,
             phoneNumber = phoneNumber

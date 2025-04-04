@@ -4,13 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sungil.main.MainViewModel
 import com.sungil.main.Screen
 import com.sungil.main.ui.calendar.CalendarScreen
 import com.sungil.main.ui.home.HomeScreen
 import com.sungil.main.ui.myapge.MyPageScreen
 
 @Composable
-fun MainNavigation(navController: NavHostController) {
+fun MainNavigation(navController: NavHostController, viewModel: MainViewModel) {
     NavHost(navController = navController, startDestination = Screen.Home.screenRoute) {
         composable(Screen.Home.screenRoute) {
             HomeScreen()
@@ -19,7 +20,7 @@ fun MainNavigation(navController: NavHostController) {
             CalendarScreen()
         }
         composable(Screen.MyPage.screenRoute) {
-            MyPageScreen()
+            MyPageScreen(viewModel)
         }
     }
 }

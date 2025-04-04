@@ -1,6 +1,6 @@
 package com.sungil.domain.repository
 
-import com.sungil.domain.model.UserInfoUseCase
+import com.sungil.domain.model.UserInfo
 
 interface DatabaseRepository {
     suspend fun saveKaKaoId(kakaoId: String): Boolean
@@ -31,5 +31,5 @@ interface DatabaseRepository {
     suspend fun setNotifyState(data: Boolean): Boolean
     suspend fun setToken(accessToken: String, refreshToken: String): Boolean
     suspend fun getToken(): Pair<String?, String?>
-    suspend fun getUserInfo(): UserInfoUseCase?
+    suspend fun getUserInfo(): UserInfo?
 }

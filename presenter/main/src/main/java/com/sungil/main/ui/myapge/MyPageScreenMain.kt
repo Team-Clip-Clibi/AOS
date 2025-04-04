@@ -1,8 +1,8 @@
 package com.sungil.main.ui.myapge
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +21,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,14 +31,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.core.AppTextStyles
+import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import com.sungil.main.component.CustomMyPageButton
 import com.sungil.main.component.MyPageItem
 
 @Composable
-internal fun MyPageScreenMain(paddingValues: PaddingValues) {
+internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewModel) {
+
+    val userState by viewModel.userState.collectAsState()
+
+    val userName = when (userState) {
+        is MainViewModel.UserUiState.Success -> (userState as MainViewModel.UserUiState.Success).userData.userName
+        is MainViewModel.UserUiState.Loading -> "불러오는 중..."
+        is MainViewModel.UserUiState.Error -> "오류 발생"
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +84,7 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues) {
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = stringResource(R.string.txt_myPage_sir, "김성일"),
+                            text = stringResource(R.string.txt_myPage_sir, userName),
                             style = AppTextStyles.SUBTITLE_18_22_SEMI,
                             color = Color(0xFF171717)
                         )
@@ -144,9 +156,11 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(bottom = 8.dp,
+                    .padding(
+                        bottom = 8.dp,
                         top = 10.dp,
-                        start = 16.dp),
+                        start = 16.dp
+                    ),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
