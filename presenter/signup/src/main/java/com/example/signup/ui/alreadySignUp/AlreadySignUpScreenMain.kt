@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
@@ -65,8 +66,10 @@ internal fun AlreadySignUpScreenMain(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                top = paddingValues.calculateTopPadding() + 32.dp, bottom = 31.dp
+                top = paddingValues.calculateTopPadding() + 32.dp,
+                bottom = 8.dp
             )
+            .navigationBarsPadding()
             .background(color = Color(0xFFFFFFFF))
             .verticalScroll(scrollState)
     ) {

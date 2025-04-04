@@ -16,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
@@ -35,8 +37,16 @@ fun BottomNavigation(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp) // 살짝 넉넉하게
-            .border(1.dp, Color(0xFFEFEFEF))
+            .height(102.dp)
+            .drawBehind {
+                val strokeWidth = 1.dp.toPx()
+                drawLine(
+                    color = Color(0xFFEFEFEF),
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = strokeWidth
+                )
+            }
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {

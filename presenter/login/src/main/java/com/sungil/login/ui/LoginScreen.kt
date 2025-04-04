@@ -62,6 +62,7 @@ internal fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .padding(bottom = 8.dp)
             .navigationBarsPadding()
     ) {
         Column(
