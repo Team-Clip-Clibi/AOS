@@ -105,6 +105,8 @@ internal fun PhoneNumberScreenMain(
                 color = Color(0xFF666666)
             )
 
+            Spacer(modifier = Modifier.height(4.dp))
+
             Text(
                 text = stringResource(R.string.txt_phone_title_sub),
                 style = AppTextStyles.HEAD_28_40_BOLD,
