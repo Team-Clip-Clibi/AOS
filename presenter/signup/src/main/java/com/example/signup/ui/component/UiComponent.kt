@@ -130,6 +130,7 @@ fun CustomCheckBox(
     onCheckChange: (Boolean) -> Unit,
     isIconShow: Boolean = true,
 ) {
+//    0xFF666666
     Row(
         modifier = modifier.clickable { onCheckChange(!checked) },
         verticalAlignment = Alignment.CenterVertically
@@ -144,7 +145,8 @@ fun CustomCheckBox(
         Text(
             modifier = Modifier.weight(1f),
             text = text,
-            style = AppTextStyles.SUBTITLE_16_24_SEMI
+            style = AppTextStyles.SUBTITLE_16_24_SEMI,
+            color =  if (checked) Color(0xFF171717) else Color(0xFF666666)
         )
         if (isIconShow) {
 
