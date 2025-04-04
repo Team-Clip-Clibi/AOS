@@ -32,4 +32,5 @@ interface DatabaseRepository {
     suspend fun setToken(accessToken: String, refreshToken: String): Boolean
     suspend fun getToken(): Pair<String?, String?>
     suspend fun getUserInfo(): UserInfo?
+    suspend fun deleteUserIfo() : Boolean
 }

@@ -4,6 +4,7 @@ import com.sungil.database.SharedPreference
 import com.sungil.database.room.dao.TokenDao
 import com.sungil.database.room.dao.UserInfoDao
 import com.sungil.database.room.model.Token
+import com.sungil.database.room.model.UserInfo
 import com.sungil.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
@@ -116,10 +117,19 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserInfo(): com.sungil.domain.model.UserInfo? {
-        return userInfoDao.getAll().firstOrNull()?.toDomain()
+        return userInfoDao.getUserInfo()?.toDomain()
     }
 
-    private fun com.sungil.database.room.model.UserInfo.toDomain(): com.sungil.domain.model.UserInfo {
+    override suspend fun deleteUserIfo(): Boolean {
+        return try{
+            userInfoDao.deleteAll()
+            true
+        }catch (e : Exception){
+            false
+        }
+    }
+
+    private fun UserInfo.toDomain(): com.sungil.domain.model.UserInfo {
         return com.sungil.domain.model.UserInfo(
             userName = name,
             gender = gender,

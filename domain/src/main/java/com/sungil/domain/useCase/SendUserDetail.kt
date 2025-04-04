@@ -52,6 +52,10 @@ class SendUserDetail @Inject constructor(
         if (sendResult != 204) {
             return Result.Fail("network error")
         }
+        val getBeforeUserInfo = database.getUserInfo()
+        if(getBeforeUserInfo != null){
+            database.deleteUserIfo()
+        }
         val saveResult = database.saveUserInfo(
             servicePermission = param.servicePermission,
             privatePermission = param.privatePermission,
