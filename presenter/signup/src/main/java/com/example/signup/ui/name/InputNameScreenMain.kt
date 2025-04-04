@@ -81,6 +81,8 @@ internal fun InputNameScreenMain(
                     .padding(start = 17.dp, end = 16.dp)
             )
 
+            Spacer(modifier = Modifier.height(4.dp))
+
             CustomContentText(
                 stringResource(R.string.txt_name_content),
                 modifier = Modifier
