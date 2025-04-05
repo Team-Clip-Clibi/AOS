@@ -48,7 +48,7 @@ fun BottomNavigation(navController: NavHostController) {
                 )
             }
             .background(Color.White),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
         Row(
             modifier = Modifier
@@ -92,22 +92,23 @@ fun BottomNavItem(
             .width(64.dp)
             .height(56.dp)
             .noVisualFeedbackClickable(onClick),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
         Column(
             modifier = Modifier
                 .wrapContentSize()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
             Icon(
                 painter = painterResource(id = item.icon),
                 contentDescription = stringResource(id = item.title),
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(24.dp),
                 tint = contentColor
             )
             Spacer(modifier = Modifier.height(4.dp))
+
             Text(
                 text = stringResource(id = item.title),
                 color = contentColor,

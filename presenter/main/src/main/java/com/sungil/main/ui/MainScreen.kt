@@ -18,7 +18,7 @@ fun MainScreenView(viewModel: MainViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) },
-        modifier = Modifier.navigationBarsPadding()
+//        modifier = Modifier.navigationBarsPadding()
     ) {
         Box(Modifier.padding(it)) {
             MainNavigation(navController = navController ,viewModel)
