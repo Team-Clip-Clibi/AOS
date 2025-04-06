@@ -37,7 +37,7 @@ fun BottomNavigation(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(102.dp)
+            .height(54.dp)
             .drawBehind {
                 val strokeWidth = 1.dp.toPx()
                 drawLine(
