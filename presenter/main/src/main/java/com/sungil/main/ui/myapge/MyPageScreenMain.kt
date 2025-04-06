@@ -53,7 +53,7 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewM
             .fillMaxSize()
             .background(Color(0xFFF7F7F7))
             .padding(
-                top = paddingValues.calculateTopPadding() + 32.dp,
+                top = paddingValues.calculateTopPadding() + 12.dp,
                 bottom = 30.dp
             )
     ) {
@@ -68,7 +68,7 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewM
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, shape = RoundedCornerShape(12.dp))
+                    .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(12.dp))
                     .height(171.dp)
             ) {
                 Column(
@@ -116,7 +116,7 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewM
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // 항목들
             MyPageItem(
