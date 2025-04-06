@@ -84,6 +84,7 @@ internal fun LoginScreen(
                     textColor = Color(0xFF171717),
                     maxLine = 1
                 )
+                Spacer(modifier = Modifier.height(2.dp))
 
                 CustomText(
                     text = stringResource(R.string.txt_login_content),
