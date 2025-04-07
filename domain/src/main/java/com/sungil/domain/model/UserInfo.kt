@@ -10,5 +10,5 @@ data class UserInfo(
     val county: String,
     val marketingPermission: Boolean,
     val nickName: String,
-    val phoneNumber: String,
+    var phoneNumber: String,
 )
