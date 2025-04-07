@@ -49,16 +49,19 @@ class GetUserInfo @Inject constructor(
         apiData.phoneNumber = apiData.phoneNumber.reMakePhoneNumber()
         return Result.Success(apiData)
     }
-    fun String.reMakePhoneNumber(): String {
+
+    private fun String.reMakePhoneNumber(): String {
         val digits = this.filter { it.isDigit() }
 
         return when {
             digits.startsWith("011") && digits.length == 10 -> {
                 "${digits.substring(0, 3)}-${digits.substring(3, 6)}-${digits.substring(6, 10)}"
             }
+
             digits.length == 11 -> {
                 "${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7, 11)}"
             }
+
             else -> this // 포맷 안 맞으면 원본 반환
         }
     }
