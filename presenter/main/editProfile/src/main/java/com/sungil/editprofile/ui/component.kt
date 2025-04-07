@@ -1,4 +1,4 @@
-package com.sungil.editprofile
+package com.sungil.editprofile.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
+import com.sungil.editprofile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

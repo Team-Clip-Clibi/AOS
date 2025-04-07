@@ -1,4 +1,4 @@
-package com.sungil.editprofile
+package com.sungil.editprofile.ui.editProfile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,9 +16,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sungil.editprofile.R
+import com.sungil.editprofile.ui.CustomLittleTitleText
+import com.sungil.editprofile.ui.CustomProfileItemWithImage
+import com.sungil.editprofile.ui.CustomProfileItemWithMore
+import com.sungil.editprofile.ui.CustomTwoText
+import com.sungil.editprofile.ui.GraySpacer
 
 @Composable
 internal fun EditProfileMainView(
@@ -42,7 +47,7 @@ internal fun EditProfileMainView(
                     bottom = 20.dp
                 )
         ) {
-            // ✳️ 기본 정보 섹션
+
             Section {
                 CustomLittleTitleText(
                     text = stringResource(R.string.txt_title_default_info),
@@ -82,7 +87,7 @@ internal fun EditProfileMainView(
 
             GraySpacer()
 
-            // ✳️ 한마디 섹션
+
             Section {
                 CustomLittleTitleText(
                     text = stringResource(R.string.txt_title_oneThing_info),
@@ -124,7 +129,7 @@ internal fun EditProfileMainView(
 
             GraySpacer()
 
-            // ✳️ 계정 섹션
+
             Section {
                 CustomLittleTitleText(
                     text = stringResource(R.string.txt_title_account),
