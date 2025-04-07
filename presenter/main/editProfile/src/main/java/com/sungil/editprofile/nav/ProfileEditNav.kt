@@ -5,10 +5,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sungil.editprofile.NAV_PROFILE_MAIN
+import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.ui.editProfile.EditProfileView
 
 @Composable
-internal fun ProfileEditNav() {
+internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
     val navController = rememberNavController()
 
     NavHost(
@@ -17,6 +18,7 @@ internal fun ProfileEditNav() {
     ) {
         composable(NAV_PROFILE_MAIN) {
             EditProfileView(
+                viewModel = viewModel,
                 actionButtonClick = {},
                 buttonClick = {}
             )

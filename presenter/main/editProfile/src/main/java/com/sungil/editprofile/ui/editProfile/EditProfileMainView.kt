@@ -14,10 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.ui.CustomLittleTitleText
 import com.sungil.editprofile.ui.CustomProfileItemWithImage
@@ -29,8 +33,15 @@ import com.sungil.editprofile.ui.GraySpacer
 internal fun EditProfileMainView(
     paddingValues: PaddingValues,
     buttonClick: () -> Unit,
+    viewModel: ProfileEditViewModel
 ) {
     val scrollState = rememberScrollState()
+    val state by viewModel.editProfileState.collectAsState()
+    val userInfo = (state as? ProfileEditViewModel.EditProfileState.Success)?.data
+
+    val name = userInfo?.name.orEmpty()
+    val nickName = userInfo?.nickName.orEmpty()
+    val phoneNumber = userInfo?.phoneNumber.orEmpty()
 
     Box(
         modifier = Modifier
@@ -57,7 +68,7 @@ internal fun EditProfileMainView(
                 CustomTwoText(
                     firstText = stringResource(R.string.txt_name),
                     firstTextColor = 0xFF171717,
-                    subText = "테스트",
+                    subText = name,
                     subTextColor = 0xFF171717
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -72,14 +83,14 @@ internal fun EditProfileMainView(
                 CustomTwoText(
                     firstText = stringResource(R.string.txt_phoneNumber),
                     firstTextColor = 0xFF171717,
-                    subText = "010-1234-4532",
+                    subText = phoneNumber,
                     subTextColor = 0xFF171717
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_nickName),
                     textColor = 0xFF171717,
-                    subTitle = "AOS",
+                    subTitle = nickName,
                     subTitleColor = 0xFF171717,
                     buttonClick = buttonClick
                 )

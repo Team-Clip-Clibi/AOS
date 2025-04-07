@@ -3,11 +3,13 @@ package com.sungil.editprofile.ui.editProfile
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.ui.CustomTopBar
 
 @Composable
 internal fun EditProfileView(
+    viewModel: ProfileEditViewModel,
     actionButtonClick: () -> Unit,
     buttonClick: () -> Unit,
 ) {
@@ -19,6 +21,6 @@ internal fun EditProfileView(
             )
         }
     ) { paddingValues ->
-        EditProfileMainView(paddingValues, buttonClick = {})
+        EditProfileMainView(paddingValues, buttonClick = {}, viewModel = viewModel)
     }
 }
