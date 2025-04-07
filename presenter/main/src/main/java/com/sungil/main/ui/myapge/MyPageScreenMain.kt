@@ -43,7 +43,7 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewM
     val userState by viewModel.userState.collectAsState()
 
     val userName = when (userState) {
-        is MainViewModel.UserUiState.Success -> (userState as MainViewModel.UserUiState.Success).userData.userName
+        is MainViewModel.UserUiState.Success -> (userState as MainViewModel.UserUiState.Success).userData.nickName
         is MainViewModel.UserUiState.Loading -> ""
         is MainViewModel.UserUiState.Error -> "오류 발생"
     }
