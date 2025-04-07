@@ -102,6 +102,7 @@ dependencies {
     implementation(project(":presenter:login"))
     implementation(project(":presenter:signup"))
     implementation(project(":presenter:main"))
+    implementation(project(":presenter:main:editProfile"))
     implementation(project(":kakao"))
     implementation(project(":domain"))
     implementation(project(":database"))

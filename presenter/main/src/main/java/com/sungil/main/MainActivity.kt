@@ -11,14 +11,17 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel : MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     @Inject
     lateinit var router: Router
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreenView(viewModel)
+            MainScreenView(viewModel, profileButtonClick = {
+                router.navigation(NAV_EDIT_PROFILE)
+            })
         }
     }
+
 }

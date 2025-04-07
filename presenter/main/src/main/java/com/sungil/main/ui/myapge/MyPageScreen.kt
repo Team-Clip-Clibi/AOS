@@ -8,7 +8,7 @@ import com.sungil.main.R
 import com.sungil.main.component.CustomMyPageAppBar
 
 @Composable
-internal fun MyPageScreen(viewModel: MainViewModel) {
+internal fun MyPageScreen(viewModel: MainViewModel, profileButtonEditClick: () -> Unit) {
     Scaffold(
         topBar = {
             CustomMyPageAppBar(
@@ -16,6 +16,6 @@ internal fun MyPageScreen(viewModel: MainViewModel) {
             )
         }
     ) { innerPadding ->
-        MyPageScreenMain(innerPadding ,viewModel)
+        MyPageScreenMain(innerPadding, viewModel, profileButtonEditClick)
     }
 }

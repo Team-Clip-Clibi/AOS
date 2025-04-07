@@ -14,14 +14,14 @@ import com.sungil.main.nav.MainNavigation
 
 
 @Composable
-fun MainScreenView(viewModel: MainViewModel) {
+fun MainScreenView(viewModel: MainViewModel, profileButtonClick: () -> Unit) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigation(navController = navController) },
         modifier = Modifier.navigationBarsPadding()
     ) {
         Box(Modifier.padding(it)) {
-            MainNavigation(navController = navController ,viewModel)
+            MainNavigation(navController = navController, viewModel, profileButtonClick)
         }
     }
 }

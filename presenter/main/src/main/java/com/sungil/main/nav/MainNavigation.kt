@@ -11,7 +11,11 @@ import com.sungil.main.ui.home.HomeScreen
 import com.sungil.main.ui.myapge.MyPageScreen
 
 @Composable
-fun MainNavigation(navController: NavHostController, viewModel: MainViewModel) {
+fun MainNavigation(
+    navController: NavHostController,
+    viewModel: MainViewModel,
+    profileButtonClick: () -> Unit,
+) {
     NavHost(navController = navController, startDestination = Screen.Home.screenRoute) {
         composable(Screen.Home.screenRoute) {
             HomeScreen()
@@ -20,7 +24,7 @@ fun MainNavigation(navController: NavHostController, viewModel: MainViewModel) {
             CalendarScreen()
         }
         composable(Screen.MyPage.screenRoute) {
-            MyPageScreen(viewModel)
+            MyPageScreen(viewModel, profileButtonClick)
         }
     }
 }

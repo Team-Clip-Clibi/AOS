@@ -17,3 +17,4 @@ val bottomNavItems = listOf(
 const val NAV_HOME = "home"
 const val NAV_CALENDAR = "calendar"
 const val NAV_MY = "my"
+const val NAV_EDIT_PROFILE = "MainEditProfile"

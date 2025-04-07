@@ -38,7 +38,7 @@ import com.sungil.main.component.CustomMyPageButton
 import com.sungil.main.component.MyPageItem
 
 @Composable
-internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewModel) {
+internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewModel , profileEditButton : () -> Unit) {
 
     val userState by viewModel.userState.collectAsState()
 
@@ -111,7 +111,7 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewM
                         text = stringResource(R.string.btn_myPage_edit_profile),
                         color = 0xFFEFEFEF,
                         textColor = 0xFF171717,
-                        onClick = {}
+                        onClick = {profileEditButton()}
                     )
                 }
             }

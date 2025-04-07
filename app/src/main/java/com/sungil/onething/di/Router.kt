@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.signup.SignUpActivity
 import com.sungil.domain.model.Router
+import com.sungil.editprofile.ProfileEditMainActivity
 import com.sungil.kakao.com.kakao.sdk.auth.AuthCodeHandlerActivity
 import com.sungil.login.LoginActivity
 import com.sungil.main.MainActivity
@@ -34,6 +35,13 @@ class Router(private val context: Context) : Router {
 
             "Main" -> {
                 val intent = Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                context.startActivity(intent)
+            }
+
+            "MainEditProfile" -> {
+                val intent = Intent(context, ProfileEditMainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
