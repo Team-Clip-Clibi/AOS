@@ -29,7 +29,7 @@ class CheckNickName @Inject constructor(
             deviceRepo.requestVibrate()
             return Result.Fail("to long")
         }
-        if (name.length < 2) {
+        if (name.length <= 2) {
             deviceRepo.requestVibrate()
             return Result.Fail("to short")
         }
