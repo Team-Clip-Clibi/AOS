@@ -260,7 +260,6 @@ fun CustomChangeDataTextField(
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .border(width = 1.dp , color = Color(0xFF989898))
             .height(48.dp)
             .padding(vertical = 10.dp),
         value = beforeText,
@@ -272,12 +271,13 @@ fun CustomChangeDataTextField(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
             disabledContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            focusedIndicatorColor = Color(0xFF989898),   // 아래 줄 색상
+            unfocusedIndicatorColor = Color(0xFF989898),
+            disabledIndicatorColor = Color(0xFF989898)
         )
     )
 }
+
 
 @Composable
 fun CustomUnderTextFieldText(text: String, color: Color) {
