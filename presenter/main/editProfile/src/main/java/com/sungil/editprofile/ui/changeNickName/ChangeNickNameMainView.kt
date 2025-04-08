@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,7 +38,7 @@ internal fun ChangeNickNameMainView(
     val state by viewModel.editProfileState.collectAsState()
     val userData = (state as? ProfileEditViewModel.EditProfileState.Success)?.data
     var nicknameValidationMessage by remember { mutableIntStateOf(R.string.txt_nick_length) }
-
+    var nickname by remember { mutableStateOf(userData?.nickName ?: "오류") }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,7 +54,7 @@ internal fun ChangeNickNameMainView(
                 .padding(start = 17.dp, end = 16.dp)
         ) {
             CustomChangeDataTextField(
-                beforeText = userData?.nickName ?: "오류",
+                beforeText = nickname,
                 inputType = KeyboardType.Text,
                 onValueChange = { input ->
                     viewModel.changeNickName(input)

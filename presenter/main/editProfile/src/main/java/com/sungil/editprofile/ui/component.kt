@@ -269,15 +269,16 @@ fun CustomChangeDataTextField(
         keyboardOptions = KeyboardOptions(keyboardType = inputType),
         singleLine = true,
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color(0xFF171717),
-            unfocusedContainerColor = Color(0xFF171717),
-            disabledContainerColor = Color(0xFF171717),
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
         )
     )
 }
+
 @Composable
 fun CustomUnderTextFieldText(text: String, color: Color) {
     Text(

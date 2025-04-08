@@ -21,6 +21,10 @@ internal fun ChangeNickNameView(
             )
         }
     ) { paddingValues ->
-
+        ChangeNickNameMainView(
+            paddingValues = paddingValues,
+            viewModel = viewModel,
+            finishedView = { changeDataFinished() }
+        )
     }
 }

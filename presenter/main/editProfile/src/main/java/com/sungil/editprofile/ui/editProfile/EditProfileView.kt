@@ -21,6 +21,6 @@ internal fun EditProfileView(
             )
         }
     ) { paddingValues ->
-        EditProfileMainView(paddingValues, buttonClick = {}, viewModel = viewModel)
+        EditProfileMainView(paddingValues, buttonClick = buttonClick, viewModel = viewModel)
     }
 }
