@@ -13,15 +13,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
@@ -57,6 +64,42 @@ fun CustomTopBar(
             )
         },
         actions = {},
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.White
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomChangeDataAppBar(
+    text : String,
+    onBackClick: () -> Unit
+){
+    CenterAlignedTopAppBar(
+        modifier = Modifier
+            .border(width = 1.dp, color = Color(0xFFEFEFEF))
+            .fillMaxWidth()
+            .padding(start = 5.dp, end = 5.dp),
+        title = {
+            Text(
+                text = text,
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center
+            )
+        },
+        navigationIcon = {},
+        actions = {
+            Image(
+                painter = painterResource(id=  R.drawable.ic_close_x),
+                contentDescription = "화면닫기",
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(24.dp)
+                    .clickable { onBackClick() }
+            )
+        },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.White
         )
@@ -206,4 +249,84 @@ fun GraySpacer() {
             .height(8.dp)
             .background(Color(0xFFEFEFEF))
     )
+}
+
+@Composable
+fun CustomChangeDataTextField(
+    beforeText: String,
+    onValueChange: (String) -> Unit,
+    inputType: KeyboardType,
+) {
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(width = 1.dp , color = Color(0xFF989898))
+            .height(48.dp)
+            .padding(vertical = 10.dp),
+        value = beforeText,
+        onValueChange = onValueChange,
+        textStyle = AppTextStyles.BODY_14_20_MEDIUM,
+        keyboardOptions = KeyboardOptions(keyboardType = inputType),
+        singleLine = true,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color(0xFF171717),
+            unfocusedContainerColor = Color(0xFF171717),
+            disabledContainerColor = Color(0xFF171717),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+@Composable
+fun CustomUnderTextFieldText(text: String, color: Color) {
+    Text(
+        text = text,
+        style = AppTextStyles.CAPTION_12_18_SEMI,
+        color = color
+    )
+}
+@Composable
+fun CustomButton(
+    text: String,
+    onclick: () -> Unit,
+    enable: Boolean,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .padding(
+                start = 17.dp,
+                end = 17.dp
+            ),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+
+            when (enable) {
+                true -> {
+                    Color(0xFF6700CE)
+                }
+
+                false -> {
+                    Color(0xFFEFEFEF)
+                }
+            }
+
+        ),
+        onClick = { onclick() },
+        enabled = enable
+    ) {
+        Text(
+            text = text,
+            style = AppTextStyles.TITLE_20_28_SEMI,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+            color = if (enable) {
+                Color(0xFFFFFFFF)
+            } else {
+                Color(0xFF171717)
+            }
+        )
+    }
 }

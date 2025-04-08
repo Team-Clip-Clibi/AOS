@@ -38,6 +38,14 @@ class ProfileEditViewModel @Inject constructor(private val userInfo: GetUserInfo
         }
     }
 
+    fun changeNickName(newNickName: String) {
+        val currentState = _editProfileState.value
+        if (currentState is EditProfileState.Success) {
+            val updatedUserInfo = currentState.data.copy(nickName = newNickName)
+            _editProfileState.value = EditProfileState.Success(updatedUserInfo)
+        }
+    }
+
     sealed interface EditProfileState {
         data object Loading : EditProfileState
         data class Success(val data: UserInfo) : EditProfileState
