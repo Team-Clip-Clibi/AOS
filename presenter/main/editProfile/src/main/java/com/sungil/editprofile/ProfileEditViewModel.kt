@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.ActivateHaptic
 import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetUserInfo
+import com.sungil.domain.useCase.SaveChangeProfileData
+import com.sungil.domain.useCase.UpdateJob
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +20,9 @@ import javax.inject.Inject
 class ProfileEditViewModel @Inject constructor(
     private val userInfo: GetUserInfo,
     private val changeNickName: CheckNickName,
-    private val haptic : ActivateHaptic
+    private val haptic: ActivateHaptic,
+    private val changeJob: UpdateJob,
+    private val saveData : SaveChangeProfileData
 ) : ViewModel() {
     private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
     val editProfileState: StateFlow<EditProfileState> = _editProfileState.asStateFlow()
@@ -29,6 +33,7 @@ class ProfileEditViewModel @Inject constructor(
     private val _jobSelectionError = MutableStateFlow(false)
     val jobSelectionError: StateFlow<Boolean> = _jobSelectionError.asStateFlow()
     private var _initialJobSelection: List<JOB> = emptyList()
+
     init {
         getUserInfo()
     }
@@ -40,10 +45,12 @@ class ProfileEditViewModel @Inject constructor(
                 _jobSelectionError.value = false
                 current - job
             }
+
             current.size < 2 -> {
                 _jobSelectionError.value = false
                 current + job
             }
+
             else -> {
                 _jobSelectionError.value = true
                 viewModelScope.launch {
@@ -54,9 +61,11 @@ class ProfileEditViewModel @Inject constructor(
         }
         _selectedJobs.value = newList
     }
+
     fun isJobSelectionChanged(): Boolean {
         return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
     }
+
     private fun getUserInfo() {
         viewModelScope.launch {
             when (val result = userInfo.invoke()) {
@@ -74,7 +83,6 @@ class ProfileEditViewModel @Inject constructor(
                         diet = result.data.diet,
                         language = result.data.language
                     )
-                    val jobPair = data.job
                     _initialJobSelection = JOB.entries.filter {
                         it.displayName == data.job.first || it.displayName == data.job.second
                     }
@@ -110,8 +118,27 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun changeJob(){
+    fun changeJob() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = changeJob.invoke(
+                UpdateJob.Param(
+                    Pair(_selectedJobs.value[0].name, _selectedJobs.value[1].name)
+                )
+            )) {
+                is UpdateJob.Result.Fail -> {
+                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                }
 
+                is UpdateJob.Result.Success -> {
+                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                }
+            }
+        }
+    }
+
+
+    fun initFlow(){
+        _editProfileState.value = EditProfileState.Loading
     }
 
     sealed interface EditProfileState {

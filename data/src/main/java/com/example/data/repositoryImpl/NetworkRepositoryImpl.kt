@@ -7,6 +7,7 @@ import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
+import com.sungil.network.model.Job
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.RequestUserInfo
@@ -147,6 +148,11 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestUpdateFcmToken(accessToken: String): Int {
         val result = api.requestUpdateFcmToken(accessToken)
+        return result.code()
+    }
+
+    override suspend fun requestUpdateJob(accessToken: String, data: List<String>): Int {
+        val result = api.requestChangeJob(accessToken , Job(data))
         return result.code()
     }
 

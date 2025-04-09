@@ -41,7 +41,9 @@ interface NetworkRepository {
         isAllowNotify: Boolean,
     ): Pair<String?, String?>
 
-    suspend fun requestUserData(accessToken : String) : UserInfo?
+    suspend fun requestUserData(accessToken: String): UserInfo?
 
-    suspend fun requestUpdateFcmToken(accessToken : String) : Int
+    suspend fun requestUpdateFcmToken(accessToken: String): Int
+
+    suspend fun requestUpdateJob(accessToken: String, data: List<String>): Int
 }
