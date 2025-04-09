@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -26,7 +27,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -328,6 +331,28 @@ fun CustomButton(
             } else {
                 Color(0xFF171717)
             }
+        )
+    }
+}
+
+@Composable
+fun CustomSnackBar(data: SnackbarData) {
+    Row(
+        modifier = Modifier
+            .width(360.dp)
+            .height(48.dp)
+            .background(color = Color(0xFF383838), shape = RoundedCornerShape(size = 8.dp))
+            .padding(start = 16.dp, end = 16.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_message),
+            contentDescription = "message",
+            contentScale = ContentScale.None
+        )
+        Text(
+            text = data.visuals.message,
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = Color(0xFFFFFFFF)
         )
     }
 }

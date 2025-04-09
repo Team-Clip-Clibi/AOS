@@ -22,6 +22,8 @@
     <string name="txt_nick_length_over">*최대 8자까지 가능해요.</string>
     <string name="txt_nick_length_low">*2자 이상 입력해주세요</string>
     <string name="txt_nick_no_special">*특수문자를 사용할 수 없습니다.</string>
+    <string name="txt_network_error">네트워크 에러</string>
+    <string name="txt_already_use">사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해 주세요.</string>
     <string name="txt_nick_name_okay">사용 가능한 닉네임입니다.</string>
 
 
