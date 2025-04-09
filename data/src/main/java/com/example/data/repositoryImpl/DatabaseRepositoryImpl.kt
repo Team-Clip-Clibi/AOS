@@ -50,8 +50,6 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveUserInfo(
-        servicePermission: Boolean,
-        privatePermission: Boolean,
         marketingPermission: Boolean,
         name: String,
         nickName: String,
@@ -63,11 +61,13 @@ class DatabaseRepositoryImpl @Inject constructor(
         gender: String,
         platform: String,
         phoneNumber: String,
+        jobList: List<String>,
+        loveState: List<String>,
+        diet: String,
+        language: String,
     ): Boolean {
-        val userInfo = com.sungil.database.room.model.UserInfo(
+        val userInfo =UserInfo(
             name = name,
-            termServicePermission = servicePermission,
-            privatePermission = privatePermission,
             marketingPermission = marketingPermission,
             nickName = nickName,
             birtYear = birthYear,
@@ -77,7 +77,11 @@ class DatabaseRepositoryImpl @Inject constructor(
             area = area,
             gender = gender,
             platform = platform,
-            phoneNumber = phoneNumber
+            phoneNumber = phoneNumber,
+            job = jobList,
+            loveState = loveState,
+            diet = diet,
+            language = language
         )
         try {
             userInfoDao.insert(userInfo)

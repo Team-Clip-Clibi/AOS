@@ -181,10 +181,6 @@ class SignUpViewModel @Inject constructor(
                     county = _userInfoState.value.areaRealValue,
                     cityDisplayName = _userInfoState.value.city,
                     countyDisplayName = _userInfoState.value.area,
-                    servicePermission = _termItem.value.firstOrNull { it.termName == "servicePermission" }?.checked
-                        ?: false,
-                    privatePermission = _termItem.value.firstOrNull { it.termName == "privatePermission" }?.checked
-                        ?: false,
                     marketingPermission = _termItem.value.firstOrNull { it.termName == "marketingPermission" }?.checked
                         ?: false,
                     name = _userInfoState.value.name,

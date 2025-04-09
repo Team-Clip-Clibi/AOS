@@ -12,8 +12,6 @@ interface DatabaseRepository {
     suspend fun getFcmToken(): String
     suspend fun updateFcmToken(data: String): Boolean
     suspend fun saveUserInfo(
-        servicePermission: Boolean,
-        privatePermission: Boolean,
         marketingPermission: Boolean,
         name: String,
         nickName: String,
@@ -25,6 +23,10 @@ interface DatabaseRepository {
         gender: String,
         platform: String,
         phoneNumber: String,
+        jobList: List<String>,
+        loveState: List<String>,
+        diet: String,
+        language: String,
     ): Boolean
 
     suspend fun getNotifyState(): Boolean

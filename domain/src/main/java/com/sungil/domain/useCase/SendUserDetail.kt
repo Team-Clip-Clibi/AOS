@@ -20,8 +20,6 @@ class SendUserDetail @Inject constructor(
         val county: String,
         val cityDisplayName: String,
         val countyDisplayName: String,
-        val servicePermission: Boolean,
-        val privatePermission: Boolean,
         val marketingPermission: Boolean,
         val name: String,
         val nickName: String,
@@ -63,8 +61,6 @@ class SendUserDetail @Inject constructor(
             database.deleteUserIfo()
         }
         val saveResult = database.saveUserInfo(
-            servicePermission = param.servicePermission,
-            privatePermission = param.privatePermission,
             marketingPermission = param.marketingPermission,
             name = param.name,
             nickName = param.nickName,
@@ -75,7 +71,11 @@ class SendUserDetail @Inject constructor(
             area = param.county,
             gender = param.gender,
             platform = "KAKAO",
-            phoneNumber = param.phoneNumber
+            phoneNumber = param.phoneNumber,
+            jobList = listOf("NONE" ,"NONE"),
+            loveState = listOf("NONE" , "NONE"),
+            diet = "NONE",
+            language = "KOREAN"
         )
         if (!saveResult) {
             return Result.Fail("Save Fail")
