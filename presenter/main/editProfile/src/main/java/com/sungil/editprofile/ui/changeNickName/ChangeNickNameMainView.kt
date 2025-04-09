@@ -33,6 +33,7 @@ import com.sungil.editprofile.ERROR_SPECIAL
 import com.sungil.editprofile.ERROR_TOKEN_NULL
 import com.sungil.editprofile.ERROR_TO_LONG
 import com.sungil.editprofile.ERROR_TO_SHORT
+import com.sungil.editprofile.ERROR_USER_TOKEN_NLL
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.ui.CustomButton
@@ -44,7 +45,7 @@ internal fun ChangeNickNameMainView(
     paddingValues: PaddingValues,
     viewModel: ProfileEditViewModel,
     finishedView: () -> Unit,
-    snackBarHost : SnackbarHostState
+    snackBarHost: SnackbarHostState,
 ) {
     val state by viewModel.editProfileState.collectAsState()
     val userData = (state as? ProfileEditViewModel.EditProfileState.Success)?.data
@@ -62,37 +63,44 @@ internal fun ChangeNickNameMainView(
         viewModel.editProfileState.collect { state ->
             when (state) {
                 is ProfileEditViewModel.EditProfileState.Error -> {
-                   when (state.message) {
+                    when (state.message) {
                         ERROR_TO_LONG -> {
                             nicknameValidationMessage = R.string.txt_nick_length_over
                         }
+
                         ERROR_TO_SHORT -> {
-                            nicknameValidationMessage =R.string.txt_nick_length_low
+                            nicknameValidationMessage = R.string.txt_nick_length_low
                         }
+
                         ERROR_SPECIAL -> {
-                            nicknameValidationMessage =R.string.txt_nick_no_special
+                            nicknameValidationMessage = R.string.txt_nick_no_special
                         }
-                        ERROR_NETWORK, ERROR_TOKEN_NULL -> {
+
+                        ERROR_NETWORK, ERROR_TOKEN_NULL, ERROR_USER_TOKEN_NLL -> {
                             snackBarHost.showSnackbar(
                                 message = context.getString(R.string.txt_network_error),
                                 duration = SnackbarDuration.Short
                             )
                         }
+
                         ERROR_ALREADY_USE -> {
                             snackBarHost.showSnackbar(
                                 message = context.getString(R.string.txt_already_use),
                                 duration = SnackbarDuration.Short
                             )
                         }
+
                         else -> throw IllegalArgumentException("Unsupported error: ${state.message}")
                     }
                 }
+
                 is ProfileEditViewModel.EditProfileState.SuccessToChange -> {
                     snackBarHost.showSnackbar(
                         message = context.getString(R.string.txt_message_okay),
                         duration = SnackbarDuration.Short
                     )
                 }
+
                 else -> Unit
             }
         }
