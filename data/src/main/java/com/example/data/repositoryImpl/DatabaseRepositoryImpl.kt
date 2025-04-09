@@ -78,8 +78,10 @@ class DatabaseRepositoryImpl @Inject constructor(
             gender = gender,
             platform = platform,
             phoneNumber = phoneNumber,
-            job = jobList,
-            loveState = loveState,
+            firstJob = jobList.first,
+            secondJob = jobList.second,
+            myLoveState = loveState.first,
+            wantLoveState = loveState.second,
             diet = diet,
             language = language
         )
@@ -145,8 +147,8 @@ class DatabaseRepositoryImpl @Inject constructor(
             marketingPermission = marketingPermission,
             nickName = nickName,
             phoneNumber = phoneNumber,
-            job = job,
-            loveState = loveState,
+            job = Pair(firstJob , secondJob),
+            loveState = Pair(myLoveState , wantLoveState),
             diet = diet,
             language = language
         )

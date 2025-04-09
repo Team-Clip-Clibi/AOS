@@ -161,7 +161,11 @@ class NetworkRepositoryImpl @Inject constructor(
             county = "JUNG_GU",
             marketingPermission = false,
             nickName = nickname,
-            phoneNumber = phoneNumber
+            phoneNumber = phoneNumber,
+            job = Pair("NONE" ,"NONE"),
+            loveState = Pair("NONE" , "NONE"),
+            diet = "NONE",
+            language = "KOREAN"
         )
     }
 }

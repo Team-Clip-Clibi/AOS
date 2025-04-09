@@ -20,6 +20,12 @@ class GetUserInfo @Inject constructor(
         val userData = database.getUserInfo()
         if (userData != null) {
             userData.phoneNumber = userData.phoneNumber.reMakePhoneNumber()
+            val jobList = if (userData.job.first == "NONE") {
+                Pair("학생", "IT")
+            } else {
+                userData.job
+            }
+            userData.job = jobList
             return Result.Success(userData)
         }
         val token = database.getToken()
@@ -48,6 +54,12 @@ class GetUserInfo @Inject constructor(
         if (!saveResult) {
             return Result.Fail("save Error")
         }
+        val jobList = if (apiData.job.first == "NONE") {
+            Pair("학생", "IT")
+        } else {
+            apiData.job
+        }
+        apiData.job = jobList
         apiData.phoneNumber = apiData.phoneNumber.reMakePhoneNumber()
         return Result.Success(apiData)
     }
