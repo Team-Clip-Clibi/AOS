@@ -2,6 +2,7 @@ package com.sungil.editprofile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sungil.domain.useCase.ActivateHaptic
 import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetUserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class ProfileEditViewModel @Inject constructor(
     private val userInfo: GetUserInfo,
     private val changeNickName: CheckNickName,
+    private val haptic : ActivateHaptic
 ) : ViewModel() {
     private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
     val editProfileState: StateFlow<EditProfileState> = _editProfileState.asStateFlow()
@@ -44,6 +46,9 @@ class ProfileEditViewModel @Inject constructor(
             }
             else -> {
                 _jobSelectionError.value = true
+                viewModelScope.launch {
+                    haptic.invoke()
+                }
                 return
             }
         }
