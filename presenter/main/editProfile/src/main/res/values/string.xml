@@ -25,7 +25,7 @@
     <string name="txt_network_error">네트워크 에러</string>
     <string name="txt_already_use">사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해 주세요.</string>
     <string name="txt_nick_name_okay">사용 가능한 닉네임입니다.</string>
-
+    <string name="txt_message_okay">닉네임 변경 완료</string>
 
 <!--  btn  -->
     <string name="btn_finish">완료</string>

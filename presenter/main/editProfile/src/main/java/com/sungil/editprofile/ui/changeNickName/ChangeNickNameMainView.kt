@@ -88,7 +88,10 @@ internal fun ChangeNickNameMainView(
                     }
                 }
                 is ProfileEditViewModel.EditProfileState.SuccessToChange -> {
-                    finishedView()
+                    snackBarHost.showSnackbar(
+                        message = context.getString(R.string.txt_message_okay),
+                        duration = SnackbarDuration.Short
+                    )
                 }
                 else -> Unit
             }
