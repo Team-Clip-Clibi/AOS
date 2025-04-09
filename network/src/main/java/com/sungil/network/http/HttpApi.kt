@@ -2,6 +2,7 @@ package com.sungil.network.http
 
 import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
+import com.sungil.network.model.Job
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.RequestUserInfo
@@ -103,4 +104,14 @@ interface HttpApi {
     suspend fun requestUpdateFcmToken(
         @Header("Authorization") bearerToken: String,
     ) : Response<Unit>
+
+    /**
+     * 직업 업데이트
+     */
+    @PATCH(BuildConfig.CHANGE_JOB_URL)
+    suspend fun requestChangeJob(
+        @Header("Authorization") bearerToken: String,
+        @Body job : Job
+    ) : Response<Unit>
+
 }
