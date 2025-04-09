@@ -261,7 +261,7 @@ fun CustomChangeDataTextField(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .padding(vertical = 10.dp),
+            ,
         value = beforeText,
         onValueChange = onValueChange,
         textStyle = AppTextStyles.BODY_14_20_MEDIUM,
