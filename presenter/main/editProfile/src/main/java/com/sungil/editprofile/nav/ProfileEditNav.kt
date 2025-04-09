@@ -5,12 +5,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sungil.editprofile.NAV_CHANGE_JOB
+import com.sungil.editprofile.NAV_CHANGE_LOVE
 import com.sungil.editprofile.NAV_CHANGE_NICK_NAME
 import com.sungil.editprofile.NAV_PROFILE_MAIN
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.ui.changeJob.ChangeJobView
 import com.sungil.editprofile.ui.changeNickName.ChangeNickNameView
 import com.sungil.editprofile.ui.editProfile.EditProfileView
+import com.sungil.editprofile.ui.loveState.LoveStateView
 
 @Composable
 internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
@@ -29,6 +31,9 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
                 },
                 editJobClick = {
                     navController.navigate(NAV_CHANGE_JOB)
+                },
+                editLoveClick = {
+                    navController.navigate(NAV_CHANGE_LOVE)
                 }
             )
         }
@@ -52,5 +57,17 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
                 }
             )
         }
+        composable(NAV_CHANGE_LOVE) {
+            LoveStateView(
+                viewModel = viewModel,
+                onBackClick = {
+                    navController.navigateUp()
+                },
+                changeDataFinished = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
     }
 }

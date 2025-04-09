@@ -3,6 +3,7 @@ package com.sungil.editprofile
 const val NAV_PROFILE_MAIN = "profileMain"
 const val NAV_CHANGE_NICK_NAME = "changeNickName"
 const val NAV_CHANGE_JOB = "changeJob"
+const val NAV_CHANGE_LOVE = "changeLove"
 const val ERROR_TO_LONG = "to long"
 const val ERROR_TO_SHORT = "to short"
 const val ERROR_SPECIAL = "no special"
@@ -22,4 +23,16 @@ enum class JOB(val displayName : String){
     BUSINESS("사업"),
     POLITICS("정치"),
     ETC("기타")
+}
+
+enum class LOVE(val displayName: String){
+    SINGLE("싱글"),
+    TAKEN("연애중"),
+    MARRIED("기혼"),
+    NO_SHOW("밝히고 싶지 않아요")
+}
+
+enum class MEETING(val displayName: String){
+    SAME("같은 상태인 사람만 만나고 싶어요"),
+    OKAY("연애 상태는 신경쓰지 않아도 괜찮아요")
 }

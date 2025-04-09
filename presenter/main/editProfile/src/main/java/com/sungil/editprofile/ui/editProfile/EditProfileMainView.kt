@@ -33,7 +33,8 @@ internal fun EditProfileMainView(
     paddingValues: PaddingValues,
     editNickNameClick: () -> Unit,
     editJobClick : () -> Unit,
-    viewModel: ProfileEditViewModel
+    viewModel: ProfileEditViewModel,
+    loveClick : () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val state by viewModel.editProfileState.collectAsState()
@@ -118,7 +119,7 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = editNickNameClick
+                    buttonClick = loveClick
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(

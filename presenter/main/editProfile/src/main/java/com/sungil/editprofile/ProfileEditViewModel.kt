@@ -22,7 +22,7 @@ class ProfileEditViewModel @Inject constructor(
     private val changeNickName: CheckNickName,
     private val haptic: ActivateHaptic,
     private val changeJob: UpdateJob,
-    private val saveData : SaveChangeProfileData
+    private val saveData: SaveChangeProfileData,
 ) : ViewModel() {
     private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
     val editProfileState: StateFlow<EditProfileState> = _editProfileState.asStateFlow()
@@ -33,6 +33,12 @@ class ProfileEditViewModel @Inject constructor(
     private val _jobSelectionError = MutableStateFlow(false)
     val jobSelectionError: StateFlow<Boolean> = _jobSelectionError.asStateFlow()
     private var _initialJobSelection: List<JOB> = emptyList()
+
+    private val _loveState = MutableStateFlow(LoveState())
+    val loveState: StateFlow<LoveState> = _loveState
+
+    private var _loveButton = MutableStateFlow(false)
+    val loveButton : StateFlow<Boolean> = _loveButton
 
     init {
         getUserInfo()
@@ -136,8 +142,20 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
+    fun changeLoveState(data: LOVE) {
+        _loveState.update { it.copy(love = data) }
+        _loveButton.value = true
+    }
 
-    fun initFlow(){
+    fun changeMeetingState(data : MEETING){
+        _loveState.update { it.copy(Meeting = data) }
+        _loveButton.value = true
+    }
+
+    fun sendLoveState(){
+
+    }
+    fun initFlow() {
         _editProfileState.value = EditProfileState.Loading
     }
 
@@ -157,4 +175,9 @@ data class UserInfo(
     val loveState: Pair<String, String>,
     val diet: String,
     val language: String,
+)
+
+data class LoveState(
+    var love: LOVE = LOVE.SINGLE,
+    var Meeting: MEETING = MEETING.SAME,
 )

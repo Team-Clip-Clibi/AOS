@@ -31,6 +31,16 @@
     <string name="top_job_change_job">하는 일 변경</string>
     <string name="txt_job_select_two">최대 2개까지 선택할 수 있어요.</string>
 
+    <!--Love state-->
+    <string name="top_love_state">연애 상태 변경</string>
+    <string name="txt_love_single">싱글</string>
+    <string name="txt_love_ing">연애중</string>
+    <string name="txt_love_married">기혼</string>
+    <string name="txt_love_no_show">밝히고 싶지 않아요</string>
+    <string name="txt_love_matching">모임 매칭시 연애 상태 고려 여부</string>
+    <string name="txt_love_same">같은 상태인 사람만 만나고 싶어요</string>
+    <string name="txt_love_never_mind">연애 상태는 신경쓰지 않아도 괜찮아요</string>
+
     <!--  btn  -->
     <string name="btn_finish">완료</string>
 </resources>
