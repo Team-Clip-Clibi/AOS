@@ -17,8 +17,8 @@ data class UserInfo(
     val gender: String,
     val platform : String,
     val phoneNumber : String,
-    val job : List<String>,
-    val loveState : List<String>,
+    val job : Pair<String , String>,
+    val loveState : Pair<String , String>,
     val diet : String,
     val language : String
 )

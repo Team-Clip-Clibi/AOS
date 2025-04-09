@@ -61,8 +61,8 @@ class DatabaseRepositoryImpl @Inject constructor(
         gender: String,
         platform: String,
         phoneNumber: String,
-        jobList: List<String>,
-        loveState: List<String>,
+        jobList: Pair<String, String>,
+        loveState: Pair<String, String>,
         diet: String,
         language: String,
     ): Boolean {

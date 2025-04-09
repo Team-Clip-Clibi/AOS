@@ -72,8 +72,8 @@ class SendUserDetail @Inject constructor(
             gender = param.gender,
             platform = "KAKAO",
             phoneNumber = param.phoneNumber,
-            jobList = listOf("NONE" ,"NONE"),
-            loveState = listOf("NONE" , "NONE"),
+            jobList = Pair("NONE" ,"NONE"),
+            loveState = Pair("NONE" , "NONE"),
             diet = "NONE",
             language = "KOREAN"
         )
