@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,7 +31,8 @@ import com.sungil.editprofile.ui.GraySpacer
 @Composable
 internal fun EditProfileMainView(
     paddingValues: PaddingValues,
-    buttonClick: () -> Unit,
+    editNickNameClick: () -> Unit,
+    editJobClick : () -> Unit,
     viewModel: ProfileEditViewModel
 ) {
     val scrollState = rememberScrollState()
@@ -92,7 +92,7 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = nickName,
                     subTitleColor = 0xFF171717,
-                    buttonClick = buttonClick
+                    buttonClick = editNickNameClick
                 )
             }
 
@@ -110,7 +110,7 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = buttonClick
+                    buttonClick = editJobClick
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
@@ -118,7 +118,7 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = buttonClick
+                    buttonClick = editNickNameClick
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
@@ -126,7 +126,7 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = buttonClick
+                    buttonClick = editNickNameClick
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
@@ -134,7 +134,7 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = buttonClick
+                    buttonClick = editNickNameClick
                 )
             }
 
@@ -152,14 +152,14 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = buttonClick
+                    buttonClick = editNickNameClick
                 )
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_sign_out),
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = buttonClick
+                    buttonClick = editNickNameClick
                 )
             }
         }

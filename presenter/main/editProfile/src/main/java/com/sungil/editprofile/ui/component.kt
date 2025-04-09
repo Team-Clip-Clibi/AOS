@@ -1,5 +1,6 @@
 package com.sungil.editprofile.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,12 +14,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -34,7 +39,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.core.AppTextStyles
+import com.sungil.editprofile.JOB
 import com.sungil.editprofile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -359,5 +366,60 @@ fun CustomSnackBar(data: SnackbarData) {
             style = AppTextStyles.CAPTION_12_18_SEMI,
             color = Color(0xFFFFFFFF)
         )
+    }
+}
+
+@Composable
+fun CustomTitle1624Semi(
+    text: String,
+    color: Long,
+) {
+    Text(
+        text = text,
+        style = AppTextStyles.SUBTITLE_16_24_SEMI,
+        color = Color(color)
+    )
+}
+
+@Composable
+fun JobGridSelector(
+    selectedJobs: List<JOB>,
+    onJobToggle: (JOB) -> Unit,
+
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        items(JOB.entries.toList()) { job ->
+            val isSelected = selectedJobs.contains(job)
+
+            OutlinedButton(
+                onClick = {
+                    onJobToggle(job)
+                },
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = if (isSelected) Color(0xFFF9F0FF) else Color(0xFFF7F7F7),
+                    contentColor = Color.Black
+                ),
+                border = BorderStroke(
+                    1.dp,
+                    if (isSelected) Color(0xFFD3ADF7) else Color.Transparent
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .width(175.dp)
+                    .height(48.dp)
+
+            ) {
+                Text(
+                    text = job.displayName,
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = Color(0xFF171717)
+                )
+            }
+        }
     }
 }

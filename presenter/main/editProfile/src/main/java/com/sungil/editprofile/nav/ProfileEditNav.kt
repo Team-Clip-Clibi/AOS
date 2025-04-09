@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sungil.editprofile.NAV_CHANGE_JOB
 import com.sungil.editprofile.NAV_CHANGE_NICK_NAME
 import com.sungil.editprofile.NAV_PROFILE_MAIN
 import com.sungil.editprofile.ProfileEditViewModel
+import com.sungil.editprofile.ui.changeJob.ChangeJobView
 import com.sungil.editprofile.ui.changeNickName.ChangeNickNameView
 import com.sungil.editprofile.ui.editProfile.EditProfileView
 
@@ -22,8 +24,11 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
             EditProfileView(
                 viewModel = viewModel,
                 actionButtonClick = {},
-                buttonClick = {
+                editNickNameClick = {
                     navController.navigate(NAV_CHANGE_NICK_NAME)
+                },
+                editJobClick = {
+                    navController.navigate(NAV_CHANGE_JOB)
                 }
             )
         }
@@ -32,10 +37,18 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
             ChangeNickNameView(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.navigate(NAV_PROFILE_MAIN)
+                    navController.navigateUp()
                 },
                 changeDataFinished = {
                     navController.navigate(NAV_PROFILE_MAIN)
+                }
+            )
+        }
+        composable(NAV_CHANGE_JOB){
+            ChangeJobView(
+                viewModel = viewModel,
+                onBackClick = {
+                    navController.navigateUp()
                 }
             )
         }

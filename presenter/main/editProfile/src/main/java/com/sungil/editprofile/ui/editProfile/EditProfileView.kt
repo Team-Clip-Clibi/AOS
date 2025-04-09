@@ -11,7 +11,8 @@ import com.sungil.editprofile.ui.CustomTopBar
 internal fun EditProfileView(
     viewModel: ProfileEditViewModel,
     actionButtonClick: () -> Unit,
-    buttonClick: () -> Unit,
+    editNickNameClick: () -> Unit,
+    editJobClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -21,6 +22,11 @@ internal fun EditProfileView(
             )
         }
     ) { paddingValues ->
-        EditProfileMainView(paddingValues, buttonClick = buttonClick, viewModel = viewModel)
+        EditProfileMainView(
+            paddingValues,
+            editNickNameClick = editNickNameClick,
+            editJobClick = editJobClick,
+            viewModel = viewModel
+        )
     }
 }

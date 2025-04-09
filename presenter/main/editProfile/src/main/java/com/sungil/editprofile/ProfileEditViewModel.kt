@@ -21,10 +21,37 @@ class ProfileEditViewModel @Inject constructor(
     private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
     val editProfileState: StateFlow<EditProfileState> = _editProfileState.asStateFlow()
 
+    private val _selectedJobs = MutableStateFlow<List<JOB>>(emptyList())
+    val selectedJobs: StateFlow<List<JOB>> = _selectedJobs.asStateFlow()
+
+    private val _jobSelectionError = MutableStateFlow(false)
+    val jobSelectionError: StateFlow<Boolean> = _jobSelectionError.asStateFlow()
+    private var _initialJobSelection: List<JOB> = emptyList()
     init {
         getUserInfo()
     }
 
+    fun toggleJob(job: JOB) {
+        val current = _selectedJobs.value
+        val newList = when {
+            job in current -> {
+                _jobSelectionError.value = false
+                current - job
+            }
+            current.size < 2 -> {
+                _jobSelectionError.value = false
+                current + job
+            }
+            else -> {
+                _jobSelectionError.value = true
+                return
+            }
+        }
+        _selectedJobs.value = newList
+    }
+    fun isJobSelectionChanged(): Boolean {
+        return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
+    }
     private fun getUserInfo() {
         viewModelScope.launch {
             when (val result = userInfo.invoke()) {
@@ -42,6 +69,11 @@ class ProfileEditViewModel @Inject constructor(
                         diet = result.data.diet,
                         language = result.data.language
                     )
+                    val jobPair = data.job
+                    _initialJobSelection = JOB.entries.filter {
+                        it.displayName == data.job.first || it.displayName == data.job.second
+                    }
+                    _selectedJobs.value = _initialJobSelection
                     _editProfileState.value = EditProfileState.Success(data)
                 }
             }
@@ -71,6 +103,10 @@ class ProfileEditViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun changeJob(){
+
     }
 
     sealed interface EditProfileState {
