@@ -36,7 +36,11 @@ class ProfileEditViewModel @Inject constructor(
                     val data = UserInfo(
                         name = result.data.userName,
                         nickName = result.data.nickName,
-                        phoneNumber = result.data.phoneNumber
+                        phoneNumber = result.data.phoneNumber,
+                        job = result.data.job,
+                        loveState = result.data.loveState,
+                        diet = result.data.diet,
+                        language = result.data.language
                     )
                     _editProfileState.value = EditProfileState.Success(data)
                 }
@@ -53,12 +57,15 @@ class ProfileEditViewModel @Inject constructor(
         val updatedUserInfo = currentState.data.copy(nickName = newNickName)
         _editProfileState.value = EditProfileState.Success(updatedUserInfo)
         viewModelScope.launch(Dispatchers.IO) {
-            when(val result = changeNickName.invoke(CheckNickName.Param(
-                newNickName
-            ))){
+            when (val result = changeNickName.invoke(
+                CheckNickName.Param(
+                    newNickName
+                )
+            )) {
                 is CheckNickName.Result.Fail -> {
                     _editProfileState.value = EditProfileState.Error(result.message)
                 }
+
                 is CheckNickName.Result.Success -> {
                     _editProfileState.value = EditProfileState.SuccessToChange(result.message)
                 }
@@ -69,7 +76,7 @@ class ProfileEditViewModel @Inject constructor(
     sealed interface EditProfileState {
         data object Loading : EditProfileState
         data class Success(val data: UserInfo) : EditProfileState
-        data class SuccessToChange(val message : String) : EditProfileState
+        data class SuccessToChange(val message: String) : EditProfileState
         data class Error(val message: String) : EditProfileState
     }
 }
@@ -78,4 +85,8 @@ data class UserInfo(
     val name: String,
     val nickName: String,
     val phoneNumber: String,
+    val job: Pair<String, String>,
+    val loveState: Pair<String, String>,
+    val diet: String,
+    val language: String,
 )
