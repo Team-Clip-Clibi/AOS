@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -38,7 +39,12 @@ internal fun ChangeNickNameMainView(
     val state by viewModel.editProfileState.collectAsState()
     val userData = (state as? ProfileEditViewModel.EditProfileState.Success)?.data
     var nicknameValidationMessage by remember { mutableIntStateOf(R.string.txt_nick_length) }
-    var nickname by remember { mutableStateOf(userData?.nickName ?: "오류") }
+    var nickname by remember { mutableStateOf("") }
+
+    LaunchedEffect(userData?.nickName) {
+        nickname = userData?.nickName ?: "오류"
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,8 +63,7 @@ internal fun ChangeNickNameMainView(
                 beforeText = nickname,
                 inputType = KeyboardType.Text,
                 onValueChange = { input ->
-                    viewModel.changeNickName(input)
-
+                    nickname = input
                     nicknameValidationMessage = when {
                         input.length < 2 -> R.string.txt_nick_length_low
                         input.length > 8 -> R.string.txt_nick_length_over

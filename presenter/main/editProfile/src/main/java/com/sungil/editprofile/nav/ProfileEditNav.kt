@@ -31,8 +31,12 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
         composable(NAV_CHANGE_NICK_NAME) {
             ChangeNickNameView(
                 viewModel = viewModel,
-                onBackClick = {},
-                changeDataFinished = {}
+                onBackClick = {
+                    navController.navigate(NAV_PROFILE_MAIN)
+                },
+                changeDataFinished = {
+                    navController.navigate(NAV_PROFILE_MAIN)
+                }
             )
         }
     }
