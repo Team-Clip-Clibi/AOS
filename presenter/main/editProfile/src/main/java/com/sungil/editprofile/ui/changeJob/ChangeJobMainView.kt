@@ -72,7 +72,7 @@ internal fun ChangeJobMainView(
             CustomButton(
                 stringResource(R.string.btn_finish),
                 onclick = { viewModel.changeJob() },
-                enable = isChanged && selectedJobs.size == 2
+                enable = isChanged && selectedJobs.size <= 2
             )
         }
     }
