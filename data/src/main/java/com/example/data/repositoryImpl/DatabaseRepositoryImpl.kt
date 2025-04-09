@@ -144,7 +144,11 @@ class DatabaseRepositoryImpl @Inject constructor(
             county = area,
             marketingPermission = marketingPermission,
             nickName = nickName,
-            phoneNumber = phoneNumber
+            phoneNumber = phoneNumber,
+            job = job,
+            loveState = loveState,
+            diet = diet,
+            language = language
         )
     }
 
