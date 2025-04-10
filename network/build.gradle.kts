@@ -37,8 +37,9 @@ android {
         val signInUrl: String = properties.getProperty("login", "")
         val userInfoUrl: String = properties.getProperty("userInfo", "")
         val fcmToken: String = properties.getProperty("fcmToken", "")
-        val changeJob : String = properties.getProperty("changeJob", "")
-        val updateRelationShip : String = properties.getProperty("changeRelationShip" ,"")
+        val changeJob: String = properties.getProperty("changeJob", "")
+        val updateRelationShip: String = properties.getProperty("changeRelationShip", "")
+        val language: String = properties.getProperty("language", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -52,8 +53,9 @@ android {
         buildConfigField("String", "LOGIN_URL", signInUrl)
         buildConfigField("String", "USERINFO_URL", userInfoUrl)
         buildConfigField("String", "UPDATE_FCM_TOKEN", fcmToken)
-        buildConfigField("String" , "CHANGE_JOB_URL" , changeJob)
-        buildConfigField("String" , "UPDATE_RELEATION_URL" , updateRelationShip)
+        buildConfigField("String", "CHANGE_JOB_URL", changeJob)
+        buildConfigField("String", "UPDATE_RELEATION_URL", updateRelationShip)
+        buildConfigField("String", "LANGUAGE_UPDATE_URL", language)
     }
 
     buildTypes {

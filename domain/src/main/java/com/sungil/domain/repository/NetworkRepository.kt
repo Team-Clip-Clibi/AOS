@@ -48,4 +48,6 @@ interface NetworkRepository {
     suspend fun requestUpdateJob(accessToken: String, data: List<String>): Int
 
     suspend fun requestUpdateLoveState(accessToken: String, love: String, relation: Boolean): Int
+
+    suspend fun requestUpdateLanguage(accessToken: String, language: String): Int
 }

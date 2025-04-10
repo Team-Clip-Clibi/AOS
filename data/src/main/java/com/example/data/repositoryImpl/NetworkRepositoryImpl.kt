@@ -8,6 +8,7 @@ import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
 import com.sungil.network.model.Job
+import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.RelationShip
@@ -168,6 +169,14 @@ class NetworkRepositoryImpl @Inject constructor(
                 love,
                 relation
             )
+        )
+        return result.code()
+    }
+
+    override suspend fun requestUpdateLanguage(accessToken: String, language: String): Int {
+        val result = api.requestUpdateLanguage(
+            accessToken,
+            Language(language)
         )
         return result.code()
     }

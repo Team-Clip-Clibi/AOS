@@ -3,6 +3,7 @@ package com.sungil.network.http
 import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
 import com.sungil.network.model.Job
+import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.RelationShip
@@ -123,4 +124,14 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Body data: RelationShip,
     ): Response<Unit>
+
+    /**
+     * 사용 언어 변경 API
+     */
+    @PATCH(BuildConfig.LANGUAGE_UPDATE_URL)
+    suspend fun requestUpdateLanguage(
+        @Header("Authorization") bearerToken: String,
+        @Body body: Language,
+    ) : Response<Unit>
+
 }

@@ -13,6 +13,7 @@ const val ERROR_ALREADY_USE = "Already use"
 const val ERROR_NETWORK = "network Error"
 const val ERROR_FAIL_TO_UPDATE_LOVE = "Fail to update Love"
 const val ERROR_FAIL_SAVE = "Save Fail"
+const val ERROR_USER_DATA_NULL = "userData is null"
 
 enum class JOB(val displayName : String){
     STUDENT("학생"),
@@ -37,4 +38,10 @@ enum class LOVE(val displayName: String){
 enum class MEETING(val displayName: String){
     SAME("같은 상태인 사람만 만나고 싶어요"),
     OKAY("연애 상태는 신경쓰지 않아도 괜찮아요")
+}
+
+enum class LANGUAGE() {
+    KOREAN,
+    ENGLISH,
+    BOTH
 }
