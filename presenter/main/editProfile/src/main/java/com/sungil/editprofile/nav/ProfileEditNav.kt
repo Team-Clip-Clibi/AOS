@@ -36,6 +36,9 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
                 },
                 editLoveClick = {
                     navController.navigate(NAV_CHANGE_LOVE)
+                },
+                editLanguageClick = {
+                    navController.navigate(NAV_CHANGE_LANGUAGE)
                 }
             )
         }
@@ -47,7 +50,7 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
                     navController.navigateUp()
                 },
                 changeDataFinished = {
-                    navController.navigate(NAV_PROFILE_MAIN)
+                    navController.navigateUp()
                 }
             )
         }
