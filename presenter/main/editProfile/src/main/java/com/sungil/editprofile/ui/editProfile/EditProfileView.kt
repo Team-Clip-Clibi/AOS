@@ -15,6 +15,7 @@ internal fun EditProfileView(
     editJobClick: () -> Unit,
     editLoveClick: () -> Unit,
     editLanguageClick: () -> Unit,
+    goToLoginPage : () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -30,7 +31,8 @@ internal fun EditProfileView(
             editJobClick = editJobClick,
             viewModel = viewModel,
             loveClick = editLoveClick,
-            editLanguageClick = editLanguageClick
+            editLanguageClick = editLanguageClick,
+            goToLoginPage = goToLoginPage
         )
     }
 }

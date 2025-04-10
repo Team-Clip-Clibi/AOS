@@ -5,6 +5,7 @@ const val NAV_CHANGE_NICK_NAME = "changeNickName"
 const val NAV_CHANGE_JOB = "changeJob"
 const val NAV_CHANGE_LOVE = "changeLove"
 const val NAV_CHANGE_LANGUAGE = "language"
+const val NAV_LOGOUT = "Login"
 
 const val ERROR_TO_LONG = "to long"
 const val ERROR_TO_SHORT = "to short"

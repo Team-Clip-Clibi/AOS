@@ -17,7 +17,7 @@ import com.sungil.editprofile.ui.editProfile.EditProfileView
 import com.sungil.editprofile.ui.loveState.LoveStateView
 
 @Composable
-internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
+internal fun ProfileEditNav(viewModel: ProfileEditViewModel, goToLoginPage: () -> Unit) {
     val navController = rememberNavController()
 
     NavHost(
@@ -39,6 +39,9 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel) {
                 },
                 editLanguageClick = {
                     navController.navigate(NAV_CHANGE_LANGUAGE)
+                },
+                goToLoginPage = {
+                    goToLoginPage()
                 }
             )
         }

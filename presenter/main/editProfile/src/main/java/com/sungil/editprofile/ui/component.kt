@@ -459,6 +459,7 @@ fun CustomDialog(
     titleText: String,
     contentText: String,
     buttonText: String,
+    subButtonText : String
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -521,7 +522,7 @@ fun CustomDialog(
                         .background(color = Color(0xFFEFEFEF), shape = RoundedCornerShape(size = 12.dp))
                 ) {
                     Text(
-                        text = buttonText,
+                        text = subButtonText,
                         style = AppTextStyles.SUBTITLE_16_24_SEMI,
                         color = Color(0xFF171717),
                     )

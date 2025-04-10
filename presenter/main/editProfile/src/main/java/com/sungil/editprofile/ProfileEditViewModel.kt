@@ -52,6 +52,9 @@ class ProfileEditViewModel @Inject constructor(
     private var _language = MutableStateFlow(LANGUAGE.KOREAN)
     val language: StateFlow<LANGUAGE> = _language
 
+    private var _showLogoutDialog = MutableStateFlow(false)
+    val showLogoutDialog :StateFlow<Boolean> = _showLogoutDialog
+
     init {
         getUserInfo()
     }
@@ -196,6 +199,10 @@ class ProfileEditViewModel @Inject constructor(
 
     fun isJobSelectionChanged(): Boolean {
         return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
+    }
+
+    fun disMissDialog(){
+        _showLogoutDialog.value = false
     }
 
     fun changeLoveState(data: LOVE) {

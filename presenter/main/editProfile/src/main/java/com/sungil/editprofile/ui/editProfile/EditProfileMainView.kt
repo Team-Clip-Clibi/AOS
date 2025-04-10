@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
+import com.sungil.editprofile.ui.CustomDialog
 import com.sungil.editprofile.ui.CustomLittleTitleText
 import com.sungil.editprofile.ui.CustomProfileItemWithImage
 import com.sungil.editprofile.ui.CustomProfileItemWithMore
@@ -35,16 +37,26 @@ internal fun EditProfileMainView(
     editJobClick : () -> Unit,
     viewModel: ProfileEditViewModel,
     loveClick : () -> Unit,
-    editLanguageClick : () -> Unit
+    editLanguageClick : () -> Unit,
+    goToLoginPage : () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val state by viewModel.editProfileState.collectAsState()
     val userInfo = (state as? ProfileEditViewModel.EditProfileState.Success)?.data
-
+    val showDialog by viewModel.showLogoutDialog.collectAsState()
     val name = userInfo?.name.orEmpty()
     val nickName = userInfo?.nickName.orEmpty()
     val phoneNumber = userInfo?.phoneNumber.orEmpty()
-
+    LaunchedEffect(Unit) {
+        viewModel.editProfileState.collect{ state ->
+            when(state){
+                is ProfileEditViewModel.EditProfileState.SuccessToChange -> {
+                    goToLoginPage()
+                }
+                else -> Unit
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -164,6 +176,16 @@ internal fun EditProfileMainView(
                     buttonClick = editNickNameClick
                 )
             }
+        }
+        if(showDialog){
+            CustomDialog(
+                onDismiss = {viewModel.disMissDialog()},
+                buttonClick = {viewModel.logout()},
+                titleText = stringResource(R.string.dialog_logout_title),
+                contentText = stringResource(R.string.dialog_logout_content),
+                buttonText = stringResource(R.string.dialog_logout_okay_button),
+                subButtonText = stringResource(R.string.dialog_logout_dismiss)
+            )
         }
     }
 }
