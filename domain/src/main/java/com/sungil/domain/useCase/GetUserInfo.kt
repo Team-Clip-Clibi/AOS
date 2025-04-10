@@ -35,15 +35,8 @@ class GetUserInfo @Inject constructor(
         val apiData = network.requestUserData(TOKEN_FORM + token.first!!)
             ?: return Result.Fail("network Error")
         val saveResult = database.saveUserInfo(
-            marketingPermission = true,
             name = apiData.userName,
             nickName = apiData.nickName,
-            birthYear = "",
-            birthMonth = "",
-            birthDay = "",
-            city = "",
-            area = "",
-            gender = "MALE",
             platform = "KAKAO",
             phoneNumber = apiData.phoneNumber,
             jobList = Pair("NONE" ,"NONE"),

@@ -7,14 +7,7 @@ import com.sungil.database.TABLE_USER_INFO
 @Entity(tableName = TABLE_USER_INFO)
 data class UserInfo(
     @PrimaryKey val name: String,
-    val marketingPermission: Boolean,
     val nickName: String,
-    val birtYear: String,
-    val birthMonth: String,
-    val birthDay: String,
-    val city: String,
-    val area: String,
-    val gender: String,
     val platform : String,
     val phoneNumber : String,
     val firstJob : String,

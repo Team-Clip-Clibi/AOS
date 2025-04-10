@@ -36,15 +36,8 @@ class UpdateLove @Inject constructor(
         }
         userData.loveState = Pair(param.love, param.relationShip)
         val saveResult = database.saveUserInfo(
-            marketingPermission = userData.marketingPermission,
             name = userData.userName,
             nickName = userData.nickName,
-            birthYear = userData.birthYear,
-            birthMonth = userData.birthMonth,
-            birthDay = userData.birthDay,
-            city = userData.city,
-            area = userData.county,
-            gender = userData.gender,
             platform = "KAKAO",
             phoneNumber = userData.phoneNumber,
             jobList = userData.job,

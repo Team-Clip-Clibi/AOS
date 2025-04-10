@@ -61,15 +61,8 @@ class SendUserDetail @Inject constructor(
             database.deleteUserIfo()
         }
         val saveResult = database.saveUserInfo(
-            marketingPermission = param.marketingPermission,
             name = param.name,
             nickName = param.nickName,
-            birthYear = param.birthYear,
-            birthMonth = param.birthMonth,
-            birthDay = param.birthDay,
-            city = param.city,
-            area = param.county,
-            gender = param.gender,
             platform = "KAKAO",
             phoneNumber = param.phoneNumber,
             jobList = Pair("NONE" ,"NONE"),

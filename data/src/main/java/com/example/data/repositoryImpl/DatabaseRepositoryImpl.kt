@@ -50,15 +50,8 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveUserInfo(
-        marketingPermission: Boolean,
         name: String,
         nickName: String,
-        birthYear: String,
-        birthMonth: String,
-        birthDay: String,
-        city: String,
-        area: String,
-        gender: String,
         platform: String,
         phoneNumber: String,
         jobList: Pair<String, String>,
@@ -68,14 +61,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     ): Boolean {
         val userInfo =UserInfo(
             name = name,
-            marketingPermission = marketingPermission,
             nickName = nickName,
-            birtYear = birthYear,
-            birthMonth = birthMonth,
-            birthDay = birthDay,
-            city = city,
-            area = area,
-            gender = gender,
             platform = platform,
             phoneNumber = phoneNumber,
             firstJob = jobList.first,
@@ -147,13 +133,6 @@ class DatabaseRepositoryImpl @Inject constructor(
     private fun UserInfo.toDomain(): com.sungil.domain.model.UserInfo {
         return com.sungil.domain.model.UserInfo(
             userName = name,
-            gender = gender,
-            birthYear = birtYear,
-            birthMonth = birthMonth,
-            birthDay = birthDay,
-            city = city,
-            county = area,
-            marketingPermission = marketingPermission,
             nickName = nickName,
             phoneNumber = phoneNumber,
             job = Pair(firstJob , secondJob),

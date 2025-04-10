@@ -12,18 +12,11 @@ interface DatabaseRepository {
     suspend fun getFcmToken(): String
     suspend fun updateFcmToken(data: String): Boolean
     suspend fun saveUserInfo(
-        marketingPermission: Boolean,
         name: String,
         nickName: String,
-        birthYear: String,
-        birthMonth: String,
-        birthDay: String,
-        city: String,
-        area: String,
-        gender: String,
         platform: String,
         phoneNumber: String,
-        jobList: Pair<String , String>,
+        jobList: Pair<String, String>,
         loveState: Pair<String, String>,
         diet: String,
         language: String,
