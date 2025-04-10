@@ -46,4 +46,6 @@ interface NetworkRepository {
     suspend fun requestUpdateFcmToken(accessToken: String): Int
 
     suspend fun requestUpdateJob(accessToken: String, data: List<String>): Int
+
+    suspend fun requestUpdateLoveState(accessToken: String, love: String, relation: Boolean): Int
 }

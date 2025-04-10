@@ -11,6 +11,8 @@ const val ERROR_TOKEN_NULL = "token is null"
 const val ERROR_USER_TOKEN_NLL = "Token is null"
 const val ERROR_ALREADY_USE = "Already use"
 const val ERROR_NETWORK = "network Error"
+const val ERROR_FAIL_TO_UPDATE_LOVE = "Fail to update Love"
+const val ERROR_FAIL_SAVE = "Save Fail"
 
 enum class JOB(val displayName : String){
     STUDENT("학생"),
@@ -27,9 +29,9 @@ enum class JOB(val displayName : String){
 
 enum class LOVE(val displayName: String){
     SINGLE("싱글"),
-    TAKEN("연애중"),
-    MARRIED("기혼"),
-    NO_SHOW("밝히고 싶지 않아요")
+    COUPLE("연애중"),
+    MARRIAGE("기혼"),
+    SECRET("밝히고 싶지 않아요")
 }
 
 enum class MEETING(val displayName: String){

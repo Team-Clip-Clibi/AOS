@@ -7,6 +7,7 @@ import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetUserInfo
 import com.sungil.domain.useCase.SaveChangeProfileData
 import com.sungil.domain.useCase.UpdateJob
+import com.sungil.domain.useCase.UpdateLove
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,7 @@ class ProfileEditViewModel @Inject constructor(
     private val haptic: ActivateHaptic,
     private val changeJob: UpdateJob,
     private val saveData: SaveChangeProfileData,
+    private val updateLoveState: UpdateLove,
 ) : ViewModel() {
     private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
     val editProfileState: StateFlow<EditProfileState> = _editProfileState.asStateFlow()
@@ -38,7 +40,7 @@ class ProfileEditViewModel @Inject constructor(
     val loveState: StateFlow<LoveState> = _loveState
 
     private var _loveButton = MutableStateFlow(false)
-    val loveButton : StateFlow<Boolean> = _loveButton
+    val loveButton: StateFlow<Boolean> = _loveButton
 
     init {
         getUserInfo()
@@ -92,6 +94,10 @@ class ProfileEditViewModel @Inject constructor(
                     _initialJobSelection = JOB.entries.filter {
                         it.displayName == data.job.first || it.displayName == data.job.second
                     }
+                    _loveState.value = LoveState(love =
+                    LOVE.entries.find { it.name == data.loveState.first } ?: LOVE.SINGLE,
+                        Meeting = if (data.loveState.second == "SAME") MEETING.SAME else MEETING.OKAY)
+
                     _selectedJobs.value = _initialJobSelection
                     _editProfileState.value = EditProfileState.Success(data)
                 }
@@ -147,14 +153,30 @@ class ProfileEditViewModel @Inject constructor(
         _loveButton.value = true
     }
 
-    fun changeMeetingState(data : MEETING){
+    fun changeMeetingState(data: MEETING) {
         _loveState.update { it.copy(Meeting = data) }
         _loveButton.value = true
     }
 
-    fun sendLoveState(){
+    fun sendLoveState() {
+        viewModelScope.launch {
+            when (val result = updateLoveState.invoke(
+                UpdateLove.Param(
+                    _loveState.value.love.toString(),
+                    _loveState.value.Meeting.toString()
+                )
+            )) {
+                is UpdateLove.Result.Fail -> {
+                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                }
 
+                is UpdateLove.Result.Success -> {
+                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                }
+            }
+        }
     }
+
     fun initFlow() {
         _editProfileState.value = EditProfileState.Loading
     }

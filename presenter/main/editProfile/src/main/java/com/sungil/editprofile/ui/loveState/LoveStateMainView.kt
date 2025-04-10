@@ -2,7 +2,6 @@ package com.sungil.editprofile.ui.loveState
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -13,15 +12,20 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sungil.editprofile.ERROR_FAIL_SAVE
+import com.sungil.editprofile.ERROR_FAIL_TO_UPDATE_LOVE
+import com.sungil.editprofile.ERROR_TOKEN_NULL
 import com.sungil.editprofile.LOVE
 import com.sungil.editprofile.MEETING
 import com.sungil.editprofile.ProfileEditViewModel
@@ -39,6 +43,44 @@ internal fun LoveStateMainView(
 ) {
     val loveState by viewModel.loveState.collectAsState()
     val button by viewModel.loveButton.collectAsState()
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.editProfileState.collect{ state ->
+            when(state){
+                is ProfileEditViewModel.EditProfileState.Error -> {
+                    when(state.message){
+                        ERROR_TOKEN_NULL  ->{
+                            snackBarHost.showSnackbar(
+                                message = context.getString(R.string.txt_network_error),
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        ERROR_FAIL_TO_UPDATE_LOVE ->{
+                            snackBarHost.showSnackbar(
+                                message = context.getString(R.string.txt_network_error),
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        ERROR_FAIL_SAVE ->{
+                            snackBarHost.showSnackbar(
+                                message = context.getString(R.string.msg_save_error),
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    }
+                    viewModel.initFlow()
+                }
+                is ProfileEditViewModel.EditProfileState.SuccessToChange -> {
+                    snackBarHost.showSnackbar(
+                        message = context.getString(R.string.msg_save_success),
+                        duration = SnackbarDuration.Short
+                    )
+                    viewModel.initFlow()
+                }
+                else -> Unit
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,7 +130,7 @@ internal fun LoveStateMainView(
                     .fillMaxWidth()
                     .height(48.dp)
                     .background(
-                        color = if (loveState.love == LOVE.TAKEN) {
+                        color = if (loveState.love == LOVE.COUPLE) {
                             Color(0xFFF9F0FF)
                         } else {
                             Color(0xFFF7F7F7)
@@ -96,7 +138,7 @@ internal fun LoveStateMainView(
                         shape = RoundedCornerShape(8.dp)
                     )
                     .then(
-                        if (loveState.love == LOVE.TAKEN) {
+                        if (loveState.love == LOVE.COUPLE) {
                             Modifier.border(
                                 width = 1.dp,
                                 color = Color(0xFFD3ADF7),
@@ -107,7 +149,7 @@ internal fun LoveStateMainView(
                         }
                     ),
                 text = stringResource(R.string.txt_love_ing),
-                clickable = { viewModel.changeLoveState(LOVE.TAKEN) }
+                clickable = { viewModel.changeLoveState(LOVE.COUPLE) }
             )
             Spacer(modifier = Modifier.height(10.dp))
             CustomLovePick(
@@ -115,7 +157,7 @@ internal fun LoveStateMainView(
                     .fillMaxWidth()
                     .height(48.dp)
                     .background(
-                        color = if (loveState.love == LOVE.MARRIED) {
+                        color = if (loveState.love == LOVE.MARRIAGE) {
                             Color(0xFFF9F0FF)
                         } else {
                             Color(0xFFF7F7F7)
@@ -123,7 +165,7 @@ internal fun LoveStateMainView(
                         shape = RoundedCornerShape(8.dp)
                     )
                     .then(
-                        if (loveState.love == LOVE.MARRIED) {
+                        if (loveState.love == LOVE.MARRIAGE) {
                             Modifier.border(
                                 width = 1.dp,
                                 color = Color(0xFFD3ADF7),
@@ -134,7 +176,7 @@ internal fun LoveStateMainView(
                         }
                     ),
                 text = stringResource(R.string.txt_love_married),
-                clickable = { viewModel.changeLoveState(LOVE.MARRIED) }
+                clickable = { viewModel.changeLoveState(LOVE.MARRIAGE) }
             )
             Spacer(modifier = Modifier.height(10.dp))
             CustomLovePick(
@@ -142,7 +184,7 @@ internal fun LoveStateMainView(
                     .fillMaxWidth()
                     .height(48.dp)
                     .background(
-                        color = if (loveState.love == LOVE.NO_SHOW) {
+                        color = if (loveState.love == LOVE.SECRET) {
                             Color(0xFFF9F0FF)
                         } else {
                             Color(0xFFF7F7F7)
@@ -150,7 +192,7 @@ internal fun LoveStateMainView(
                         shape = RoundedCornerShape(8.dp)
                     )
                     .then(
-                        if (loveState.love == LOVE.NO_SHOW) {
+                        if (loveState.love == LOVE.SECRET) {
                             Modifier.border(
                                 width = 1.dp,
                                 color = Color(0xFFD3ADF7),
@@ -161,7 +203,7 @@ internal fun LoveStateMainView(
                         }
                     ),
                 text = stringResource(R.string.txt_love_no_show),
-                clickable = { viewModel.changeLoveState(LOVE.NO_SHOW) }
+                clickable = { viewModel.changeLoveState(LOVE.SECRET) }
             )
         }
         Spacer(modifier = Modifier.height(24.dp))

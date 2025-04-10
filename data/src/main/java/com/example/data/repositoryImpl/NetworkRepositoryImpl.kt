@@ -10,6 +10,7 @@ import com.sungil.network.http.HttpApi
 import com.sungil.network.model.Job
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
+import com.sungil.network.model.RelationShip
 import com.sungil.network.model.RequestUserInfo
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
@@ -152,13 +153,28 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun requestUpdateJob(accessToken: String, data: List<String>): Int {
-        val result = api.requestChangeJob(accessToken , Job(data))
+        val result = api.requestChangeJob(accessToken, Job(data))
         return result.code()
     }
 
-    private fun RequestUserInfo.toDomain() : UserInfo{
+    override suspend fun requestUpdateLoveState(
+        accessToken: String,
+        love: String,
+        relation: Boolean,
+    ): Int {
+        val result = api.requestUpdateRelationShip(
+            accessToken,
+            RelationShip(
+                love,
+                relation
+            )
+        )
+        return result.code()
+    }
+
+    private fun RequestUserInfo.toDomain(): UserInfo {
         return UserInfo(
-            userName =  username,
+            userName = username,
             gender = "MALE",
             birthYear = "1996",
             birthMonth = "07",
@@ -168,8 +184,8 @@ class NetworkRepositoryImpl @Inject constructor(
             marketingPermission = false,
             nickName = nickname,
             phoneNumber = phoneNumber,
-            job = Pair("NONE" ,"NONE"),
-            loveState = Pair("NONE" , "NONE"),
+            job = Pair("NONE", "NONE"),
+            loveState = Pair("NONE", "NONE"),
             diet = "NONE",
             language = "KOREAN"
         )

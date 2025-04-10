@@ -5,6 +5,7 @@ import com.sungil.network.model.AuthToken
 import com.sungil.network.model.Job
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
+import com.sungil.network.model.RelationShip
 import com.sungil.network.model.RequestUserInfo
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
@@ -103,7 +104,7 @@ interface HttpApi {
     @PATCH(BuildConfig.UPDATE_FCM_TOKEN)
     suspend fun requestUpdateFcmToken(
         @Header("Authorization") bearerToken: String,
-    ) : Response<Unit>
+    ): Response<Unit>
 
     /**
      * 직업 업데이트
@@ -111,7 +112,15 @@ interface HttpApi {
     @PATCH(BuildConfig.CHANGE_JOB_URL)
     suspend fun requestChangeJob(
         @Header("Authorization") bearerToken: String,
-        @Body job : Job
-    ) : Response<Unit>
+        @Body job: Job,
+    ): Response<Unit>
 
+    /**
+     * 연애 상태 변경 API
+     */
+    @PATCH(BuildConfig.UPDATE_RELEATION_URL)
+    suspend fun requestUpdateRelationShip(
+        @Header("Authorization") bearerToken: String,
+        @Body data: RelationShip,
+    ): Response<Unit>
 }
