@@ -38,7 +38,8 @@ internal fun EditProfileMainView(
     viewModel: ProfileEditViewModel,
     loveClick : () -> Unit,
     editLanguageClick : () -> Unit,
-    goToLoginPage : () -> Unit
+    goToLoginPage : () -> Unit,
+    signOutPage : () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val state by viewModel.editProfileState.collectAsState()
@@ -166,14 +167,18 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = editNickNameClick
+                    buttonClick = {
+                        viewModel.setDialogTrue()
+                    }
                 )
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_sign_out),
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = editNickNameClick
+                    buttonClick = {
+                        signOutPage()
+                    }
                 )
             }
         }

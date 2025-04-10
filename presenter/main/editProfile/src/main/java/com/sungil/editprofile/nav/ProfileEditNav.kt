@@ -9,12 +9,14 @@ import com.sungil.editprofile.NAV_CHANGE_LANGUAGE
 import com.sungil.editprofile.NAV_CHANGE_LOVE
 import com.sungil.editprofile.NAV_CHANGE_NICK_NAME
 import com.sungil.editprofile.NAV_PROFILE_MAIN
+import com.sungil.editprofile.NAV_SIGN_OUT
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.ui.changeJob.ChangeJobView
 import com.sungil.editprofile.ui.changeLanguage.ChangeLanguageView
 import com.sungil.editprofile.ui.changeNickName.ChangeNickNameView
 import com.sungil.editprofile.ui.editProfile.EditProfileView
 import com.sungil.editprofile.ui.loveState.LoveStateView
+import com.sungil.editprofile.ui.signout.SignOutView
 
 @Composable
 internal fun ProfileEditNav(viewModel: ProfileEditViewModel, goToLoginPage: () -> Unit) {
@@ -42,6 +44,9 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel, goToLoginPage: () -
                 },
                 goToLoginPage = {
                     goToLoginPage()
+                },
+                signOutPage = {
+                    navController.navigate(NAV_SIGN_OUT)
                 }
             )
         }
@@ -85,6 +90,16 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel, goToLoginPage: () -
                 }
             )
         }
-
+        composable(NAV_SIGN_OUT) {
+            SignOutView(
+                viewModel = viewModel,
+                onBackClick = {
+                    navController.navigateUp()
+                },
+                goToLoginPage = {
+                    goToLoginPage()
+                }
+            )
+        }
     }
 }

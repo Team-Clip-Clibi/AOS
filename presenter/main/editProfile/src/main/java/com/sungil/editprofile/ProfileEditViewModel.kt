@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.sign
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
@@ -54,6 +53,9 @@ class ProfileEditViewModel @Inject constructor(
 
     private var _showLogoutDialog = MutableStateFlow(false)
     val showLogoutDialog :StateFlow<Boolean> = _showLogoutDialog
+
+    private var _signOutContent = MutableStateFlow(SignOutData.NOTING)
+    val signOutContent : StateFlow<SignOutData> = _signOutContent
 
     init {
         getUserInfo()
@@ -219,10 +221,18 @@ class ProfileEditViewModel @Inject constructor(
         _language.value = data
         _button.value = true
     }
+    fun changeSignOutContent(data : SignOutData){
+        _signOutContent.value = data
+        _button.value = true
+    }
+    fun setDialogTrue(){
+        _showLogoutDialog.value = true
+    }
 
     fun initFlow() {
         _editProfileState.value = EditProfileState.Loading
         _button.value = false
+        _showLogoutDialog.value = false
     }
 
     fun toggleJob(job: JOB) {

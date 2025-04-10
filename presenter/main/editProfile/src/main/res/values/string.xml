@@ -49,11 +49,21 @@
     <string name="txt_language_both">한국어, 영어 모두 가능</string>
     <!--  btn  -->
     <string name="btn_finish">완료</string>
-
+    <!-- signOut   -->
+    <string name="top_sign_out">탈퇴하기</string>
+    <string name="txt_sign_out_title">"탈퇴 사유를 선택해주세요"</string>
+    <string name="txt_sign_out_content_service">서비스에서 만난 인연이 기대에 못 미쳐요</string>
+    <string name="txt_sign_out_content_apply">신청한 모임의 질이 만족스럽지 않았어요</string>
+    <string name="txt_sign_out_content_not_good">서비스 이용이 불편했어요</string>
+    <string name="txt_sign_out_content_not_need">서비스의 필요성을 못 느꼈어요</string>
+    <string name="txt_sign_out_content_etc">기타</string>
     <!--  dialog  -->
     <string name="dialog_logout_title">로그아웃 하시겠어요?</string>
     <string name="dialog_logout_content">저장된 정보는 유지되며, 다시 로그인하면 이어서 이용할 수 있습니다</string>
     <string name="dialog_logout_okay_button">로그아웃</string>
     <string name="dialog_logout_dismiss">취소</string>
-
+    <string name="dialog_sign_out_title">회원탈퇴가 완료되었습니다</string>
+    <string name="dialog_sign_out_content">계정이 삭제되면 모든 데이터가 영구 삭제됩니다.</string>
+    <string name="dialog_okay">확인</string>
+    <string name="dialog_cancel">취소</string>
 </resources>

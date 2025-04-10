@@ -532,3 +532,16 @@ fun CustomDialog(
     }
 }
 
+@Composable
+fun CustomTitle(
+    text : String,
+    color : Color
+){
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = text,
+        color = color,
+        style = AppTextStyles.TITLE_20_28_SEMI
+    )
+}
+
