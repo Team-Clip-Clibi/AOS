@@ -189,13 +189,6 @@ class NetworkRepositoryImpl @Inject constructor(
     private fun RequestUserInfo.toDomain(): UserInfo {
         return UserInfo(
             userName = username,
-            gender = "MALE",
-            birthYear = "1996",
-            birthMonth = "07",
-            birthDay = "25",
-            city = "SEOUL",
-            county = "JUNG_GU",
-            marketingPermission = false,
             nickName = nickname,
             phoneNumber = phoneNumber,
             job = Pair("NONE", "NONE"),
