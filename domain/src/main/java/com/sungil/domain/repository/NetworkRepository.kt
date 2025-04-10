@@ -50,4 +50,6 @@ interface NetworkRepository {
     suspend fun requestUpdateLoveState(accessToken: String, love: String, relation: Boolean): Int
 
     suspend fun requestUpdateLanguage(accessToken: String, language: String): Int
+
+    suspend fun requestSignOut(refreshToken : String) : Int
 }

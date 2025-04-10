@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -41,6 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.core.AppTextStyles
 import com.sungil.editprofile.JOB
 import com.sungil.editprofile.R
@@ -448,3 +451,83 @@ fun CustomItemPick(
         )
     }
 }
+
+@Composable
+fun CustomDialog(
+    onDismiss: () -> Unit,
+    buttonClick: () -> Unit,
+    titleText: String,
+    contentText: String,
+    buttonText: String,
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFFF7F7F7),
+                    shape = RoundedCornerShape(size = 24.dp)
+                )
+                .width(324.dp)
+                .height(174.dp)
+                .background(
+                    color = Color(0xFFFFFFFF),
+                    shape = RoundedCornerShape(size = 24.dp)
+                )
+                .padding(24.dp),
+
+            ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = titleText,
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = Color(0xFF171717),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Text(
+                    text = contentText,
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = Color(0xFF666666),
+                    textAlign = TextAlign.Center,
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Button(
+                    onClick = buttonClick,
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                ) {
+                    Text(
+                        text = buttonText,
+                        style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                        color = Color(0xFFFFFFFF),
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(
+                    onClick = onDismiss,
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .background(color = Color(0xFFEFEFEF), shape = RoundedCornerShape(size = 12.dp))
+                ) {
+                    Text(
+                        text = buttonText,
+                        style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                        color = Color(0xFF171717),
+                    )
+                }
+            }
+        }
+    }
+}
+

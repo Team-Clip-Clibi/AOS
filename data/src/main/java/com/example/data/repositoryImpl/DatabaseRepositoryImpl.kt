@@ -135,6 +135,15 @@ class DatabaseRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun removeToken(): Boolean {
+        return try{
+            tokenDao.deleteAll()
+            true
+        }catch (e : Exception){
+            false
+        }
+    }
+
     private fun UserInfo.toDomain(): com.sungil.domain.model.UserInfo {
         return com.sungil.domain.model.UserInfo(
             userName = name,

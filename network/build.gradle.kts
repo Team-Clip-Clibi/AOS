@@ -40,6 +40,7 @@ android {
         val changeJob: String = properties.getProperty("changeJob", "")
         val updateRelationShip: String = properties.getProperty("changeRelationShip", "")
         val language: String = properties.getProperty("language", "")
+        val signOut : String = properties.getProperty("signOut" ,"")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -56,6 +57,7 @@ android {
         buildConfigField("String", "CHANGE_JOB_URL", changeJob)
         buildConfigField("String", "UPDATE_RELEATION_URL", updateRelationShip)
         buildConfigField("String", "LANGUAGE_UPDATE_URL", language)
+        buildConfigField("String" , "SIGNOUT_URL" ,signOut)
     }
 
     buildTypes {

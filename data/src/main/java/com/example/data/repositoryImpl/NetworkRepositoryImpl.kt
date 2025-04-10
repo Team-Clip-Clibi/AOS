@@ -181,6 +181,11 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.code()
     }
 
+    override suspend fun requestSignOut(refreshToken: String): Int {
+        val result = api.requestSignOut(refreshToken)
+        return result.code()
+    }
+
     private fun RequestUserInfo.toDomain(): UserInfo {
         return UserInfo(
             userName = username,

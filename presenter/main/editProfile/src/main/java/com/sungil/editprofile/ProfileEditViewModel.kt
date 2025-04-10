@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.ActivateHaptic
 import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetUserInfo
+import com.sungil.domain.useCase.LogOut
 import com.sungil.domain.useCase.SaveChangeProfileData
+import com.sungil.domain.useCase.SignOut
 import com.sungil.domain.useCase.UpdateJob
 import com.sungil.domain.useCase.UpdateLanguage
 import com.sungil.domain.useCase.UpdateLove
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.sign
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
@@ -27,6 +30,8 @@ class ProfileEditViewModel @Inject constructor(
     private val saveData: SaveChangeProfileData,
     private val updateLoveState: UpdateLove,
     private val updateLanguage: UpdateLanguage,
+    private val logout : LogOut,
+    private val signOut : SignOut
 ) : ViewModel() {
     private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
     val editProfileState: StateFlow<EditProfileState> = _editProfileState.asStateFlow()
@@ -49,34 +54,6 @@ class ProfileEditViewModel @Inject constructor(
 
     init {
         getUserInfo()
-    }
-
-    fun toggleJob(job: JOB) {
-        val current = _selectedJobs.value
-        val newList = when {
-            job in current -> {
-                _jobSelectionError.value = false
-                current - job
-            }
-
-            current.size < 2 -> {
-                _jobSelectionError.value = false
-                current + job
-            }
-
-            else -> {
-                _jobSelectionError.value = true
-                viewModelScope.launch {
-                    haptic.invoke()
-                }
-                return
-            }
-        }
-        _selectedJobs.value = newList
-    }
-
-    fun isJobSelectionChanged(): Boolean {
-        return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
     }
 
     private fun getUserInfo() {
@@ -172,21 +149,6 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun changeLoveState(data: LOVE) {
-        _loveState.update { it.copy(love = data) }
-        _button.value = true
-    }
-
-    fun changeMeetingState(data: MEETING) {
-        _loveState.update { it.copy(Meeting = data) }
-        _button.value = true
-    }
-
-    fun changeLanguage(data: LANGUAGE) {
-        _language.value = data
-        _button.value = true
-    }
-
     fun sendLoveState() {
         viewModelScope.launch {
             when (val result = updateLoveState.invoke(
@@ -206,15 +168,84 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
+    fun logout(){
+        viewModelScope.launch {
+            when(val result = logout.invoke()){
+                is LogOut.Result.Fail -> {
+                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                }
+                is LogOut.Result.Success -> {
+                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                }
+            }
+        }
+    }
+
+    fun signOut(){
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val result = signOut.invoke()){
+                is SignOut.Result.Fail -> {
+                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                }
+                is SignOut.Result.Success ->{
+                    _editProfileState.value = EditProfileState.GoodBye(result.message)
+                }
+            }
+        }
+    }
+
+    fun isJobSelectionChanged(): Boolean {
+        return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
+    }
+
+    fun changeLoveState(data: LOVE) {
+        _loveState.update { it.copy(love = data) }
+        _button.value = true
+    }
+
+    fun changeMeetingState(data: MEETING) {
+        _loveState.update { it.copy(Meeting = data) }
+        _button.value = true
+    }
+
+    fun changeLanguage(data: LANGUAGE) {
+        _language.value = data
+        _button.value = true
+    }
+
     fun initFlow() {
         _editProfileState.value = EditProfileState.Loading
         _button.value = false
     }
 
+    fun toggleJob(job: JOB) {
+        val current = _selectedJobs.value
+        val newList = when {
+            job in current -> {
+                _jobSelectionError.value = false
+                current - job
+            }
+
+            current.size < 2 -> {
+                _jobSelectionError.value = false
+                current + job
+            }
+
+            else -> {
+                _jobSelectionError.value = true
+                viewModelScope.launch {
+                    haptic.invoke()
+                }
+                return
+            }
+        }
+        _selectedJobs.value = newList
+    }
     sealed interface EditProfileState {
         data object Loading : EditProfileState
         data class Success(val data: UserInfo) : EditProfileState
         data class SuccessToChange(val message: String) : EditProfileState
+        data class GoodBye(val message : String) : EditProfileState
         data class Error(val message: String) : EditProfileState
     }
 }

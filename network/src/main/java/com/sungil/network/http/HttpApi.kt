@@ -13,6 +13,7 @@ import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -133,5 +134,13 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Body body: Language,
     ) : Response<Unit>
+
+    /**
+     * 회원 털퇴 API
+     */
+    @DELETE(BuildConfig.SIGNOUT_URL)
+    suspend fun requestSignOut(
+        @Header("Authorization")  bearerToken: String,
+    ): Response<Unit>
 
 }

@@ -35,4 +35,5 @@ interface DatabaseRepository {
     suspend fun getToken(): Pair<String?, String?>
     suspend fun getUserInfo(): UserInfo?
     suspend fun deleteUserIfo() : Boolean
+    suspend fun removeToken(): Boolean
 }
