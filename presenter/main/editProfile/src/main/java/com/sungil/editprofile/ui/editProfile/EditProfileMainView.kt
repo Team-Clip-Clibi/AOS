@@ -34,7 +34,8 @@ internal fun EditProfileMainView(
     editNickNameClick: () -> Unit,
     editJobClick : () -> Unit,
     viewModel: ProfileEditViewModel,
-    loveClick : () -> Unit
+    loveClick : () -> Unit,
+    editLanguageClick : () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val state by viewModel.editProfileState.collectAsState()
@@ -135,7 +136,7 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = editNickNameClick
+                    buttonClick = editLanguageClick
                 )
             }
 
