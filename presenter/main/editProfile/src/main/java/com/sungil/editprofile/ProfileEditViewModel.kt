@@ -22,18 +22,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
-    private val userInfo: GetUserInfo,
+    private val userInfoUseCase: GetUserInfo,
     private val changeNickName: CheckNickName,
     private val haptic: ActivateHaptic,
     private val changeJob: UpdateJob,
     private val saveData: SaveChangeProfileData,
     private val updateLoveState: UpdateLove,
     private val updateLanguage: UpdateLanguage,
-    private val logout : LogOut,
-    private val signOut : SignOut
+    private val logout: LogOut,
+    private val signOut: SignOut
 ) : ViewModel() {
+
     private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
     val editProfileState: StateFlow<EditProfileState> = _editProfileState.asStateFlow()
+
+    private val _userInfo = MutableStateFlow<UserInfo?>(null)
+    val userInfo: StateFlow<UserInfo?> = _userInfo.asStateFlow()
 
     private val _selectedJobs = MutableStateFlow<List<JOB>>(emptyList())
     val selectedJobs: StateFlow<List<JOB>> = _selectedJobs.asStateFlow()
@@ -52,10 +56,10 @@ class ProfileEditViewModel @Inject constructor(
     val language: StateFlow<LANGUAGE> = _language
 
     private var _showLogoutDialog = MutableStateFlow(false)
-    val showLogoutDialog :StateFlow<Boolean> = _showLogoutDialog
+    val showLogoutDialog: StateFlow<Boolean> = _showLogoutDialog
 
     private var _signOutContent = MutableStateFlow(SignOutData.NOTING)
-    val signOutContent : StateFlow<SignOutData> = _signOutContent
+    val signOutContent: StateFlow<SignOutData> = _signOutContent
 
     init {
         getUserInfo()
@@ -63,7 +67,7 @@ class ProfileEditViewModel @Inject constructor(
 
     private fun getUserInfo() {
         viewModelScope.launch {
-            when (val result = userInfo.invoke()) {
+            when (val result = userInfoUseCase.invoke()) {
                 is GetUserInfo.Result.Fail -> {
                     _editProfileState.value = EditProfileState.Error(result.errorMessage)
                 }
@@ -78,35 +82,34 @@ class ProfileEditViewModel @Inject constructor(
                         diet = result.data.diet,
                         language = result.data.language
                     )
+                    _userInfo.value = data
+
                     _initialJobSelection = JOB.entries.filter {
                         it.displayName == data.job.first || it.displayName == data.job.second
                     }
-                    _loveState.value = LoveState(love =
-                    LOVE.entries.find { it.name == data.loveState.first } ?: LOVE.SINGLE,
-                        Meeting = if (data.loveState.second == "SAME") MEETING.SAME else MEETING.OKAY)
-                    _language.value =
-                        LANGUAGE.entries.find { it.name == result.data.language } ?: LANGUAGE.KOREAN
                     _selectedJobs.value = _initialJobSelection
-                    _editProfileState.value = EditProfileState.Success(data)
+
+                    _loveState.value = LoveState(
+                        love = LOVE.entries.find { it.name == data.loveState.first } ?: LOVE.SINGLE,
+                        Meeting = if (data.loveState.second == "SAME") MEETING.SAME else MEETING.OKAY
+                    )
+                    _language.value = LANGUAGE.entries.find { it.name == data.language } ?: LANGUAGE.KOREAN
+
+                    _editProfileState.value = EditProfileState.Loading // 초기 상태로 설정 (UI가 이 상태를 기준으로 판단한다면 유지)
                 }
             }
         }
     }
 
     fun changeNickName(newNickName: String) {
-        val currentState = _editProfileState.value
-        if (currentState !is EditProfileState.Success) {
-            _editProfileState.value = EditProfileState.Error("Fail to get Data")
+        if (_userInfo.value == null) {
+            _editProfileState.value = EditProfileState.Error("사용자 정보를 불러올 수 없습니다.")
             return
         }
-        val updatedUserInfo = currentState.data.copy(nickName = newNickName)
-        _editProfileState.value = EditProfileState.Success(updatedUserInfo)
+
+        _userInfo.update { it?.copy(nickName = newNickName) }
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = changeNickName.invoke(
-                CheckNickName.Param(
-                    newNickName
-                )
-            )) {
+            when (val result = changeNickName.invoke(CheckNickName.Param(newNickName))) {
                 is CheckNickName.Result.Fail -> {
                     _editProfileState.value = EditProfileState.Error(result.message)
                 }
@@ -139,9 +142,7 @@ class ProfileEditViewModel @Inject constructor(
     fun changeLanguage() {
         viewModelScope.launch {
             when (val result = updateLanguage.invoke(
-                UpdateLanguage.Param(
-                    _language.value.toString()
-                )
+                UpdateLanguage.Param(_language.value.toString())
             )) {
                 is UpdateLanguage.Result.Fail -> {
                     _editProfileState.value = EditProfileState.Error(result.errorMessage)
@@ -173,12 +174,13 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun logout(){
+    fun logout() {
         viewModelScope.launch {
-            when(val result = logout.invoke()){
+            when (val result = logout.invoke()) {
                 is LogOut.Result.Fail -> {
                     _editProfileState.value = EditProfileState.Error(result.errorMessage)
                 }
+
                 is LogOut.Result.Success -> {
                     _editProfileState.value = EditProfileState.SuccessToChange(result.message)
                 }
@@ -186,13 +188,14 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun signOut(){
+    fun signOut() {
         viewModelScope.launch(Dispatchers.IO) {
-            when(val result = signOut.invoke()){
+            when (val result = signOut.invoke()) {
                 is SignOut.Result.Fail -> {
                     _editProfileState.value = EditProfileState.Error(result.errorMessage)
                 }
-                is SignOut.Result.Success ->{
+
+                is SignOut.Result.Success -> {
                     _editProfileState.value = EditProfileState.GoodBye(result.message)
                 }
             }
@@ -203,8 +206,12 @@ class ProfileEditViewModel @Inject constructor(
         return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
     }
 
-    fun disMissDialog(){
+    fun disMissDialog() {
         _showLogoutDialog.value = false
+    }
+
+    fun setDialogTrue() {
+        _showLogoutDialog.value = true
     }
 
     fun changeLoveState(data: LOVE) {
@@ -221,18 +228,17 @@ class ProfileEditViewModel @Inject constructor(
         _language.value = data
         _button.value = true
     }
-    fun changeSignOutContent(data : SignOutData){
+
+    fun changeSignOutContent(data: SignOutData) {
         _signOutContent.value = data
         _button.value = true
-    }
-    fun setDialogTrue(){
-        _showLogoutDialog.value = true
     }
 
     fun initFlow() {
         _editProfileState.value = EditProfileState.Loading
         _button.value = false
         _showLogoutDialog.value = false
+
     }
 
     fun toggleJob(job: JOB) {
@@ -250,19 +256,17 @@ class ProfileEditViewModel @Inject constructor(
 
             else -> {
                 _jobSelectionError.value = true
-                viewModelScope.launch {
-                    haptic.invoke()
-                }
+                viewModelScope.launch { haptic.invoke() }
                 return
             }
         }
         _selectedJobs.value = newList
     }
+
     sealed interface EditProfileState {
-        data object Loading : EditProfileState
-        data class Success(val data: UserInfo) : EditProfileState
+        object Loading : EditProfileState
         data class SuccessToChange(val message: String) : EditProfileState
-        data class GoodBye(val message : String) : EditProfileState
+        data class GoodBye(val message: String) : EditProfileState
         data class Error(val message: String) : EditProfileState
     }
 }
@@ -281,4 +285,3 @@ data class LoveState(
     var love: LOVE = LOVE.SINGLE,
     var Meeting: MEETING = MEETING.SAME,
 )
-

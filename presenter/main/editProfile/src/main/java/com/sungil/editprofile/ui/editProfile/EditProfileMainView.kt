@@ -43,8 +43,9 @@ internal fun EditProfileMainView(
 ) {
     val scrollState = rememberScrollState()
     val state by viewModel.editProfileState.collectAsState()
-    val userInfo = (state as? ProfileEditViewModel.EditProfileState.Success)?.data
+    val userInfo by viewModel.userInfo.collectAsState()
     val showDialog by viewModel.showLogoutDialog.collectAsState()
+
     val name = userInfo?.name.orEmpty()
     val nickName = userInfo?.nickName.orEmpty()
     val phoneNumber = userInfo?.phoneNumber.orEmpty()

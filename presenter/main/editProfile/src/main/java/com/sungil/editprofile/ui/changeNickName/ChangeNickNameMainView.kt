@@ -48,13 +48,12 @@ internal fun ChangeNickNameMainView(
     snackBarHost: SnackbarHostState,
 ) {
     val state by viewModel.editProfileState.collectAsState()
-    val userData = (state as? ProfileEditViewModel.EditProfileState.Success)?.data
+    val userData by viewModel.userInfo.collectAsState()
 
     var nickname by remember { mutableStateOf("") }
     var nicknameValidationMessage by remember { mutableIntStateOf(R.string.txt_nick_length) }
 
-
-    LaunchedEffect(userData?.nickName) {
+    LaunchedEffect(userData) {
         nickname = userData?.nickName ?: "오류"
     }
     val context = LocalContext.current
