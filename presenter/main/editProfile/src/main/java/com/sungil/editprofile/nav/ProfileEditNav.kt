@@ -8,9 +8,11 @@ import com.sungil.editprofile.NAV_CHANGE_JOB
 import com.sungil.editprofile.NAV_CHANGE_LANGUAGE
 import com.sungil.editprofile.NAV_CHANGE_LOVE
 import com.sungil.editprofile.NAV_CHANGE_NICK_NAME
+import com.sungil.editprofile.NAV_DIET
 import com.sungil.editprofile.NAV_PROFILE_MAIN
 import com.sungil.editprofile.NAV_SIGN_OUT
 import com.sungil.editprofile.ProfileEditViewModel
+import com.sungil.editprofile.ui.changeDiet.DietView
 import com.sungil.editprofile.ui.changeJob.ChangeJobView
 import com.sungil.editprofile.ui.changeLanguage.ChangeLanguageView
 import com.sungil.editprofile.ui.changeNickName.ChangeNickNameView
@@ -47,6 +49,9 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel, goToLoginPage: () -
                 },
                 signOutPage = {
                     navController.navigate(NAV_SIGN_OUT)
+                },
+                dietPage = {
+                    navController.navigate(NAV_DIET)
                 }
             )
         }
@@ -101,5 +106,14 @@ internal fun ProfileEditNav(viewModel: ProfileEditViewModel, goToLoginPage: () -
                 }
             )
         }
+        composable(NAV_DIET) {
+            DietView(
+                viewModel = viewModel,
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
     }
 }

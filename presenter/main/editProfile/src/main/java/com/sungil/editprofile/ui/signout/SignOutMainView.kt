@@ -45,7 +45,7 @@ internal fun SignOutMainView(
 ) {
     val signOutContent = viewModel.signOutContent.collectAsState()
     val button = viewModel.button.collectAsState()
-    var reaspn by remember { mutableStateOf("") }
+    var inputValue by remember { mutableStateOf("") }
     val dialog = viewModel.showLogoutDialog.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.editProfileState.collect { state ->
@@ -114,10 +114,10 @@ internal fun SignOutMainView(
 
             if(signOutContent.value == SignOutData.ETC){
                 CustomChangeDataTextField(
-                    beforeText = reaspn,
+                    beforeText = inputValue,
                     inputType = KeyboardType.Text,
                     onValueChange = { data ->
-                        reaspn = data
+                        inputValue = data
                     }
                 )
             }

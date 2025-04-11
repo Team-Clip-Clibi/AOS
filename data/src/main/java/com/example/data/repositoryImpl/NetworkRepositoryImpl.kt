@@ -7,6 +7,7 @@ import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
+import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
@@ -184,6 +185,27 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun requestSignOut(refreshToken: String): Int {
         val result = api.requestSignOut(refreshToken)
         return result.code()
+    }
+
+    override suspend fun requestUpdateDiet(accessToken: String, diet: String): Int {
+        val result = api.requestUpdateDiet(accessToken , Diet(diet))
+        return result.code()
+    }
+
+    override suspend fun requestDiet(accessToken: String): String {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun requestJob(accessToken: String): List<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun requestLove(accessToken: String): Pair<String, Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun requestLanguage(accessToken: String): String {
+        TODO("Not yet implemented")
     }
 
     private fun RequestUserInfo.toDomain(): UserInfo {

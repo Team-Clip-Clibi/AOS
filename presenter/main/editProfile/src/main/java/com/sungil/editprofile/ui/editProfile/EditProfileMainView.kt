@@ -39,7 +39,8 @@ internal fun EditProfileMainView(
     loveClick : () -> Unit,
     editLanguageClick : () -> Unit,
     goToLoginPage : () -> Unit,
-    signOutPage : () -> Unit
+    signOutPage : () -> Unit,
+    dietPage : () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val state by viewModel.editProfileState.collectAsState()
@@ -142,7 +143,7 @@ internal fun EditProfileMainView(
                     textColor = 0xFF171717,
                     subTitle = "",
                     subTitleColor = 0xFF171717,
-                    buttonClick = editNickNameClick
+                    buttonClick = dietPage
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(

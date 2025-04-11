@@ -47,6 +47,14 @@
     <string name="txt_language_kor">한국어</string>
     <string name="txt_language_eng">영어</string>
     <string name="txt_language_both">한국어, 영어 모두 가능</string>
+    <!-- diet   -->
+    <string name="top_diet">식단 제한 변경</string>
+    <string name="txt_diet_vg">비건이에요</string>
+    <string name="txt_diet_vt">베지테리언이에요</string>
+    <string name="txt_diet_gf">글루텐프리를 지켜요</string>
+    <string name="txt_diet_all">다 잘먹어요</string>
+    <string name="txt_diet_etc">기타</string>
+
     <!--  btn  -->
     <string name="btn_finish">완료</string>
     <!-- signOut   -->

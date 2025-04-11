@@ -7,6 +7,7 @@ const val NAV_CHANGE_LOVE = "changeLove"
 const val NAV_CHANGE_LANGUAGE = "language"
 const val NAV_LOGOUT = "Login"
 const val NAV_SIGN_OUT = "signOut"
+const val NAV_DIET =" diet"
 
 const val ERROR_TO_LONG = "to long"
 const val ERROR_TO_SHORT = "to short"
@@ -19,7 +20,7 @@ const val ERROR_FAIL_TO_UPDATE_LOVE = "Fail to update Love"
 const val ERROR_FAIL_SAVE = "Save Fail"
 const val ERROR_USER_DATA_NULL = "userData is null"
 
-enum class JOB(val displayName : String){
+enum class JOB(val displayName: String) {
     STUDENT("학생"),
     MANUFACTURING("제조업"),
     MEDICAL("의료계"),
@@ -32,14 +33,14 @@ enum class JOB(val displayName : String){
     ETC("기타")
 }
 
-enum class LOVE(val displayName: String){
+enum class LOVE(val displayName: String) {
     SINGLE("싱글"),
     COUPLE("연애중"),
     MARRIAGE("기혼"),
     SECRET("밝히고 싶지 않아요")
 }
 
-enum class MEETING(val displayName: String){
+enum class MEETING(val displayName: String) {
     SAME("같은 상태인 사람만 만나고 싶어요"),
     OKAY("연애 상태는 신경쓰지 않아도 괜찮아요")
 }
@@ -57,4 +58,13 @@ enum class SignOutData {
     NOT_NEED,
     ETC,
     NOTING
+}
+
+enum class DIET(val displayName: String) {
+    VG("비건이에요"),
+    VT("베지테리언이에요"),
+    GF("글루텐프리를 지켜요"),
+    ALL("다 잘먹어요"),
+    ETC("기타"),
+    NONE("NULL")
 }

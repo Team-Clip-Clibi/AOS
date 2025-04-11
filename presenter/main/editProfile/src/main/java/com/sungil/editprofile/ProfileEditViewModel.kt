@@ -8,6 +8,7 @@ import com.sungil.domain.useCase.GetUserInfo
 import com.sungil.domain.useCase.LogOut
 import com.sungil.domain.useCase.SaveChangeProfileData
 import com.sungil.domain.useCase.SignOut
+import com.sungil.domain.useCase.UpdateDiet
 import com.sungil.domain.useCase.UpdateJob
 import com.sungil.domain.useCase.UpdateLanguage
 import com.sungil.domain.useCase.UpdateLove
@@ -30,7 +31,8 @@ class ProfileEditViewModel @Inject constructor(
     private val updateLoveState: UpdateLove,
     private val updateLanguage: UpdateLanguage,
     private val logout: LogOut,
-    private val signOut: SignOut
+    private val signOut: SignOut,
+    private val diet : UpdateDiet
 ) : ViewModel() {
 
     private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
@@ -60,6 +62,9 @@ class ProfileEditViewModel @Inject constructor(
 
     private var _signOutContent = MutableStateFlow(SignOutData.NOTING)
     val signOutContent: StateFlow<SignOutData> = _signOutContent
+
+    private var _dietData = MutableStateFlow(DIET.NONE)
+    val dietData : StateFlow<DIET> = _dietData
 
     init {
         getUserInfo()
@@ -94,7 +99,7 @@ class ProfileEditViewModel @Inject constructor(
                         Meeting = if (data.loveState.second == "SAME") MEETING.SAME else MEETING.OKAY
                     )
                     _language.value = LANGUAGE.entries.find { it.name == data.language } ?: LANGUAGE.KOREAN
-
+                    _dietData.value = DIET.entries.find { it.displayName == data.diet } ?: DIET.NONE
                     _editProfileState.value = EditProfileState.Loading // 초기 상태로 설정 (UI가 이 상태를 기준으로 판단한다면 유지)
                 }
             }
@@ -202,6 +207,19 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
+    fun updateDiet(){
+        viewModelScope.launch {
+            when(val result = diet.invoke(UpdateDiet.Param(_dietData.value.displayName))){
+                is UpdateDiet.Result.Fail -> {
+                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                }
+                is UpdateDiet.Result.Success ->{
+                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                }
+            }
+        }
+    }
+
     fun isJobSelectionChanged(): Boolean {
         return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
     }
@@ -232,6 +250,10 @@ class ProfileEditViewModel @Inject constructor(
     fun changeSignOutContent(data: SignOutData) {
         _signOutContent.value = data
         _button.value = true
+    }
+
+    fun setDiet(data : DIET){
+        _dietData.value = data
     }
 
     fun initFlow() {
