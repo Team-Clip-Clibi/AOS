@@ -8,6 +8,7 @@ const val NAV_CHANGE_LANGUAGE = "language"
 const val NAV_LOGOUT = "Login"
 const val NAV_SIGN_OUT = "signOut"
 const val NAV_DIET =" diet"
+const val NAV_MAIN = "Main"
 
 const val ERROR_TO_LONG = "to long"
 const val ERROR_TO_SHORT = "to short"

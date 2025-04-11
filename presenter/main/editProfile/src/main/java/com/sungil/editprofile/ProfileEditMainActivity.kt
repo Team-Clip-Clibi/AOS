@@ -19,7 +19,11 @@ class ProfileEditMainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ProfileEditNav(viewModel, goToLoginPage = { router.navigation(NAV_LOGOUT) })
+            ProfileEditNav(
+                viewModel,
+                goToLoginPage = { router.navigation(NAV_LOGOUT) },
+                goToMainPage = { router.navigation(NAV_MAIN) }
+            )
         }
     }
 }

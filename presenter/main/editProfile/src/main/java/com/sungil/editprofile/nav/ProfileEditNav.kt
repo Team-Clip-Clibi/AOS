@@ -21,7 +21,11 @@ import com.sungil.editprofile.ui.loveState.LoveStateView
 import com.sungil.editprofile.ui.signout.SignOutView
 
 @Composable
-internal fun ProfileEditNav(viewModel: ProfileEditViewModel, goToLoginPage: () -> Unit) {
+internal fun ProfileEditNav(
+    viewModel: ProfileEditViewModel,
+    goToLoginPage: () -> Unit,
+    goToMainPage: () -> Unit,
+) {
     val navController = rememberNavController()
 
     NavHost(
