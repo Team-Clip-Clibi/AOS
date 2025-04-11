@@ -145,7 +145,7 @@ internal fun ChangeLanguageMainView(
                         shape = RoundedCornerShape(8.dp)
                     )
                     .then(
-                        if (language == LANGUAGE.KOREAN) {
+                        if (language == LANGUAGE.ENGLISH) {
                             Modifier.border(
                                 width = 1.dp,
                                 color = Color(0xFFD3ADF7),
