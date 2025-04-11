@@ -12,6 +12,7 @@ import com.sungil.domain.useCase.UpdateDiet
 import com.sungil.domain.useCase.UpdateJob
 import com.sungil.domain.useCase.UpdateLanguage
 import com.sungil.domain.useCase.UpdateLove
+import com.sungil.domain.useCase.UpdateNickName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val userInfoUseCase: GetUserInfo,
-    private val changeNickName: CheckNickName,
+    private val changeNickName: UpdateNickName,
     private val haptic: ActivateHaptic,
     private val changeJob: UpdateJob,
     private val saveData: SaveChangeProfileData,
@@ -114,12 +115,12 @@ class ProfileEditViewModel @Inject constructor(
 
         _userInfo.update { it?.copy(nickName = newNickName) }
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = changeNickName.invoke(CheckNickName.Param(newNickName))) {
-                is CheckNickName.Result.Fail -> {
+            when (val result = changeNickName.invoke(UpdateNickName.Param(newNickName))) {
+                is UpdateNickName.Result.Fail -> {
                     _editProfileState.value = EditProfileState.Error(result.message)
                 }
 
-                is CheckNickName.Result.Success -> {
+                is UpdateNickName.Result.Success -> {
                     _editProfileState.value = EditProfileState.SuccessToChange(result.message)
                 }
             }

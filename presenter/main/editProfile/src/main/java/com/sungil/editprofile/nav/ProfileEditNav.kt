@@ -29,11 +29,7 @@ internal fun ProfileEditNav(
     goToMainPage: () -> Unit,
 ) {
     val navController = rememberNavController()
-    LaunchedEffect(Unit) {
-        navController.currentBackStackEntryFlow.collect { entry ->
-            Log.d("NavDebug", "Current route: ${entry.destination.route}")
-        }
-    }
+
     NavHost(
         navController = navController,
         startDestination = NAV_PROFILE_MAIN
@@ -41,7 +37,7 @@ internal fun ProfileEditNav(
         composable(NAV_PROFILE_MAIN) {
             EditProfileView(
                 viewModel = viewModel,
-                actionButtonClick = {},
+                actionButtonClick = {goToMainPage()},
                 editNickNameClick = {
                     navController.navigate(NAV_CHANGE_NICK_NAME)
                 },
