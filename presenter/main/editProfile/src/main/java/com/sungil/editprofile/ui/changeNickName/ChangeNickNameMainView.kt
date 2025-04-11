@@ -109,7 +109,7 @@ internal fun ChangeNickNameMainView(
     val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 8.dp
@@ -120,6 +120,7 @@ internal fun ChangeNickNameMainView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .align(Alignment.TopCenter)
                 .padding(start = 17.dp, end = 16.dp)
         ) {
             NicknameTextField(

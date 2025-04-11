@@ -390,13 +390,13 @@ fun CustomTitle1624Semi(
 fun JobGridSelector(
     selectedJobs: List<JOB>,
     onJobToggle: (JOB) -> Unit,
-
+    modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         items(JOB.entries.toList()) { job ->
             val isSelected = selectedJobs.contains(job)

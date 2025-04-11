@@ -34,50 +34,45 @@ internal fun ChangeJobMainView(
     viewModel: ProfileEditViewModel,
     snackBarHost: SnackbarHostState,
 ) {
-
     val selectedJobs by viewModel.selectedJobs.collectAsState()
     val isOverLimit by viewModel.jobSelectionError.collectAsState()
     val isChanged = remember(selectedJobs) { viewModel.isJobSelectionChanged() }
-    val scrollState = rememberScrollState()
-    Box(
+
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 8.dp
             )
             .navigationBarsPadding()
-            .verticalScroll(scrollState)
+            .padding(start = 17.dp, end = 16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 17.dp, end = 16.dp)
-        ) {
-            CustomTitle1624Semi(
-                text = stringResource(R.string.txt_job_select_two),
-                color = if (isOverLimit) 0xFFFF4F4F else 0xFFFB4F4F
-            )
 
-            Spacer(modifier = Modifier.height(24.dp))
+        CustomTitle1624Semi(
+            text = stringResource(R.string.txt_job_select_two),
+            color = if (isOverLimit) 0xFFFF4F4F else 0xFFFB4F4F
+        )
 
-            JobGridSelector(
-                selectedJobs = selectedJobs,
-                onJobToggle = viewModel::toggleJob,
-            )
-        }
-        Column(
+        Spacer(modifier = Modifier.height(24.dp))
+
+        JobGridSelector(
+            selectedJobs = selectedJobs,
+            onJobToggle = viewModel::toggleJob,
             modifier = Modifier
-                .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-        ) {
-            HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomButton(
-                stringResource(R.string.btn_finish),
-                onclick = { viewModel.changeJob() },
-                enable = isChanged && selectedJobs.size <= 2
-            )
-        }
+                .weight(1f)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CustomButton(
+            stringResource(R.string.btn_finish),
+            onclick = { viewModel.changeJob() },
+            enable = isChanged && selectedJobs.size <= 2
+        )
     }
 }

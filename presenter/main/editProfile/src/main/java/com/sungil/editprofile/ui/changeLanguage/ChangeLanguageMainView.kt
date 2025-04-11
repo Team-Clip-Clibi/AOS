@@ -106,6 +106,7 @@ internal fun ChangeLanguageMainView(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .align(Alignment.TopCenter)
                 .padding(start = 17.dp, end = 16.dp)
         ) {
             CustomItemPick(

@@ -63,7 +63,7 @@ internal fun SignOutMainView(
     val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 8.dp
@@ -73,7 +73,8 @@ internal fun SignOutMainView(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
                 .padding(start = 17.dp, end = 16.dp)
         ) {
             CustomTitle(

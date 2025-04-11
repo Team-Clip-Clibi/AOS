@@ -91,7 +91,7 @@ internal fun DietChangeMainView(
     Box(
         Modifier
             .background(Color(0xFFFFFFFF))
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(top = paddingValues.calculateTopPadding() + 32.dp, bottom = 8.dp)
             .navigationBarsPadding()
             .verticalScroll(scrollState)
@@ -99,6 +99,7 @@ internal fun DietChangeMainView(
         Column(
             Modifier
                 .fillMaxSize()
+                .align(Alignment.TopCenter)
                 .padding(start = 17.dp, end = 16.dp)
         ) {
             CustomItemPick(
