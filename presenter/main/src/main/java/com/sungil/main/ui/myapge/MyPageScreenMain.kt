@@ -43,6 +43,7 @@ internal fun MyPageScreenMain(
     viewModel: MainViewModel,
     profileEditButton: () -> Unit,
     reportClick: () -> Unit,
+    lowGuide : () -> Unit
 ) {
 
     val userState by viewModel.userState.collectAsState()
@@ -178,7 +179,7 @@ internal fun MyPageScreenMain(
                     text = stringResource(R.string.txt_myPage_term),
                     style = AppTextStyles.CAPTION_12_14_MEDIUM,
                     color = Color(0xFF383838),
-                    modifier = Modifier.clickable { /* TODO */ }
+                    modifier = Modifier.clickable { lowGuide() }
                 )
 
                 Spacer(modifier = Modifier.width(16.dp))

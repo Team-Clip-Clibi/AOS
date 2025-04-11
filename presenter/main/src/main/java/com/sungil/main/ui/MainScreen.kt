@@ -18,6 +18,7 @@ fun MainScreenView(
     viewModel: MainViewModel,
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
+    lowClick: () -> Unit
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -29,7 +30,8 @@ fun MainScreenView(
                 navController = navController,
                 viewModel,
                 profileButtonClick,
-                reportClick
+                reportClick,
+                lowClick = lowClick
             )
         }
     }

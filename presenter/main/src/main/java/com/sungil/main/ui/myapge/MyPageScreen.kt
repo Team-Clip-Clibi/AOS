@@ -12,6 +12,7 @@ internal fun MyPageScreen(
     viewModel: MainViewModel,
     profileButtonEditClick: () -> Unit,
     reportClick: () -> Unit,
+    lowClick : () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -20,6 +21,6 @@ internal fun MyPageScreen(
             )
         }
     ) { innerPadding ->
-        MyPageScreenMain(innerPadding, viewModel, profileButtonEditClick, reportClick)
+        MyPageScreenMain(innerPadding, viewModel, profileButtonEditClick, reportClick, lowClick)
     }
 }

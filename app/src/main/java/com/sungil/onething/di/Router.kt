@@ -7,6 +7,7 @@ import com.sungil.domain.model.Router
 import com.sungil.editprofile.ProfileEditMainActivity
 import com.sungil.kakao.com.kakao.sdk.auth.AuthCodeHandlerActivity
 import com.sungil.login.LoginActivity
+import com.sungil.low.ui.low.LowActivity
 import com.sungil.main.MainActivity
 import com.sungil.report.ReportMainActivity
 
@@ -47,12 +48,21 @@ class Router(private val context: Context) : Router {
                 }
                 context.startActivity(intent)
             }
+
             "report" -> {
-                val intent = Intent(context , ReportMainActivity::class.java).apply {
+                val intent = Intent(context, ReportMainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
             }
+
+            "low" -> {
+                val intent = Intent(context, LowActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                context.startActivity(intent)
+            }
+
             else -> {
                 throw IllegalArgumentException("Unsupported target: $target")
             }

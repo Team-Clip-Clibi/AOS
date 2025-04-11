@@ -61,6 +61,11 @@
         <activity
             android:name="com.sungil.report.ReportMainActivity"
             android:exported="true" />
+
+        <activity
+            android:name="com.sungil.low.ui.low.LowActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

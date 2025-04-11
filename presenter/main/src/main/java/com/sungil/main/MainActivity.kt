@@ -21,7 +21,8 @@ class MainActivity : ComponentActivity() {
             MainScreenView(
                 viewModel = viewModel,
                 profileButtonClick = { router.navigation(NAV_EDIT_PROFILE) },
-                reportClick = { router.navigation(NAV_REPORT) }
+                reportClick = { router.navigation(NAV_REPORT) },
+                lowClick = { router.navigation(NAV_LOW) }
             )
         }
     }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="top_low">약관 및 정책</string>
+    <string name="txt_low_person">개인정보 처리방침</string>
+    <string name="txt_low_guide">이용약관</string>
+    <string name="txt_low_com">커뮤니티 가이드라인</string>
+</resources>
