@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RelationShip(
-    val relationshipStatus: String,
-    val isSameRelationshipConsidered: Boolean,
+    val relationshipStatus: String?,
+    val isSameRelationshipConsidered: Boolean?,
 )

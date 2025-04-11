@@ -32,8 +32,15 @@ class GetUserInfo @Inject constructor(
         val diet = network.requestDiet(TOKEN_FORM + token.first!!) ?: "NONE"
         val language = network.requestLanguage(TOKEN_FORM + token.first!!) ?: "KOREAN"
         val loveState = network.requestLove(TOKEN_FORM + token.first!!)
-        apiUserData.job = Pair(job[0], job[1])
-        apiUserData.diet = diet.replace(Regex("[^가-힣 ]"), "")
+        apiUserData.job = Pair(
+            job.getOrNull(0) ?: "NONE",
+            job.getOrNull(1) ?: "NONE"
+        )
+        apiUserData.diet = if ("null" in diet) {
+            "NONE"
+        } else {
+            diet.replace(Regex("[^가-힣 ]"), "")
+        }
         apiUserData.language = language
         val saveResult = database.saveUserInfo(
             name = apiUserData.userName,
