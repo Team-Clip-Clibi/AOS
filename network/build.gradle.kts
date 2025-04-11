@@ -42,6 +42,7 @@ android {
         val language: String = properties.getProperty("language", "")
         val signOut : String = properties.getProperty("signOut" ,"")
         val diet : String = properties.getProperty("diet", "")
+        val report : String = properties.getProperty("report", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -60,6 +61,7 @@ android {
         buildConfigField("String", "LANGUAGE_UPDATE_URL", language)
         buildConfigField("String" , "SIGNOUT_URL" ,signOut)
         buildConfigField("String" , "DIET_URL" , diet)
+        buildConfigField("String" , "REPORT_URL" , report)
     }
 
     buildTypes {

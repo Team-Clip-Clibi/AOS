@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -133,7 +134,7 @@ fun CustomMyPageAppBar(text: String) {
             .fillMaxWidth()
             .height(48.dp)
             .background(Color(0xFFF7F7F7))
-            .padding(start = 17.dp , end = 12.dp),
+            .padding(start = 17.dp, end = 12.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         Text(
@@ -171,8 +172,9 @@ fun CustomMyPageButton(
         )
     }
 }
+
 @Composable
-fun MyPageItem(text: String, icon: Int) {
+fun MyPageItem(text: String, icon: Int, click: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -181,7 +183,8 @@ fun MyPageItem(text: String, icon: Int) {
                 color = Color(0xFFFFFFFF),
                 shape = RoundedCornerShape(size = 8.dp)
             )
-            .padding(start = 17.dp, end = 16.dp, top = 10.dp, bottom = 10.dp),
+            .padding(start = 17.dp, end = 16.dp, top = 10.dp, bottom = 10.dp)
+            .clickable { click() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(

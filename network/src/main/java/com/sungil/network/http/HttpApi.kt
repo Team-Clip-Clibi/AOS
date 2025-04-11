@@ -8,6 +8,7 @@ import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.RelationShip
+import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
@@ -150,7 +151,7 @@ interface HttpApi {
     suspend fun requestUpdateLanguage(
         @Header("Authorization") bearerToken: String,
         @Body body: Language,
-    ) : Response<Unit>
+    ): Response<Unit>
 
     /**
      * 사용 언어 GET API
@@ -166,8 +167,8 @@ interface HttpApi {
     @PATCH(BuildConfig.DIET_URL)
     suspend fun requestUpdateDiet(
         @Header("Authorization") bearerToken: String,
-        @Body diet : Diet
-    ) : Response<Unit>
+        @Body diet: Diet,
+    ): Response<Unit>
 
     /**
      * 식닥 GET URL
@@ -175,14 +176,22 @@ interface HttpApi {
     @GET(BuildConfig.DIET_URL)
     suspend fun requestDiet(
         @Header("Authorization") bearerToken: String,
-    ) : Response<Diet>
+    ): Response<Diet>
 
     /**
      * 회원 털퇴 API
      */
     @DELETE(BuildConfig.SIGNOUT_URL)
     suspend fun requestSignOut(
-        @Header("Authorization")  bearerToken: String,
+        @Header("Authorization") bearerToken: String,
     ): Response<Unit>
 
+    /**
+     * 신고 API
+     */
+    @POST(BuildConfig.REPORT_URL)
+    suspend fun requestReport(
+        @Header("Authorization") bearerToken: String,
+        @Body data: Report,
+    ): Response<Unit>
 }

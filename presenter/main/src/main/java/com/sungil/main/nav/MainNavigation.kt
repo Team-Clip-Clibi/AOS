@@ -15,6 +15,7 @@ fun MainNavigation(
     navController: NavHostController,
     viewModel: MainViewModel,
     profileButtonClick: () -> Unit,
+    reportClick: () -> Unit,
 ) {
     NavHost(navController = navController, startDestination = Screen.Home.screenRoute) {
         composable(Screen.Home.screenRoute) {
@@ -24,7 +25,7 @@ fun MainNavigation(
             CalendarScreen()
         }
         composable(Screen.MyPage.screenRoute) {
-            MyPageScreen(viewModel, profileButtonClick)
+            MyPageScreen(viewModel, profileButtonClick, reportClick)
         }
     }
 }

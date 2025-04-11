@@ -64,4 +64,6 @@ interface NetworkRepository {
 
     suspend fun requestLanguage(accessToken: String): String
 
+    suspend fun requestReport(accessToken: String, content: String, reportCategory: String): Int
+
 }

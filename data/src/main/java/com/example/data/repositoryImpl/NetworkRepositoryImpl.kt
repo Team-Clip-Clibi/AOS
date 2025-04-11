@@ -13,7 +13,9 @@ import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.RelationShip
+import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
+import com.sungil.network.model.SLANG
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
 import kotlinx.coroutines.flow.Flow
@@ -188,7 +190,7 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun requestUpdateDiet(accessToken: String, diet: String): Int {
-        val result = api.requestUpdateDiet(accessToken , Diet(diet))
+        val result = api.requestUpdateDiet(accessToken, Diet(diet))
         return result.code()
     }
 
@@ -206,6 +208,22 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestLanguage(accessToken: String): String {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun requestReport(
+        accessToken: String,
+        content: String,
+        reportCategory: String,
+    ): Int {
+        val category = SLANG.entries.find { it.name == reportCategory }
+            ?: throw IllegalArgumentException("Invalid report category: $reportCategory")
+        val result = api.requestReport(
+            accessToken, Report(
+                content = content,
+                reportCategory = category
+            )
+        )
+        return result.code()
     }
 
     private fun RequestUserInfo.toDomain(): UserInfo {

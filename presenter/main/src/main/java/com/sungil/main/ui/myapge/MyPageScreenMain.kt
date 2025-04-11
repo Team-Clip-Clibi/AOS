@@ -38,7 +38,12 @@ import com.sungil.main.component.CustomMyPageButton
 import com.sungil.main.component.MyPageItem
 
 @Composable
-internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewModel , profileEditButton : () -> Unit) {
+internal fun MyPageScreenMain(
+    paddingValues: PaddingValues,
+    viewModel: MainViewModel,
+    profileEditButton: () -> Unit,
+    reportClick: () -> Unit,
+) {
 
     val userState by viewModel.userState.collectAsState()
 
@@ -111,7 +116,7 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewM
                         text = stringResource(R.string.btn_myPage_edit_profile),
                         color = 0xFFEFEFEF,
                         textColor = 0xFF171717,
-                        onClick = {profileEditButton()}
+                        onClick = { profileEditButton() }
                     )
                 }
             }
@@ -121,22 +126,27 @@ internal fun MyPageScreenMain(paddingValues: PaddingValues, viewModel: MainViewM
             // 항목들
             MyPageItem(
                 text = stringResource(R.string.txt_myPage_notify),
-                icon = R.drawable.ic_bell
+                icon = R.drawable.ic_bell,
+                click = {}
             )
             Spacer(modifier = Modifier.height(12.dp))
             MyPageItem(
                 text = stringResource(R.string.txt_myPage_notice),
-                icon = R.drawable.ic_noti
+                icon = R.drawable.ic_noti,
+                click = {}
             )
             Spacer(modifier = Modifier.height(12.dp))
             MyPageItem(
                 text = stringResource(R.string.txt_myPage_customer),
-                icon = R.drawable.ic_customer_service
+                icon = R.drawable.ic_customer_service,
+                click = {}
             )
             Spacer(modifier = Modifier.height(12.dp))
+
             MyPageItem(
                 text = stringResource(R.string.txt_myPage_police),
-                icon = R.drawable.ic_alert
+                icon = R.drawable.ic_alert,
+                click = { reportClick() }
             )
 
 
