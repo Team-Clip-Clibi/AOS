@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,10 +51,12 @@ internal fun ContentMainView(
             }
         }
     }
+    val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFFFFFFFF))
+            .verticalScroll(scrollState)
             .padding(top = paddingValues.calculateTopPadding() + 32.dp, bottom = 8.dp)
     ) {
         Column(

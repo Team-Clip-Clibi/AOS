@@ -60,16 +60,17 @@ internal fun EditProfileMainView(
             }
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White) // 전체 배경 회색
             .navigationBarsPadding()
+            .verticalScroll(scrollState)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
                 .padding(
                     top = paddingValues.calculateTopPadding() + 20.dp,
                     bottom = 20.dp

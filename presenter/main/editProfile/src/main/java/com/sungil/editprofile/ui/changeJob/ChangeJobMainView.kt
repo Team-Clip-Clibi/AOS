@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -36,6 +38,7 @@ internal fun ChangeJobMainView(
     val selectedJobs by viewModel.selectedJobs.collectAsState()
     val isOverLimit by viewModel.jobSelectionError.collectAsState()
     val isChanged = remember(selectedJobs) { viewModel.isJobSelectionChanged() }
+    val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -44,6 +47,7 @@ internal fun ChangeJobMainView(
                 bottom = 8.dp
             )
             .navigationBarsPadding()
+            .verticalScroll(scrollState)
     ) {
         Column(
             modifier = Modifier

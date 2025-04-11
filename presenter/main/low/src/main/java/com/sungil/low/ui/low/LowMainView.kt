@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,11 +22,13 @@ import com.sungil.low.ui.CustomLowItem
 internal fun LowMainView(
     paddingValues: PaddingValues,
 ) {
+    val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFFFFFFFF))
             .padding(top = paddingValues.calculateTopPadding() + 32.dp, start = 17.dp, end = 16.dp)
+            .verticalScroll(scrollState)
             .navigationBarsPadding()
     ) {
         Column(
