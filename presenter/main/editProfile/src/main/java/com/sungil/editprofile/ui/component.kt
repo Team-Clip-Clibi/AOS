@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -470,7 +471,7 @@ fun CustomDialog(
                     shape = RoundedCornerShape(size = 24.dp)
                 )
                 .width(324.dp)
-                .height(174.dp)
+                .height(240.dp)
                 .background(
                     color = Color(0xFFFFFFFF),
                     shape = RoundedCornerShape(size = 24.dp)
@@ -479,6 +480,8 @@ fun CustomDialog(
 
             ) {
             Column(
+                modifier = Modifier.fillMaxSize()
+                    .background(Color(0xFFFFFFFF)),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -504,6 +507,7 @@ fun CustomDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
+                        .background(color = Color(0xFF6700CE), shape = RoundedCornerShape(size = 12.dp))
                 ) {
                     Text(
                         text = buttonText,
@@ -516,10 +520,12 @@ fun CustomDialog(
                 Button(
                     onClick = onDismiss,
                     shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        Color(0xFFEFEFEF)
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
-                        .background(color = Color(0xFFEFEFEF), shape = RoundedCornerShape(size = 12.dp))
                 ) {
                     Text(
                         text = subButtonText,

@@ -112,13 +112,15 @@ internal fun SignOutMainView(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            CustomChangeDataTextField(
-                beforeText = reaspn,
-                inputType = KeyboardType.Text,
-                onValueChange = { data ->
-                    reaspn = data
-                }
-            )
+            if(signOutContent.value == SignOutData.ETC){
+                CustomChangeDataTextField(
+                    beforeText = reaspn,
+                    inputType = KeyboardType.Text,
+                    onValueChange = { data ->
+                        reaspn = data
+                    }
+                )
+            }
             Spacer(modifier = Modifier.weight(1f))
         }
         Column(
@@ -138,7 +140,9 @@ internal fun SignOutMainView(
         }
         if (dialog.value) {
             CustomDialog(
-                onDismiss = { onBackClick() },
+                onDismiss = {
+                    viewModel.disMissDialog()
+                    onBackClick() },
                 buttonClick = { viewModel.signOut() },
                 titleText = stringResource(R.string.dialog_sign_out_title),
                 contentText = stringResource(R.string.dialog_sign_out_content),
