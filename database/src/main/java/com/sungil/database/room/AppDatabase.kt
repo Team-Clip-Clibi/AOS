@@ -9,7 +9,7 @@ import com.sungil.database.room.model.UserInfo
 
 @Database(
     entities = [UserInfo::class , Token :: class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 
