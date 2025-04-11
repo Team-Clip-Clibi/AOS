@@ -13,7 +13,7 @@ data class UserInfo(
     val firstJob : String,
     val secondJob : String,
     val myLoveState : String,
-    val wantLoveState : String,
+    val wantLoveState : Boolean,
     val diet : String,
     val language : String
 )

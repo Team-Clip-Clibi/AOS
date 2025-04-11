@@ -41,9 +41,9 @@ enum class LOVE(val displayName: String) {
     SECRET("밝히고 싶지 않아요")
 }
 
-enum class MEETING(val displayName: String) {
-    SAME("같은 상태인 사람만 만나고 싶어요"),
-    OKAY("연애 상태는 신경쓰지 않아도 괜찮아요")
+enum class MEETING(val displayName: Boolean) {
+    SAME(true),
+    OKAY(false)
 }
 
 enum class LANGUAGE() {

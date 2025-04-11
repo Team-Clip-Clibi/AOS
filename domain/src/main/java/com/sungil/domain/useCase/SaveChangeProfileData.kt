@@ -9,7 +9,7 @@ class SaveChangeProfileData @Inject constructor(private val database: DatabaseRe
     data class Param(
         val nickName: String,
         val job: Pair<String, String>,
-        val loveState: Pair<String, String>,
+        val loveState: Pair<String, Boolean>,
         val diet: String,
         val language: String,
     ) : UseCase.Param

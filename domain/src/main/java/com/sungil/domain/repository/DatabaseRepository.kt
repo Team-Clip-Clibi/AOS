@@ -17,7 +17,7 @@ interface DatabaseRepository {
         platform: String,
         phoneNumber: String,
         jobList: Pair<String, String>,
-        loveState: Pair<String, String>,
+        loveState: Pair<String, Boolean>,
         diet: String,
         language: String,
     ): Boolean

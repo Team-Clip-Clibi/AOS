@@ -66,7 +66,7 @@ class SendUserDetail @Inject constructor(
             platform = "KAKAO",
             phoneNumber = param.phoneNumber,
             jobList = Pair("NONE" ,"NONE"),
-            loveState = Pair("NONE" , "NONE"),
+            loveState = Pair("NONE" , false),
             diet = "NONE",
             language = "KOREAN"
         )

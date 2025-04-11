@@ -1,7 +1,6 @@
 package com.sungil.domain.repository
 
 import android.app.Activity
-import android.icu.text.TimeZoneFormat.ParseOption
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.UserInfo
 import kotlinx.coroutines.flow.Flow
@@ -58,11 +57,11 @@ interface NetworkRepository {
 
     suspend fun requestDiet(accessToken: String): String
 
-    suspend fun requestJob(accessToken: String): List<String>
+    suspend fun requestJob(accessToken: String):  List<String>?
 
-    suspend fun requestLove(accessToken: String): Pair<String, Boolean>
+    suspend fun requestLove(accessToken: String):  Pair<String?, Boolean?>
 
-    suspend fun requestLanguage(accessToken: String): String
+    suspend fun requestLanguage(accessToken: String): String?
 
     suspend fun requestReport(accessToken: String, content: String, reportCategory: String): Int
 

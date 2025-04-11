@@ -28,27 +28,30 @@ class GetUserInfo @Inject constructor(
         }
         val apiUserData = network.requestUserData(TOKEN_FORM + token.first!!)
             ?: return Result.Fail("network Error")
-
+        val job = network.requestJob(TOKEN_FORM + token.first!!) ?: listOf("NONE", "NONE")
+        val diet = network.requestDiet(TOKEN_FORM + token.first!!) ?: "NONE"
+        val language = network.requestLanguage(TOKEN_FORM + token.first!!) ?: "KOREAN"
+        val loveState = network.requestLove(TOKEN_FORM + token.first!!)
+        apiUserData.job = Pair(job[0], job[1])
+        apiUserData.diet = diet.replace(Regex("[^가-힣 ]"), "")
+        apiUserData.language = language
         val saveResult = database.saveUserInfo(
             name = apiUserData.userName,
             nickName = apiUserData.nickName,
             platform = "KAKAO",
             phoneNumber = apiUserData.phoneNumber.reMakePhoneNumber(),
-            jobList = Pair("NONE" ,"NONE"),
-            loveState = Pair("NONE" , "NONE"),
-            diet = "NONE",
-            language = "KOREAN"
+            jobList = apiUserData.job,
+            loveState = if (loveState.first == null) {
+                Pair("NONE", false)
+            } else {
+                Pair(loveState.first!!, loveState.second!!)
+            },
+            diet = apiUserData.diet,
+            language = apiUserData.language
         )
         if (!saveResult) {
             return Result.Fail("save Error")
         }
-        val jobList = if (apiUserData.job.first == "NONE") {
-            Pair("학생", "IT")
-        } else {
-            apiUserData.job
-        }
-        apiUserData.job = jobList
-        apiUserData.phoneNumber = apiUserData.phoneNumber.reMakePhoneNumber()
         return Result.Success(apiUserData)
     }
 
@@ -64,7 +67,7 @@ class GetUserInfo @Inject constructor(
                 "${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7, 11)}"
             }
 
-            else -> this // 포맷 안 맞으면 원본 반환
+            else -> this
         }
     }
 }

@@ -35,7 +35,7 @@ internal fun ReportMainView(
     val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(Color(0xFFFFFFFF))
             .verticalScroll(scrollState)
             .navigationBarsPadding()
@@ -48,7 +48,7 @@ internal fun ReportMainView(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
             CustomTitleText(stringResource(R.string.txt_main_title))

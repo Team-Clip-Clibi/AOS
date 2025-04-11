@@ -90,17 +90,17 @@ class ProfileEditViewModel @Inject constructor(
                     _userInfo.value = data
 
                     _initialJobSelection = JOB.entries.filter {
-                        it.displayName == data.job.first || it.displayName == data.job.second
+                        it.name == data.job.first || it.name == data.job.second
                     }
                     _selectedJobs.value = _initialJobSelection
 
                     _loveState.value = LoveState(
                         love = LOVE.entries.find { it.name == data.loveState.first } ?: LOVE.SINGLE,
-                        Meeting = if (data.loveState.second == "SAME") MEETING.SAME else MEETING.OKAY
+                        Meeting = if (data.loveState.second) MEETING.SAME else MEETING.OKAY
                     )
                     _language.value = LANGUAGE.entries.find { it.name == data.language } ?: LANGUAGE.KOREAN
                     _dietData.value = DIET.entries.find { it.displayName == data.diet } ?: DIET.NONE
-                    _editProfileState.value = EditProfileState.Loading // 초기 상태로 설정 (UI가 이 상태를 기준으로 판단한다면 유지)
+                    _editProfileState.value = EditProfileState.Loading
                 }
             }
         }
@@ -298,7 +298,7 @@ data class UserInfo(
     val nickName: String,
     val phoneNumber: String,
     val job: Pair<String, String>,
-    val loveState: Pair<String, String>,
+    val loveState: Pair<String, Boolean>,
     val diet: String,
     val language: String,
 )

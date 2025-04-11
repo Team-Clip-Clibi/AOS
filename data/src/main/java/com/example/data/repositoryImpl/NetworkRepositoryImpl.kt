@@ -195,19 +195,23 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun requestDiet(accessToken: String): String {
-        TODO("Not yet implemented")
+        val result = api.requestDiet(accessToken)
+        return result.body().toString()
     }
 
-    override suspend fun requestJob(accessToken: String): List<String> {
-        TODO("Not yet implemented")
+    override suspend fun requestJob(accessToken: String): List<String>? {
+        val result = api.requestJob(accessToken)
+        return result.body()?.jobList
     }
 
-    override suspend fun requestLove(accessToken: String): Pair<String, Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun requestLove(accessToken: String): Pair<String?, Boolean?> {
+        val result = api.requestRelationShip(accessToken)
+        return Pair(result.body()?.relationshipStatus, result.body()?.isSameRelationshipConsidered)
     }
 
-    override suspend fun requestLanguage(accessToken: String): String {
-        TODO("Not yet implemented")
+    override suspend fun requestLanguage(accessToken: String): String? {
+        val result = api.requestGetLanguage(accessToken)
+        return result.body()?.language
     }
 
     override suspend fun requestReport(
@@ -232,7 +236,7 @@ class NetworkRepositoryImpl @Inject constructor(
             nickName = nickname,
             phoneNumber = phoneNumber,
             job = Pair("NONE", "NONE"),
-            loveState = Pair("NONE", "NONE"),
+            loveState = Pair("NONE", false),
             diet = "NONE",
             language = "KOREAN"
         )

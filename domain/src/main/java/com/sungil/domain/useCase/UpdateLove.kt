@@ -34,7 +34,8 @@ class UpdateLove @Inject constructor(
         if (result != 204) {
             return Result.Fail("Fail to update Love")
         }
-        userData.loveState = Pair(param.love, param.relationShip)
+        val relation = param.relationShip == "SAME"
+        userData.loveState = Pair(param.love,relation)
         val saveResult = database.saveUserInfo(
             name = userData.userName,
             nickName = userData.nickName,

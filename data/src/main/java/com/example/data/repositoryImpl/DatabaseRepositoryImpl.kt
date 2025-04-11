@@ -55,11 +55,11 @@ class DatabaseRepositoryImpl @Inject constructor(
         platform: String,
         phoneNumber: String,
         jobList: Pair<String, String>,
-        loveState: Pair<String, String>,
+        loveState: Pair<String, Boolean>,
         diet: String,
         language: String,
     ): Boolean {
-        val userInfo =UserInfo(
+        val userInfo = UserInfo(
             name = name,
             nickName = nickName,
             platform = platform,
@@ -113,19 +113,19 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteUserIfo(): Boolean {
-        return try{
+        return try {
             userInfoDao.deleteAll()
             true
-        }catch (e : Exception){
+        } catch (e: Exception) {
             false
         }
     }
 
     override suspend fun removeToken(): Boolean {
-        return try{
+        return try {
             tokenDao.deleteAll()
             true
-        }catch (e : Exception){
+        } catch (e: Exception) {
             false
         }
     }
@@ -135,8 +135,8 @@ class DatabaseRepositoryImpl @Inject constructor(
             userName = name,
             nickName = nickName,
             phoneNumber = phoneNumber,
-            job = Pair(firstJob , secondJob),
-            loveState = Pair(myLoveState , wantLoveState),
+            job = Pair(firstJob, secondJob),
+            loveState = Pair(myLoveState, wantLoveState),
             diet = diet,
             language = language
         )
