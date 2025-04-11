@@ -140,6 +140,7 @@ class ProfileEditViewModel @Inject constructor(
 
                 is UpdateJob.Result.Success -> {
                     _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                    updateInitialJobSelection()
                 }
             }
         }
@@ -223,6 +224,10 @@ class ProfileEditViewModel @Inject constructor(
 
     fun isJobSelectionChanged(): Boolean {
         return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
+    }
+
+    private fun updateInitialJobSelection() {
+        _initialJobSelection = _selectedJobs.value.toList()
     }
 
     fun disMissDialog() {

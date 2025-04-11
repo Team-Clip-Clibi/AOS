@@ -4,6 +4,7 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.useCase.UpdateNickName.Result
 import javax.inject.Inject
 
 class UpdateJob @Inject constructor(
@@ -31,6 +32,21 @@ class UpdateJob @Inject constructor(
         val updateResult = network.requestUpdateJob(TOKEN_FORM + token.first!!, jobList)
         if (updateResult != 204) {
             return Result.Fail("network Error")
+        }
+        val userData = database.getUserInfo() ?: return Result.Fail("userData is null")
+        userData.job = Pair(param.job.first , param.job.second)
+        val saveResult = database.saveUserInfo(
+            name = userData.userName,
+            nickName = userData.nickName,
+            platform = "KAKAO",
+            phoneNumber = userData.phoneNumber,
+            jobList = userData.job,
+            loveState = userData.loveState,
+            diet = userData.diet,
+            language = userData.language
+        )
+        if (!saveResult) {
+            return Result.Fail("Save Fail")
         }
         return Result.Success("Save Success")
     }

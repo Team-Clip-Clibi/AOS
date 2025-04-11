@@ -39,11 +39,7 @@ internal fun ChangeJobMainView(
     val selectedJobs by viewModel.selectedJobs.collectAsState()
     val isOverLimit by viewModel.jobSelectionError.collectAsState()
     val isChanged = remember(selectedJobs) { viewModel.isJobSelectionChanged() }
-    LaunchedEffect(Unit) {
-        viewModel.editProfileState.collect{
 
-        }
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,29 +48,29 @@ internal fun ChangeJobMainView(
                 bottom = 8.dp
             )
             .navigationBarsPadding()
-            .padding(start = 17.dp, end = 16.dp)
     ) {
 
-        CustomTitle1624Semi(
-            text = stringResource(R.string.txt_job_select_two),
-            color = if (isOverLimit) 0xFFFF4F4F else 0xFFFB4F4F
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        JobGridSelector(
-            selectedJobs = selectedJobs,
-            onJobToggle = viewModel::toggleJob,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .padding(start = 17.dp, end = 16.dp)
                 .weight(1f)
-        )
+        ) {
+            CustomTitle1624Semi(
+                text = stringResource(R.string.txt_job_select_two),
+                color = if (isOverLimit) 0xFFFF4F4F else 0xFFFB4F4F
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+
+            JobGridSelector(
+                selectedJobs = selectedJobs,
+                onJobToggle = viewModel::toggleJob,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
         Spacer(modifier = Modifier.height(8.dp))
-
         CustomButton(
             stringResource(R.string.btn_finish),
             onclick = { viewModel.changeJob() },
