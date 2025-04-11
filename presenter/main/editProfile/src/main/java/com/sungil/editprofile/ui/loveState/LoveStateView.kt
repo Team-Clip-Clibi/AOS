@@ -26,7 +26,10 @@ internal fun LoveStateView(
         topBar = {
             CustomChangeDataAppBar(
                 text = stringResource(R.string.top_love_state),
-                onBackClick = { onBackClick() }
+                onBackClick = {
+                    viewModel.initFlow()
+                    onBackClick()
+                }
             )
         },
         snackbarHost = {

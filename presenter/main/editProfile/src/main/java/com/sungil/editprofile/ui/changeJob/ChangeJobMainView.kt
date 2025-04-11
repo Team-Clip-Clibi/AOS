@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import com.sungil.editprofile.R
 import com.sungil.editprofile.ui.CustomButton
 import com.sungil.editprofile.ui.CustomTitle1624Semi
 import com.sungil.editprofile.ui.JobGridSelector
+import kotlinx.coroutines.flow.collect
 
 @Composable
 internal fun ChangeJobMainView(
@@ -37,7 +39,11 @@ internal fun ChangeJobMainView(
     val selectedJobs by viewModel.selectedJobs.collectAsState()
     val isOverLimit by viewModel.jobSelectionError.collectAsState()
     val isChanged = remember(selectedJobs) { viewModel.isJobSelectionChanged() }
+    LaunchedEffect(Unit) {
+        viewModel.editProfileState.collect{
 
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

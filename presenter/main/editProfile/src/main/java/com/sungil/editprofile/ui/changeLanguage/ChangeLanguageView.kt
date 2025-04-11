@@ -25,7 +25,10 @@ internal fun ChangeLanguageView(
         topBar = {
             CustomChangeDataAppBar(
                 text = stringResource(R.string.top_language),
-                onBackClick = { onBackClick() }
+                onBackClick = {
+                    viewModel.initFlow()
+                    onBackClick()
+                }
             )
         },
         snackbarHost = {

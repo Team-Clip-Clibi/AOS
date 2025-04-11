@@ -86,6 +86,7 @@ internal fun ChangeLanguageMainView(
                         message = context.getString(R.string.msg_save_success),
                         duration = SnackbarDuration.Short
                     )
+                    viewModel.initFlow()
                 }
 
                 else -> Unit

@@ -1,6 +1,8 @@
 package com.sungil.editprofile.nav
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,7 +29,11 @@ internal fun ProfileEditNav(
     goToMainPage: () -> Unit,
 ) {
     val navController = rememberNavController()
-
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntryFlow.collect { entry ->
+            Log.d("NavDebug", "Current route: ${entry.destination.route}")
+        }
+    }
     NavHost(
         navController = navController,
         startDestination = NAV_PROFILE_MAIN
@@ -64,10 +70,10 @@ internal fun ProfileEditNav(
             ChangeNickNameView(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 },
                 changeDataFinished = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 }
             )
         }
@@ -75,7 +81,7 @@ internal fun ProfileEditNav(
             ChangeJobView(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 }
             )
         }
@@ -83,10 +89,10 @@ internal fun ProfileEditNav(
             LoveStateView(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 },
                 changeDataFinished = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 }
             )
         }
@@ -95,7 +101,7 @@ internal fun ProfileEditNav(
             ChangeLanguageView(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 }
             )
         }
@@ -103,7 +109,7 @@ internal fun ProfileEditNav(
             SignOutView(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 },
                 goToLoginPage = {
                     goToLoginPage()
@@ -114,7 +120,7 @@ internal fun ProfileEditNav(
             DietView(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 }
             )
         }

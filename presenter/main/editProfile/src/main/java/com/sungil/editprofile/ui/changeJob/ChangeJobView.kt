@@ -25,7 +25,10 @@ internal fun ChangeJobView(
         topBar = {
             CustomChangeDataAppBar(
                 text = stringResource(R.string.top_job_change_job),
-                onBackClick = { onBackClick() }
+                onBackClick = {
+                    viewModel.initFlow()
+                    onBackClick()
+                }
             )
         },
         snackbarHost = {

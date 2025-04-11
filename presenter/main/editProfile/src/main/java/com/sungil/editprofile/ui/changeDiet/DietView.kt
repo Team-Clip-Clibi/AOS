@@ -26,7 +26,10 @@ internal fun DietView(
         topBar = {
             CustomChangeDataAppBar(
                 text = stringResource(R.string.top_diet),
-                onBackClick = { onBackClick() }
+                onBackClick = {
+                    viewModel.initFlow()
+                    onBackClick()
+                }
             )
         },
         snackbarHost = {

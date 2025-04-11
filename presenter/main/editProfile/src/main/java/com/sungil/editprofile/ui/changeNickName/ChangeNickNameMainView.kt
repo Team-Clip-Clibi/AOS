@@ -100,6 +100,7 @@ internal fun ChangeNickNameMainView(
                         message = context.getString(R.string.txt_message_okay),
                         duration = SnackbarDuration.Short
                     )
+                    viewModel.initFlow()
                 }
 
                 else -> Unit

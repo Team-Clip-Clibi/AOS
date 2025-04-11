@@ -1,5 +1,6 @@
 package com.sungil.editprofile.ui.editProfile
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.ui.CustomDialog
@@ -42,6 +44,7 @@ internal fun EditProfileMainView(
     signOutPage : () -> Unit,
     dietPage : () -> Unit
 ) {
+    val navController = rememberNavController()
     val scrollState = rememberScrollState()
     val state by viewModel.editProfileState.collectAsState()
     val userInfo by viewModel.userInfo.collectAsState()
@@ -50,6 +53,7 @@ internal fun EditProfileMainView(
     val name = userInfo?.name.orEmpty()
     val nickName = userInfo?.nickName.orEmpty()
     val phoneNumber = userInfo?.phoneNumber.orEmpty()
+
     LaunchedEffect(Unit) {
         viewModel.editProfileState.collect{ state ->
             when(state){

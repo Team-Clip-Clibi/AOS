@@ -71,14 +71,13 @@ internal fun LoveStateMainView(
                             )
                         }
                     }
-                    viewModel.initFlow()
                 }
                 is ProfileEditViewModel.EditProfileState.SuccessToChange -> {
+                    viewModel.initFlow()
                     snackBarHost.showSnackbar(
                         message = context.getString(R.string.msg_save_success),
                         duration = SnackbarDuration.Short
                     )
-                    viewModel.initFlow()
                 }
                 else -> Unit
             }
