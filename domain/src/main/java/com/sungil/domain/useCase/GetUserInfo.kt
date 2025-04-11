@@ -20,25 +20,20 @@ class GetUserInfo @Inject constructor(
         val userData = database.getUserInfo()
         if (userData != null) {
             userData.phoneNumber = userData.phoneNumber.reMakePhoneNumber()
-            val jobList = if (userData.job.first == "NONE") {
-                Pair("학생", "IT")
-            } else {
-                userData.job
-            }
-            userData.job = jobList
             return Result.Success(userData)
         }
         val token = database.getToken()
         if (token.first == null || token.second == null) {
             return Result.Fail("Token is null")
         }
-        val apiData = network.requestUserData(TOKEN_FORM + token.first!!)
+        val apiUserData = network.requestUserData(TOKEN_FORM + token.first!!)
             ?: return Result.Fail("network Error")
+
         val saveResult = database.saveUserInfo(
-            name = apiData.userName,
-            nickName = apiData.nickName,
+            name = apiUserData.userName,
+            nickName = apiUserData.nickName,
             platform = "KAKAO",
-            phoneNumber = apiData.phoneNumber,
+            phoneNumber = apiUserData.phoneNumber.reMakePhoneNumber(),
             jobList = Pair("NONE" ,"NONE"),
             loveState = Pair("NONE" , "NONE"),
             diet = "NONE",
@@ -47,14 +42,14 @@ class GetUserInfo @Inject constructor(
         if (!saveResult) {
             return Result.Fail("save Error")
         }
-        val jobList = if (apiData.job.first == "NONE") {
+        val jobList = if (apiUserData.job.first == "NONE") {
             Pair("학생", "IT")
         } else {
-            apiData.job
+            apiUserData.job
         }
-        apiData.job = jobList
-        apiData.phoneNumber = apiData.phoneNumber.reMakePhoneNumber()
-        return Result.Success(apiData)
+        apiUserData.job = jobList
+        apiUserData.phoneNumber = apiUserData.phoneNumber.reMakePhoneNumber()
+        return Result.Success(apiUserData)
     }
 
     private fun String.reMakePhoneNumber(): String {

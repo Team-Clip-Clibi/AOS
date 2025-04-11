@@ -2,6 +2,7 @@ package com.sungil.network.http
 
 import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
+import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
@@ -118,6 +119,14 @@ interface HttpApi {
     ): Response<Unit>
 
     /**
+     * 직업 GET API
+     */
+    @GET(BuildConfig.CHANGE_JOB_URL)
+    suspend fun requestJob(
+        @Header("Authorization") bearerToken: String,
+    ): Response<Job>
+
+    /**
      * 연애 상태 변경 API
      */
     @PATCH(BuildConfig.UPDATE_RELEATION_URL)
@@ -127,6 +136,14 @@ interface HttpApi {
     ): Response<Unit>
 
     /**
+     * 연애 상태 GET API
+     */
+    @GET(BuildConfig.UPDATE_RELEATION_URL)
+    suspend fun requestRelationShip(
+        @Header("Authorization") bearerToken: String,
+    ): Response<RelationShip>
+
+    /**
      * 사용 언어 변경 API
      */
     @PATCH(BuildConfig.LANGUAGE_UPDATE_URL)
@@ -134,6 +151,31 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Body body: Language,
     ) : Response<Unit>
+
+    /**
+     * 사용 언어 GET API
+     */
+    @GET(BuildConfig.LANGUAGE_UPDATE_URL)
+    suspend fun requestGetLanguage(
+        @Header("Authorization") bearerToken: String,
+    ): Response<Language>
+
+    /**
+     * 식단 업데이트 URL
+     */
+    @PATCH(BuildConfig.DIET_URL)
+    suspend fun requestUpdateDiet(
+        @Header("Authorization") bearerToken: String,
+        @Body diet : Diet
+    ) : Response<Unit>
+
+    /**
+     * 식닥 GET URL
+     */
+    @GET(BuildConfig.DIET_URL)
+    suspend fun requestDiet(
+        @Header("Authorization") bearerToken: String,
+    ) : Response<Diet>
 
     /**
      * 회원 털퇴 API
