@@ -46,9 +46,24 @@ class CheckNickName @Inject constructor(
             deviceRepo.requestVibrate()
             return Result.Fail("Already use")
         }
-        val inputResult = networkRepo.inputNickName(name , TOKEN_FORM+token.first)
-        if(inputResult != 204){
+        val inputResult = networkRepo.inputNickName(name, TOKEN_FORM + token.first)
+        if (inputResult != 204) {
             return Result.Fail("network Error")
+        }
+        val userData = database.getUserInfo() ?: return Result.Fail("userData is null")
+        userData.nickName = name
+        val saveResult = database.saveUserInfo(
+            name = userData.userName,
+            nickName = userData.nickName,
+            platform = "KAKAO",
+            phoneNumber = userData.phoneNumber,
+            jobList = userData.job,
+            loveState = userData.loveState,
+            diet = userData.diet,
+            language = userData.language
+        )
+        if (!saveResult) {
+            return Result.Fail("Save Fail")
         }
         return Result.Success("name okay")
     }
