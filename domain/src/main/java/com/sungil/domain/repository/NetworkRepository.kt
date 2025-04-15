@@ -3,6 +3,8 @@ package com.sungil.domain.repository
 import android.app.Activity
 import android.icu.text.TimeZoneFormat.ParseOption
 import com.sungil.domain.model.Banner
+import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.UserInfo
@@ -74,4 +76,9 @@ interface NetworkRepository {
         accessToken: String,
         bannerType: String,
     ): Banner
+
+    suspend fun requestMatchingData(
+        accessToken: String
+    ) : Match
+
 }

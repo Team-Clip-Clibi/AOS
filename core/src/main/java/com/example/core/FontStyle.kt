@@ -36,6 +36,14 @@ object AppTextStyles {
         color = Color(0xFF171717),
     )
 
+    val HEAD_22_30_BOLD = TextStyle(
+        fontSize = 22.sp,
+        lineHeight = 30.sp,
+        fontFamily = FontFamily(Font(R.font.bold)),
+        fontWeight = FontWeight(700),
+        color = Color(0xFF171717)
+    )
+
     val TITLE_20_28_SEMI = TextStyle(
         fontSize = 20.sp,
         lineHeight = 28.sp,

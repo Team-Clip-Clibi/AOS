@@ -3,6 +3,8 @@ package com.example.data.repositoryImpl
 import android.app.Activity
 import com.example.fcm.FirebaseFCM
 import com.sungil.domain.model.Banner
+import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.UserInfo
@@ -13,6 +15,7 @@ import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
+import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
@@ -266,6 +269,29 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun requestMatchingData(accessToken: String): Match {
+        val result = api.requestMatchData(accessToken)
+        if (result.code() != 200) {
+            return Match(
+                responseCode = result.code(),
+                oneThingMatch = emptyList(),
+                randomMatch = emptyList()
+            )
+        }
+        if (result.body() == null) {
+            return Match(
+                responseCode = -100,
+                oneThingMatch = emptyList(),
+                randomMatch = emptyList()
+            )
+        }
+        return Match(
+            responseCode = result.code(),
+            oneThingMatch = result.body()!!.oneThingMatchings.map { it.toDomainMatchData() },
+            randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData() }
+        )
+    }
+
     private fun RequestUserInfo.toDomain(): UserInfo {
         return UserInfo(
             userName = username,
@@ -275,6 +301,14 @@ class NetworkRepositoryImpl @Inject constructor(
             loveState = Pair("NONE", false),
             diet = "NONE",
             language = "KOREAN"
+        )
+    }
+
+    private fun MatchingDto.toDomainMatchData(): MatchData {
+        return MatchData(
+            matchingId = matchingId,
+            daysUntilMeeting = daysUntilMeeting,
+            meetingPlace = meetingPlace
         )
     }
 }
