@@ -45,6 +45,7 @@ android {
         val report : String = properties.getProperty("report", "")
         val noti : String = properties.getProperty("noti" , "")
         val banner : String = properties.getProperty("banner" , "")
+        val match : String = properties.getProperty("match", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -66,6 +67,7 @@ android {
         buildConfigField("String" , "REPORT_URL" , report)
         buildConfigField("String" , "NOTIFICATION_URL" , noti)
         buildConfigField("String" , "BANNER_URL" , banner)
+        buildConfigField("String" ,"MATCH_URL" , match)
     }
 
     buildTypes {

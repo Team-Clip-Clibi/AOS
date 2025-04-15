@@ -7,6 +7,7 @@ import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
+import com.sungil.network.model.MatchingResponse
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
 import com.sungil.network.model.RelationShip
@@ -213,4 +214,13 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Path("bannerType") bannerType: String,
     ): Response<Banner>
+
+
+    /**
+     * 매칭 조회 API
+     */
+    @GET(BuildConfig.MATCH_URL)
+    suspend fun requestMatchData(
+        @Header("Authorization") bearerToken: String,
+    ) : Response<MatchingResponse>
 }
