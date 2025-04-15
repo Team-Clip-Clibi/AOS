@@ -2,11 +2,13 @@ package com.sungil.network.http
 
 import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
+import com.sungil.network.model.Banner
 import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.NickNameCheckRequest
+import com.sungil.network.model.Notification
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
@@ -194,4 +196,21 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Body data: Report,
     ): Response<Unit>
+
+    /**
+     * 공지사항 API
+     */
+    @GET(BuildConfig.NOTIFICATION_URL)
+    suspend fun requestNotification(
+        @Header("Authorization") bearerToken: String,
+    ): Response<Notification>
+
+    /**
+     * 배너 API
+     */
+    @GET(BuildConfig.BANNER_URL + "{bannerType}")
+    suspend fun requestBanner(
+        @Header("Authorization") bearerToken: String,
+        @Path("bannerType") bannerType: String,
+    ): Response<Banner>
 }

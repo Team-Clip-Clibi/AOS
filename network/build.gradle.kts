@@ -43,6 +43,8 @@ android {
         val signOut : String = properties.getProperty("signOut" ,"")
         val diet : String = properties.getProperty("diet", "")
         val report : String = properties.getProperty("report", "")
+        val noti : String = properties.getProperty("noti" , "")
+        val banner : String = properties.getProperty("banner" , "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -62,6 +64,8 @@ android {
         buildConfigField("String" , "SIGNOUT_URL" ,signOut)
         buildConfigField("String" , "DIET_URL" , diet)
         buildConfigField("String" , "REPORT_URL" , report)
+        buildConfigField("String" , "NOTIFICATION_URL" , noti)
+        buildConfigField("String" , "BANNER_URL" , banner)
     }
 
     buildTypes {
