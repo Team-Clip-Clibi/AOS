@@ -25,7 +25,7 @@ class GetBanner @Inject constructor(
             return Result.Fail("token is null")
         }
         val banner = network.requestBanner(TOKEN_FORM + token, param.bannerHost)
-        if (banner.responseCode != 204) {
+        if (banner.responseCode != 200) {
             return Result.Fail("network error")
         }
         return Result.Success(banner)

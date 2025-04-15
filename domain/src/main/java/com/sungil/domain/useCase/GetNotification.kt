@@ -23,7 +23,7 @@ class GetNotification @Inject constructor(
             return Result.Fail("token is null")
         }
         val notification = network.requestNotification(TOKEN_FORM + token.first)
-        if (notification.responseCode != 204) {
+        if (notification.responseCode != 200) {
             return Result.Fail("network is error")
         }
         return Result.Success(notification)
