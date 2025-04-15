@@ -2,6 +2,8 @@ package com.example.data.repositoryImpl
 
 import android.app.Activity
 import com.example.fcm.FirebaseFCM
+import com.sungil.domain.model.Banner
+import com.sungil.domain.model.Notification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.NetworkRepository
@@ -228,6 +230,40 @@ class NetworkRepositoryImpl @Inject constructor(
             )
         )
         return result.code()
+    }
+
+    override suspend fun requestNotification(accessToken: String): Notification {
+        val result = api.requestNotification(accessToken)
+        if (result.code() != 204) {
+            return Notification(
+                responseCode = result.code(),
+                noticeType = "",
+                content = "",
+                link = ""
+            )
+        }
+        return Notification(
+            responseCode = result.code(),
+            noticeType = result.body()!!.noticeType,
+            content = result.body()!!.content,
+            link = result.body()!!.link
+        )
+    }
+
+    override suspend fun requestBanner(
+        accessToken: String,
+        bannerType: String,
+    ): Banner {
+        val result = api.requestBanner(accessToken, bannerType)
+        if (result.code() != 204) {
+            return Banner(result.code(), image = "", headText = "", subText = "")
+        }
+        return Banner(
+            result.code(),
+            image = result.body()!!.imagePresignedUrl,
+            headText = result.body()!!.headText,
+            subText = result.body()!!.subText
+        )
     }
 
     private fun RequestUserInfo.toDomain(): UserInfo {
