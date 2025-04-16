@@ -1,6 +1,5 @@
 package com.sungil.domain.useCase
 
-import android.text.style.TtsSpan.DateBuilder
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository

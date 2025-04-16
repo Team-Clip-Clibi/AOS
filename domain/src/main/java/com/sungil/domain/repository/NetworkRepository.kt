@@ -1,11 +1,10 @@
 package com.sungil.domain.repository
 
 import android.app.Activity
-import android.icu.text.TimeZoneFormat.ParseOption
 import com.sungil.domain.model.Banner
 import com.sungil.domain.model.Match
-import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.Notification
+import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.UserInfo
 import kotlinx.coroutines.flow.Flow
@@ -78,7 +77,15 @@ interface NetworkRepository {
     ): Banner
 
     suspend fun requestMatchingData(
-        accessToken: String
-    ) : Match
+        accessToken: String,
+    ): Match
+
+    suspend fun requestUpdateToken(
+        refreshToken: String,
+    ): Triple<Int,String?, String?>
+
+    suspend fun requestOneThineNotification(
+        accessToken: String,
+    ): OneThineNotification
 
 }

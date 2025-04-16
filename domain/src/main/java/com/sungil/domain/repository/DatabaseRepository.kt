@@ -25,7 +25,7 @@ interface DatabaseRepository {
     suspend fun getNotifyState(): Boolean
     suspend fun setNotifyState(data: Boolean): Boolean
     suspend fun setToken(accessToken: String, refreshToken: String): Boolean
-    suspend fun getToken(): Pair<String?, String?>
+    suspend fun getToken(): Pair<String, String>
     suspend fun getUserInfo(): UserInfo?
     suspend fun deleteUserIfo() : Boolean
     suspend fun removeToken(): Boolean

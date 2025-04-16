@@ -224,7 +224,7 @@ interface HttpApi {
     @GET(BuildConfig.MATCH_URL)
     suspend fun requestMatchData(
         @Header("Authorization") bearerToken: String,
-    ) : Response<MatchingResponse>
+    ): Response<MatchingResponse>
 
     /**
      * 원띵 알람 조회 API
@@ -232,10 +232,10 @@ interface HttpApi {
     @GET(BuildConfig.NOTIFICATION_URL)
     suspend fun requestNewNotification(
         @Header("Authorization") bearerToken: String,
-    ) : List<OneThinNotify>
+    ): Response<List<OneThinNotify>>
 
     @POST(BuildConfig.REFRESH_URL)
     suspend fun requestRefreshToken(
         @Header("Authorization") bearerToken: String,
-    ) : AuthToken
+    ): Response<AuthToken>
 }

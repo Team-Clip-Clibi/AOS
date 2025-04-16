@@ -5,7 +5,6 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.DeviceRepository
 import com.sungil.domain.repository.NetworkRepository
-import com.sungil.domain.useCase.CheckNickName.Result
 import javax.inject.Inject
 
 class UpdateNickName @Inject constructor(

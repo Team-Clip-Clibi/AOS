@@ -4,7 +4,6 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
-import com.sungil.domain.useCase.UpdateNickName.Result
 import javax.inject.Inject
 
 class UpdateJob @Inject constructor(

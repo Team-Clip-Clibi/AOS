@@ -1,8 +1,6 @@
 package com.example.data.repositoryImpl
 
 import com.sungil.database.SharedPreference
-import com.sungil.database.room.dao.TokenDao
-import com.sungil.database.room.model.Token
 import com.sungil.database.room.model.UserInfo
 import com.sungil.database.token.TokenManager
 import com.sungil.database.user.UserData
@@ -84,7 +82,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun setToken(accessToken: String, refreshToken: String): Boolean {
         return tokenManger.updateToken(accessToken, refreshToken)
     }
-    override suspend fun getToken(): Pair<String?, String?> {
+    override suspend fun getToken(): Pair<String, String> {
         return tokenManger.getToken()
     }
 

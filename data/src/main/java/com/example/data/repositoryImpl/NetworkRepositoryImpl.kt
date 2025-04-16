@@ -6,6 +6,8 @@ import com.sungil.domain.model.Banner
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.Notification
+import com.sungil.domain.model.OneThineNotification
+import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.NetworkRepository
@@ -17,6 +19,7 @@ import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
+import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
@@ -292,6 +295,28 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun requestUpdateToken(refreshToken: String): Triple<Int, String?, String?> {
+        val result = api.requestRefreshToken(refreshToken)
+        if(result.code() != 204){
+            return Triple(result.code() , "","")
+        }
+        return Triple(result.code() , result.body()?.accessToken ,result.body()?.refreshToken)
+    }
+
+    override suspend fun requestOneThineNotification(accessToken: String): OneThineNotification {
+        val result = api.requestNewNotification(accessToken)
+        if(result.code() != 200){
+            return OneThineNotification(
+                result.code(),
+                emptyList()
+            )
+        }
+        return OneThineNotification(
+            result.code(),
+            result.body()!!.map { it.toDomain() }
+        )
+    }
+
     private fun RequestUserInfo.toDomain(): UserInfo {
         return UserInfo(
             userName = username,
@@ -309,6 +334,15 @@ class NetworkRepositoryImpl @Inject constructor(
             matchingId = matchingId,
             daysUntilMeeting = daysUntilMeeting,
             meetingPlace = meetingPlace
+        )
+    }
+
+    private fun OneThinNotify.toDomain(): OneThineNotify {
+        return OneThineNotify(
+            id = id,
+            notificationType = notificationType,
+            content = content,
+            createdAt = createdAt
         )
     }
 }
