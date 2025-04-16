@@ -19,14 +19,28 @@ class GetMatch @Inject constructor(
 
     suspend fun invoke(): Result {
         val token = database.getToken()
-        if (token.first == null || token.second == null) {
-            return Result.Fail("token is null")
-        }
         val data = network.requestMatchingData(TOKEN_FORM + token.first)
-        if (data.responseCode != 200) {
-            return Result.Fail("network error")
+        when (data.responseCode) {
+            401 -> {
+                val refreshToken = network.requestUpdateToken(TOKEN_FORM + token.second)
+                if (refreshToken.first != 200) {
+                    return Result.Fail("reLogin")
+                }
+                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
+                if (!saveToken) {
+                    return Result.Fail("save error")
+                }
+                val reRequest = network.requestMatchingData(TOKEN_FORM + refreshToken.second)
+                if (reRequest.responseCode != 200) {
+                    return Result.Fail("network error")
+                }
+                return Result.Success(reRequest)
+            }
+
+            -100 -> return Result.Fail("network error")
+            200 -> return Result.Success(data)
+            else -> return Result.Fail("network error")
         }
-        return Result.Success(data)
     }
 
 }

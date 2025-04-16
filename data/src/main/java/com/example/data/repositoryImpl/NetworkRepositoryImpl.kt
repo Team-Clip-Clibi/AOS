@@ -2,9 +2,10 @@ package com.example.data.repositoryImpl
 
 import android.app.Activity
 import com.example.fcm.FirebaseFCM
+import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.Banner
 import com.sungil.domain.model.Match
-import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.OneThineNotify
@@ -290,8 +291,8 @@ class NetworkRepositoryImpl @Inject constructor(
         }
         return Match(
             responseCode = result.code(),
-            oneThingMatch = result.body()!!.oneThingMatchings.map { it.toDomainMatchData() },
-            randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData() }
+            oneThingMatch = result.body()!!.oneThingMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_ONE_THING) },
+            randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_RANDOM) }
         )
     }
 
@@ -329,8 +330,9 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun MatchingDto.toDomainMatchData(): MatchData {
-        return MatchData(
+    private fun MatchingDto.toDomainMatchData(category: CATEGORY): MatchInfo {
+        return MatchInfo(
+            category = category,
             matchingId = matchingId,
             daysUntilMeeting = daysUntilMeeting,
             meetingPlace = meetingPlace
