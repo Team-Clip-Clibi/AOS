@@ -1,5 +1,6 @@
 package com.sungil.network.http
 
+import android.media.session.MediaSession.Token
 import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
 import com.sungil.network.model.Banner
@@ -233,4 +234,8 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
     ) : List<OneThinNotify>
 
+    @POST(BuildConfig.REFRESH_URL)
+    suspend fun requestRefreshToken(
+        @Header("Authorization") bearerToken: String,
+    ) : AuthToken
 }
