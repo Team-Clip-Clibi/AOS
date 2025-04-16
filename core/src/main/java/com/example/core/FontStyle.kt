@@ -100,4 +100,12 @@ object AppTextStyles {
         color = Color(0xFF171717),
     )
 
+    val SUBTITLE_18_26_SEMI = TextStyle(
+        fontSize = 18.sp,
+        lineHeight = 26.sp,
+        fontFamily = FontFamily(Font(R.font.semi_bold)),
+        fontWeight = FontWeight(600),
+        color = Color(0xFF171717)
+    )
+
 }

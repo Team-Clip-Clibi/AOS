@@ -20,7 +20,13 @@ fun MainNavigation(
 ) {
     NavHost(navController = navController, startDestination = Screen.Home.screenRoute) {
         composable(Screen.Home.screenRoute) {
-            HomeScreen()
+            HomeScreen(
+                viewModel = viewModel,
+                alarmClick = {},
+                notifyClick = {},
+                oneThingMatchClick = {},
+                randomMatchClick = {}
+            )
         }
         composable(Screen.Calendar.screenRoute) {
             CalendarScreen()

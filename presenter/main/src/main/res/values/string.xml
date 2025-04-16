@@ -28,6 +28,8 @@
     <string name="btn_honme_random_content">주제없이 만나요</string>
     <string name="btn_home_light">번개 모임</string>
     <string name="btn_home_light_content">오늘 만날 수 있어요</string>
+    <string name="card_one_thing_title">원띵 모임</string>
+    <string name="card_random_title">랜덤 모임</string>
 
     <!-- Error message   -->
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>

@@ -1,6 +1,5 @@
 package com.sungil.main.component
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.core.AppTextStyles
+import com.sungil.domain.CATEGORY
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
 import com.sungil.main.Screen
@@ -165,7 +165,7 @@ fun CustomMyPageButton(
             backgroundColor = Color(color),
             contentColor = Color(textColor)
         ),
-        elevation = null // ✅ 그림자 제거하고 싶을 경우
+        elevation = null
     ) {
         Text(
             text = text,
@@ -346,4 +346,87 @@ fun HomeTitleText(
         style = AppTextStyles.TITLE_20_28_SEMI,
         color = Color(0xFF383838)
     )
+}
+
+@Composable
+fun MeetingCard(
+    category: CATEGORY,
+    time: String,
+    location: String,
+) {
+    Column(
+        modifier = Modifier
+            .width(192.dp)
+            .height(174.dp)
+            .background(
+                color = when (category) {
+                    CATEGORY.CONTENT_ONE_THING -> Color(0xFF6700CE)
+                    CATEGORY.CONTENT_RANDOM -> Color(0xFF61C9A0)
+                },
+                shape = RoundedCornerShape(size = 24.dp)
+            )
+            .padding(20.dp)
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = when (category) {
+                CATEGORY.CONTENT_ONE_THING -> stringResource(R.string.card_one_thing_title)
+                CATEGORY.CONTENT_RANDOM -> stringResource(R.string.card_random_title)
+            },
+            style = AppTextStyles.SUBTITLE_18_26_SEMI,
+            color = Color(0xFFFFFFFF)
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(44.dp)
+                .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 12.dp))
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Image(
+                painter = when (category) {
+                    CATEGORY.CONTENT_ONE_THING -> painterResource(R.drawable.ic_calendar_purple)
+                    CATEGORY.CONTENT_RANDOM -> painterResource(R.drawable.ic_calendar_green)
+                },
+                contentDescription = "match date",
+                modifier = Modifier.size(24.dp)
+            )
+
+            Text(
+                text = time,
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = Color(0xFF171717)
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(44.dp)
+                .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 12.dp))
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Image(
+                painter = when (category) {
+                    CATEGORY.CONTENT_ONE_THING -> painterResource(R.drawable.ic_location_purple)
+                    CATEGORY.CONTENT_RANDOM -> painterResource(R.drawable.ic_location_green)
+                },
+                contentDescription = "match date",
+                modifier = Modifier.size(24.dp)
+            )
+
+            Text(
+                text = location,
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = Color(0xFF171717)
+            )
+        }
+    }
 }
