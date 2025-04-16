@@ -76,9 +76,11 @@ class LoginActivity : ComponentActivity() {
                             ERROR_FCM_TOKEN -> {
                                 finish()
                             }
+
                             ERROR_NOTIFY_NOT_SAVE ->{
                                 finish()
                             }
+
                             else -> throw IllegalArgumentException("UNKNOW ERROR")
                         }
                     }

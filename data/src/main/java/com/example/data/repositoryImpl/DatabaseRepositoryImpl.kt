@@ -2,16 +2,17 @@ package com.example.data.repositoryImpl
 
 import com.sungil.database.SharedPreference
 import com.sungil.database.room.dao.TokenDao
-import com.sungil.database.room.dao.UserInfoDao
 import com.sungil.database.room.model.Token
 import com.sungil.database.room.model.UserInfo
+import com.sungil.database.token.TokenManager
+import com.sungil.database.user.UserData
 import com.sungil.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(
     private val database: SharedPreference,
-    private val userInfoDao: UserInfoDao,
-    private val tokenDao: TokenDao,
+    private val userInfo: UserData,
+    private val tokenManger: TokenManager,
 ) :
     DatabaseRepository {
 
@@ -59,25 +60,17 @@ class DatabaseRepositoryImpl @Inject constructor(
         diet: String,
         language: String,
     ): Boolean {
-        val userInfo = UserInfo(
+        val result = this.userInfo.updateUserInfo(
             name = name,
             nickName = nickName,
             platform = platform,
             phoneNumber = phoneNumber,
-            firstJob = jobList.first,
-            secondJob = jobList.second,
-            myLoveState = loveState.first,
-            wantLoveState = loveState.second,
+            jobList = jobList,
+            loveState = loveState,
             diet = diet,
             language = language
         )
-        try {
-            userInfoDao.insert(userInfo)
-            return true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return false
-        }
+        return result
     }
 
     override suspend fun getNotifyState(): Boolean {
@@ -89,45 +82,22 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setToken(accessToken: String, refreshToken: String): Boolean {
-        return try {
-            tokenDao.insertToken(
-                Token(
-                    accessToken = accessToken,
-                    refreshToken = refreshToken
-                )
-            )
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
+        return tokenManger.updateToken(accessToken, refreshToken)
     }
-
     override suspend fun getToken(): Pair<String?, String?> {
-        val token = tokenDao.getToken()
-        return Pair(token?.accessToken, token?.refreshToken)
+        return tokenManger.getToken()
     }
 
     override suspend fun getUserInfo(): com.sungil.domain.model.UserInfo? {
-        return userInfoDao.getUserInfo()?.toDomain()
+        return userInfo.getUserData().toDomain()
     }
 
     override suspend fun deleteUserIfo(): Boolean {
-        return try {
-            userInfoDao.deleteAll()
-            true
-        } catch (e: Exception) {
-            false
-        }
+        return userInfo.deleteUserInfo()
     }
 
     override suspend fun removeToken(): Boolean {
-        return try {
-            tokenDao.deleteAll()
-            true
-        } catch (e: Exception) {
-            false
-        }
+        return tokenManger.clearToken()
     }
 
     private fun UserInfo.toDomain(): com.sungil.domain.model.UserInfo {
