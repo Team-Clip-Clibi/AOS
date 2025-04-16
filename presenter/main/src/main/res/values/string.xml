@@ -16,4 +16,21 @@
     <string name="txt_myPage_term">약관 및 정책</string>
     <string name="txt_myPage_guide">원띵 이용가이드</string>
 
+    <!-- Home -->
+    <string name="notify_notice">공지</string>
+    <string name="notify_article">기사</string>
+    <string name="txt_home_title">%1$s님의 모임</string>
+    <string name="txt_home_not_meeting">"아직 확정된 모임이 없어요.\n모임을 신청해 보세요!"</string>
+    <string name="txt_home_sub_title">모임 신청</string>
+    <string name="btn_home_oneThing">원띵 모임</string>
+    <string name="btn_home_oneThing_content">대화하고 싶은 단 하나의 주제가 있다면</string>
+    <string name="btn_home_random">랜덤 모임</string>
+    <string name="btn_honme_random_content">주제없이 만나요</string>
+    <string name="btn_home_light">번개 모임</string>
+    <string name="btn_home_light_content">오늘 만날 수 있어요</string>
+
+    <!-- Error message   -->
+    <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
+    <string name="msg_network_error">네트워크 에러</string>
+    <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
 </resources>

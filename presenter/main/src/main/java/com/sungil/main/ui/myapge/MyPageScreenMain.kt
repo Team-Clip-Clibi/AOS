@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
+import com.sungil.domain.model.UserInfo
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import com.sungil.main.component.CustomMyPageButton
@@ -48,10 +49,10 @@ internal fun MyPageScreenMain(
 
     val userState by viewModel.userState.collectAsState()
 
-    val userName = when (userState) {
-        is MainViewModel.UserUiState.Success -> (userState as MainViewModel.UserUiState.Success).userData.nickName
-        is MainViewModel.UserUiState.Loading -> ""
-        is MainViewModel.UserUiState.Error -> "오류 발생"
+    val userName = when (userState.userDataState) {
+        is MainViewModel.UiState.Success -> (userState.userDataState as MainViewModel.UiState.Success<UserInfo>).data.nickName
+        is MainViewModel.UiState.Loading -> ""
+        is MainViewModel.UiState.Error -> "오류 발생"
     }
 
     Box(

@@ -1,26 +1,26 @@
 package com.sungil.main.component
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.core.AppTextStyles
+import com.sungil.main.CONTENT_NOTICE
+import com.sungil.main.R
 import com.sungil.main.Screen
 import com.sungil.main.bottomNavItems
 
@@ -202,4 +204,146 @@ fun MyPageItem(text: String, icon: Int, click: () -> Unit) {
             textAlign = TextAlign.Start
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomHomeTopBar(
+    text : String,
+    bellImage : Int,
+    click: () -> Unit
+){
+    CenterAlignedTopAppBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 17.dp, end = 12.dp),
+        title = {
+            Text(
+                text = text,
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color = Color.Black
+            )
+        },
+        navigationIcon = {
+            Image(
+                painter = painterResource(id = R.drawable.ic_one_thing),
+                contentDescription = "logo",
+                modifier = Modifier
+                    .height(24.dp)
+            )
+        },
+        actions = {
+            Image(
+                painter = painterResource( id = bellImage),
+                contentDescription = "알람",
+                modifier = Modifier
+                    .size(48.dp)
+                    .padding(12.dp)
+                    .clickable { click() }
+            )
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color(0xFFF7F7F7)
+        )
+    )
+}
+
+@Composable
+fun CustomSnackBar(data: SnackbarData) {
+    Row(
+        modifier = Modifier
+            .width(360.dp)
+            .height(48.dp)
+            .background(color = Color(0xFF383838), shape = RoundedCornerShape(size = 8.dp))
+            .padding(start = 16.dp, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = com.sungil.editprofile.R.drawable.ic_message),
+            contentDescription = "message",
+            contentScale = ContentScale.None,
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        androidx.compose.material3.Text(
+            text = data.visuals.message,
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = Color(0xFFFFFFFF)
+        )
+    }
+}
+
+@Composable
+fun CustomNotifyBar(
+    noticeType: String,
+    content: String,
+    link: String,
+    notifyClick: (String) -> Unit,
+    notifyClose : () -> Unit
+) {
+    val titleColor = when (noticeType) {
+        CONTENT_NOTICE -> Color(0xFFFB4F4F)
+        else -> Color(0xFF171717)
+    }
+    val title = when (noticeType) {
+        CONTENT_NOTICE -> stringResource(R.string.notify_notice)
+        else -> stringResource(R.string.notify_article)
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(34.dp)
+            .background(color = Color(0xFFEFEFEF))
+            .padding(horizontal = 17.dp)
+            .clickable { notifyClick(link) },
+        contentAlignment = Alignment.Center
+    ) {
+        // 왼쪽: title
+        Row(
+            modifier = Modifier.align(Alignment.CenterStart),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = title,
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = titleColor
+            )
+        }
+
+        // 가운데: content
+        Text(
+            text = content,
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            modifier = Modifier.align(Alignment.Center)
+        )
+
+        // 오른쪽: close icon
+        Image(
+            painter = painterResource(R.drawable.ic_close_gray),
+            contentDescription = "close alarm",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .size(34.dp)
+                .padding(8.5.dp)
+                .clickable { notifyClose() }
+        )
+    }
+}
+
+@Composable
+fun HomeTitleText(
+    text: String,
+) {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(28.dp),
+        text = text,
+        style = AppTextStyles.TITLE_20_28_SEMI,
+        color = Color(0xFF383838)
+    )
 }

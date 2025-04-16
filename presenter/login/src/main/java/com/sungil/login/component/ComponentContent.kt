@@ -126,9 +126,9 @@ fun CustomPager(
         ) {
             Image(
                 painter = painterResource(id = testImage[page]),
-                contentDescription = "page$page Image",
+     `           contentDescription = "page$page Image",
                 contentScale = ContentScale.Fit,
-                modifier = modifier.fillMaxSize()
+                modifier = modifier.fillMaxSize()`
             )
             Text(
                 text = text[page],

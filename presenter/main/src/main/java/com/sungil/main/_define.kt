@@ -20,3 +20,10 @@ const val NAV_MY = "my"
 const val NAV_EDIT_PROFILE = "MainEditProfile"
 const val NAV_REPORT = "report"
 const val NAV_LOW = "low"
+
+const val ERROR_RE_LOGIN = "reLogin"
+const val ERROR_SAVE_ERROR = "save error"
+const val ERROR_NETWORK_ERROR = "network error"
+
+const val CONTENT_NOTICE = "NOTICE"
+const val CONTENT_ARTICLE = "ARTICLE"

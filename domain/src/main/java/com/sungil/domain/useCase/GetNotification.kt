@@ -19,13 +19,27 @@ class GetNotification @Inject constructor(
 
     suspend fun invoke(): Result {
         val token = database.getToken()
-        if (token.first == null || token.second == null) {
-            return Result.Fail("token is null")
-        }
         val notification = network.requestNotification(TOKEN_FORM + token.first)
-        if (notification.responseCode != 200) {
-            return Result.Fail("network is error")
+        when(notification.responseCode){
+            401 -> {
+                val refreshToken = network.requestUpdateToken(token.second)
+                if(refreshToken.first != 200){
+                    return Result.Fail("reLogin")
+                }
+                val saveNewToken = database.setToken(accessToken = refreshToken.second!! , refreshToken = refreshToken.third!!)
+                if(!saveNewToken){
+                    return Result.Fail("save error")
+                }
+                val reRequest = network.requestNotification(TOKEN_FORM + refreshToken.second)
+                if(reRequest.responseCode != 200){
+                    return Result.Fail("network error")
+                }
+                return Result.Success(reRequest)
+            }
+            200 ->{
+                return Result.Success(notification)
+            }
+            else -> return Result.Fail("network error")
         }
-        return Result.Success(notification)
     }
 }
