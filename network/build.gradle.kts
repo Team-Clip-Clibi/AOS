@@ -47,6 +47,7 @@ android {
         val banner : String = properties.getProperty("banner" , "")
         val match : String = properties.getProperty("match", "")
         val refresh : String = properties.getProperty("refresh"  , "")
+        val notification : String = properties.getProperty("notification" ,"")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -70,6 +71,7 @@ android {
         buildConfigField("String" , "BANNER_URL" , banner)
         buildConfigField("String" ,"MATCH_URL" , match)
         buildConfigField("String" , "REFRESH_URL" , refresh)
+        buildConfigField("String" , "NOTIFICATION_URL" , notification)
     }
 
     buildTypes {
