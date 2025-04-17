@@ -4,6 +4,7 @@ import android.app.Activity
 import com.example.fcm.FirebaseFCM
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.Banner
+import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.Notification
@@ -263,13 +264,15 @@ class NetworkRepositoryImpl @Inject constructor(
     ): Banner {
         val result = api.requestBanner(accessToken, bannerType)
         if (result.code() != 204) {
-            return Banner(result.code(), image = "", headText = "", subText = "")
+            return Banner(result.code(), BannerData(image = "", headText = "", subText = ""))
         }
         return Banner(
             result.code(),
-            image = result.body()!!.imagePresignedUrl,
-            headText = result.body()!!.headText,
-            subText = result.body()!!.subText
+            BannerData(
+                image = result.body()!!.imagePresignedUrl,
+                headText = result.body()!!.headText,
+                subText = result.body()!!.subText
+            )
         )
     }
 

@@ -4,10 +4,12 @@ package com.sungil.main
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.UserInfo
+import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetMatch
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
@@ -26,6 +28,7 @@ class MainViewModel @Inject constructor(
     private val notify: GetNotification,
     private val oneThingNotify: GetNewNotification,
     private val match: GetMatch,
+    private val banner: GetBanner,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -108,6 +111,25 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(matchState = UiState.Success(result.data))
                     }
+                    getBanner()
+                }
+            }
+        }
+    }
+
+    private fun getBanner() {
+        viewModelScope.launch {
+            when (val result = banner.invoke(GetBanner.Param("HOME"))) {
+                is GetBanner.Result.Fail -> {
+                    _userState.update {
+                        it.copy(banner = UiState.Error(result.message))
+                    }
+                }
+
+                is GetBanner.Result.Success -> {
+                    _userState.update {
+                        it.copy(banner = UiState.Success(result.data))
+                    }
                 }
             }
         }
@@ -127,6 +149,7 @@ class MainViewModel @Inject constructor(
         val userDataState: UiState<UserInfo> = UiState.Loading,
         val notificationState: UiState<Notification> = UiState.Loading,
         val oneThingState: UiState<List<OneThineNotify>> = UiState.Loading,
+        val banner: UiState<BannerData> = UiState.Loading,
         val matchState: UiState<Match> = UiState.Loading,
     )
 }
