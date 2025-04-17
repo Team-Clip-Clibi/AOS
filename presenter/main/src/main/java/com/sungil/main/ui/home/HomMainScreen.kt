@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchInfo
+import com.sungil.editprofile.ui.changeDiet.dietItemModifier
 import com.sungil.main.ERROR_NETWORK_ERROR
 import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.ERROR_SAVE_ERROR
@@ -126,7 +127,7 @@ internal fun HomMainScreen(
             }
         }
 
-        // 메인뷰
+        // 메인뷰 -> 여기 height을 최대로 주고 싶어
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -193,6 +194,12 @@ internal fun HomMainScreen(
                 )
             }
         }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        ) {
 
+        }
     }
 }
