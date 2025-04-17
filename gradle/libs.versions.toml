@@ -27,6 +27,8 @@ firebase-messaging = "23.4.1"
 room-database = "2.6.1"
 ksp = "1.9.0-1.0.11"
 compose-material = "1.7.8"
+glide-version= "1.0.0-alpha.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
@@ -48,27 +50,29 @@ androidx-compose-material3 = { group = "androidx.wear.compose", name = "compose-
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-kakao-common = {group = "com.kakao.sdk" , name  = "v2-all" , version.ref = "kakao-sdk"}
-google-gson = {group = "com.google.code.gson" , name = "gson" , version.ref ="gson"}
-lifecycle-viewModel = {group = "androidx.lifecycle" , name = "lifecycle-viewmodel-ktx" , version.ref = "lifecycle"}
-firebase-bom = {group = "com.google.firebase" , name = "firebase-bom" , version.ref = "firebase-bom"}
-compose-nav = {group = "androidx.navigation" , name = "navigation-compose" , version.ref ="nav"}
+kakao-common = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao-sdk" }
+google-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+lifecycle-viewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+compose-nav = { group = "androidx.navigation", name = "navigation-compose", version.ref = "nav" }
 jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 squareup-okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
 squareup-retrofit2-converter-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrotit2" }
 squareup-retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrotit2" }
-firebase-analytics = {group = "com.google.firebase" , name = "firebase-analytics" , version.ref = "firebase-analytics"}
-firebase-message = {group = "com.google.firebase" , name = "firebase-messaging" , version.ref = "firebase-messaging"}
-room-database-runtime = {group = "androidx.room" , name = "room-runtime" , version.ref = "room-database"}
-room-database-ktx = {group = "androidx.room" , name = "room-ktx" , version.ref = "room-database"}
-room-database-compiler = { group = "androidx.room" , name = "room-compiler" , version.ref = "room-database"}
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
+firebase-message = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
+room-database-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-database" }
+room-database-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-database" }
+room-database-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-database" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material", version = "compose-material" }
+
+glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide-version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 hilt-project = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-google-service-gms = {id = "com.google.gms.google-services" , version.ref = "gms-service"}
+google-service-gms = { id = "com.google.gms.google-services", version.ref = "gms-service" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-devtool-ksp = {id = "com.google.devtools.ksp" , version.ref = "ksp"}
+devtool-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

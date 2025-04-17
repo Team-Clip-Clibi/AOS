@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarDuration
@@ -33,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchInfo
-import com.sungil.editprofile.ui.changeDiet.dietItemModifier
 import com.sungil.main.ERROR_NETWORK_ERROR
 import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.ERROR_SAVE_ERROR
@@ -193,6 +191,7 @@ internal fun HomMainScreen(
                     modifier = Modifier.weight(1f)
                 )
             }
+            Spacer(Modifier.weight(1f))
         }
         Column(
             modifier = Modifier

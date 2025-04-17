@@ -555,3 +555,10 @@ fun CustomHomeButton(
         }
     }
 }
+
+@Composable
+fun Banner(
+    image : String
+){
+
+}

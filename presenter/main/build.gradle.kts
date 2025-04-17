@@ -62,6 +62,8 @@ dependencies {
     //nav
     implementation(libs.compose.nav)
     implementation(libs.androidx.compose.material)
+    //image
+    implementation(libs.glide.compose)
     //project
     implementation(project(":domain"))
     implementation(project(":core"))
