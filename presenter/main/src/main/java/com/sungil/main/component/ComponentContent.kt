@@ -1,10 +1,17 @@
 package com.sungil.main.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -28,6 +35,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.core.AppTextStyles
 import com.sungil.domain.CATEGORY
+import com.sungil.domain.model.MatchInfo
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
 import com.sungil.main.Screen
@@ -86,7 +94,7 @@ fun BottomNavItem(
     item: Screen,
     isSelected: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val contentColor = if (isSelected) Color(0xFF171717) else Color(0xFF989898)
 
@@ -129,6 +137,7 @@ fun Modifier.noVisualFeedbackClickable(onClick: () -> Unit): Modifier = composed
         }
     )
 }
+
 @Composable
 fun CustomMyPageAppBar(text: String) {
     Box(
@@ -209,10 +218,10 @@ fun MyPageItem(text: String, icon: Int, click: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomHomeTopBar(
-    text : String,
-    bellImage : Int,
-    click: () -> Unit
-){
+    text: String,
+    bellImage: Int,
+    click: () -> Unit,
+) {
     CenterAlignedTopAppBar(
         modifier = Modifier
             .fillMaxWidth()
@@ -226,7 +235,7 @@ fun CustomHomeTopBar(
         },
         navigationIcon = {
             Image(
-                painter = painterResource(id = R.drawable.ic_one_thing),
+                painter = painterResource(id = R.drawable.ic_one_thing_purple),
                 contentDescription = "logo",
                 modifier = Modifier
                     .height(24.dp)
@@ -234,7 +243,7 @@ fun CustomHomeTopBar(
         },
         actions = {
             Image(
-                painter = painterResource( id = bellImage),
+                painter = painterResource(id = bellImage),
                 contentDescription = "알람",
                 modifier = Modifier
                     .size(48.dp)
@@ -281,7 +290,7 @@ fun CustomNotifyBar(
     content: String,
     link: String,
     notifyClick: (String) -> Unit,
-    notifyClose : () -> Unit
+    notifyClose: () -> Unit,
 ) {
     val titleColor = when (noticeType) {
         CONTENT_NOTICE -> Color(0xFFFB4F4F)
@@ -347,6 +356,74 @@ fun HomeTitleText(
         color = Color(0xFF383838)
     )
 }
+
+@Composable
+fun MeetingCardList(
+    matchList: List<MatchInfo>,
+    onAddClick: () -> Unit,
+    canAdd: Boolean,
+) {
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        itemsIndexed(matchList, key = { _, item -> item.matchingId }) { _, match ->
+            AnimatedVisibility(
+                visible = true,
+                enter = fadeIn(tween(300)) + slideInHorizontally(
+                    animationSpec = tween(300),
+                    initialOffsetX = { it / 2 }
+                )
+            ) {
+                MeetingCard(
+                    category = match.category,
+                    time = "${match.daysUntilMeeting}일 후",
+                    location = match.meetingPlace
+                )
+            }
+        }
+
+        if (canAdd) {
+            item {
+                MainCardView(
+                    contentString = stringResource(R.string.txt_home_not_meeting),
+                    addClick = onAddClick
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MainCardView(
+    contentString: String,
+    addClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(174.dp)
+            .background(color = Color(0xFFEFEFEF), shape = RoundedCornerShape(size = 24.dp))
+            .padding(20.dp)
+            .clickable { addClick() },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_plus_gray),
+            modifier = Modifier.size(40.dp),
+            contentDescription = "add meeting"
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = contentString,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = Color(0xFF666666),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
 
 @Composable
 fun MeetingCard(
@@ -427,6 +504,54 @@ fun MeetingCard(
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
                 color = Color(0xFF171717)
             )
+        }
+    }
+}
+
+@Composable
+fun CustomHomeButton(
+    titleText: String,
+    contentText: String,
+    image: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        modifier = modifier
+            .height(84.dp)
+            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 14.dp))
+            .border(
+                width = 1.dp,
+                color = Color(0xFFF7F7F7),
+                shape = RoundedCornerShape(size = 14.dp)
+            ),
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Image(
+                painter = painterResource(image),
+                contentDescription = "button image",
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(Modifier.width(16.dp))
+            Column(
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = titleText,
+                    style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                    color = Color(0xFF171717)
+                )
+                Text(
+                    text = contentText,
+                    style = AppTextStyles.CAPTION_12_18_SEMI,
+                    color = Color(0xFF666666)
+                )
+            }
         }
     }
 }

@@ -1,41 +1,48 @@
 package com.sungil.main.ui.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.sungil.domain.model.Notification
-import com.sungil.editprofile.ERROR_USER_DATA_NULL
+import com.sungil.domain.CATEGORY
+import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchInfo
 import com.sungil.main.ERROR_NETWORK_ERROR
 import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.ERROR_SAVE_ERROR
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
+import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.CustomNotifyBar
 import com.sungil.main.component.HomeTitleText
+import com.sungil.main.component.MeetingCardList
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun HomMainScreen(
@@ -47,11 +54,29 @@ internal fun HomMainScreen(
     randomMatchClick: () -> Unit,
     reLogin: () -> Unit,
 ) {
+    val serverMatch = Match(
+        responseCode = 200,
+        oneThingMatch = listOf(
+            MatchInfo(CATEGORY.CONTENT_ONE_THING, 1, 3, "강남역"),
+            MatchInfo(CATEGORY.CONTENT_ONE_THING, 2, 4, "홍대입구")
+        ),
+        randomMatch = listOf(
+            MatchInfo(CATEGORY.CONTENT_RANDOM, 3, 5, "잠실")
+        )
+    )
+
+    val totalList = serverMatch.oneThingMatch + serverMatch.randomMatch
+
+    val visibleCards = remember { mutableStateListOf<MatchInfo>() }
+    val coroutineScope = rememberCoroutineScope()
     val state by viewModel.userState.collectAsState()
     val notificationState = state.notificationState
     val userData = state.userDataState
     val context = LocalContext.current
     val notifyShow by viewModel.notifyShow.collectAsState()
+    val notServiceMsg = stringResource(R.string.msg_not_service)
+
+
     LaunchedEffect(notificationState) {
         if (notificationState is MainViewModel.UiState.Error) {
             when (notificationState.message) {
@@ -101,7 +126,7 @@ internal fun HomMainScreen(
             }
         }
 
-        // 메인 콘텐츠 영역 (padding 있음)
+        // 메인뷰
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,10 +136,63 @@ internal fun HomMainScreen(
         ) {
 
             HomeTitleText(
-                text = if (userData is MainViewModel.UiState.Success) userData.data.nickName else "error"
+                text = if (userData is MainViewModel.UiState.Success) stringResource(
+                    R.string.txt_home_title,
+                    userData.data.nickName
+                ) else stringResource(R.string.txt_home_title, "ERROR")
             )
             Spacer(Modifier.height(12.dp))
+            MeetingCardList(
+                matchList = visibleCards,
+                onAddClick = {
+                    val nextIndex = visibleCards.size
+                    if (nextIndex < totalList.size) {
+                        visibleCards.add(totalList[nextIndex])
+                    }
+                },
+                canAdd = visibleCards.size < totalList.size
+            )
+            Spacer(Modifier.height(40.dp))
+            HomeTitleText(
+                text = stringResource(R.string.txt_home_sub_title)
+            )
+            Spacer(Modifier.height(12.dp))
+            CustomHomeButton(
+                titleText = stringResource(R.string.btn_home_oneThing),
+                contentText = stringResource(R.string.btn_home_oneThing_content),
+                onClick = onThingClick,
+                image = R.drawable.ic_one_thing_purple,
+                modifier = Modifier.fillMaxWidth()
+            )
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+
+            ) {
+                CustomHomeButton(
+                    titleText = stringResource(R.string.btn_home_random),
+                    contentText = stringResource(R.string.btn_home_random_content),
+                    onClick = randomMatchClick,
+                    image = R.drawable.ic_random_green,
+                    modifier = Modifier.weight(1f)
+                )
+                CustomHomeButton(
+                    titleText = stringResource(R.string.btn_home_light),
+                    contentText = stringResource(R.string.btn_home_light_content),
+                    onClick = {
+                        coroutineScope.launch {
+                            snackBarHost.showSnackbar(
+                                message = notServiceMsg,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    },
+                    image = R.drawable.ic_light_yellow,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
+
     }
 }

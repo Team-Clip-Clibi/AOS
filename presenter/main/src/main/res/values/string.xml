@@ -25,7 +25,7 @@
     <string name="btn_home_oneThing">원띵 모임</string>
     <string name="btn_home_oneThing_content">대화하고 싶은 단 하나의 주제가 있다면</string>
     <string name="btn_home_random">랜덤 모임</string>
-    <string name="btn_honme_random_content">주제없이 만나요</string>
+    <string name="btn_home_random_content">주제없이 만나요</string>
     <string name="btn_home_light">번개 모임</string>
     <string name="btn_home_light_content">오늘 만날 수 있어요</string>
     <string name="card_one_thing_title">원띵 모임</string>
@@ -35,4 +35,5 @@
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <string name="msg_network_error">네트워크 에러</string>
     <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
+    <string name="msg_not_service">앗! 해당 서비스는 아직 개발중이에요</string>
 </resources>
