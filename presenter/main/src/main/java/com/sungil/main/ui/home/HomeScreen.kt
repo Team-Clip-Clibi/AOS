@@ -37,7 +37,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             CustomHomeTopBar(
-                text ="",
+                text = "",
                 bellImage = icons,
                 click = {}
             )
@@ -50,10 +50,18 @@ fun HomeScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 17.dp , end = 16.dp , bottom = 91.dp)
+                    .padding(start = 17.dp, end = 16.dp, bottom = 91.dp)
             )
         }
     ) { paddingValues ->
-
+        HomMainScreen(
+            paddingValues = paddingValues,
+            viewModel = viewModel,
+            snackBarHost = snackBarHostState,
+            onThingClick = oneThingMatchClick,
+            notifyClick = notifyClick,
+            randomMatchClick = randomMatchClick,
+            reLogin = {}
+        )
     }
 }

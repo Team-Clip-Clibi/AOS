@@ -37,6 +37,7 @@ import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.ERROR_SAVE_ERROR
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
+import com.sungil.main.component.Banner
 import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.CustomNotifyBar
 import com.sungil.main.component.HomeTitleText
@@ -74,7 +75,7 @@ internal fun HomMainScreen(
     val context = LocalContext.current
     val notifyShow by viewModel.notifyShow.collectAsState()
     val notServiceMsg = stringResource(R.string.msg_not_service)
-
+    val bannerImage = state.banner
 
     LaunchedEffect(notificationState) {
         if (notificationState is MainViewModel.UiState.Error) {
@@ -101,7 +102,7 @@ internal fun HomMainScreen(
             .fillMaxSize()
             .padding(
                 top = paddingValues.calculateTopPadding(),
-                bottom = 40.dp
+                bottom = 32.dp
             )
             .background(Color(0xFFF7F7F7))
             .navigationBarsPadding()
@@ -198,7 +199,9 @@ internal fun HomMainScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-
+            if(bannerImage is MainViewModel.UiState.Success){
+                Banner(bannerImage.data.image)
+            }
         }
     }
 }

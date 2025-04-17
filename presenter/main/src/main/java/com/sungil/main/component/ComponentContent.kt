@@ -33,6 +33,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.core.AppTextStyles
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.MatchInfo
@@ -556,9 +558,16 @@ fun CustomHomeButton(
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun Banner(
-    image : String
-){
-
+    image: String,
+) {
+    GlideImage(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(110.dp),
+        model = image,
+        contentDescription = "banner"
+    )
 }
