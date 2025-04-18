@@ -229,12 +229,12 @@ interface HttpApi {
     /**
      * 원띵 알람 조회 API
      */
-    @GET(BuildConfig.REFRESH_URL)
+    @GET(BuildConfig.ONE_THING_NOTI_URL)
     suspend fun requestNewNotification(
         @Header("Authorization") bearerToken: String,
     ): Response<List<OneThinNotify>>
 
-    @POST(BuildConfig.ONE_THING_NOTI_URL)
+    @POST(BuildConfig.REFRESH_URL)
     suspend fun requestRefreshToken(
         @Header("Authorization") bearerToken: String,
     ): Response<AuthToken>

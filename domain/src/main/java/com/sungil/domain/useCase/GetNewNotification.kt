@@ -18,7 +18,7 @@ class GetNewNotification @Inject constructor(
 
     suspend fun invoke(): Result {
         val token = database.getToken()
-        val oneThingNotification = network.requestOneThineNotification(TOKEN_FORM + token)
+        val oneThingNotification = network.requestOneThineNotification(TOKEN_FORM + token.first)
         when (oneThingNotification.responseCode) {
             401 -> {
                 val refreshToken = network.requestUpdateToken(TOKEN_FORM + token.second)
