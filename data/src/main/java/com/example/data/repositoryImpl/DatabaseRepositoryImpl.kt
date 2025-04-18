@@ -86,7 +86,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         return tokenManger.getToken()
     }
 
-    override suspend fun getUserInfo(): com.sungil.domain.model.UserInfo? {
+    override suspend fun getUserInfo(): com.sungil.domain.model.UserData {
         return userInfo.getUserData().toDomain()
     }
 
@@ -98,8 +98,8 @@ class DatabaseRepositoryImpl @Inject constructor(
         return tokenManger.clearToken()
     }
 
-    private fun UserInfo.toDomain(): com.sungil.domain.model.UserInfo {
-        return com.sungil.domain.model.UserInfo(
+    private fun UserInfo.toDomain(): com.sungil.domain.model.UserData {
+        return com.sungil.domain.model.UserData(
             userName = name,
             nickName = nickName,
             phoneNumber = phoneNumber,

@@ -1,5 +1,6 @@
 package com.sungil.domain.repository
 
+import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 
 interface DatabaseRepository {
@@ -26,7 +27,7 @@ interface DatabaseRepository {
     suspend fun setNotifyState(data: Boolean): Boolean
     suspend fun setToken(accessToken: String, refreshToken: String): Boolean
     suspend fun getToken(): Pair<String, String>
-    suspend fun getUserInfo(): UserInfo?
+    suspend fun getUserInfo(): UserData
     suspend fun deleteUserIfo() : Boolean
     suspend fun removeToken(): Boolean
 }

@@ -8,6 +8,7 @@ import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.OneThineNotify
+import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetMatch
@@ -146,7 +147,7 @@ class MainViewModel @Inject constructor(
     }
 
     data class MainViewState(
-        val userDataState: UiState<UserInfo> = UiState.Loading,
+        val userDataState: UiState<UserData> = UiState.Loading,
         val notificationState: UiState<Notification> = UiState.Loading,
         val oneThingState: UiState<List<OneThineNotify>> = UiState.Loading,
         val banner: UiState<BannerData> = UiState.Loading,

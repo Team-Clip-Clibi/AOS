@@ -5,7 +5,11 @@ import com.example.fcm.FirebaseFCM
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.Banner
 import com.sungil.domain.model.BannerData
+import com.sungil.domain.model.DietData
+import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
+import com.sungil.domain.model.Love
+import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.Notification
@@ -206,9 +210,14 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.code()
     }
 
-    override suspend fun requestDiet(accessToken: String): String {
+    override suspend fun requestDiet(accessToken: String): DietResponse {
         val result = api.requestDiet(accessToken)
-        return result.body().toString()
+        return DietResponse(
+            result.code(),
+            DietData(
+                result.body().toString()
+            )
+        )
     }
 
     override suspend fun requestJob(accessToken: String): JobList {
@@ -225,9 +234,21 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun requestLove(accessToken: String): Pair<String?, Boolean?> {
+    override suspend fun requestLove(accessToken: String): LoveResponse {
         val result = api.requestRelationShip(accessToken)
-        return Pair(result.body()?.relationshipStatus, result.body()?.isSameRelationshipConsidered)
+        if (result.code() != 200) {
+            return LoveResponse(
+                responseCode = result.code(), Love(
+                    relationShip = "", isSameRelationShip = false
+                )
+            )
+        }
+        return LoveResponse(
+            responseCode = result.code(), Love(
+                relationShip = result.body()!!.relationshipStatus!!,
+                isSameRelationShip = result.body()!!.isSameRelationshipConsidered!!
+            )
+        )
     }
 
     override suspend fun requestLanguage(accessToken: String): String? {
