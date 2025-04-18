@@ -13,10 +13,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +31,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -144,9 +149,9 @@ fun Modifier.noVisualFeedbackClickable(onClick: () -> Unit): Modifier = composed
 fun CustomMyPageAppBar(text: String) {
     Box(
         modifier = Modifier
+            .background(Color(0xFFF7F7F7))
             .fillMaxWidth()
             .height(48.dp)
-            .background(Color(0xFFF7F7F7))
             .padding(start = 17.dp, end = 12.dp),
         contentAlignment = Alignment.CenterStart
     ) {
@@ -173,7 +178,7 @@ fun CustomMyPageButton(
             .height(48.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(color),
+            containerColor = Color(color),
             contentColor = Color(textColor)
         ),
         elevation = null
@@ -226,20 +231,21 @@ fun CustomHomeTopBar(
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 17.dp, end = 12.dp),
+            .fillMaxWidth(),
+
         title = {
             Text(
                 text = text,
                 style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color.Black
+                color = Color.Black,
             )
         },
         navigationIcon = {
             Image(
-                painter = painterResource(id = R.drawable.ic_one_thing_purple),
+                painter = painterResource(id = R.drawable.ic_logo_str),
                 contentDescription = "logo",
                 modifier = Modifier
+                    .padding(start = 17.dp)
                     .height(24.dp)
             )
         },
@@ -386,10 +392,15 @@ fun MeetingCardList(
         }
 
         if (canAdd) {
+            val isFirstCard = matchList.isEmpty()
             item {
                 MainCardView(
                     contentString = stringResource(R.string.txt_home_not_meeting),
-                    addClick = onAddClick
+                    addClick = onAddClick,
+                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(
+                        192.dp
+                    )
+
                 )
             }
         }
@@ -400,10 +411,11 @@ fun MeetingCardList(
 fun MainCardView(
     contentString: String,
     addClick: () -> Unit,
+    modifier: Modifier = Modifier
+
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .height(174.dp)
             .background(color = Color(0xFFEFEFEF), shape = RoundedCornerShape(size = 24.dp))
             .padding(20.dp)
@@ -516,30 +528,33 @@ fun CustomHomeButton(
     contentText: String,
     image: Int,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    padding : Modifier = Modifier
 ) {
     Button(
         modifier = modifier
             .height(84.dp)
-            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 14.dp))
-            .border(
-                width = 1.dp,
-                color = Color(0xFFF7F7F7),
-                shape = RoundedCornerShape(size = 14.dp)
-            ),
-        onClick = onClick
+            .border(1.dp, Color(0xFFF7F7F7), shape = RoundedCornerShape(14.dp)),
+        onClick = onClick,
+        contentPadding = PaddingValues(horizontal = 0.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFFFFFFF)
+        ),
+        shape = RoundedCornerShape(14.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.Start
         ) {
             Image(
                 painter = painterResource(image),
                 contentDescription = "button image",
                 modifier = Modifier.size(24.dp)
             )
-            Spacer(Modifier.width(16.dp))
+            Spacer(modifier = padding)
             Column(
                 verticalArrangement = Arrangement.Center
             ) {

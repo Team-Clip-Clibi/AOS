@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(userDataState = UiState.Success(result.data))
                     }
-                    oneThingNotify()
+                    getBanner()
                 }
 
                 is GetUserInfo.Result.Fail -> {
@@ -68,7 +68,7 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(oneThingState = UiState.Error(result.errorMessage))
                     }
-                    serviceNotify()
+
                 }
 
                 is GetNewNotification.Result.Success -> {
@@ -93,7 +93,7 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(notificationState = UiState.Success(result.data))
                     }
-                    requestMatch()
+
                 }
             }
         }
@@ -112,7 +112,7 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(matchState = UiState.Success(result.data))
                     }
-                    getBanner()
+
                 }
             }
         }

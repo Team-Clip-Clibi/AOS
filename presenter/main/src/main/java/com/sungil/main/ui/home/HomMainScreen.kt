@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarDuration
@@ -100,11 +101,11 @@ internal fun HomMainScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF7F7F7))
             .padding(
                 top = paddingValues.calculateTopPadding(),
                 bottom = 32.dp
             )
-            .background(Color(0xFFF7F7F7))
             .navigationBarsPadding()
             .verticalScroll(rememberScrollState())
     ) {
@@ -162,8 +163,11 @@ internal fun HomMainScreen(
                 contentText = stringResource(R.string.btn_home_oneThing_content),
                 onClick = onThingClick,
                 image = R.drawable.ic_one_thing_purple,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                padding = Modifier.width(16.dp)
             )
+
+            Spacer(Modifier.height(12.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -175,7 +179,8 @@ internal fun HomMainScreen(
                     contentText = stringResource(R.string.btn_home_random_content),
                     onClick = randomMatchClick,
                     image = R.drawable.ic_random_green,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    padding = Modifier.width(12.dp)
                 )
                 CustomHomeButton(
                     titleText = stringResource(R.string.btn_home_light),
@@ -189,7 +194,8 @@ internal fun HomMainScreen(
                         }
                     },
                     image = R.drawable.ic_light_yellow,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    padding = Modifier.width(12.dp)
                 )
             }
             Spacer(Modifier.weight(1f))
@@ -197,9 +203,10 @@ internal fun HomMainScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(Color(0xFFF7F7F7))
                 .align(Alignment.BottomCenter)
         ) {
-            if(bannerImage is MainViewModel.UiState.Success){
+            if (bannerImage is MainViewModel.UiState.Success) {
                 Banner(bannerImage.data.image)
             }
         }
