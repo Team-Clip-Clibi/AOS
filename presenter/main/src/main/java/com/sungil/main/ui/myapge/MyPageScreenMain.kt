@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
+import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
@@ -50,7 +51,7 @@ internal fun MyPageScreenMain(
     val userState by viewModel.userState.collectAsState()
 
     val userName = when (userState.userDataState) {
-        is MainViewModel.UiState.Success -> (userState.userDataState as MainViewModel.UiState.Success<UserInfo>).data.nickName
+        is MainViewModel.UiState.Success -> (userState.userDataState as MainViewModel.UiState.Success<UserData>).data.nickName
         is MainViewModel.UiState.Loading -> ""
         is MainViewModel.UiState.Error -> "오류 발생"
     }

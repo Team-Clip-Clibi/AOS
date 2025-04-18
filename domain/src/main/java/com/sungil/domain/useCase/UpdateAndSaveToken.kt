@@ -23,7 +23,6 @@ class UpdateAndSaveToken @Inject constructor(
 
     override suspend fun invoke(param: Param): Result {
         val beforeToken = repo.getFcmToken()
-        val token = repo.getToken()
         return when {
             beforeToken.isEmpty() -> {
                 val result = repo.saveFcmToken(param.fcmToken)
@@ -36,18 +35,6 @@ class UpdateAndSaveToken @Inject constructor(
 
             beforeToken == param.fcmToken -> {
                 Result.Success("Already same token")
-            }
-
-            beforeToken != param.fcmToken && token.first != null && token.second != null -> {
-                val result = repo.updateFcmToken(param.fcmToken)
-                if (!result) {
-                    return Result.Fail("Failed to update token")
-                }
-                val updateFcmTokenResult = api.requestUpdateFcmToken(TOKEN_FORM + token.first)
-                if (updateFcmTokenResult != 204) {
-                    return Result.Fail("Fail to update Fcm Token")
-                }
-                return Result.Success("Success to save data")
             }
 
             else -> {

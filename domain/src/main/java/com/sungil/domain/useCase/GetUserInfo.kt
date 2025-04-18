@@ -24,7 +24,8 @@ class GetUserInfo @Inject constructor(
 
         updateJobIfNeeded(userData, token)?.let { token = it } ?: return Result.Fail("job error")
         updateDietIfNeeded(userData, token)?.let { token = it } ?: return Result.Fail("diet error")
-        updateLoveStateIfNeeded(userData, token)?.let { token = it } ?: return Result.Fail("love error")
+        updateLoveStateIfNeeded(userData, token)?.let { token = it }
+            ?: return Result.Fail("love error")
 
         val saveResult = database.saveUserInfo(
             name = userData.userName,
@@ -40,13 +41,20 @@ class GetUserInfo @Inject constructor(
         return if (saveResult) Result.Success(userData) else Result.Fail("save error")
     }
 
-    private suspend fun updateJobIfNeeded(userData: UserData, token: Pair<String, String>): Pair<String, String>? {
+    private suspend fun updateJobIfNeeded(
+        userData: UserData,
+        token: Pair<String, String>,
+    ): Pair<String, String>? {
         if (userData.job.first != "NONE") return token
 
         val result = network.requestJob(TOKEN_FORM + token.first)
         return when (result.responseCode) {
             200 -> {
-                userData.job = Pair(result.jobList[0], result.jobList[1])
+                userData.job = if (result.jobList.isEmpty()) {
+                    Pair("NONE", "NONE")
+                } else {
+                    Pair(result.jobList[0], result.jobList[1])
+                }
                 token
             }
 
@@ -62,13 +70,20 @@ class GetUserInfo @Inject constructor(
         }
     }
 
-    private suspend fun updateDietIfNeeded(userData: UserData, token: Pair<String, String>): Pair<String, String>? {
+    private suspend fun updateDietIfNeeded(
+        userData: UserData,
+        token: Pair<String, String>,
+    ): Pair<String, String>? {
         if (userData.diet != "NONE") return token
 
         val result = network.requestDiet(TOKEN_FORM + token.first)
         return when (result.response) {
             200 -> {
-                userData.diet = result.diet.diet
+                userData.diet = if (result.diet.diet.contains("null")) {
+                    "NONE"
+                } else {
+                    result.diet.diet
+                }
                 token
             }
 
@@ -84,7 +99,10 @@ class GetUserInfo @Inject constructor(
         }
     }
 
-    private suspend fun updateLoveStateIfNeeded(userData: UserData, token: Pair<String, String>): Pair<String, String>? {
+    private suspend fun updateLoveStateIfNeeded(
+        userData: UserData,
+        token: Pair<String, String>,
+    ): Pair<String, String>? {
         if (userData.loveState.first != "NONE") return token
 
         val result = network.requestLove(TOKEN_FORM + token.first)
@@ -97,7 +115,8 @@ class GetUserInfo @Inject constructor(
             401 -> refreshTokenIfNeeded(token.second) { newToken ->
                 val retry = network.requestLove(TOKEN_FORM + newToken)
                 if (retry.responseCode == 200) {
-                    userData.loveState = Pair(retry.data.relationShip, retry.data.isSameRelationShip)
+                    userData.loveState =
+                        Pair(retry.data.relationShip, retry.data.isSameRelationShip)
                     true
                 } else false
             }?.also { return it } ?: return null
@@ -108,7 +127,7 @@ class GetUserInfo @Inject constructor(
 
     private suspend fun refreshTokenIfNeeded(
         oldRefreshToken: String,
-        onSuccess: suspend (newAccessToken: String) -> Boolean
+        onSuccess: suspend (newAccessToken: String) -> Boolean,
     ): Pair<String, String>? {
         val refreshResult = network.requestUpdateToken(TOKEN_FORM + oldRefreshToken)
         if (refreshResult.first != 200) return null

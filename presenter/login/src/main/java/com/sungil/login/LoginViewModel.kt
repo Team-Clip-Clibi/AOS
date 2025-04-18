@@ -68,7 +68,7 @@ class LoginViewModel @Inject constructor(
                     _actionFlow.emit(Action.Error(result.errorMessage))
                 }
             }
-//            getToken()
+            getToken()
         }
     }
 

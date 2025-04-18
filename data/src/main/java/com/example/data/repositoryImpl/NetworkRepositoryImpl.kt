@@ -245,8 +245,8 @@ class NetworkRepositoryImpl @Inject constructor(
         }
         return LoveResponse(
             responseCode = result.code(), Love(
-                relationShip = result.body()!!.relationshipStatus!!,
-                isSameRelationShip = result.body()!!.isSameRelationshipConsidered!!
+                relationShip = result.body()?.relationshipStatus ?: "SINGLE",
+                isSameRelationShip = result.body()?.isSameRelationshipConsidered ?: false
             )
         )
     }
@@ -284,9 +284,9 @@ class NetworkRepositoryImpl @Inject constructor(
         }
         return Notification(
             responseCode = result.code(),
-            noticeType = result.body()!!.noticeType,
-            content = result.body()!!.content,
-            link = result.body()!!.link
+            noticeType = result.body()?.noticeType ?: "",
+            content = result.body()?.content?: "",
+            link = result.body()?.link ?: ""
         )
     }
 

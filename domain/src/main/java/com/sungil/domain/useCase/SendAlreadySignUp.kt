@@ -23,7 +23,7 @@ class SendAlreadySignUp @Inject constructor(
         val token = database.getToken()
         val requestUserInfo = network.requestUserData(TOKEN_FORM + token.first)
         when (requestUserInfo!!.responseCode) {
-            201 -> {
+            200 -> {
                 val saveUserData = database.saveUserInfo(
                     name = requestUserInfo.data.userName,
                     nickName = requestUserInfo.data.nickName,
@@ -70,6 +70,5 @@ class SendAlreadySignUp @Inject constructor(
             }
             else -> return Result.Fail("network error")
         }
-        return Result.Success("Success")
     }
 }
