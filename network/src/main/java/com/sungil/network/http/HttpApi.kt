@@ -203,7 +203,7 @@ interface HttpApi {
     /**
      * 공지사항 API
      */
-    @GET(BuildConfig.NOTIFICATION_URL)
+    @GET(BuildConfig.ANNOUNCEMENT_URL)
     suspend fun requestNotification(
         @Header("Authorization") bearerToken: String,
     ): Response<Notification>
@@ -229,12 +229,12 @@ interface HttpApi {
     /**
      * 원띵 알람 조회 API
      */
-    @GET(BuildConfig.NOTIFICATION_URL)
+    @GET(BuildConfig.REFRESH_URL)
     suspend fun requestNewNotification(
         @Header("Authorization") bearerToken: String,
     ): Response<List<OneThinNotify>>
 
-    @POST(BuildConfig.REFRESH_URL)
+    @POST(BuildConfig.ONE_THING_NOTI_URL)
     suspend fun requestRefreshToken(
         @Header("Authorization") bearerToken: String,
     ): Response<AuthToken>

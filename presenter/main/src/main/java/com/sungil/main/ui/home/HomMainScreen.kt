@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchInfo
 import com.sungil.main.ERROR_NETWORK_ERROR
 import com.sungil.main.ERROR_RE_LOGIN
@@ -55,8 +56,7 @@ internal fun HomMainScreen(
     randomMatchClick: () -> Unit,
     reLogin: () -> Unit,
 ) {
-    val serverMatch = Match(
-        responseCode = 200,
+    val serverMatch = MatchData(
         oneThingMatch = listOf(
             MatchInfo(CATEGORY.CONTENT_ONE_THING, 1, 3, "강남역"),
             MatchInfo(CATEGORY.CONTENT_ONE_THING, 2, 4, "홍대입구")

@@ -67,11 +67,11 @@ android {
         buildConfigField("String" , "SIGNOUT_URL" ,signOut)
         buildConfigField("String" , "DIET_URL" , diet)
         buildConfigField("String" , "REPORT_URL" , report)
-        buildConfigField("String" , "NOTIFICATION_URL" , noti)
+        buildConfigField("String" , "ANNOUNCEMENT_URL" , noti)
         buildConfigField("String" , "BANNER_URL" , banner)
         buildConfigField("String" ,"MATCH_URL" , match)
         buildConfigField("String" , "REFRESH_URL" , refresh)
-        buildConfigField("String" , "NOTIFICATION_URL" , notification)
+        buildConfigField("String" , "ONE_THING_NOTI_URL" , notification)
     }
 
     buildTypes {

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.UserData
@@ -49,7 +50,7 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(userDataState = UiState.Success(result.data))
                     }
-                    getBanner()
+
                 }
 
                 is GetUserInfo.Result.Fail -> {
@@ -151,7 +152,7 @@ class MainViewModel @Inject constructor(
         val notificationState: UiState<Notification> = UiState.Loading,
         val oneThingState: UiState<List<OneThineNotify>> = UiState.Loading,
         val banner: UiState<BannerData> = UiState.Loading,
-        val matchState: UiState<Match> = UiState.Loading,
+        val matchState: UiState<MatchData> = UiState.Loading,
     )
 }
 

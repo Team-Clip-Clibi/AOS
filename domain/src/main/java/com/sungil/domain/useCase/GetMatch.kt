@@ -3,6 +3,7 @@ package com.sungil.domain.useCase
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
@@ -13,7 +14,7 @@ class GetMatch @Inject constructor(
 ) {
 
     sealed interface Result : UseCase.Result {
-        data class Success(val data: Match) : Result
+        data class Success(val data: MatchData) : Result
         data class Fail(val errorMessage: String) : Result
     }
 
@@ -34,11 +35,11 @@ class GetMatch @Inject constructor(
                 if (reRequest.responseCode != 200) {
                     return Result.Fail("network error")
                 }
-                return Result.Success(reRequest)
+                return Result.Success(reRequest.data)
             }
 
             -100 -> return Result.Fail("network error")
-            200 -> return Result.Success(data)
+            200 -> return Result.Success(data.data)
             else -> return Result.Fail("network error")
         }
     }

@@ -4,6 +4,10 @@ import com.sungil.domain.CATEGORY
 
 data class Match(
     val responseCode: Int,
+    val data : MatchData
+)
+
+data class MatchData(
     val oneThingMatch: List<MatchInfo>,
     val randomMatch: List<MatchInfo>,
 )

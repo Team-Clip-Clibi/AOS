@@ -11,6 +11,7 @@ import com.sungil.domain.model.JobList
 import com.sungil.domain.model.Love
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.OneThineNotification
@@ -274,7 +275,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestNotification(accessToken: String): Notification {
         val result = api.requestNotification(accessToken)
-        if (result.code() != 204) {
+        if (result.code() != 200) {
             return Notification(
                 responseCode = result.code(),
                 noticeType = "",
@@ -313,21 +314,27 @@ class NetworkRepositoryImpl @Inject constructor(
         if (result.code() != 200) {
             return Match(
                 responseCode = result.code(),
-                oneThingMatch = emptyList(),
-                randomMatch = emptyList()
+                MatchData(
+                    oneThingMatch = emptyList(),
+                    randomMatch = emptyList()
+                )
             )
         }
         if (result.body() == null) {
             return Match(
                 responseCode = -100,
-                oneThingMatch = emptyList(),
-                randomMatch = emptyList()
+                MatchData(
+                    oneThingMatch = emptyList(),
+                    randomMatch = emptyList()
+                )
             )
         }
         return Match(
             responseCode = result.code(),
-            oneThingMatch = result.body()!!.oneThingMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_ONE_THING) },
-            randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_RANDOM) }
+            data = MatchData(
+                oneThingMatch = result.body()!!.oneThingMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_ONE_THING) },
+                randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_RANDOM) }
+            ),
         )
     }
 
