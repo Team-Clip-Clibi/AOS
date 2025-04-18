@@ -5,12 +5,14 @@ import com.example.fcm.FirebaseFCM
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.Banner
 import com.sungil.domain.model.BannerData
+import com.sungil.domain.model.JobList
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.PhoneNumberCheckResult
+import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
@@ -158,7 +160,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestUserData(accessToken: String): UserInfo? {
         val result = api.requestUserInfo(accessToken)
-        return result.body()?.toDomain()
+        return result.body()?.toDomain(result.code())
     }
 
     override suspend fun requestUpdateFcmToken(accessToken: String): Int {
@@ -209,9 +211,18 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.body().toString()
     }
 
-    override suspend fun requestJob(accessToken: String): List<String>? {
+    override suspend fun requestJob(accessToken: String): JobList {
         val result = api.requestJob(accessToken)
-        return result.body()?.jobList
+        if (result.code() != 200) {
+            return JobList(
+                result.code(),
+                emptyList()
+            )
+        }
+        return JobList(
+            result.code(),
+            result.body()!!.jobList
+        )
     }
 
     override suspend fun requestLove(accessToken: String): Pair<String?, Boolean?> {
@@ -321,15 +332,18 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun RequestUserInfo.toDomain(): UserInfo {
+    private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {
         return UserInfo(
-            userName = username,
-            nickName = nickname,
-            phoneNumber = phoneNumber,
-            job = Pair("NONE", "NONE"),
-            loveState = Pair("NONE", false),
-            diet = "NONE",
-            language = "KOREAN"
+            responseCode = responseCode,
+            data = UserData(
+                userName = username,
+                nickName = nickname,
+                phoneNumber = phoneNumber,
+                job = Pair("NONE", "NONE"),
+                loveState = Pair("NONE", false),
+                diet = "NONE",
+                language = "KOREAN"
+            )
         )
     }
 

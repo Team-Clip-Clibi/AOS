@@ -30,10 +30,7 @@ class CheckAlreadySignUpNumber @Inject constructor(
     override suspend fun invoke(param: Param): Result {
         val editorNumber = param.phoneNumber.replace(Regex("[^0-9]"), "").trim()
         val token = database.getToken()
-        if (token.first == null) {
-            return Result.Fail("token is null")
-        }
-        val resultCode = repo.checkAlreadySignUpNumber(editorNumber, TOKEN_FORM + token.first!!)
+        val resultCode = repo.checkAlreadySignUpNumber(editorNumber, TOKEN_FORM + token.first)
         if (resultCode.code == 200) {
             return Result.Fail(
                 "Already SignUp",

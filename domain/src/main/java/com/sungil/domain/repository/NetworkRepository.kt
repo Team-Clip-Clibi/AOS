@@ -2,6 +2,7 @@ package com.sungil.domain.repository
 
 import android.app.Activity
 import com.sungil.domain.model.Banner
+import com.sungil.domain.model.JobList
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.OneThineNotification
@@ -61,7 +62,7 @@ interface NetworkRepository {
 
     suspend fun requestDiet(accessToken: String): String
 
-    suspend fun requestJob(accessToken: String): List<String>?
+    suspend fun requestJob(accessToken: String): JobList
 
     suspend fun requestLove(accessToken: String): Pair<String?, Boolean?>
 

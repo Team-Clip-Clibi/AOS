@@ -43,9 +43,6 @@ class SendUserDetail @Inject constructor(
         }
         val editBirthDay = reformBirth(year, month, day)
         val token = database.getToken()
-        if (token.first == null || token.second == null) {
-            return Result.Fail("Token is null")
-        }
         val sendResult = network.inputUserDetail(
             token = TOKEN_FORM + token.first,
             gender = param.gender,
@@ -55,10 +52,6 @@ class SendUserDetail @Inject constructor(
         )
         if (sendResult != 204) {
             return Result.Fail("network error")
-        }
-        val getBeforeUserInfo = database.getUserInfo()
-        if(getBeforeUserInfo != null){
-            database.deleteUserIfo()
         }
         val saveResult = database.saveUserInfo(
             name = param.name,
