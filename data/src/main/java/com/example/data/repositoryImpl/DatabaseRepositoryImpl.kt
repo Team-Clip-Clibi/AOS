@@ -1,6 +1,8 @@
 package com.example.data.repositoryImpl
 
+import com.sungil.database.MeetingManger.MeetingManger
 import com.sungil.database.SharedPreference
+import com.sungil.database.room.model.Meeting
 import com.sungil.database.room.model.UserInfo
 import com.sungil.database.token.TokenManager
 import com.sungil.database.user.UserData
@@ -11,6 +13,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     private val database: SharedPreference,
     private val userInfo: UserData,
     private val tokenManger: TokenManager,
+    private val meetingManger  :MeetingManger
 ) :
     DatabaseRepository {
 

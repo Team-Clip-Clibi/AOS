@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.sungil.database.SharedPreference
 import com.sungil.database.SharedPreferenceImpl
 import com.sungil.database.room.AppDatabase
+import com.sungil.database.room.dao.MeetingDao
 import com.sungil.database.room.dao.TokenDao
 import com.sungil.database.room.dao.UserInfoDao
 import com.sungil.database.room.model.Token
@@ -43,5 +44,10 @@ class DatabaseModule {
     @Provides
     fun provideTokenDao(appDatabase: AppDatabase): TokenDao {
         return appDatabase.tokenDao()
+    }
+
+    @Provides
+    fun provideMeetingDao(appDatabase: AppDatabase) : MeetingDao {
+        return appDatabase.meetingDao()
     }
 }
