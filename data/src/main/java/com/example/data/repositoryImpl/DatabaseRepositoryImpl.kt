@@ -6,6 +6,7 @@ import com.sungil.database.room.model.Meeting
 import com.sungil.database.room.model.UserInfo
 import com.sungil.database.token.TokenManager
 import com.sungil.database.user.UserData
+import com.sungil.domain.model.SaveMatch
 import com.sungil.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
@@ -13,7 +14,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     private val database: SharedPreference,
     private val userInfo: UserData,
     private val tokenManger: TokenManager,
-    private val meetingManger  :MeetingManger
+    private val meetingManger: MeetingManger,
 ) :
     DatabaseRepository {
 
@@ -85,6 +86,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun setToken(accessToken: String, refreshToken: String): Boolean {
         return tokenManger.updateToken(accessToken, refreshToken)
     }
+
     override suspend fun getToken(): Pair<String, String> {
         return tokenManger.getToken()
     }
@@ -101,6 +103,32 @@ class DatabaseRepositoryImpl @Inject constructor(
         return tokenManger.clearToken()
     }
 
+    override suspend fun getSaveMatch(): List<SaveMatch> {
+        val saveData = meetingManger.get()
+        if (saveData.isEmpty()) {
+            return emptyList()
+        }
+        return saveData.map { it.toDomain() }
+    }
+
+    override suspend fun deleteSaveMatch(matchId : Int): Boolean {
+        return meetingManger.delete(matchId)
+    }
+
+    override suspend fun insetSaveMatch(
+        matchId: Int,
+        time: String,
+        category: String,
+        location: String
+    ): Boolean {
+        return meetingManger.inset(
+            matchId = matchId,
+            time = time,
+            category = category,
+            location = location
+        )
+    }
+
     private fun UserInfo.toDomain(): com.sungil.domain.model.UserData {
         return com.sungil.domain.model.UserData(
             userName = name,
@@ -113,4 +141,12 @@ class DatabaseRepositoryImpl @Inject constructor(
         )
     }
 
+    private fun Meeting.toDomain(): SaveMatch {
+        return SaveMatch(
+            matchId = matchId,
+            category = category,
+            time = time,
+            location = location
+        )
+    }
 }

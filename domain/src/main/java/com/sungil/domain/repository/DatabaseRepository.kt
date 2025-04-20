@@ -1,7 +1,7 @@
 package com.sungil.domain.repository
 
+import com.sungil.domain.model.SaveMatch
 import com.sungil.domain.model.UserData
-import com.sungil.domain.model.UserInfo
 
 interface DatabaseRepository {
     suspend fun saveKaKaoId(kakaoId: String): Boolean
@@ -30,4 +30,7 @@ interface DatabaseRepository {
     suspend fun getUserInfo(): UserData
     suspend fun deleteUserIfo() : Boolean
     suspend fun removeToken(): Boolean
+    suspend fun getSaveMatch() : List<SaveMatch>
+    suspend fun deleteSaveMatch(matchId : Int) : Boolean
+    suspend fun insetSaveMatch(matchId : Int , time : String , category : String , location : String) : Boolean
 }
