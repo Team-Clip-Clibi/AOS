@@ -16,6 +16,9 @@ class RequestLogin @Inject constructor(
         data class Fail(val errorMessage: String) : Result
     }
 
+    /**
+     * 400 번대 에러 대응 필요
+     */
     suspend fun invoke(): Result {
         val kakaoId: String = database.getKaKaoId()
         val osVersion: String = device.getAndroidOsVersion().toString()
