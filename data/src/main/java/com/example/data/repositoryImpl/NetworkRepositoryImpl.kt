@@ -275,6 +275,14 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestNotification(accessToken: String): Notification {
         val result = api.requestNotification(accessToken)
+        if(result.body()?.size == 0){
+            return Notification(
+                responseCode = 204,
+                noticeType = "",
+                content = "",
+                link = ""
+            )
+        }
         if (result.code() != 200) {
             return Notification(
                 responseCode = result.code(),
@@ -283,11 +291,19 @@ class NetworkRepositoryImpl @Inject constructor(
                 link = ""
             )
         }
+        if(result.body() == null){
+            return Notification(
+                responseCode = 204,
+                noticeType =  "",
+                content =  "",
+                link =  ""
+            )
+        }
         return Notification(
             responseCode = result.code(),
-            noticeType = result.body()?.noticeType ?: "",
-            content = result.body()?.content?: "",
-            link = result.body()?.link ?: ""
+            noticeType = result.body()?.first()?.noticeType ?: "",
+            content = result.body()?.first()?.content?: "",
+            link = result.body()?.first()?.link ?: ""
         )
     }
 
@@ -302,9 +318,9 @@ class NetworkRepositoryImpl @Inject constructor(
         return Banner(
             result.code(),
             BannerData(
-                image = result.body()!!.imagePresignedUrl,
-                headText = result.body()!!.headText,
-                subText = result.body()!!.subText
+                image = result.body()!!.first().imagePresignedUrl,
+                headText = result.body()!!.first().headText,
+                subText = result.body()!!.first().subText
             )
         )
     }
