@@ -40,6 +40,9 @@ class GetNewNotification @Inject constructor(
                 return Result.Success(oneThingNotification.notification)
             }
 
+            204 ->{
+                return Result.Success(emptyList())
+            }
             else -> {
                 return Result.Fail("network error")
             }

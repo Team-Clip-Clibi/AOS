@@ -1,5 +1,6 @@
 package com.sungil.main.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,17 +57,6 @@ internal fun HomMainScreen(
     randomMatchClick: () -> Unit,
     reLogin: () -> Unit,
 ) {
-    val serverMatch = MatchData(
-        oneThingMatch = listOf(
-            MatchInfo(CATEGORY.CONTENT_ONE_THING, 1, 3, "강남역"),
-            MatchInfo(CATEGORY.CONTENT_ONE_THING, 2, 4, "홍대입구")
-        ),
-        randomMatch = listOf(
-            MatchInfo(CATEGORY.CONTENT_RANDOM, 3, 5, "잠실")
-        )
-    )
-
-    val totalList = serverMatch.oneThingMatch + serverMatch.randomMatch
 
     val visibleCards = remember { mutableStateListOf<MatchInfo>() }
     val coroutineScope = rememberCoroutineScope()
@@ -75,8 +65,15 @@ internal fun HomMainScreen(
     val userData = state.userDataState
     val context = LocalContext.current
     val notifyShow by viewModel.notifyShow.collectAsState()
+    val matchState = state.matchState
     val notServiceMsg = stringResource(R.string.msg_not_service)
     val bannerImage = state.banner
+    val unSaveList = (matchState as? MainViewModel.UiState.Success)
+        ?.data?.unSaveData
+        ?.let { it.oneThingMatch + it.randomMatch }
+        ?: emptyList()
+
+    val canAdd = unSaveList.isNotEmpty()
 
     LaunchedEffect(notificationState) {
         if (notificationState is MainViewModel.UiState.Error) {
@@ -94,6 +91,25 @@ internal fun HomMainScreen(
                 ERROR_RE_LOGIN -> {
                     reLogin()
                 }
+            }
+        }
+    }
+
+    LaunchedEffect(matchState) {
+        when (matchState) {
+            is MainViewModel.UiState.Error -> {
+
+            }
+
+            MainViewModel.UiState.Loading -> {
+                Log.d(javaClass.name.toString(), "Loading for get Data")
+            }
+
+            is MainViewModel.UiState.Success -> {
+                val data = matchState.data
+                visibleCards.clear()
+                visibleCards.addAll(data.saveData.oneThingMatch)
+                visibleCards.addAll(data.saveData.randomMatch)
             }
         }
     }
@@ -146,12 +162,11 @@ internal fun HomMainScreen(
             MeetingCardList(
                 matchList = visibleCards,
                 onAddClick = {
-                    val nextIndex = visibleCards.size
-                    if (nextIndex < totalList.size) {
-                        visibleCards.add(totalList[nextIndex])
+                    if (unSaveList.isNotEmpty()) {
+                        viewModel.saveMatch(unSaveList.first())
                     }
                 },
-                canAdd = visibleCards.size < totalList.size
+                canAdd = canAdd
             )
             Spacer(Modifier.height(40.dp))
             HomeTitleText(

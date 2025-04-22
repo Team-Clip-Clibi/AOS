@@ -1,21 +1,23 @@
 package com.sungil.main
 
 
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.BannerData
-import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.OneThineNotify
+import com.sungil.domain.model.SaveMatch
 import com.sungil.domain.model.UserData
-import com.sungil.domain.model.UserInfo
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetMatch
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
+import com.sungil.domain.useCase.GetSaveMatch
 import com.sungil.domain.useCase.GetUserInfo
+import com.sungil.domain.useCase.SaveMatchData
+import com.sungil.main.model.MatchResultData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +32,9 @@ class MainViewModel @Inject constructor(
     private val notify: GetNotification,
     private val oneThingNotify: GetNewNotification,
     private val match: GetMatch,
+    private val getMatch : GetSaveMatch,
     private val banner: GetBanner,
+    private val saveMatch : SaveMatchData
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -50,7 +54,6 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(userDataState = UiState.Success(result.data))
                     }
-                    oneThingNotify()
                 }
 
                 is GetUserInfo.Result.Fail -> {
@@ -60,6 +63,7 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+        oneThingNotify()
     }
 
     private fun oneThingNotify() {
@@ -76,10 +80,10 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(oneThingState = UiState.Success(result.data))
                     }
-                    serviceNotify()
                 }
             }
         }
+        serviceNotify()
     }
 
     private fun serviceNotify() {
@@ -95,10 +99,10 @@ class MainViewModel @Inject constructor(
                     _userState.update {
                         it.copy(notificationState = UiState.Success(result.data))
                     }
-                    requestMatch()
                 }
             }
         }
+        requestMatch()
     }
 
     private fun requestMatch() {
@@ -111,10 +115,57 @@ class MainViewModel @Inject constructor(
                 }
 
                 is GetMatch.Result.Success -> {
+                    getSaveMatch(result.data)
+                }
+            }
+        }
+    }
+
+    private fun getSaveMatch(data: MatchData) {
+        viewModelScope.launch {
+            when (val result = getMatch.invoke(GetSaveMatch.Param(data))) {
+                is GetSaveMatch.Result.Fail -> {
                     _userState.update {
-                        it.copy(matchState = UiState.Success(result.data))
+                        it.copy(matchState = UiState.Error(result.errorMessage))
                     }
-                    getBanner()
+                }
+
+                is GetSaveMatch.Result.Success -> {
+                    val resultData = MatchResultData(
+                        saveData = result.data,
+                        unSaveData = result.unSaveData
+                    )
+                    _userState.update {
+                        it.copy(matchState = UiState.Success(resultData))
+                    }
+                }
+            }
+        }
+        getBanner()
+    }
+
+    fun saveMatch(data : MatchInfo){
+        viewModelScope.launch {
+            val matchState = _userState.value.matchState
+            val matchResult = (matchState as? UiState.Success)?.data ?: return@launch
+            when(val result = saveMatch.invoke(SaveMatchData.Param(
+                newSaveData = data,
+                saveData = matchResult.saveData,
+                unSaveData = matchResult.unSaveData
+            ))){
+                is SaveMatchData.Result.Fail -> {
+                    _userState.update {
+                        it.copy(matchState = UiState.Error(result.errorMessage))
+                    }
+                }
+                is SaveMatchData.Result.Success -> {
+                    val resultData = MatchResultData(
+                        saveData = result.newSaveData,
+                        unSaveData = result.newUnSaveData
+                    )
+                    _userState.update {
+                        it.copy(matchState = UiState.Success(resultData))
+                    }
                 }
             }
         }
@@ -153,7 +204,8 @@ class MainViewModel @Inject constructor(
         val notificationState: UiState<Notification> = UiState.Loading,
         val oneThingState: UiState<List<OneThineNotify>> = UiState.Loading,
         val banner: UiState<BannerData> = UiState.Loading,
-        val matchState: UiState<MatchData> = UiState.Loading,
+        val matchState: UiState<MatchResultData> = UiState.Loading,
+        val saveMatchData : UiState<MatchData> = UiState.Loading
     )
 }
 

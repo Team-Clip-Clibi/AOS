@@ -1,9 +1,11 @@
 package com.sungil.domain.useCase
 
+import com.sungil.domain.CATEGORY
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
@@ -39,7 +41,18 @@ class GetMatch @Inject constructor(
             }
 
             -100 -> return Result.Fail("network error")
-            200 -> return Result.Success(data.data)
+            200 -> {
+                val serverMatch = MatchData(
+                    oneThingMatch = listOf(
+                        MatchInfo(CATEGORY.CONTENT_ONE_THING, 1, 3, "강남역"),
+                        MatchInfo(CATEGORY.CONTENT_ONE_THING, 2, 4, "홍대입구")
+                    ),
+                    randomMatch = listOf(
+                        MatchInfo(CATEGORY.CONTENT_RANDOM, 3, 5, "잠실")
+                    )
+                )
+                return Result.Success(serverMatch)
+            }
             else -> return Result.Fail("network error")
         }
     }
