@@ -206,7 +206,7 @@ interface HttpApi {
     @GET(BuildConfig.ANNOUNCEMENT_URL)
     suspend fun requestNotification(
         @Header("Authorization") bearerToken: String,
-    ): Response<Notification>
+    ): Response<List<Notification>>
 
     /**
      * 배너 API
@@ -215,7 +215,7 @@ interface HttpApi {
     suspend fun requestBanner(
         @Header("Authorization") bearerToken: String,
         @Path("bannerType") bannerType: String,
-    ): Response<Banner>
+    ): Response<List<Banner>>
 
 
     /**
