@@ -29,9 +29,7 @@ class MainViewModel @Inject constructor(
     private val notify: GetNotification,
     private val oneThingNotify: GetNewNotification,
     private val match: GetMatch,
-    private val getMatch : GetSaveMatch,
     private val banner: GetBanner,
-    private val saveMatch : SaveMatchData
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
