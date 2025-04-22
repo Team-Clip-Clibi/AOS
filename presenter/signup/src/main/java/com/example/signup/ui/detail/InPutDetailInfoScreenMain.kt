@@ -1,8 +1,6 @@
 package com.example.signup.ui.detail
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,23 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material3.OpenOnPhoneDialogDefaults.Icon
-import com.example.core.AppTextStyles
 import com.example.signup.FEMALE
-import com.example.signup.ISArea
-import com.example.signup.ISCity
-import com.example.signup.ISDay
-import com.example.signup.ISMonth
-import com.example.signup.ISYear
 import com.example.signup.MALE
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.BottomSheetSelector
-import com.example.signup.ui.component.CustomBottomSheet
 import com.example.signup.ui.component.CustomButton
 import com.example.signup.ui.component.CustomContentText
 import com.example.signup.ui.component.CustomGenderPick
@@ -98,6 +85,7 @@ internal fun InPutDetailInfoScreenMain(
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 8.dp
             )
+            .background(color = Color(0xFFFFFFFF))
             .navigationBarsPadding()
     ) {
         Column(
