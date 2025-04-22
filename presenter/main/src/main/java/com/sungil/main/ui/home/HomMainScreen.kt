@@ -68,12 +68,7 @@ internal fun HomMainScreen(
     val matchState = state.matchState
     val notServiceMsg = stringResource(R.string.msg_not_service)
     val bannerImage = state.banner
-    val unSaveList = (matchState as? MainViewModel.UiState.Success)
-        ?.data?.unSaveData
-        ?.let { it.oneThingMatch + it.randomMatch }
-        ?: emptyList()
-
-    val canAdd = unSaveList.isNotEmpty()
+    val notifyBarHeight = if (notificationState is MainViewModel.UiState.Success && notifyShow) 34.dp else 0.dp
 
     LaunchedEffect(notificationState) {
         if (notificationState is MainViewModel.UiState.Error) {
@@ -108,8 +103,8 @@ internal fun HomMainScreen(
             is MainViewModel.UiState.Success -> {
                 val data = matchState.data
                 visibleCards.clear()
-                visibleCards.addAll(data.saveData.oneThingMatch)
-                visibleCards.addAll(data.saveData.randomMatch)
+                visibleCards.addAll(data.oneThingMatch)
+                visibleCards.addAll(data.randomMatch)
             }
         }
     }
@@ -120,7 +115,6 @@ internal fun HomMainScreen(
             .background(Color(0xFFF7F7F7))
             .padding(
                 top = paddingValues.calculateTopPadding(),
-                bottom = 32.dp
             )
             .navigationBarsPadding()
             .verticalScroll(rememberScrollState())
@@ -148,10 +142,9 @@ internal fun HomMainScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopStart)
-                .padding(top = if (notificationState is MainViewModel.UiState.Success && notifyShow) 32.dp else 0.dp)
+                .padding(top = paddingValues.calculateTopPadding() + notifyBarHeight)
                 .padding(start = 17.dp, end = 16.dp)
         ) {
-
             HomeTitleText(
                 text = if (userData is MainViewModel.UiState.Success) stringResource(
                     R.string.txt_home_title,
@@ -162,11 +155,8 @@ internal fun HomMainScreen(
             MeetingCardList(
                 matchList = visibleCards,
                 onAddClick = {
-                    if (unSaveList.isNotEmpty()) {
-                        viewModel.saveMatch(unSaveList.first())
-                    }
                 },
-                canAdd = canAdd
+                canAdd = true
             )
             Spacer(Modifier.height(40.dp))
             HomeTitleText(
@@ -194,7 +184,8 @@ internal fun HomMainScreen(
                     contentText = stringResource(R.string.btn_home_random_content),
                     onClick = randomMatchClick,
                     image = R.drawable.ic_random_green,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
+                        .height(83.dp),
                     padding = Modifier.width(12.dp)
                 )
                 CustomHomeButton(
@@ -209,7 +200,8 @@ internal fun HomMainScreen(
                         }
                     },
                     image = R.drawable.ic_light_yellow,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
+                        .height(83.dp),
                     padding = Modifier.width(12.dp)
                 )
             }
