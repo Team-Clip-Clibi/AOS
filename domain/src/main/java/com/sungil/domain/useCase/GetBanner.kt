@@ -21,7 +21,7 @@ class GetBanner @Inject constructor(
 
     override suspend fun invoke(param: Param): Result {
         val token = database.getToken()
-        val banner = network.requestBanner(TOKEN_FORM + token, param.bannerHost)
+        val banner = network.requestBanner(TOKEN_FORM + token.first, param.bannerHost)
         when (banner.responseCode) {
             200 -> return Result.Success(banner.banner)
             401 -> {

@@ -39,6 +39,16 @@ class GetNotification @Inject constructor(
             200 ->{
                 return Result.Success(notification)
             }
+            204 ->{
+                return Result.Success(
+                    Notification(
+                        responseCode = 204,
+                        noticeType = "NOTICE",
+                        content = "테스트에용",
+                        link = "www.naver.com"
+                    )
+                )
+            }
             else -> return Result.Fail("network error")
         }
     }

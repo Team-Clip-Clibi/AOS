@@ -41,7 +41,7 @@ class GetNewNotification @Inject constructor(
             }
 
             204 ->{
-                return Result.Success(emptyList())
+                return Result.Fail("No data")
             }
             else -> {
                 return Result.Fail("network error")
