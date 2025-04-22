@@ -35,6 +35,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -222,47 +223,48 @@ fun MyPageItem(text: String, icon: Int, click: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomHomeTopBar(
     text: String,
     bellImage: Int,
     click: () -> Unit,
 ) {
-    CenterAlignedTopAppBar(
+    Box(
         modifier = Modifier
-            .fillMaxWidth(),
-
-        title = {
-            Text(
-                text = text,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color.Black,
-            )
-        },
-        navigationIcon = {
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(Color(0xFFF7F7F7))
+            .padding(horizontal = 17.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_logo_str),
                 contentDescription = "logo",
-                modifier = Modifier
-                    .padding(start = 17.dp)
-                    .height(24.dp)
+                modifier = Modifier.size(
+                    width = 100.dp,
+                    height = 24.dp
+                )
             )
-        },
-        actions = {
-            Image(
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = text,
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color = Color.Black
+            )
+            Spacer(Modifier.weight(1f))
+            Icon(
                 painter = painterResource(id = bellImage),
                 contentDescription = "알람",
                 modifier = Modifier
-                    .size(48.dp)
-                    .padding(12.dp)
+                    .size(24.dp)
                     .clickable { click() }
             )
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color(0xFFF7F7F7)
-        )
-    )
+        }
+    }
 }
 
 @Composable
@@ -284,7 +286,7 @@ fun CustomSnackBar(data: SnackbarData) {
                 .height(24.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        androidx.compose.material3.Text(
+        Text(
             text = data.visuals.message,
             style = AppTextStyles.CAPTION_12_18_SEMI,
             color = Color(0xFFFFFFFF)
@@ -300,53 +302,51 @@ fun CustomNotifyBar(
     notifyClick: (String) -> Unit,
     notifyClose: () -> Unit,
 ) {
-    val titleColor = when (noticeType) {
-        CONTENT_NOTICE -> Color(0xFFFB4F4F)
-        else -> Color(0xFF171717)
-    }
-    val title = when (noticeType) {
-        CONTENT_NOTICE -> stringResource(R.string.notify_notice)
-        else -> stringResource(R.string.notify_article)
-    }
+    val titleColor = if (noticeType == CONTENT_NOTICE) Color(0xFFFB4F4F) else Color(0xFF171717)
+    val titleText = if (noticeType == CONTENT_NOTICE)
+        stringResource(R.string.notify_notice)
+    else
+        stringResource(R.string.notify_article)
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(34.dp)
-            .background(color = Color(0xFFEFEFEF))
-            .padding(horizontal = 17.dp)
-            .clickable { notifyClick(link) },
-        contentAlignment = Alignment.Center
+            .background(Color(0xFFEFEFEF))
+            .clickable { notifyClick(link) }
+            .padding(start = 17.dp , end = 8.5.dp)
     ) {
-        // 왼쪽: title
+        // 왼쪽(타이틀 + 내용)을 한 Row에 배치
         Row(
-            modifier = Modifier.align(Alignment.CenterStart),
+            modifier = Modifier
+                .align(Alignment.CenterStart),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = title,
+                text = titleText,
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 color = titleColor
             )
+
+            Spacer(Modifier.width(12.dp))
+
+            Text(
+                text = content,
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
 
-        // 가운데: content
-        Text(
-            text = content,
-            style = AppTextStyles.CAPTION_12_18_SEMI,
-            modifier = Modifier.align(Alignment.Center)
-        )
-
-        // 오른쪽: close icon
-        Image(
+        // 오른쪽 닫기 아이콘
+        Icon(
             painter = painterResource(R.drawable.ic_close_gray),
             contentDescription = "close alarm",
-            contentScale = ContentScale.Fit,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .size(34.dp)
-                .padding(8.5.dp)
-                .clickable { notifyClose() }
+                .size(17.dp)
+                .clickable { notifyClose() },
+            tint = Color(0xFF718096)
         )
     }
 }
