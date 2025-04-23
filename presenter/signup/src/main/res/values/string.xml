@@ -75,5 +75,7 @@
     <string name="dialog_title_already_signup">이미 가입되어있는 번호에요</string>
     <string name="dialog_content_already_signup">로그인하러 가시겠어요?</string>
     <string name="dialog_btn_already_signup">로그인하러 가기</string>
+    <!--  msg  -->
     <string name="msg_reLogin">시간만료 처음으로 돌아가 주세요.</string>
+    <string name="msg_network_error">네트워크 에러</string>
 </resources>
