@@ -36,7 +36,7 @@ import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.ERROR_SAVE_ERROR
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
-import com.sungil.main.component.Banner
+import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.CustomNotifyBar
 import com.sungil.main.component.HomeTitleText
@@ -64,7 +64,8 @@ internal fun HomMainScreen(
     val matchState = state.matchState
     val notServiceMsg = stringResource(R.string.msg_not_service)
     val bannerImage = state.banner
-    val notifyBarHeight = if (notificationState is MainViewModel.UiState.Success && notifyShow) 34.dp else 0.dp
+    val notifyBarHeight =
+        if (notificationState is MainViewModel.UiState.Success && notifyShow) 34.dp else 0.dp
 
     LaunchedEffect(notificationState) {
         if (notificationState is MainViewModel.UiState.Error) {
@@ -146,7 +147,6 @@ internal fun HomMainScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopStart)
                 .padding(top = paddingValues.calculateTopPadding() + notifyBarHeight)
-                .padding(start = 17.dp, end = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             HomeTitleText(
@@ -173,7 +173,9 @@ internal fun HomMainScreen(
                 contentText = stringResource(R.string.btn_home_oneThing_content),
                 onClick = onThingClick,
                 image = R.drawable.ic_one_thing_purple,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 16.dp),
                 padding = Modifier.width(16.dp)
             )
 
@@ -190,7 +192,8 @@ internal fun HomMainScreen(
                     image = R.drawable.ic_random_green,
                     modifier = Modifier
                         .weight(1f)
-                        .height(83.dp),
+                        .height(83.dp)
+                        .padding(start = 17.dp),
                     padding = Modifier.width(12.dp)
                 )
                 CustomHomeButton(
@@ -207,6 +210,7 @@ internal fun HomMainScreen(
                     image = R.drawable.ic_light_yellow,
                     modifier = Modifier
                         .weight(1f)
+                        .padding(end = 16.dp)
                         .height(83.dp),
                     padding = Modifier.width(12.dp)
                 )
@@ -215,8 +219,8 @@ internal fun HomMainScreen(
             Spacer(Modifier.height(32.dp))
 
             if (bannerImage is MainViewModel.UiState.Success) {
-                Banner(
-                    image = bannerImage.data.image,
+                AutoSlidingBanner(
+                    image = bannerImage.data,
                 )
             }
         }

@@ -1,7 +1,7 @@
 package com.sungil.domain.repository
 
 import android.app.Activity
-import com.sungil.domain.model.Banner
+import com.sungil.domain.model.BannerResponse
 import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
@@ -77,7 +77,7 @@ interface NetworkRepository {
     suspend fun requestBanner(
         accessToken: String,
         bannerType: String,
-    ): Banner
+    ): BannerResponse
 
     suspend fun requestMatchingData(
         accessToken: String,

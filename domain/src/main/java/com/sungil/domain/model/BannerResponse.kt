@@ -1,8 +1,8 @@
 package com.sungil.domain.model
 
-data class Banner(
+data class BannerResponse(
     val responseCode: Int,
-    val banner : BannerData
+    val bannerResponse : List<BannerData>
 )
 
 data class BannerData(

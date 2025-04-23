@@ -3,7 +3,7 @@ package com.example.data.repositoryImpl
 import android.app.Activity
 import com.example.fcm.FirebaseFCM
 import com.sungil.domain.CATEGORY
-import com.sungil.domain.model.Banner
+import com.sungil.domain.model.BannerResponse
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietData
 import com.sungil.domain.model.DietResponse
@@ -23,6 +23,7 @@ import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
+import com.sungil.network.model.Banner
 import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
@@ -277,7 +278,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestNotification(accessToken: String): NotificationResponse {
         val result = api.requestNotification(accessToken)
-        if(result.body()?.size == 0){
+        if (result.body()?.size == 0) {
             return NotificationResponse(
                 responseCode = 204,
                 notificationDataList = emptyList()
@@ -289,7 +290,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 notificationDataList = emptyList()
             )
         }
-        if(result.body() == null){
+        if (result.body() == null) {
             return NotificationResponse(
                 responseCode = 204,
                 notificationDataList = emptyList()
@@ -304,20 +305,22 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun requestBanner(
         accessToken: String,
         bannerType: String,
-    ): Banner {
+    ): BannerResponse {
         val result = api.requestBanner(accessToken, bannerType)
-        if (result.code() != 204) {
-            return Banner(result.code(), BannerData(image = "", headText = "", subText = ""))
+        when (result.code()) {
+            200 -> {
+                return BannerResponse(
+                    responseCode = result.code(),
+                    bannerResponse = result.body()!!.map { it.toDomain() }
+                )
+            }
+
+            else -> {
+                return BannerResponse(result.code(), emptyList())
+            }
         }
-        return Banner(
-            result.code(),
-            BannerData(
-                image = result.body()!!.first().imagePresignedUrl,
-                headText = result.body()!!.first().headText,
-                subText = result.body()!!.first().subText
-            )
-        )
     }
+
 
     override suspend fun requestMatchingData(accessToken: String): Match {
         val result = api.requestMatchData(accessToken)
@@ -342,7 +345,11 @@ class NetworkRepositoryImpl @Inject constructor(
         return Match(
             responseCode = result.code(),
             data = MatchData(
-                oneThingMatch = result.body()!!.oneThingMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_ONE_THING) },
+                oneThingMatch = result.body()!!.oneThingMatchings.map {
+                    it.toDomainMatchData(
+                        CATEGORY.CONTENT_ONE_THING
+                    )
+                },
                 randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_RANDOM) }
             ),
         )
@@ -350,15 +357,15 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestUpdateToken(refreshToken: String): Triple<Int, String?, String?> {
         val result = api.requestRefreshToken(refreshToken)
-        if(result.code() != 204){
-            return Triple(result.code() , "","")
+        if (result.code() != 204) {
+            return Triple(result.code(), "", "")
         }
-        return Triple(result.code() , result.body()?.accessToken ,result.body()?.refreshToken)
+        return Triple(result.code(), result.body()?.accessToken, result.body()?.refreshToken)
     }
 
     override suspend fun requestOneThineNotification(accessToken: String): OneThineNotification {
         val result = api.requestNewNotification(accessToken)
-        if(result.code() != 200){
+        if (result.code() != 200) {
             return OneThineNotification(
                 result.code(),
                 emptyList()
@@ -402,11 +409,20 @@ class NetworkRepositoryImpl @Inject constructor(
             createdAt = createdAt
         )
     }
+
     private fun Notification.toDomain(): NotificationData {
         return NotificationData(
             noticeType = this.noticeType,
             content = this.content,
             link = this.link
+        )
+    }
+
+    private fun Banner.toDomain(): BannerData {
+        return BannerData(
+            image = this.imagePresignedUrl,
+            headText = this.headText,
+            subText = this.subText
         )
     }
 }

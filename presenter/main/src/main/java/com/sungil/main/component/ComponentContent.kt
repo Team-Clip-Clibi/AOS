@@ -6,6 +6,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +15,8 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -48,12 +52,14 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.core.AppTextStyles
 import com.sungil.domain.CATEGORY
+import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
 import com.sungil.main.Screen
 import com.sungil.main.bottomNavItems
 import kotlinx.coroutines.delay
+import kotlin.coroutines.cancellation.CancellationException
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
@@ -320,7 +326,7 @@ fun CustomNotifyBar(
             .height(34.dp)
             .background(Color(0xFFEFEFEF))
             .clickable { notifyClick(link) }
-            .padding(start = 17.dp , end = 8.5.dp)
+            .padding(start = 17.dp, end = 8.5.dp)
     ) {
         // 왼쪽(타이틀 + 내용)을 한 Row에 배치
         Row(
@@ -364,7 +370,8 @@ fun HomeTitleText(
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .height(28.dp),
+            .height(28.dp)
+            .padding(start = 17.dp, end = 16.dp),
         text = text,
         style = AppTextStyles.TITLE_20_28_SEMI,
         color = Color(0xFF383838)
@@ -389,7 +396,8 @@ fun MeetingCardList(
     }
 
     LazyRow(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .padding(start = 17.dp, end = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         itemsIndexed(matchList, key = { _, item -> item.matchingId }) { _, match ->
@@ -596,16 +604,44 @@ fun CustomHomeButton(
     }
 }
 
+
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun Banner(
-    image: String,
+fun AutoSlidingBanner(
+    image: List<BannerData>,
+    intervalMillis: Long = 3000L,
+    scrollDuration: Int = 500,
 ) {
-    GlideImage(
+    val pagerState = rememberPagerState(pageCount = { image.size })
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(intervalMillis)
+
+            if (pagerState.isScrollInProgress) continue
+
+            val nextPage = (pagerState.currentPage + 1) % image.size
+
+            pagerState.animateScrollToPage(
+                page = nextPage,
+                animationSpec = tween(
+                    durationMillis = scrollDuration,
+                    easing = FastOutSlowInEasing
+                )
+            )
+        }
+    }
+
+    HorizontalPager(
+        state = pagerState,
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp),
-        model = image,
-        contentDescription = "banner"
-    )
+            .height(110.dp)
+    ) { page ->
+        GlideImage(
+            model = image[page].image,
+            contentDescription = "banner",
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }

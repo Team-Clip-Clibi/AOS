@@ -128,6 +128,7 @@ class MainViewModel @Inject constructor(
                 }
 
                 is GetBanner.Result.Success -> {
+                    val test = result.data
                     _userState.update {
                         it.copy(banner = UiState.Success(result.data))
                     }
@@ -150,7 +151,7 @@ class MainViewModel @Inject constructor(
         val userDataState: UiState<UserData> = UiState.Loading,
         val notificationResponseState: UiState<List<NotificationData>> = UiState.Loading,
         val oneThingState: UiState<List<OneThineNotify>> = UiState.Loading,
-        val banner: UiState<BannerData> = UiState.Loading,
+        val banner: UiState<List<BannerData>> = UiState.Loading,
         val matchState: UiState<MatchData> = UiState.Loading,
     )
 }

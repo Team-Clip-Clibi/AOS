@@ -13,7 +13,7 @@ class GetBanner @Inject constructor(
 ) : UseCase<GetBanner.Param, GetBanner.Result> {
 
     sealed interface Result : UseCase.Result {
-        data class Success(val data: BannerData) : Result
+        data class Success(val data: List<BannerData>) : Result
         data class Fail(val message: String) : Result
     }
 
@@ -23,7 +23,7 @@ class GetBanner @Inject constructor(
         val token = database.getToken()
         val banner = network.requestBanner(TOKEN_FORM + token.first, param.bannerHost)
         when (banner.responseCode) {
-            200 -> return Result.Success(banner.banner)
+            200 -> return Result.Success(banner.bannerResponse)
             401 -> {
                 val refreshToken = network.requestUpdateToken(TOKEN_FORM + token.second)
                 if (refreshToken.first != 200) {
@@ -38,7 +38,7 @@ class GetBanner @Inject constructor(
                 if (reRequest.responseCode != 200) {
                     return Result.Fail("network error")
                 }
-                return Result.Success(reRequest.banner)
+                return Result.Success(reRequest.bannerResponse)
             }
 
             else -> return Result.Fail("network error")
