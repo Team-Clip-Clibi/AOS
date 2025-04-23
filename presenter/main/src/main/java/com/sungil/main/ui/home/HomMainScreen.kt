@@ -146,13 +146,14 @@ internal fun HomMainScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopStart)
-                .padding(top = paddingValues.calculateTopPadding() + notifyBarHeight)
+                .padding(top = paddingValues.calculateTopPadding() + notifyBarHeight , bottom = 40.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             HomeTitleText(
                 text = if (userData is MainViewModel.UiState.Success)
                     stringResource(R.string.txt_home_title, userData.data.nickName)
-                else stringResource(R.string.txt_home_title, "ERROR")
+                else stringResource(R.string.txt_home_title, "ERROR"),
+                size = visibleCards.size.toString()
             )
             Spacer(Modifier.height(12.dp))
 
