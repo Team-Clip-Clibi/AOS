@@ -26,12 +26,12 @@ class CheckNameOkay @Inject constructor(
             return Result.Fail("Only english and korean")
         }
         val token = database.getToken()
-        if (token.first == null || token.second == null) {
-            return Result.Fail("Token is Null")
+        val response = network.inputName(name, TOKEN_FORM+ token.first)
+        if(response == 401){
+            return Result.Fail("reLogin")
         }
-        val response = network.inputName(name, TOKEN_FORM+ token.first!!)
         if (response != 204) {
-            return Result.Fail("Fail to update Name")
+            return Result.Fail("network error")
         }
         return Result.Success("name Okay")
     }

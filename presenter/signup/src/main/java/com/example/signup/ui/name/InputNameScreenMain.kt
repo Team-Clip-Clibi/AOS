@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,10 +27,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.signup.ERROR_NETWORK_ERROR
 import com.example.signup.R
+import com.example.signup.RE_LOGIN
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomButton
 import com.example.signup.ui.component.CustomContentText
@@ -42,19 +47,43 @@ internal fun InputNameScreenMain(
     paddingValues: PaddingValues,
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
+    reLogin: () -> Unit,
+    snackBarHostState: SnackbarHostState,
 ) {
 
     var isValidName by remember { mutableIntStateOf(R.string.txt_name_safe) }
     val name by viewModel.userInfoState.collectAsState()
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.userInfoState.collectLatest { userInfoState ->
-            when(userInfoState.nameCheck){
+            when (userInfoState.nameCheck) {
                 is SignUpViewModel.CheckState.StanBy -> {
                     isValidName = R.string.txt_name_safe
                 }
+
                 is SignUpViewModel.CheckState.ValueNotOkay -> {
-                    isValidName = R.string.txt_name_korean_english
+                    when ((userInfoState.nameCheck as SignUpViewModel.CheckState.ValueNotOkay).errorMessage) {
+                        ERROR_NETWORK_ERROR -> {
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_network_error),
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+
+                        RE_LOGIN -> {
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_reLogin),
+                                duration = SnackbarDuration.Short
+                            )
+                            viewModel.resetName()
+                            reLogin()
+                        }
+
+                        else -> isValidName = R.string.txt_name_korean_english
+                    }
+
                 }
+
                 is SignUpViewModel.CheckState.ValueOkay -> {
                     buttonClick()
                     viewModel.resetName()
@@ -62,6 +91,7 @@ internal fun InputNameScreenMain(
             }
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -100,7 +130,7 @@ internal fun InputNameScreenMain(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .padding(start = 17.dp , end = 16.dp),
+                    .padding(start = 17.dp, end = 16.dp),
                 onValueChange = { input ->
                     viewModel.inputName(input)
                 },
@@ -111,7 +141,9 @@ internal fun InputNameScreenMain(
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(start = 17.dp , end = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 17.dp, end = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
