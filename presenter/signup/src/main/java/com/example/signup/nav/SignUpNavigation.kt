@@ -61,6 +61,9 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, mai
                     navController.navigate(NAV_NAME)
                 },
                 signUpPage = { navController.navigate(NAV_ALREADY_SIGN_UP) },
+                goToLoginPage = {
+                    clear()
+                }
             )
         }
 

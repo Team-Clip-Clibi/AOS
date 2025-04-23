@@ -23,7 +23,7 @@ internal fun InputNickNameScreen(
     viewModel: SignUpViewModel,
     actionClick: () -> Unit,
     buttonClick: () -> Unit,
-    reLogin : () -> Unit
+    reLogin: () -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -45,12 +45,18 @@ internal fun InputNickNameScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 17.dp, end = 16.dp, bottom = WindowInsets.navigationBars.asPaddingValues().calculateTopPadding() + 16.dp)
+                    .padding(
+                        start = 17.dp,
+                        end = 16.dp,
+                        bottom = WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateTopPadding() + 70.dp
+                    )
             )
         }
     ) { paddingValues ->
         InPutNickNameScreenMain(
-            paddingValues, viewModel, buttonClick , snackBarHostState ,reLogin
+            paddingValues, viewModel, buttonClick, snackBarHostState, reLogin
         )
     }
 }
