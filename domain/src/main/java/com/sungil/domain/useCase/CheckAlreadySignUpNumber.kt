@@ -31,19 +31,44 @@ class CheckAlreadySignUpNumber @Inject constructor(
         val editorNumber = param.phoneNumber.replace(Regex("[^0-9]"), "").trim()
         val token = database.getToken()
         val resultCode = repo.checkAlreadySignUpNumber(editorNumber, TOKEN_FORM + token.first)
-        if (resultCode.code == 200) {
-            return Result.Fail(
-                "Already SignUp",
-                userName = maskName(resultCode.userName!!),
-                platform = reformPlatform(resultCode.platform!!),
-                createdAt = extractDateOnly(resultCode.createdAt!!)
-            )
+        when (resultCode.code) {
+            200 -> {
+                return Result.Fail(
+                    "Already SignUp",
+                    userName = maskName(resultCode.userName!!),
+                    platform = reformPlatform(resultCode.platform!!),
+                    createdAt = extractDateOnly(resultCode.createdAt!!)
+                )
+            }
+
+            401 -> {
+                return Result.Fail(
+                    errorMessage = "reLogin",
+                    userName = "",
+                    platform = "",
+                    createdAt = ""
+                )
+            }
+
+            400 -> {
+                val inputResultCode = repo.inputPhoneNumber(editorNumber, TOKEN_FORM + token.first)
+                if (inputResultCode == 401) {
+                    return Result.Fail(
+                        errorMessage = "reLogin",
+                        userName = "",
+                        platform = "",
+                        createdAt = ""
+                    )
+                }
+                if (inputResultCode != 204) {
+                    return Result.Fail("network error")
+                }
+                return Result.Success("okay SignUp")
+            }
+
+            else -> return Result.Fail("network error")
         }
-        val inputResultCode = repo.inputPhoneNumber(editorNumber, TOKEN_FORM + token.first)
-        if (inputResultCode != 204) {
-            return Result.Fail("network error")
-        }
-        return Result.Success("okay SignUp")
+
     }
 
     private fun maskName(name: String): String {

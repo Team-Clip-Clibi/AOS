@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,12 +24,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.signup.ERROR_ALREADY_SIGN_UP
+import com.example.signup.ERROR_NETWORK_ERROR
 import com.example.signup.R
+import com.example.signup.RE_LOGIN
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomButton
 import com.example.signup.ui.component.CustomTextField
@@ -39,11 +44,14 @@ internal fun PhoneNumberScreenMain(
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
     signUpPage: () -> Unit,
-) {
+    snackBarHostState: SnackbarHostState,
+    goLoginPage: () -> Unit,
+
+    ) {
     val phoneNumber by viewModel.userInfoState.collectAsState()
 
     var buttonIsEnable = false
-
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.userInfoState.collectLatest { userInfo ->
             when (val phoneState = userInfo.phoneNumberCheckState) {
@@ -62,11 +70,29 @@ internal fun PhoneNumberScreenMain(
                         ERROR_ALREADY_SIGN_UP -> {
                             signUpPage()
                         }
+
+                        RE_LOGIN -> {
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_reLogin),
+                                duration = SnackbarDuration.Short
+                            )
+                            goLoginPage()
+                        }
+
+                        ERROR_NETWORK_ERROR -> {
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_network_error),
+                                duration = SnackbarDuration.Short
+                            )
+                            viewModel.resetPhoneNumberState()
+                            goLoginPage()
+                        }
                     }
                 }
             }
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
