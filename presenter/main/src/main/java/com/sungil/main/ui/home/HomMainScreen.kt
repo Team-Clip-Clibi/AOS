@@ -68,7 +68,8 @@ internal fun HomMainScreen(
     val matchState = state.matchState
     val notServiceMsg = stringResource(R.string.msg_not_service)
     val bannerImage = state.banner
-    val notifyBarHeight = if (notificationState is MainViewModel.UiState.Success && notifyShow) 34.dp else 0.dp
+    val notifyBarHeight =
+        if (notificationState is MainViewModel.UiState.Success && notifyShow) 34.dp else 0.dp
 
     LaunchedEffect(notificationState) {
         if (notificationState is MainViewModel.UiState.Error) {
@@ -93,11 +94,21 @@ internal fun HomMainScreen(
     LaunchedEffect(matchState) {
         when (matchState) {
             is MainViewModel.UiState.Error -> {
+                when (matchState.message) {
+                    ERROR_RE_LOGIN -> {
+                        reLogin()
+                    }
 
-            }
+                    ERROR_SAVE_ERROR -> snackBarHost.showSnackbar(
+                        message = context.getString(R.string.msg_save_error),
+                        duration = SnackbarDuration.Short
+                    )
 
-            MainViewModel.UiState.Loading -> {
-                Log.d(javaClass.name.toString(), "Loading for get Data")
+                    ERROR_NETWORK_ERROR -> snackBarHost.showSnackbar(
+                        message = context.getString(R.string.msg_network_error),
+                        duration = SnackbarDuration.Short
+                    )
+                }
             }
 
             is MainViewModel.UiState.Success -> {
@@ -106,6 +117,7 @@ internal fun HomMainScreen(
                 visibleCards.addAll(data.oneThingMatch)
                 visibleCards.addAll(data.randomMatch)
             }
+            else -> Unit
         }
     }
 
@@ -184,7 +196,8 @@ internal fun HomMainScreen(
                     contentText = stringResource(R.string.btn_home_random_content),
                     onClick = randomMatchClick,
                     image = R.drawable.ic_random_green,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .height(83.dp),
                     padding = Modifier.width(12.dp)
                 )
@@ -200,7 +213,8 @@ internal fun HomMainScreen(
                         }
                     },
                     image = R.drawable.ic_light_yellow,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .height(83.dp),
                     padding = Modifier.width(12.dp)
                 )
