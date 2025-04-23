@@ -70,8 +70,7 @@ internal fun HomMainScreen(
     val matchState = state.matchState
     val notServiceMsg = stringResource(R.string.msg_not_service)
     val bannerImage = state.banner
-    val notifyBarHeight =
-        if (notificationState is MainViewModel.UiState.Success && notifyShow) 34.dp else 0.dp
+    val notifyBarHeight = if (notificationState is MainViewModel.UiState.Success && notifyShow) 34.dp else 0.dp
 
     LaunchedEffect(notificationState) {
         if (notificationState is MainViewModel.UiState.Error) {
@@ -131,11 +130,28 @@ internal fun HomMainScreen(
             .padding(top = paddingValues.calculateTopPadding())
             .navigationBarsPadding()
     ) {
+        if (notificationState is MainViewModel.UiState.Success && notifyShow) {
+            val data = notificationState.data
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopStart)
+            ) {
+                CustomNotifyBar(
+                    noticeType = data.noticeType,
+                    content = data.content,
+                    link = data.link,
+                    notifyClick = { notifyClick(data.link) },
+                    notifyClose = { viewModel.setNotifyShow(false) }
+                )
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopStart)
-                .padding(top = notifyBarHeight)
+                .padding(top = paddingValues.calculateTopPadding() + notifyBarHeight)
                 .padding(start = 17.dp, end = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
