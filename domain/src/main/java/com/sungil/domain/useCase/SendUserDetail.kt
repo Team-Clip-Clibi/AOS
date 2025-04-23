@@ -50,6 +50,9 @@ class SendUserDetail @Inject constructor(
             city = param.city,
             county = param.county
         )
+        if(sendResult == 401){
+            return Result.Fail("reLogin")
+        }
         if (sendResult != 204) {
             return Result.Fail("network error")
         }

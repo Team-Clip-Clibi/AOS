@@ -78,4 +78,6 @@
     <!--  msg  -->
     <string name="msg_reLogin">시간만료 처음으로 돌아가 주세요.</string>
     <string name="msg_network_error">네트워크 에러</string>
+    <string name="msg_input_birth">생년월일을 입력해주십시요</string>
+    <string name="msg_data_error">데이터 저장오류 다시 시도해주십시요</string>
 </resources>

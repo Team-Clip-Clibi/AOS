@@ -19,6 +19,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,12 +31,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.signup.ERROR_DATA_NOT_INPUT
+import com.example.signup.ERROR_NETWORK_ERROR
+import com.example.signup.ERROR_SAVE_DATA_FAIL
+import com.example.signup.ERROR_SAVE_SIGNUP_HISTORY_FAIL
 import com.example.signup.FEMALE
 import com.example.signup.MALE
 import com.example.signup.R
+import com.example.signup.RE_LOGIN
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.BottomSheetSelector
 import com.example.signup.ui.component.CustomButton
@@ -50,6 +58,8 @@ internal fun InPutDetailInfoScreenMain(
     paddingValues: PaddingValues,
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
+    reLogin : () -> Unit,
+    snackBarHostState: SnackbarHostState
 ) {
     var yearBottomSheet by remember { mutableStateOf(false) }
     var dayBottomSheet by remember { mutableStateOf(false) }
@@ -58,7 +68,7 @@ internal fun InPutDetailInfoScreenMain(
     var areaBottomSheet by remember { mutableStateOf(false) }
 
     val userInfo by viewModel.userInfoState.collectAsState()
-
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.userInfoState.collectLatest { userInfoState ->
             when (val detailState = userInfoState.detailState) {
@@ -67,7 +77,41 @@ internal fun InPutDetailInfoScreenMain(
                 }
 
                 is SignUpViewModel.CheckState.ValueNotOkay -> {
-                    Log.e(javaClass.name.toString(), detailState.errorMessage)
+                    when(detailState.errorMessage){
+                        ERROR_DATA_NOT_INPUT ->{
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_input_birth),
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        RE_LOGIN ->{
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_reLogin),
+                                duration = SnackbarDuration.Short
+                            )
+                            reLogin()
+                        }
+                        ERROR_NETWORK_ERROR ->{
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_data_error),
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        ERROR_SAVE_DATA_FAIL ->{
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_data_error),
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        ERROR_SAVE_SIGNUP_HISTORY_FAIL ->{
+                            snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.msg_data_error),
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        else -> throw IllegalArgumentException("Invalid report category: ${detailState.errorMessage}")
+                    }
+
                 }
 
                 is SignUpViewModel.CheckState.ValueOkay -> {
