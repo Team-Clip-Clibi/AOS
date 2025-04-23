@@ -23,12 +23,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sungil.domain.CATEGORY
@@ -117,6 +119,7 @@ internal fun HomMainScreen(
                 visibleCards.addAll(data.oneThingMatch)
                 visibleCards.addAll(data.randomMatch)
             }
+
             else -> Unit
         }
     }
@@ -125,56 +128,36 @@ internal fun HomMainScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF7F7F7))
-            .padding(
-                top = paddingValues.calculateTopPadding(),
-            )
+            .padding(top = paddingValues.calculateTopPadding())
             .navigationBarsPadding()
-            .verticalScroll(rememberScrollState())
     ) {
-        // 상단 알림 영역 (padding 없음)
-        if (notificationState is MainViewModel.UiState.Success && notifyShow) {
-            val data = notificationState.data
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.TopStart)
-            ) {
-                CustomNotifyBar(
-                    noticeType = data.noticeType,
-                    content = data.content,
-                    link = data.link,
-                    notifyClick = { notifyClick(data.link) },
-                    notifyClose = { viewModel.setNotifyShow(false) }
-                )
-            }
-        }
-
-        // 메인뷰 -> 여기 height을 최대로 주고 싶어
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopStart)
-                .padding(top = paddingValues.calculateTopPadding() + notifyBarHeight)
+                .padding(top = notifyBarHeight)
                 .padding(start = 17.dp, end = 16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             HomeTitleText(
-                text = if (userData is MainViewModel.UiState.Success) stringResource(
-                    R.string.txt_home_title,
-                    userData.data.nickName
-                ) else stringResource(R.string.txt_home_title, "ERROR")
+                text = if (userData is MainViewModel.UiState.Success)
+                    stringResource(R.string.txt_home_title, userData.data.nickName)
+                else stringResource(R.string.txt_home_title, "ERROR")
             )
             Spacer(Modifier.height(12.dp))
+
             MeetingCardList(
                 matchList = visibleCards,
-                onAddClick = {
-                },
+                onAddClick = {},
                 canAdd = true
             )
+
             Spacer(Modifier.height(40.dp))
-            HomeTitleText(
-                text = stringResource(R.string.txt_home_sub_title)
-            )
+
+            HomeTitleText(text = stringResource(R.string.txt_home_sub_title))
+
             Spacer(Modifier.height(12.dp))
+
             CustomHomeButton(
                 titleText = stringResource(R.string.btn_home_oneThing),
                 contentText = stringResource(R.string.btn_home_oneThing_content),
@@ -189,7 +172,6 @@ internal fun HomMainScreen(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
-
             ) {
                 CustomHomeButton(
                     titleText = stringResource(R.string.btn_home_random),
@@ -219,16 +201,13 @@ internal fun HomMainScreen(
                     padding = Modifier.width(12.dp)
                 )
             }
-            Spacer(Modifier.weight(1f))
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFFF7F7F7))
-                .align(Alignment.BottomCenter)
-        ) {
+
+            Spacer(Modifier.height(32.dp))
+
             if (bannerImage is MainViewModel.UiState.Success) {
-                Banner(bannerImage.data.image)
+                Banner(
+                    image = bannerImage.data.image,
+                )
             }
         }
     }

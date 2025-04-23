@@ -1,6 +1,8 @@
 package com.sungil.main.component
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
@@ -23,6 +25,9 @@ import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -48,6 +53,7 @@ import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
 import com.sungil.main.Screen
 import com.sungil.main.bottomNavItems
+import kotlinx.coroutines.delay
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
@@ -371,15 +377,35 @@ fun MeetingCardList(
     onAddClick: () -> Unit,
     canAdd: Boolean,
 ) {
+    val visibleMatchIds = remember { mutableStateListOf<Int>() }
+
+    // matchingId 기준으로 LaunchedEffect 감지
+    LaunchedEffect(matchList.map { it.matchingId }) {
+        visibleMatchIds.clear()
+        matchList.forEachIndexed { _, item ->
+            delay(200L) // ← 더 천천히 등장하도록 delay 증가
+            visibleMatchIds.add(item.matchingId)
+        }
+    }
+
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         itemsIndexed(matchList, key = { _, item -> item.matchingId }) { _, match ->
+            val isVisible = match.matchingId in visibleMatchIds
             AnimatedVisibility(
-                visible = true,
-                enter = fadeIn(tween(300)) + slideInHorizontally(
-                    animationSpec = tween(300),
+                visible = isVisible,
+                enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 600,
+                        easing = FastOutSlowInEasing // ← 더 부드럽게
+                    )
+                ) + slideInHorizontally(
+                    animationSpec = tween(
+                        durationMillis = 600,
+                        easing = FastOutSlowInEasing // ← 여기도 동일하게
+                    ),
                     initialOffsetX = { it / 2 }
                 )
             ) {
@@ -397,10 +423,7 @@ fun MeetingCardList(
                 MainCardView(
                     contentString = stringResource(R.string.txt_home_not_meeting),
                     addClick = onAddClick,
-                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(
-                        192.dp
-                    )
-
+                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(192.dp)
                 )
             }
         }
