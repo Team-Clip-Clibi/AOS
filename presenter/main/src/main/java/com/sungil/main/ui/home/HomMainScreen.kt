@@ -132,10 +132,10 @@ internal fun HomMainScreen(
                     .align(Alignment.TopStart)
             ) {
                 CustomNotifyBar(
-                    noticeType = data.noticeType,
-                    content = data.content,
-                    link = data.link,
-                    notifyClick = { notifyClick(data.link) },
+                    noticeType = data.first().noticeType,
+                    content = data.first().content,
+                    link = data.first().link,
+                    notifyClick = { notifyClick(data.first().link) },
                     notifyClose = { viewModel.setNotifyShow(false) }
                 )
             }

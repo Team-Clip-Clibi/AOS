@@ -39,6 +39,10 @@ class MainViewModel @Inject constructor(
 
     init {
         requestUserInfo()
+        oneThingNotify()
+        serviceNotify()
+        requestMatch()
+        getBanner()
     }
 
     private fun requestUserInfo() {
@@ -57,7 +61,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        oneThingNotify()
     }
 
     private fun oneThingNotify() {
@@ -77,7 +80,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        serviceNotify()
     }
 
     private fun serviceNotify() {
@@ -96,7 +98,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        requestMatch()
     }
 
     private fun requestMatch() {
@@ -115,7 +116,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        getBanner()
     }
 
     private fun getBanner() {
