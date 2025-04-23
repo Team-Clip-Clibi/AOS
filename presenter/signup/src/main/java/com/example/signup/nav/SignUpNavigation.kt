@@ -132,6 +132,9 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, clear: () -> Unit, mai
                 actionClick = { navController.navigateUp() },
                 buttonClick = {
                     main()
+                },
+                reLogin = {
+                    clear()
                 }
             )
         }
