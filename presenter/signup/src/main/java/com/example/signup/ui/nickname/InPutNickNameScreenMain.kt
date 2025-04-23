@@ -86,6 +86,7 @@ internal fun InPutNickNameScreenMain(
                             message = context.getString(R.string.msg_reLogin),
                             duration = SnackbarDuration.Short
                         )
+                        goLoginPage()
                         viewModel.resetNickName()
                         return@collectLatest
                     }
