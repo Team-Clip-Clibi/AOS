@@ -1,6 +1,9 @@
 package com.sungil.editprofile.ui.changeDiet
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -40,7 +43,13 @@ internal fun DietView(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 17.dp , end = 16.dp , bottom = 91.dp)
+                    .padding(
+                        start = 17.dp,
+                        end = 16.dp,
+                        bottom = WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateTopPadding() + 70.dp
+                    )
             )
         }
     ) { paddingValues ->
