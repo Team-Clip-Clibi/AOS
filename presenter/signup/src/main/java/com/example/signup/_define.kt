@@ -24,7 +24,7 @@ const val NAME_LONG = "to long"
 const val NAME_SHORT = "to short"
 const val NAME_SPECIAL = "no special"
 const val NICKNAME_ALREADY_USE = "Already use"
-
+const val RE_LOGIN = "reLogin"
 enum class City(val displayName: String) {
     SEOUL("서울"),
     BUSAN("부산"),

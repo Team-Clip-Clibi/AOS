@@ -33,20 +33,23 @@ class CheckNickName @Inject constructor(
             deviceRepo.requestVibrate()
             return Result.Fail("to short")
         }
-        if (!name.matches(Regex("^[a-zA-Z가-힣]+$"))) {
+        if (!name.matches(Regex("^[a-zA-Z가-힣0-9]+$"))) {
             deviceRepo.requestVibrate()
             return Result.Fail("no special")
         }
         val token = database.getToken()
-        if (token.first == null || token.second == null) {
-            return Result.Fail("token is null")
+        val apiResult = networkRepo.checkNickName(name, TOKEN_FORM + token.first)
+        if (apiResult == 401) {
+            return Result.Fail("reLogin")
         }
-        val apiResult = networkRepo.checkNickName(name, TOKEN_FORM + token.first!!)
         if (apiResult != 200) {
             deviceRepo.requestVibrate()
             return Result.Fail("Already use")
         }
         val inputResult = networkRepo.inputNickName(name, TOKEN_FORM + token.first)
+        if (inputResult == 401) {
+            return Result.Fail("reLogin")
+        }
         if (inputResult != 204) {
             return Result.Fail("network Error")
         }

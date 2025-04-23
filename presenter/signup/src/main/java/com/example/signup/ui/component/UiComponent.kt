@@ -54,6 +54,7 @@ import com.example.signup.R
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -698,4 +699,31 @@ fun UnderLineText(
         textDecoration = TextDecoration.Underline,
         modifier = modifier
     )
+}
+
+@Composable
+fun CustomSnackBar(data: SnackbarData) {
+    Row(
+        modifier = Modifier
+            .width(360.dp)
+            .height(48.dp)
+            .background(color = Color(0xFF383838), shape = RoundedCornerShape(size = 8.dp))
+            .padding(start = 16.dp, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_message),
+            contentDescription = "message",
+            contentScale = ContentScale.None,
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = data.visuals.message,
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = Color(0xFFFFFFFF)
+        )
+    }
 }

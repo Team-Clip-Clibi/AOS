@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -35,6 +38,7 @@ import com.example.signup.NAME_SHORT
 import com.example.signup.NAME_SPECIAL
 import com.example.signup.NICKNAME_ALREADY_USE
 import com.example.signup.R
+import com.example.signup.RE_LOGIN
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.CustomButton
 import com.example.signup.ui.component.CustomContentText
@@ -49,6 +53,8 @@ internal fun InPutNickNameScreenMain(
     paddingValues: PaddingValues,
     viewModel: SignUpViewModel,
     buttonClick: () -> Unit,
+    snackBarHostState: SnackbarHostState,
+    goLoginPage : () -> Unit
 ) {
 
 
@@ -56,6 +62,7 @@ internal fun InPutNickNameScreenMain(
     val nickName by viewModel.userInfoState.collectAsState()
     var isCheck by remember { mutableStateOf(false) }
     var buttonOkay by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.userInfoState.collectLatest { userInfo ->
             when (val nickNameState = userInfo.nickCheckStanBy) {
@@ -74,6 +81,15 @@ internal fun InPutNickNameScreenMain(
                 is SignUpViewModel.CheckState.ValueNotOkay -> {
                     buttonOkay = false
                     isCheck = false
+                    if(nickNameState.errorMessage == RE_LOGIN){
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_reLogin),
+                            duration = SnackbarDuration.Short
+                        )
+                        viewModel.resetNickName()
+                        return@collectLatest
+                    }
+
                     nicknameValidationMessage = when (nickNameState.errorMessage) {
                         NAME_LONG -> {
                             R.string.txt_nick_length_over
@@ -90,13 +106,13 @@ internal fun InPutNickNameScreenMain(
                         NICKNAME_ALREADY_USE -> {
                             R.string.txt_nick_name_already_use
                         }
-
                         else -> throw IllegalArgumentException("UNKNOW ERROR")
                     }
                 }
             }
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
