@@ -705,7 +705,7 @@ fun UnderLineText(
 fun CustomSnackBar(data: SnackbarData) {
     Row(
         modifier = Modifier
-            .width(360.dp)
+            .fillMaxWidth()
             .height(48.dp)
             .background(color = Color(0xFF383838), shape = RoundedCornerShape(size = 8.dp))
             .padding(start = 16.dp, end = 16.dp),
