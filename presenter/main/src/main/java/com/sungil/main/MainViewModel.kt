@@ -5,16 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchData
-import com.sungil.domain.model.Notification
+import com.sungil.domain.model.NotificationData
+import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.UserData
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetMatch
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
-import com.sungil.domain.useCase.GetSaveMatch
 import com.sungil.domain.useCase.GetUserInfo
-import com.sungil.domain.useCase.SaveMatchData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -86,13 +85,13 @@ class MainViewModel @Inject constructor(
             when (val result = notify.invoke()) {
                 is GetNotification.Result.Fail -> {
                     _userState.update {
-                        it.copy(notificationState = UiState.Error(result.errorMessage))
+                        it.copy(notificationResponseState = UiState.Error(result.errorMessage))
                     }
                 }
 
                 is GetNotification.Result.Success -> {
                     _userState.update {
-                        it.copy(notificationState = UiState.Success(result.data))
+                        it.copy(notificationResponseState = UiState.Success(result.data))
                     }
                 }
             }
@@ -149,7 +148,7 @@ class MainViewModel @Inject constructor(
 
     data class MainViewState(
         val userDataState: UiState<UserData> = UiState.Loading,
-        val notificationState: UiState<Notification> = UiState.Loading,
+        val notificationResponseState: UiState<List<NotificationData>> = UiState.Loading,
         val oneThingState: UiState<List<OneThineNotify>> = UiState.Loading,
         val banner: UiState<BannerData> = UiState.Loading,
         val matchState: UiState<MatchData> = UiState.Loading,

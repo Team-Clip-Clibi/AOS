@@ -13,7 +13,8 @@ import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchInfo
-import com.sungil.domain.model.Notification
+import com.sungil.domain.model.NotificationData
+import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.PhoneNumberCheckResult
@@ -28,6 +29,7 @@ import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
+import com.sungil.network.model.Notification
 import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
@@ -273,37 +275,29 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.code()
     }
 
-    override suspend fun requestNotification(accessToken: String): Notification {
+    override suspend fun requestNotification(accessToken: String): NotificationResponse {
         val result = api.requestNotification(accessToken)
         if(result.body()?.size == 0){
-            return Notification(
+            return NotificationResponse(
                 responseCode = 204,
-                noticeType = "",
-                content = "",
-                link = ""
+                notificationDataList = emptyList()
             )
         }
         if (result.code() != 200) {
-            return Notification(
+            return NotificationResponse(
                 responseCode = result.code(),
-                noticeType = "",
-                content = "",
-                link = ""
+                notificationDataList = emptyList()
             )
         }
         if(result.body() == null){
-            return Notification(
+            return NotificationResponse(
                 responseCode = 204,
-                noticeType =  "",
-                content =  "",
-                link =  ""
+                notificationDataList = emptyList()
             )
         }
-        return Notification(
+        return NotificationResponse(
             responseCode = result.code(),
-            noticeType = result.body()?.first()?.noticeType ?: "",
-            content = result.body()?.first()?.content?: "",
-            link = result.body()?.first()?.link ?: ""
+            notificationDataList = result.body()!!.map { it.toDomain() }
         )
     }
 
@@ -406,6 +400,13 @@ class NetworkRepositoryImpl @Inject constructor(
             notificationType = notificationType,
             content = content,
             createdAt = createdAt
+        )
+    }
+    private fun Notification.toDomain(): NotificationData {
+        return NotificationData(
+            noticeType = this.noticeType,
+            content = this.content,
+            link = this.link
         )
     }
 }

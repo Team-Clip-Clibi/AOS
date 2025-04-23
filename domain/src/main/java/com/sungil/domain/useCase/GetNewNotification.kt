@@ -41,7 +41,13 @@ class GetNewNotification @Inject constructor(
             }
 
             204 ->{
-                return Result.Fail("No data")
+                val testData = OneThineNotify(
+                    id = 0,
+                    notificationType = "NOTICE",
+                    content = "테스트에용",
+                    createdAt = "2025-04-23"
+                )
+                return Result.Success(listOf(testData))
             }
             else -> {
                 return Result.Fail("network error")
