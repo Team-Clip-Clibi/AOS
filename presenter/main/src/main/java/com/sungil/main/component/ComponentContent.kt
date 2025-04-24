@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -368,32 +369,8 @@ fun CustomNotifyBar(
     notifyClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var currentIndex by remember { mutableStateOf(0) }
+    val currentIndex by remember { mutableIntStateOf(0) }
     val currentNotification = notifications[currentIndex]
-    var offsetY by remember { mutableStateOf(0f) }
-    var alpha by remember { mutableStateOf(1f) }
-
-    val animatedOffsetY by animateFloatAsState(
-        targetValue = offsetY,
-        animationSpec = tween(400), label = "offsetY"
-    )
-    val animatedAlpha by animateFloatAsState(
-        targetValue = alpha,
-        animationSpec = tween(400), label = "alpha"
-    )
-
-    LaunchedEffect(currentIndex) {
-        delay(2000)
-        alpha = 0f
-        offsetY = -20f
-        delay(400)
-        currentIndex = (currentIndex + 1) % notifications.size
-        offsetY = 20f
-        alpha = 0f
-        delay(10)
-        alpha = 1f
-        offsetY = 0f
-    }
 
     val titleColor = if (currentNotification.noticeType == CONTENT_NOTICE) Color(0xFFFB4F4F) else Color(0xFF171717)
     val titleText = if (currentNotification.noticeType == CONTENT_NOTICE)
@@ -425,15 +402,12 @@ fun CustomNotifyBar(
                 text = currentNotification.content,
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .offset(y = animatedOffsetY.dp)
-                    .alpha(animatedAlpha)
+                overflow = TextOverflow.Ellipsis
             )
         }
-
     }
 }
+
 
 
 @Composable
@@ -455,7 +429,7 @@ fun HomeTitleText(
         )
 
         if (size.isNotEmpty()) {
-            Spacer(modifier = Modifier.width(10.dp)) // ✅ 간격을 명시적으로 조절
+            Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = size,
                 style = AppTextStyles.TITLE_20_28_SEMI,
