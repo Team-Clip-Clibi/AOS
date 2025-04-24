@@ -41,7 +41,7 @@ class SendAlreadySignUp @Inject constructor(
             }
 
             401 -> {
-                val refreshToken = network.requestUpdateToken(TOKEN_FORM + token.second)
+                val refreshToken = network.requestUpdateToken(token.second)
                 if(refreshToken.first != 200){
                     return Result.Fail("reLogin")
                 }

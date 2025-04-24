@@ -21,7 +21,7 @@ class GetNewNotification @Inject constructor(
         val oneThingNotification = network.requestOneThineNotification(TOKEN_FORM + token.first)
         when (oneThingNotification.responseCode) {
             401 -> {
-                val refreshToken = network.requestUpdateToken(TOKEN_FORM + token.second)
+                val refreshToken = network.requestUpdateToken(token.second)
                 if (refreshToken.first != 200) {
                     return Result.Fail("reLogin")
                 }

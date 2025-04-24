@@ -129,7 +129,7 @@ class GetUserInfo @Inject constructor(
         oldRefreshToken: String,
         onSuccess: suspend (newAccessToken: String) -> Boolean,
     ): Pair<String, String>? {
-        val refreshResult = network.requestUpdateToken(TOKEN_FORM + oldRefreshToken)
+        val refreshResult = network.requestUpdateToken(oldRefreshToken)
         if (refreshResult.first != 200) return null
 
         val saved = database.setToken(refreshResult.second!!, refreshResult.third!!)
