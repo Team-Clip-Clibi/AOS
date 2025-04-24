@@ -470,12 +470,12 @@ fun MeetingCardList(
                 enter = fadeIn(
                     animationSpec = tween(
                         durationMillis = 600,
-                        easing = FastOutSlowInEasing // ← 더 부드럽게
+                        easing = FastOutSlowInEasing
                     )
                 ) + slideInHorizontally(
                     animationSpec = tween(
                         durationMillis = 600,
-                        easing = FastOutSlowInEasing // ← 여기도 동일하게
+                        easing = FastOutSlowInEasing
                     ),
                     initialOffsetX = { it / 2 }
                 )
