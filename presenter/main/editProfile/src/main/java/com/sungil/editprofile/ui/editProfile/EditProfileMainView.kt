@@ -44,12 +44,9 @@ internal fun EditProfileMainView(
     signOutPage : () -> Unit,
     dietPage : () -> Unit
 ) {
-    val navController = rememberNavController()
     val scrollState = rememberScrollState()
-    val state by viewModel.editProfileState.collectAsState()
     val userInfo by viewModel.userInfo.collectAsState()
     val showDialog by viewModel.showLogoutDialog.collectAsState()
-
     val name = userInfo?.name.orEmpty()
     val nickName = userInfo?.nickName.orEmpty()
     val phoneNumber = userInfo?.phoneNumber.orEmpty()
