@@ -53,6 +53,16 @@ class GetNotification @Inject constructor(
                             content = "테스트에용",
                             link = "www.naver.com"
                         ),
+                        NotificationData(
+                            noticeType = "ARTICLE",
+                            content = "테스트에용2",
+                            link = "www.naver.com"
+                        ),
+                        NotificationData(
+                            noticeType = "NOTICE",
+                            content = "테스트에용3",
+                            link = "www.naver.com"
+                        ),
                     )
                 )
             }
