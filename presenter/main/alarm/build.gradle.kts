@@ -58,6 +58,8 @@ dependencies {
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    //paging
+    implementation(libs.paging.compose)
     //project
     implementation(project(":domain"))
     implementation(project(":core"))

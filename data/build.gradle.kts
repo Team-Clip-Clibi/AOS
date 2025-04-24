@@ -60,4 +60,6 @@ dependencies {
     implementation(libs.squareup.retrofit2.converter.kotlinx.serialization)
     implementation(libs.squareup.okhttp3.logging.interceptor)
     implementation(libs.jetbrains.kotlinx.serialization.json)
+    //paging
+    implementation(libs.paging.runtime)
 }
