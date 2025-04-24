@@ -1,10 +1,17 @@
 package com.sungil.main.component
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,8 +31,12 @@ import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -49,6 +60,7 @@ import com.example.core.AppTextStyles
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
+import com.sungil.domain.model.NotificationData
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
 import com.sungil.main.Screen
@@ -296,6 +308,48 @@ fun CustomSnackBar(data: SnackbarData) {
             text = data.visuals.message,
             style = AppTextStyles.CAPTION_12_18_SEMI,
             color = Color(0xFFFFFFFF)
+        )
+    }
+}
+@Composable
+fun NotificationBarListStable(
+    notifications: List<NotificationData>,
+    notifyClick: (String) -> Unit,
+    notifyClose: () -> Unit,
+) {
+    var currentIndex by remember { mutableIntStateOf(0) }
+    var visible by remember { mutableStateOf(true) }
+
+
+    LaunchedEffect(notifications) {
+        while (true) {
+            delay(1800)
+            visible = false
+            delay(300)
+            currentIndex = (currentIndex + 1) % notifications.size
+            visible = true
+        }
+    }
+
+    val currentNotification = notifications[currentIndex]
+
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(animationSpec = tween(300)) + slideInVertically(
+            animationSpec = tween(300),
+            initialOffsetY = { fullHeight -> fullHeight }
+        ),
+        exit = fadeOut(animationSpec = tween(300)) + slideOutVertically(
+            animationSpec = tween(300),
+            targetOffsetY = { fullHeight -> -fullHeight }
+        )
+    ) {
+        CustomNotifyBar(
+            noticeType = currentNotification.noticeType,
+            content = currentNotification.content,
+            link = currentNotification.link,
+            notifyClick = notifyClick,
+            notifyClose = notifyClose
         )
     }
 }

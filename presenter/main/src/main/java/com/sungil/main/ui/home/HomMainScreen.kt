@@ -38,9 +38,9 @@ import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
-import com.sungil.main.component.CustomNotifyBar
 import com.sungil.main.component.HomeTitleText
 import com.sungil.main.component.MeetingCardList
+import com.sungil.main.component.NotificationBarListStable
 import kotlinx.coroutines.launch
 
 @Composable
@@ -132,10 +132,8 @@ internal fun HomMainScreen(
                     .fillMaxWidth()
                     .align(Alignment.TopStart)
             ) {
-                CustomNotifyBar(
-                    noticeType = data.first().noticeType,
-                    content = data.first().content,
-                    link = data.first().link,
+                NotificationBarListStable(
+                    notifications = data,
                     notifyClick = { notifyClick(data.first().link) },
                     notifyClose = { viewModel.setNotifyShow(false) }
                 )
