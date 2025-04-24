@@ -96,7 +96,7 @@ fun BottomNavigation(navController: NavHostController) {
             modifier = Modifier
                 .wrapContentWidth(Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(36.dp) // 아이템 간 간격
+            horizontalArrangement = Arrangement.spacedBy(36.dp)
         ) {
             bottomNavItems.forEach { item ->
                 val isSelected = currentRoute == item.screenRoute
@@ -447,11 +447,10 @@ fun MeetingCardList(
 ) {
     val visibleMatchIds = remember { mutableStateListOf<Int>() }
 
-    // matchingId 기준으로 LaunchedEffect 감지
     LaunchedEffect(matchList.map { it.matchingId }) {
         visibleMatchIds.clear()
         matchList.forEachIndexed { _, item ->
-            delay(200L) // ← 더 천천히 등장하도록 delay 증가
+            delay(200L)
             visibleMatchIds.add(item.matchingId)
         }
     }
@@ -695,7 +694,7 @@ fun AutoSlidingBanner(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(126.dp), // 배너 + 인디케이터 높이
+            .height(126.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -734,11 +733,11 @@ fun PageIndicator(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center, // 가운데 정렬
+        horizontalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(space) // 간격을 설정
+            horizontalArrangement = Arrangement.spacedBy(space)
         ) {
             repeat(numberOfPages) {
                 Indicator(

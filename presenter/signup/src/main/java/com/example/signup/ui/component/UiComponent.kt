@@ -467,7 +467,7 @@ fun CustomGenderPick(
 fun RowScope.CustomSpinnerBox(text: String, onclick: () -> Unit) {
     Row(
         modifier = Modifier
-            .weight(1f) // 이제 에러 안 남
+            .weight(1f)
             .height(60.dp)
             .background(Color(0xFFF7F7F7), shape = RoundedCornerShape(size = 12.dp))
             .padding(start = 17.dp, end = 16.dp)
@@ -525,7 +525,7 @@ fun BottomSheetSelector(
         areaBottomSheet -> {
             CustomBottomSheet(
                 kind = ISArea,
-                selectedCity = selectedCity, // 이 줄이 핵심!
+                selectedCity = selectedCity,
                 onSelect = onSelect,
                 onDismiss = onDismiss
             )
@@ -550,7 +550,7 @@ fun CustomBottomSheet(
     kind: String,
     onSelect: (String) -> Unit,
     onDismiss: () -> Unit,
-    selectedCity: City? = null // ISArea일 때 사용
+    selectedCity: City? = null
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -560,7 +560,7 @@ fun CustomBottomSheet(
         ISMonth -> (1..12).map { "${it}월" }
         ISDay -> (1..31).map { "${it}일" }
 
-        ISCity -> City.values().map { it.displayName } // 사용자에겐 한글
+        ISCity -> City.values().map { it.displayName }
 
         ISArea -> {
             selectedCity?.let { city ->
@@ -571,7 +571,7 @@ fun CustomBottomSheet(
         else -> throw IllegalArgumentException("Invalid kind: $kind")
     }
 
-    // 아래는 그대로 사용
+
     ModalBottomSheet(
         onDismissRequest = {
             coroutineScope.launch {
@@ -591,7 +591,7 @@ fun CustomBottomSheet(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .navigationBarsPadding()
         ) {
-            // Close Icon
+
             Box(modifier = Modifier.fillMaxWidth()) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_close),

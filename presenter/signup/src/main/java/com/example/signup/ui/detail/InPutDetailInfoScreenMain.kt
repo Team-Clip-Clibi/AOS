@@ -317,7 +317,7 @@ internal fun InPutDetailInfoScreenMain(
             Spacer(modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.weight(1f))
 
-            // Divider만 예외! 패딩 없음
+
             HorizontalDivider(
                 thickness = 1.dp,
                 color = Color(0xFFEFEFEF)
