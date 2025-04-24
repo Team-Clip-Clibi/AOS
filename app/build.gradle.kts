@@ -105,6 +105,7 @@ dependencies {
     implementation(project(":presenter:main:editProfile"))
     implementation(project(":presenter:main:report"))
     implementation(project(":presenter:main:low"))
+    implementation(project(":presenter:main:alarm"))
     implementation(project(":kakao"))
     implementation(project(":domain"))
     implementation(project(":database"))
