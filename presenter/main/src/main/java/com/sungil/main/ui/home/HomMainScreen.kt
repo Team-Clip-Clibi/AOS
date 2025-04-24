@@ -60,12 +60,10 @@ internal fun HomMainScreen(
     val notificationState = state.notificationResponseState
     val userData = state.userDataState
     val context = LocalContext.current
-    val notifyShow by viewModel.notifyShow.collectAsState()
     val matchState = state.matchState
     val notServiceMsg = stringResource(R.string.msg_not_service)
     val bannerImage = state.banner
-    val notifyBarHeight =
-        if (notificationState is MainViewModel.UiState.Success && notifyShow) 34.dp else 0.dp
+    val notifyBarHeight = if (notificationState is MainViewModel.UiState.Success) 34.dp else 0.dp
 
     LaunchedEffect(notificationState) {
         if (notificationState is MainViewModel.UiState.Error) {
@@ -125,7 +123,7 @@ internal fun HomMainScreen(
             .padding(top = paddingValues.calculateTopPadding())
             .navigationBarsPadding()
     ) {
-        if (notificationState is MainViewModel.UiState.Success && notifyShow) {
+        if (notificationState is MainViewModel.UiState.Success) {
             val data = notificationState.data
             Column(
                 modifier = Modifier
@@ -135,7 +133,6 @@ internal fun HomMainScreen(
                 NotificationBarListStable(
                     notifications = data,
                     notifyClick = { notifyClick(data.first().link) },
-                    notifyClose = { viewModel.setNotifyShow(false) }
                 )
             }
         }

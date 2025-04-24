@@ -34,9 +34,6 @@ class MainViewModel @Inject constructor(
     private val _userState = MutableStateFlow(MainViewState())
     val userState: StateFlow<MainViewState> = _userState.asStateFlow()
 
-    private val _notifyShow = MutableStateFlow(true)
-    val notifyShow: StateFlow<Boolean> = _notifyShow
-
     init {
         requestUserInfo()
         oneThingNotify()
@@ -135,10 +132,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun setNotifyShow(data: Boolean) {
-        _notifyShow.value = data
     }
 
     sealed interface UiState<out T> {

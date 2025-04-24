@@ -12,6 +12,7 @@ import com.sungil.network.model.MatchingResponse
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
 import com.sungil.network.model.OneThinNotify
+import com.sungil.network.model.OneThingNotificationDTO
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
@@ -241,4 +242,20 @@ interface HttpApi {
     suspend fun requestRefreshToken(
         bearerToken: String,
     ): Response<AuthToken>
+
+    /**
+     * 새로운 알람 조회 api
+     */
+    @GET(BuildConfig.UN_READ_NOTIFY_URL)
+    suspend fun requestNotify(
+        @Header("Authorization") bearerToken: String,
+    ): Response<List<OneThingNotificationDTO>>
+
+    /**
+     * 새로운 알람 조회 API 다음 페이지
+     */
+    @GET(BuildConfig.UN_READ_NOTIFY_URL + "/"+"{phoneNumber}")
+    suspend fun requestNewNotify(
+        @Header("Authorization") bearerToken: String,
+    ): Response<List<OneThingNotificationDTO>>
 }

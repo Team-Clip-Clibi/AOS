@@ -5,6 +5,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -40,10 +42,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -315,11 +319,9 @@ fun CustomSnackBar(data: SnackbarData) {
 fun NotificationBarListStable(
     notifications: List<NotificationData>,
     notifyClick: (String) -> Unit,
-    notifyClose: () -> Unit,
 ) {
     var currentIndex by remember { mutableIntStateOf(0) }
     var visible by remember { mutableStateOf(true) }
-
 
     LaunchedEffect(notifications) {
         while (true) {
@@ -333,53 +335,82 @@ fun NotificationBarListStable(
 
     val currentNotification = notifications[currentIndex]
 
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(animationSpec = tween(300)) + slideInVertically(
-            animationSpec = tween(300),
-            initialOffsetY = { fullHeight -> fullHeight }
-        ),
-        exit = fadeOut(animationSpec = tween(300)) + slideOutVertically(
-            animationSpec = tween(300),
-            targetOffsetY = { fullHeight -> -fullHeight }
-        )
+    val targetWidth = if (visible) 1f else 0.9f
+    val animatedWidthFraction by animateFloatAsState(
+        targetValue = targetWidth,
+        animationSpec = tween(300),
+        label = "widthFraction"
+    )
+
+    val animatedAlpha by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(300),
+        label = "alpha"
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .graphicsLayer {
+                scaleX = animatedWidthFraction
+                alpha = animatedAlpha
+            }
     ) {
         CustomNotifyBar(
-            noticeType = currentNotification.noticeType,
-            content = currentNotification.content,
-            link = currentNotification.link,
+            notifications = listOf(currentNotification),
             notifyClick = notifyClick,
-            notifyClose = notifyClose
         )
     }
 }
-
 @Composable
 fun CustomNotifyBar(
-    noticeType: String,
-    content: String,
-    link: String,
+    notifications: List<NotificationData>,
     notifyClick: (String) -> Unit,
-    notifyClose: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val titleColor = if (noticeType == CONTENT_NOTICE) Color(0xFFFB4F4F) else Color(0xFF171717)
-    val titleText = if (noticeType == CONTENT_NOTICE)
+    var currentIndex by remember { mutableStateOf(0) }
+    val currentNotification = notifications[currentIndex]
+    var offsetY by remember { mutableStateOf(0f) }
+    var alpha by remember { mutableStateOf(1f) }
+
+    val animatedOffsetY by animateFloatAsState(
+        targetValue = offsetY,
+        animationSpec = tween(400), label = "offsetY"
+    )
+    val animatedAlpha by animateFloatAsState(
+        targetValue = alpha,
+        animationSpec = tween(400), label = "alpha"
+    )
+
+    LaunchedEffect(currentIndex) {
+        delay(2000)
+        alpha = 0f
+        offsetY = -20f
+        delay(400)
+        currentIndex = (currentIndex + 1) % notifications.size
+        offsetY = 20f
+        alpha = 0f
+        delay(10)
+        alpha = 1f
+        offsetY = 0f
+    }
+
+    val titleColor = if (currentNotification.noticeType == CONTENT_NOTICE) Color(0xFFFB4F4F) else Color(0xFF171717)
+    val titleText = if (currentNotification.noticeType == CONTENT_NOTICE)
         stringResource(R.string.notify_notice)
     else
         stringResource(R.string.notify_article)
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(34.dp)
             .background(Color(0xFFEFEFEF))
-            .clickable { notifyClick(link) }
+            .clickable { notifyClick(currentNotification.link) }
             .padding(start = 17.dp, end = 8.5.dp)
     ) {
-        // 왼쪽(타이틀 + 내용)을 한 Row에 배치
         Row(
-            modifier = Modifier
-                .align(Alignment.CenterStart),
+            modifier = Modifier.align(Alignment.CenterStart),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -391,25 +422,19 @@ fun CustomNotifyBar(
             Spacer(Modifier.width(12.dp))
 
             Text(
-                text = content,
+                text = currentNotification.content,
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .offset(y = animatedOffsetY.dp)
+                    .alpha(animatedAlpha)
             )
         }
 
-        // 오른쪽 닫기 아이콘
-        Icon(
-            painter = painterResource(R.drawable.ic_close_gray),
-            contentDescription = "close alarm",
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .size(17.dp)
-                .clickable { notifyClose() },
-            tint = Color(0xFF718096)
-        )
     }
 }
+
 
 @Composable
 fun HomeTitleText(
