@@ -254,8 +254,9 @@ interface HttpApi {
     /**
      * 새로운 알람 조회 API 다음 페이지
      */
-    @GET(BuildConfig.UN_READ_NOTIFY_URL + "/"+"{phoneNumber}")
+    @GET(BuildConfig.UN_READ_NOTIFY_URL + "/" + "{lastNotificationId}")
     suspend fun requestNewNotify(
         @Header("Authorization") bearerToken: String,
+        @Path("lastNotificationId") lastNotificationId: String,
     ): Response<List<OneThingNotificationDTO>>
 }
