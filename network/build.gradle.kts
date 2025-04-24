@@ -48,6 +48,8 @@ android {
         val match : String = properties.getProperty("match", "")
         val refresh : String = properties.getProperty("refresh"  , "")
         val notification : String = properties.getProperty("notification" ,"")
+        val unReadAlarm : String = properties.getProperty("unReadNotification", "")
+        val readAlarm : String = properties.getProperty("readNotificaiton" ,"")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -72,6 +74,8 @@ android {
         buildConfigField("String" ,"MATCH_URL" , match)
         buildConfigField("String" , "REFRESH_URL" , refresh)
         buildConfigField("String" , "ONE_THING_NOTI_URL" , notification)
+        buildConfigField("String" , "UN_READ_NOTIFY_URL" ,unReadAlarm)
+        buildConfigField("String" , "READ_NOTIFY_URL" , readAlarm)
     }
 
     buildTypes {
