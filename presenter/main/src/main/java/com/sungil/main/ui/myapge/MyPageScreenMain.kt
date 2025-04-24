@@ -1,6 +1,5 @@
 package com.sungil.main.ui.myapge
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.main.MainViewModel
@@ -55,6 +54,11 @@ internal fun MyPageScreenMain(
         is MainViewModel.UiState.Loading -> ""
         is MainViewModel.UiState.Error -> "오류 발생"
     }
+    val matchState = userState.matchState
+    val matchData = (matchState as? MainViewModel.UiState.Success<MatchData>)?.data
+    val oneThingSize = matchData?.oneThingMatch?.size ?: 0
+    val randomMatchSize = matchData?.randomMatch?.size ?: 0
+    val totalMatchSize = oneThingSize + randomMatchSize
 
     Box(
         modifier = Modifier
@@ -109,7 +113,7 @@ internal fun MyPageScreenMain(
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Text(
-                        text = stringResource(R.string.txt_myPage_count, 4),
+                        text = stringResource(R.string.txt_myPage_count, totalMatchSize),
                         style = AppTextStyles.BODY_14_20_MEDIUM
                     )
 
