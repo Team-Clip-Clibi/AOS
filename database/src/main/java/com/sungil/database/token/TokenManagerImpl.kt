@@ -10,7 +10,7 @@ class TokenManagerImpl @Inject constructor(private val tokenDao: TokenDao) : Tok
     override suspend fun getToken(): Pair<String, String> {
         if (token == null) {
             val dbToken =
-                tokenDao.getToken() ?: throw  throw RuntimeException("token data is null")
+                tokenDao.getToken() ?: throw RuntimeException("token data is null")
             token = Pair(dbToken.accessToken, dbToken.refreshToken)
             return Pair(dbToken.accessToken, dbToken.refreshToken)
         }
@@ -24,7 +24,7 @@ class TokenManagerImpl @Inject constructor(private val tokenDao: TokenDao) : Tok
             true
         } catch (e: Exception) {
             e.printStackTrace()
-            false
+            throw RuntimeException(e.message)
         }
     }
 
@@ -34,8 +34,7 @@ class TokenManagerImpl @Inject constructor(private val tokenDao: TokenDao) : Tok
             tokenDao.deleteAll()
             true
         } catch (e: Exception) {
-            e.printStackTrace()
-            false
+            throw RuntimeException(e.message)
         }
     }
 }
