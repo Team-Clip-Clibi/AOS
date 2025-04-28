@@ -61,4 +61,6 @@ dependencies {
     //project
     implementation(project(":domain"))
     implementation(project(":core"))
+    //firebase
+    implementation(libs.firebase.crash)
 }

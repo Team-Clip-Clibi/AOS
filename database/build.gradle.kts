@@ -6,6 +6,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
+
 val properties = Properties()
 val localPropertiesFile = project.rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -76,5 +77,7 @@ dependencies {
     implementation(libs.room.database.runtime)
     implementation(libs.room.database.ktx)
     kapt(libs.room.database.compiler)
+    //firebase
+    implementation(libs.firebase.crash)
 
 }

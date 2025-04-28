@@ -8,6 +8,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.kotlin.serialization)
 }
+
 val properties = Properties()
 val localPropertiesFile = project.rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -122,4 +123,6 @@ dependencies {
     implementation(libs.jetbrains.kotlinx.serialization.json)
     //gson
     implementation(libs.google.gson)
+    //firebase
+    implementation(libs.firebase.crash)
 }

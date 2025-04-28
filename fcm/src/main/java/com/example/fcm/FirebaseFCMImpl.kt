@@ -11,7 +11,7 @@ class FirebaseFCMImpl @Inject constructor() : FirebaseFCM {
         return try {
             FirebaseMessaging.getInstance().token.await()
         } catch (e: Exception) {
-            "Error"
+            throw RuntimeException("Error to get Firebase FCM Token")
         }
     }
 

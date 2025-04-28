@@ -29,6 +29,8 @@ ksp = "1.9.0-1.0.11"
 compose-material = "1.7.8"
 glide-version= "1.0.0-beta01"
 paging-version = "3.3.2"
+firebase-crash = "19.4.2"
+firebase-crash-plugin = "3.0.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -69,6 +71,8 @@ androidx-compose-material = { group = "androidx.compose.material", name = "mater
 glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide-version" }
 paging-runtime = {group = "androidx.paging" , name = "paging-runtime" , version.ref = "paging-version"}
 paging-compose = {group = "androidx.paging" , name = "paging-compose" , version.ref = "paging-version"}
+firebase-crash = {group ="com.google.firebase" , name = "firebase-crashlytics" , version.ref = "firebase-crash"}
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -77,3 +81,4 @@ hilt-project = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-service-gms = { id = "com.google.gms.google-services", version.ref = "gms-service" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 devtool-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+firebase-crash-plugin = {id = "com.google.firebase.crashlytics" , version.ref = "firebase-crash-plugin"}
