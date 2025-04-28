@@ -5,3 +5,4 @@ enum class NotificationType {
     EVENT,
     NOTICE
 }
+const val NAV_MAIN = "Main"
