@@ -12,7 +12,9 @@ import com.sungil.domain.useCase.UpdateAndSaveToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,6 +30,9 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
     private val _actionFlow = MutableSharedFlow<Action>()
     val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
+
+    private val _isFcmReady = MutableStateFlow(false)
+    val isFcmReady :StateFlow<Boolean> = _isFcmReady
 
     fun getKAKAOId() {
         viewModelScope.launch {
@@ -83,6 +88,7 @@ class LoginViewModel @Inject constructor(
                 updateAndSaveToken.invoke(UpdateAndSaveToken.Param(result))) {
                 is UpdateAndSaveToken.Result.Success -> {
                     _actionFlow.emit(Action.FCMToken(saveOrUpdateToken.message))
+                    _isFcmReady.value = true
                 }
 
                 is UpdateAndSaveToken.Result.Fail -> {

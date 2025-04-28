@@ -66,11 +66,13 @@ fun CustomButton(
     text : String,
     onclick :() -> Unit,
     imageId : Int = -1,
-    imageDescription : String = "noData"
+    imageDescription : String = "noData",
+    isEnable : Boolean = true
 ){
     Button(
         modifier = modifier,
         shape = shape,
+        enabled = isEnable,
         colors = buttonColor,
         onClick = onclick
     ) {

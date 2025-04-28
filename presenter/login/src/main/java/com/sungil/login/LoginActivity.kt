@@ -31,7 +31,8 @@ class LoginActivity : ComponentActivity() {
             LoginScreen(
                 kakaoLogin = {
                     viewModel.getKAKAOId()
-                }
+                },
+                viewModel = viewModel
             )
         }
         setupNotificationPermission()
