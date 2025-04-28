@@ -20,16 +20,16 @@ class AlarmViewModel @Inject constructor(private val getNotification: GetNotice)
         _notificationPagingFlow.asStateFlow()
 
     init {
-//        notify()
+        loadNotification()
     }
 
-//    private fun notify() {
-//        viewModelScope.launch {
-//            getNotification.invoke()
-//                .cachedIn(viewModelScope)
-//                .collectLatest { pagingData ->
-//                    _notificationPagingFlow.value = pagingData
-//                }
-//        }
-//    }
+    private fun loadNotification() {
+        viewModelScope.launch {
+            getNotification.invoke()
+                .cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _notificationPagingFlow.value = pagingData
+                }
+        }
+    }
 }
