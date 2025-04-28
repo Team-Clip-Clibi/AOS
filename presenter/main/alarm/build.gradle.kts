@@ -60,6 +60,7 @@ dependencies {
     kapt(libs.hilt.compiler)
     //paging
     implementation(libs.paging.compose)
+    implementation(libs.paging.runtime)
     //project
     implementation(project(":domain"))
     implementation(project(":core"))

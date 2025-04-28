@@ -1,0 +1,185 @@
+package com.sungil.alarm.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.wear.compose.material3.OpenOnPhoneDialogDefaults.Icon
+import com.example.core.AppTextStyles
+import com.sungil.alarm.R
+import com.sungil.domain.model.Notification
+
+@Composable
+fun CustomSnackBar(data: SnackbarData) {
+    Row(
+        modifier = Modifier
+            .width(360.dp)
+            .height(48.dp)
+            .background(color = Color(0xFF383838), shape = RoundedCornerShape(size = 8.dp))
+            .padding(start = 16.dp, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_message),
+            contentDescription = "message",
+            contentScale = ContentScale.None,
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = data.visuals.message,
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = Color(0xFFFFFFFF)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomTopBar(
+    title: String,
+    onBackClick: () -> Unit,
+) {
+    CenterAlignedTopAppBar(
+        modifier = Modifier
+            .border(width = 1.dp, color = Color(0xFFEFEFEF))
+            .fillMaxWidth()
+            .padding(start = 5.dp, end = 16.dp),
+        title = {
+            Text(
+                text = title,
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center
+            )
+        },
+        navigationIcon = {
+            Image(
+                painter = painterResource(id = R.drawable.ic_left_out),
+                contentDescription = "뒤로가기",
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(24.dp)
+                    .clickable { onBackClick() }
+            )
+        },
+        actions = {},
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color(0xFFEFEFEF)
+        )
+    )
+}
+
+
+@Composable
+fun CustomUnReadNotice(
+    pagingItems: LazyPagingItems<Notification>,
+    height: Dp,
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height)
+    ) {
+        items(
+            count = pagingItems.itemCount,
+            key = { index -> pagingItems[index]?.id ?: "" }
+        ) { index ->
+            pagingItems[index]?.let { notification ->
+                CustomNotifyAdapter(data = notification)
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomNotifyAdapter(
+    data: Notification,
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = getIconResByType(data.notificationType)),
+                    contentDescription = "alarm",
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(id = getTextByType(data.notificationType)),
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = Color(0xFF989898)
+                )
+            }
+            Text(
+                text = data.formattedTime,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = Color(0xFF989898)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(
+            text = data.content,
+            style = AppTextStyles.SUBTITLE_16_24_SEMI,
+            color = Color(0xFF383838)
+        )
+    }
+}
+
+fun getIconResByType(type: String): Int {
+    return when (type) {
+        NotificationType.MEETING.name -> R.drawable.ic_one_thing
+        NotificationType.NOTICE.name -> R.drawable.ic_notice
+        NotificationType.EVENT.name -> R.drawable.ic_event
+        else -> R.drawable.ic_message
+    }
+}
+
+fun getTextByType(type: String): Int {
+    return when (type) {
+        NotificationType.MEETING.name -> R.string.txt_oneThing_meeting
+        NotificationType.NOTICE.name -> R.string.txt_oneThing_notify
+        NotificationType.EVENT.name -> R.string.txt_oneThing_event
+        else -> R.string.msg_error
+    }
+}

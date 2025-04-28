@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter
 @Serializable
 data class OneThingNotificationDTO(
     val id: Int,
+    val notificationType : String,
     val content: String,
     val createdAt: String,
 )

@@ -1,11 +1,13 @@
 package com.sungil.domain.repository
 
 import android.app.Activity
+import androidx.paging.PagingData
 import com.sungil.domain.model.BannerResponse
 import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
@@ -91,4 +93,5 @@ interface NetworkRepository {
         accessToken: String,
     ): OneThineNotification
 
+    suspend fun requestNotificationPaging() : Flow<PagingData<Notification>>
 }

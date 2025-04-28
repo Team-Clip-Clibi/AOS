@@ -19,6 +19,7 @@ fun OneThingNotificationDTO.toNotification(): Notification {
     return Notification(
         id = this.id,
         content = this.content,
-        createdAt = this.createdAt
+        createdAt = this.createdAt,
+        notificationType = this.notificationType
     )
 }

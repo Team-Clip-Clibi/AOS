@@ -4,5 +4,5 @@ import androidx.activity.ComponentActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AlarmView : ComponentActivity() {
+class AlaramMainActivity : ComponentActivity() {
 }

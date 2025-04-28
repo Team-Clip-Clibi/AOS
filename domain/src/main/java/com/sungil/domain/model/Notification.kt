@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter
 
 data class Notification(
     val id: Int,
+    val notificationType : String,
     val content: String,
     val createdAt: String,
 ) {

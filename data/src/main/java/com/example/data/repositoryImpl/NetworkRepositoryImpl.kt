@@ -1,7 +1,12 @@
 package com.example.data.repositoryImpl
 
 import android.app.Activity
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.example.data.paging.NotificationPagingSource
 import com.example.fcm.FirebaseFCM
+import com.sungil.database.token.TokenManager
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerResponse
 import com.sungil.domain.model.BannerData
@@ -45,6 +50,7 @@ class NetworkRepositoryImpl @Inject constructor(
     private val firebase: FirebaseSMSRepo,
     private val api: HttpApi,
     private val fcmRepo: FirebaseFCM,
+    private val tokenManger : TokenManager
 ) :
     NetworkRepository {
     override suspend fun requestSMS(phoneNumber: String, activity: Activity): Boolean {
@@ -375,6 +381,18 @@ class NetworkRepositoryImpl @Inject constructor(
             result.code(),
             result.body()!!.map { it.toDomain() }
         )
+    }
+
+    override suspend fun requestNotificationPaging(): Flow<PagingData<com.sungil.domain.model.Notification>> {
+        return Pager(
+            config = PagingConfig(pageSize = 50),
+            pagingSourceFactory = {
+                NotificationPagingSource(
+                    api = api,
+                    tokenManager = tokenManger
+                )
+            }
+        ).flow
     }
 
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {
