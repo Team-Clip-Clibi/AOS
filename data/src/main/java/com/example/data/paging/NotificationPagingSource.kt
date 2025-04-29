@@ -12,6 +12,9 @@ import com.sungil.network.http.HttpApi
 import retrofit2.HttpException
 import javax.inject.Inject
 
+/**
+ * 새로운 알람 조회 Paging
+ */
 class NotificationPagingSource @Inject constructor(
     private val api: HttpApi,
     private val tokenManager: TokenManager,
