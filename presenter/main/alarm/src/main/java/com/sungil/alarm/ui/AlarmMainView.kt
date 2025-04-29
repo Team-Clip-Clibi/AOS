@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -21,39 +24,74 @@ import com.example.core.AppTextStyles
 import com.sungil.alarm.AlarmViewModel
 import com.sungil.alarm.R
 import com.sungil.alarm.component.CustomNoticeList
+import com.sungil.alarm.component.ERROR_RE_LOGIN
+import com.sungil.alarm.component.ERROR_SAVE
+import com.sungil.alarm.component.ERROR_SERVER
 
 @Composable
 internal fun AlarmMainView(
     viewModel: AlarmViewModel,
     paddingValue: PaddingValues,
     snackBarHost: SnackbarHostState,
+    reLogin: () -> Unit,
 ) {
     val unReadNotify = viewModel.unReadNotify.collectAsLazyPagingItems()
     val readNotify = viewModel.readNotification.collectAsLazyPagingItems()
     val unReadState = unReadNotify.loadState.refresh
-    val readState= readNotify.loadState.refresh
+    val readState = readNotify.loadState.refresh
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        when (unReadState) {
+            is LoadState.Error -> {
+                when (unReadState.error.message) {
+                    ERROR_SERVER -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_server_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
 
-    when(unReadState){
-        is LoadState.Error ->{
+                    ERROR_SAVE -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_app_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
 
-        }
-        LoadState.Loading -> {
+                    ERROR_RE_LOGIN -> {
+                        reLogin()
+                    }
+                }
+            }
 
-        }
-        is LoadState.NotLoading -> {
-
+            else -> Unit
         }
     }
+    LaunchedEffect(Unit) {
+        when (readState) {
+            is LoadState.Error -> {
+                when (readState.error.message) {
+                    ERROR_SERVER -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_server_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
 
-    when(readState){
-        is LoadState.Error -> {
+                    ERROR_SAVE -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_app_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
 
-        }
-        LoadState.Loading -> {
+                    ERROR_RE_LOGIN -> {
+                        reLogin()
+                    }
+                }
+            }
 
-        }
-        is LoadState.NotLoading ->{
-
+            else -> Unit
         }
     }
 

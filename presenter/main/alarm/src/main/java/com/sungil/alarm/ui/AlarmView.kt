@@ -23,6 +23,7 @@ import com.sungil.alarm.component.CustomTopBar
 internal fun AlarmView(
     viewModel: AlarmViewModel,
     backClick: () -> Unit,
+    reLogin : () -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -50,6 +51,11 @@ internal fun AlarmView(
             )
         }
     ) { paddingValues ->
-
+        AlarmMainView(
+            viewModel = viewModel,
+            paddingValue = paddingValues,
+            snackBarHost = snackBarHostState,
+            reLogin = reLogin
+        )
     }
 }

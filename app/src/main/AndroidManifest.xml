@@ -49,15 +49,12 @@
         <activity
             android:name="com.sungil.main.MainActivity"
             android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
         </activity>
+
         <activity
             android:name="com.sungil.editprofile.ProfileEditMainActivity"
             android:exported="true" />
+
         <activity
             android:name="com.sungil.report.ReportMainActivity"
             android:exported="true" />
@@ -65,6 +62,10 @@
         <activity
             android:name="com.sungil.low.ui.low.LowActivity"
             android:exported="true" />
+
+        <activity android:name="com.sungil.alarm.AlarmMainActivity"
+            android:exported="true"/>
+
 
     </application>
 
