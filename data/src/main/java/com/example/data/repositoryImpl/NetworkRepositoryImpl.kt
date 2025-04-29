@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.data.paging.NotificationPagingSource
+import com.example.data.paging.NotificationReadPagingSource
 import com.example.fcm.FirebaseFCM
 import com.sungil.database.token.TokenManager
 import com.sungil.domain.CATEGORY
@@ -388,6 +389,18 @@ class NetworkRepositoryImpl @Inject constructor(
             config = PagingConfig(pageSize = 50),
             pagingSourceFactory = {
                 NotificationPagingSource(
+                    api = api,
+                    tokenManager = tokenManger
+                )
+            }
+        ).flow
+    }
+
+    override suspend fun requestReadNotificationPaging(): Flow<PagingData<com.sungil.domain.model.Notification>> {
+        return Pager(
+            config = PagingConfig(pageSize = 50),
+            pagingSourceFactory = {
+                NotificationReadPagingSource(
                     api = api,
                     tokenManager = tokenManger
                 )

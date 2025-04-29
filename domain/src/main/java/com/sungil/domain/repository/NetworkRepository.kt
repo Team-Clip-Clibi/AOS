@@ -94,4 +94,6 @@ interface NetworkRepository {
     ): OneThineNotification
 
     suspend fun requestNotificationPaging() : Flow<PagingData<Notification>>
+
+    suspend fun requestReadNotificationPaging() : Flow<PagingData<Notification>>
 }
