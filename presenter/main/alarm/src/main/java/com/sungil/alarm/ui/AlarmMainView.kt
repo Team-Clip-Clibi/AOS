@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.wear.compose.material3.Text
 import com.example.core.AppTextStyles
@@ -27,7 +28,35 @@ internal fun AlarmMainView(
     paddingValue: PaddingValues,
     snackBarHost: SnackbarHostState,
 ) {
-    val pagingItems = viewModel.unReadNotify.collectAsLazyPagingItems()
+    val unReadNotify = viewModel.unReadNotify.collectAsLazyPagingItems()
+    val readNotify = viewModel.readNotification.collectAsLazyPagingItems()
+    val unReadState = unReadNotify.loadState.refresh
+    val readState= readNotify.loadState.refresh
+
+    when(unReadState){
+        is LoadState.Error ->{
+
+        }
+        LoadState.Loading -> {
+
+        }
+        is LoadState.NotLoading -> {
+
+        }
+    }
+
+    when(readState){
+        is LoadState.Error -> {
+
+        }
+        LoadState.Loading -> {
+
+        }
+        is LoadState.NotLoading ->{
+
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +73,7 @@ internal fun AlarmMainView(
             color = Color(0xFF171717)
         )
         CustomNoticeList(
-            pagingItems = pagingItems,
+            pagingItems = unReadNotify,
             height = 380.dp
         )
 
@@ -56,5 +85,9 @@ internal fun AlarmMainView(
             color = Color(0xFF171717)
         )
 
+        CustomNoticeList(
+            pagingItems = readNotify,
+            height = 1f.dp
+        )
     }
 }
