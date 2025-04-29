@@ -115,8 +115,9 @@ fun CustomUnReadNotice(
             key = { index -> pagingItems[index]?.id ?: "" }
         ) { index ->
             pagingItems[index]?.let { notification ->
+                Spacer(modifier = Modifier.height(16.dp))
                 CustomNotifyAdapter(data = notification)
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
