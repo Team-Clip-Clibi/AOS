@@ -14,10 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AlarmViewModel @Inject constructor(private val getNotification: GetNotice) : ViewModel() {
-    private val _notificationPagingFlow =
+    private val _unReadNotificationPagingFlow =
         MutableStateFlow<PagingData<Notification>>(PagingData.empty())
-    val notificationPagingFlow: StateFlow<PagingData<Notification>> =
-        _notificationPagingFlow.asStateFlow()
+    val unReadNotify: StateFlow<PagingData<Notification>> =
+        _unReadNotificationPagingFlow.asStateFlow()
 
     init {
         loadNotification()
@@ -28,8 +28,9 @@ class AlarmViewModel @Inject constructor(private val getNotification: GetNotice)
             getNotification.invoke()
                 .cachedIn(viewModelScope)
                 .collectLatest { pagingData ->
-                    _notificationPagingFlow.value = pagingData
+                    _unReadNotificationPagingFlow.value = pagingData
                 }
         }
     }
+
 }

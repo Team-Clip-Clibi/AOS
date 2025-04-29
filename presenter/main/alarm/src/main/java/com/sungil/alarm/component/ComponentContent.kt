@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import androidx.wear.compose.material3.OpenOnPhoneDialogDefaults.Icon
 import com.example.core.AppTextStyles
 import com.sungil.alarm.R
 import com.sungil.domain.model.Notification
@@ -101,7 +100,7 @@ fun CustomTopBar(
 
 
 @Composable
-fun CustomUnReadNotice(
+fun CustomNoticeList(
     pagingItems: LazyPagingItems<Notification>,
     height: Dp,
 ) {
