@@ -22,9 +22,9 @@ class MainActivity : ComponentActivity() {
                 viewModel = viewModel,
                 profileButtonClick = { router.navigation(NAV_EDIT_PROFILE) },
                 reportClick = { router.navigation(NAV_REPORT) },
-                lowClick = { router.navigation(NAV_LOW) }
+                lowClick = { router.navigation(NAV_LOW) },
+                alarmClick = {router.navigation(NAV_ALARM)}
             )
         }
     }
-
 }

@@ -42,7 +42,7 @@ fun HomeScreen(
             CustomHomeTopBar(
                 text = "",
                 bellImage = icons,
-                click = {}
+                click = alarmClick
             )
         },
         snackbarHost = {

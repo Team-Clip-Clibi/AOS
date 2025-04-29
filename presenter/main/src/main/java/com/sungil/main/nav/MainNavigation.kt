@@ -17,12 +17,13 @@ fun MainNavigation(
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
     lowClick: () -> Unit,
+    alarmClick: () -> Unit,
 ) {
     NavHost(navController = navController, startDestination = Screen.Home.screenRoute) {
         composable(Screen.Home.screenRoute) {
             HomeScreen(
                 viewModel = viewModel,
-                alarmClick = {},
+                alarmClick = alarmClick,
                 notifyClick = {},
                 oneThingMatchClick = {},
                 randomMatchClick = {}

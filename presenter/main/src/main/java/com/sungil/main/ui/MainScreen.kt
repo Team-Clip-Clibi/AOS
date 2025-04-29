@@ -18,7 +18,8 @@ fun MainScreenView(
     viewModel: MainViewModel,
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
-    lowClick: () -> Unit
+    lowClick: () -> Unit,
+    alarmClick : () -> Unit
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -28,10 +29,11 @@ fun MainScreenView(
         Box(Modifier.padding(it)) {
             MainNavigation(
                 navController = navController,
-                viewModel,
-                profileButtonClick,
-                reportClick,
-                lowClick = lowClick
+                viewModel = viewModel,
+                profileButtonClick = profileButtonClick,
+                reportClick = reportClick,
+                lowClick = lowClick,
+                alarmClick = alarmClick
             )
         }
     }
