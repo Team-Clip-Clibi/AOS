@@ -259,4 +259,23 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Path("lastNotificationId") lastNotificationId: String,
     ): Response<List<OneThingNotificationDTO>>
+
+
+    /**
+     * 이미 읽은 알람 조회
+     */
+    @GET(BuildConfig.READ_NOTIFY_URL)
+    suspend fun requestReadNotify(
+        @Header("Authorization") bearerToken: String,
+    ): Response<List<OneThingNotificationDTO>>
+
+    /**
+     * 이미 읽은 알람 다음 조회
+     */
+    @GET(BuildConfig.READ_NOTIFY_URL + "/" + "{lastNotificationId}")
+    suspend fun requestReadNotifyNext(
+        @Header("Authorization") bearerToken: String,
+        @Path("lastNotificationId") lastNotificationId: String,
+    ): Response<List<OneThingNotificationDTO>>
+
 }
