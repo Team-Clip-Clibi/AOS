@@ -7,7 +7,7 @@
     <string name="txt_oneThing_meeting">모임</string>
     <string name="txt_oneThing_event">이벤트</string>
     <string name="msg_error">에러</string>
-
+    <string name="txt_empty_alarm">새로운 알림이 없어요</string>
     <!-- msg   -->
     <string name="msg_server_error">서버 통신에 실패했습니다.</string>
     <string name="msg_app_error">App Error Fail to save Token</string>

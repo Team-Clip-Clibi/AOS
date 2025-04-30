@@ -28,6 +28,12 @@ class AlarmViewModel @Inject constructor(
     private val _readNotification = MutableStateFlow<PagingData<Notification>>(PagingData.empty())
     val readNotification: StateFlow<PagingData<Notification>> = _readNotification.asStateFlow()
 
+    private val _isAlarmEmpty = MutableStateFlow<Boolean>(false)
+    val isAlarmEmpty : StateFlow<Boolean> = _isAlarmEmpty.asStateFlow()
+
+    private var unReadEmpty = false
+    private var readEmpty = false
+
     init {
         loadNotification()
         loadReadNotice()
@@ -51,6 +57,10 @@ class AlarmViewModel @Inject constructor(
                     _readNotification.value = pagingData
                 }
         }
+    }
+
+    fun setAlarmIsEmpty(result : Boolean){
+        _isAlarmEmpty.value = result
     }
 
 }
