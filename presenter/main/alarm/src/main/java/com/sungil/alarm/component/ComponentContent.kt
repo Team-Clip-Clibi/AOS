@@ -119,6 +119,14 @@ fun CustomNoticeList(
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = stringResource(R.string.txt_item_alarm_last),
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = Color(0xFF666666)
+            )
+        }
     }
 }
 
