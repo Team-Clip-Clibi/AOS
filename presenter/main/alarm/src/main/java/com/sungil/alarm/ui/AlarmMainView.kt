@@ -1,10 +1,12 @@
 package com.sungil.alarm.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -94,38 +96,42 @@ internal fun AlarmMainView(
             else -> Unit
         }
     }
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = paddingValue.calculateTopPadding() + 24.dp,
-                start = 24.dp, end = 24.dp
-            )
-            .navigationBarsPadding()
             .background(color = Color(0xFFEFEFEF))
+            .navigationBarsPadding()
     ) {
-        Text(
-            text = stringResource(R.string.txt_title_new_alarm),
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            color = Color(0xFF171717)
-        )
-        CustomNoticeList(
-            pagingItems = unReadNotify,
-            height = 380.dp
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = paddingValue.calculateTopPadding() + 24.dp,
+                    start = 24.dp, end = 24.dp
+                )
+        ) {
+            Text(
+                text = stringResource(R.string.txt_title_new_alarm),
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color = Color(0xFF171717)
+            )
+            CustomNoticeList(
+                pagingItems = unReadNotify,
+                height = 200.dp
+            )
 
-        Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(24.dp))
 
-        Text(
-            text = stringResource(R.string.txt_title_read_alarm),
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            color = Color(0xFF171717)
-        )
+            Text(
+                text = stringResource(R.string.txt_title_read_alarm),
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color = Color(0xFF171717)
+            )
 
-        CustomNoticeList(
-            pagingItems = readNotify,
-            height = 1f.dp
-        )
+            CustomNoticeList(
+                pagingItems = readNotify,
+                height = 1f.dp
+            )
+        }
     }
 }
