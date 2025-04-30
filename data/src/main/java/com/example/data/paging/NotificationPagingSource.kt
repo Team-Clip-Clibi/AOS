@@ -65,7 +65,11 @@ class NotificationPagingSource @Inject constructor(
                         }
                     }
                 }
-
+                204 -> LoadResult.Page(
+                    data = emptyList(),
+                    prevKey = null,
+                    nextKey = null
+                )
                 else -> LoadResult.Error(HttpException(response))
             }
 
