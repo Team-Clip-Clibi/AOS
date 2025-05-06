@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class GetNotice @Inject constructor(private val network: NetworkRepository) {
 
-    suspend fun invoke(): Flow<PagingData<Notification>> {
+    fun invoke(): Flow<PagingData<Notification>> {
         return network.requestNotificationPaging()
     }
 }

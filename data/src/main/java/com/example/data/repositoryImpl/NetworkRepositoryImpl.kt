@@ -384,7 +384,7 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun requestNotificationPaging(): Flow<PagingData<com.sungil.domain.model.Notification>> {
+    override fun requestNotificationPaging(): Flow<PagingData<com.sungil.domain.model.Notification>> {
         return Pager(
             config = PagingConfig(pageSize = 50),
             pagingSourceFactory = {
@@ -396,7 +396,7 @@ class NetworkRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun requestReadNotificationPaging(): Flow<PagingData<com.sungil.domain.model.Notification>> {
+    override fun requestReadNotificationPaging(): Flow<PagingData<com.sungil.domain.model.Notification>> {
         return Pager(
             config = PagingConfig(pageSize = 50),
             pagingSourceFactory = {

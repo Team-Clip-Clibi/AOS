@@ -93,7 +93,7 @@ interface NetworkRepository {
         accessToken: String,
     ): OneThineNotification
 
-    suspend fun requestNotificationPaging() : Flow<PagingData<Notification>>
+    fun requestNotificationPaging() : Flow<PagingData<Notification>>
 
-    suspend fun requestReadNotificationPaging() : Flow<PagingData<Notification>>
+    fun requestReadNotificationPaging() : Flow<PagingData<Notification>>
 }

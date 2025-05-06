@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetReadNotice @Inject constructor(private val network: NetworkRepository) {
-    suspend fun invoke(): Flow<PagingData<Notification>> {
+    fun invoke(): Flow<PagingData<Notification>> {
         return network.requestReadNotificationPaging()
     }
 }

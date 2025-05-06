@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
@@ -30,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.core.AppTextStyles
 import com.sungil.alarm.R
@@ -107,25 +110,50 @@ fun CustomNoticeList(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .height(height)
+            .height(height),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         items(
             count = pagingItems.itemCount,
-            key = { index -> pagingItems[index]?.id ?: "" }
+            key = { index -> pagingItems[index]?.id ?: "loading-$index" }
         ) { index ->
             pagingItems[index]?.let { notification ->
-                Spacer(modifier = Modifier.height(16.dp))
                 CustomNotifyAdapter(data = notification)
-                Spacer(modifier = Modifier.height(16.dp))
             }
         }
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = stringResource(R.string.txt_item_alarm_last),
-                style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = Color(0xFF666666)
-            )
+
+        pagingItems.apply {
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    item { CircularProgressIndicator(modifier = Modifier.fillMaxWidth().padding(16.dp)) }
+                }
+
+                loadState.append is LoadState.Loading -> {
+                    item { CircularProgressIndicator(modifier = Modifier.fillMaxWidth().padding(16.dp)) }
+                }
+
+                loadState.refresh is LoadState.Error -> {
+                    val e = loadState.refresh as LoadState.Error
+                    item { Text("Error: ${e.error.localizedMessage}", color = Color.Red) }
+                }
+
+                loadState.append is LoadState.Error -> {
+                    val e = loadState.append as LoadState.Error
+                    item { Text("Append Error: ${e.error.localizedMessage}", color = Color.Red) }
+                }
+
+                loadState.append.endOfPaginationReached && pagingItems.itemCount > 0 -> {
+                    item {
+                        Text(
+                            stringResource(R.string.txt_item_alarm_last),
+                            style = AppTextStyles.BODY_14_20_MEDIUM,
+                            color = Color(0xFF666666),
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }

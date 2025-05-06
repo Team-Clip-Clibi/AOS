@@ -20,47 +20,17 @@ class AlarmViewModel @Inject constructor(
     private val getNotification: GetNotice,
     private val getReadNotice: GetReadNotice,
 ) : ViewModel() {
-    private val _unReadNotificationPagingFlow =
-        MutableStateFlow<PagingData<Notification>>(PagingData.empty())
-    val unReadNotify: StateFlow<PagingData<Notification>> =
-        _unReadNotificationPagingFlow.asStateFlow()
 
-    private val _readNotification = MutableStateFlow<PagingData<Notification>>(PagingData.empty())
-    val readNotification: StateFlow<PagingData<Notification>> = _readNotification.asStateFlow()
+    val unReadNotificationPagingFlow = getNotification.invoke()
+        .cachedIn(viewModelScope)
 
-    private val _isAlarmEmpty = MutableStateFlow<Boolean>(false)
-    val isAlarmEmpty : StateFlow<Boolean> = _isAlarmEmpty.asStateFlow()
+    val readNotificationPagingFlow = getReadNotice.invoke()
+        .cachedIn(viewModelScope)
 
-    private var unReadEmpty = false
-    private var readEmpty = false
+    private val _isAlarmEmpty = MutableStateFlow(false)
+    val isAlarmEmpty: StateFlow<Boolean> = _isAlarmEmpty.asStateFlow()
 
-    init {
-        loadNotification()
-        loadReadNotice()
-    }
-
-    private fun loadNotification() {
-        viewModelScope.launch {
-            getNotification.invoke()
-                .cachedIn(viewModelScope)
-                .collectLatest { pagingData ->
-                    _unReadNotificationPagingFlow.value = pagingData
-                }
-        }
-    }
-
-    private fun loadReadNotice() {
-        viewModelScope.launch {
-            getReadNotice.invoke()
-                .cachedIn(viewModelScope)
-                .collectLatest { pagingData ->
-                    _readNotification.value = pagingData
-                }
-        }
-    }
-
-    fun setAlarmIsEmpty(result : Boolean){
+    fun setAlarmIsEmpty(result: Boolean) {
         _isAlarmEmpty.value = result
     }
-
 }
