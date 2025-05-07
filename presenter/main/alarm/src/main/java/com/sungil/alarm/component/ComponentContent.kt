@@ -2,7 +2,6 @@ package com.sungil.alarm.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,30 +14,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.core.AppTextStyles
 import com.sungil.alarm.R
 import com.sungil.domain.model.Notification
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 @Composable
 fun CustomSnackBar(data: SnackbarData) {
@@ -73,33 +70,40 @@ fun CustomTopBar(
     title: String,
     onBackClick: () -> Unit,
 ) {
-    CenterAlignedTopAppBar(
-        modifier = Modifier.fillMaxWidth(),
-        title = {
-            Text(
-                text = title,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF000000),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(start = 5.dp, end = 16.dp)
+    Column {
+        CenterAlignedTopAppBar(
+            modifier = Modifier.fillMaxWidth(),
+            title = {
+                Text(
+                    text = title,
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = Color(0xFF000000),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = 5.dp, end = 16.dp)
+                )
+            },
+            navigationIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_left_out),
+                    contentDescription = "뒤로가기",
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .size(24.dp)
+                        .clickable { onBackClick() }
+                )
+            },
+            actions = {},
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color(0xFFFFFFFF)
             )
-        },
-        navigationIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.ic_left_out),
-                contentDescription = "뒤로가기",
-                modifier = Modifier
-                    .padding(start = 5.dp)
-                    .size(24.dp)
-                    .clickable { onBackClick() }
-            )
-        },
-        actions = {},
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color(0xFFFFFFFF)
         )
-    )
+        HorizontalDivider(
+            color = Color(0xFFEFEFEF),
+            thickness = 1.dp
+        )
+    }
 }
+
 
 @Composable
 fun CustomNoticeList(
