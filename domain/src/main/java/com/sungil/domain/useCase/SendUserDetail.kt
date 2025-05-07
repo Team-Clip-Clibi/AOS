@@ -77,6 +77,7 @@ class SendUserDetail @Inject constructor(
     }
 
     private fun reformBirth(year: String, month: String, day: String): String {
-        return "$year-$month-$day"
+        val paddedDay = day.padStart(2, '0')
+        return "$year-$month-$paddedDay"
     }
 }
