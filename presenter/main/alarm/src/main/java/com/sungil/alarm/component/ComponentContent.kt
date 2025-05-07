@@ -146,13 +146,37 @@ fun CustomNoticeList(
 
                 loadState.append.endOfPaginationReached && pagingItems.itemCount > 0 -> {
                     item {
-                        Text(
-                            stringResource(R.string.txt_item_alarm_last),
-                            style = AppTextStyles.BODY_14_20_MEDIUM,
-                            color = Color(0xFF666666),
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // 왼쪽 수평선
+                            HorizontalDivider(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(start = 12.dp),
+                                color = Color(0xFFEFEFEF),
+                                thickness = 1.dp
+                            )
+
+                            // 중앙 텍스트
+                            Text(
+                                text = stringResource(R.string.txt_item_alarm_last),
+                                style = AppTextStyles.BODY_14_20_MEDIUM,
+                                color = Color(0xFF666666),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(horizontal = 12.dp)
+                            )
+
+                            // 오른쪽 수평선
+                            HorizontalDivider(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(end = 12.dp),
+                                color = Color(0xFFEFEFEF),
+                                thickness = 1.dp
+                            )
+                        }
                     }
                 }
             }
