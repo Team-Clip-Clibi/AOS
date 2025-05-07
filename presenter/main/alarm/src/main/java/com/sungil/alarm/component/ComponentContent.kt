@@ -150,7 +150,6 @@ fun CustomNoticeList(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // 왼쪽 수평선
                             HorizontalDivider(
                                 modifier = Modifier
                                     .weight(1f)
@@ -158,8 +157,6 @@ fun CustomNoticeList(
                                 color = Color(0xFFEFEFEF),
                                 thickness = 1.dp
                             )
-
-                            // 중앙 텍스트
                             Text(
                                 text = stringResource(R.string.txt_item_alarm_last),
                                 style = AppTextStyles.BODY_14_20_MEDIUM,
@@ -167,8 +164,6 @@ fun CustomNoticeList(
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.padding(horizontal = 12.dp)
                             )
-
-                            // 오른쪽 수평선
                             HorizontalDivider(
                                 modifier = Modifier
                                     .weight(1f)
