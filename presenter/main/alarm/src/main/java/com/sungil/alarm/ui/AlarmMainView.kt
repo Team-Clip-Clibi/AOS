@@ -2,6 +2,7 @@ package com.sungil.alarm.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -119,11 +121,28 @@ internal fun AlarmMainView(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_notify_gray),
-                    contentDescription = "alarm",
-                    modifier = Modifier.size(60.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(60.dp)
+                        .background(
+                            color = Color(0xFFF7F7F7),
+                            shape = RoundedCornerShape(size = 100.dp)
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFFDCDCDC),
+                            shape = RoundedCornerShape(size = 100.dp)
+                        )
+                        .padding(12.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_notify_gray),
+                        contentDescription = "alarm",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
                 Spacer(Modifier.height(12.dp))
                 Text(
                     text = stringResource(R.string.txt_empty_alarm),
