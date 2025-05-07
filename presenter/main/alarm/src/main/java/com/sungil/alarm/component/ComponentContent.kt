@@ -18,7 +18,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -72,16 +74,14 @@ fun CustomTopBar(
     onBackClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
-        modifier = Modifier
-            .border(width = 1.dp, color = Color(0xFFEFEFEF))
-            .fillMaxWidth()
-            .padding(start = 5.dp, end = 16.dp),
+        modifier = Modifier.fillMaxWidth(),
         title = {
             Text(
                 text = title,
                 style = AppTextStyles.TITLE_20_28_SEMI,
                 color = Color(0xFF000000),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 5.dp, end = 16.dp)
             )
         },
         navigationIcon = {
@@ -89,28 +89,25 @@ fun CustomTopBar(
                 painter = painterResource(id = R.drawable.ic_left_out),
                 contentDescription = "뒤로가기",
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(start = 5.dp)
                     .size(24.dp)
                     .clickable { onBackClick() }
             )
         },
         actions = {},
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color(0xFFEFEFEF)
+            containerColor = Color(0xFFFFFFFF)
         )
     )
 }
 
-
 @Composable
 fun CustomNoticeList(
     pagingItems: LazyPagingItems<Notification>,
-    height: Dp,
+    modifier : Modifier
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 8.dp)
     ) {
@@ -149,7 +146,8 @@ fun CustomNoticeList(
                             stringResource(R.string.txt_item_alarm_last),
                             style = AppTextStyles.BODY_14_20_MEDIUM,
                             color = Color(0xFF666666),
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
@@ -162,42 +160,53 @@ fun CustomNoticeList(
 fun CustomNotifyAdapter(
     data: Notification,
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = getIconResByType(data.notificationType)),
-                    contentDescription = "alarm",
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(id = getIconResByType(data.notificationType)),
+                        contentDescription = "alarm",
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(id = getTextByType(data.notificationType)),
+                        style = AppTextStyles.BODY_14_20_MEDIUM,
+                        color = Color(0xFF989898)
+                    )
+                }
                 Text(
-                    text = stringResource(id = getTextByType(data.notificationType)),
+                    text = data.formattedTime,
                     style = AppTextStyles.BODY_14_20_MEDIUM,
                     color = Color(0xFF989898)
                 )
             }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
             Text(
-                text = data.formattedTime,
-                style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = Color(0xFF989898)
+                text = data.content,
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = Color(0xFF383838),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 32.dp)
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
-
-        Text(
-            text = data.content,
-            style = AppTextStyles.SUBTITLE_16_24_SEMI,
-            color = Color(0xFF383838)
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = Color(0xFFEFEFEF),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

@@ -50,8 +50,10 @@ internal fun AlarmMainView(
     val readState = readNotify.loadState.refresh
     val context = LocalContext.current
     val emptyAlarmPage = viewModel.isAlarmEmpty.collectAsState()
-    if (unReadNotify.itemCount == 0 && readNotify.itemCount == 0) {
+    if (readNotify.itemCount == 0 && unReadNotify.itemCount == 0) {
         viewModel.setAlarmIsEmpty(true)
+    } else {
+        viewModel.setAlarmIsEmpty(false)
     }
     LaunchedEffect(Unit) {
         when (unReadState) {
@@ -108,67 +110,76 @@ internal fun AlarmMainView(
             else -> Unit
         }
     }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFFEFEFEF))
-            .navigationBarsPadding()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = paddingValue.calculateTopPadding() + 24.dp,
-                    start = 24.dp, end = 24.dp
+    when {
+        emptyAlarmPage.value -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color(0xFFFFFFFF)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_notify_gray),
+                    contentDescription = "alarm",
+                    modifier = Modifier.size(60.dp)
                 )
-        ) {
-            Text(
-                text = stringResource(R.string.txt_title_new_alarm),
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF171717)
-            )
-            CustomNoticeList(
-                pagingItems = unReadNotify,
-                height = 200.dp
-            )
-
-            Spacer(Modifier.height(24.dp))
-
-            Text(
-                text = stringResource(R.string.txt_title_read_alarm),
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF171717)
-            )
-
-            CustomNoticeList(
-                pagingItems = readNotify,
-                height = 1f.dp
-            )
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.txt_empty_alarm),
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = Color(0xFF989898),
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
-//        when{
-//            emptyAlarmPage.value ->{
-//                Column(
-//                    modifier = Modifier.fillMaxSize(),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                    verticalArrangement = Arrangement.Center
-//                ) {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.ic_notify_gray),
-//                        contentDescription = "alarm",
-//                        modifier = Modifier.size(60.dp)
-//                    )
-//                    Spacer(Modifier.height(12.dp))
-//                    Text(
-//                        text = stringResource(R.string.txt_empty_alarm),
-//                        style = AppTextStyles.BODY_14_20_MEDIUM,
-//                        color = Color(0xFF989898),
-//                        textAlign = TextAlign.Center,
-//                    )
-//                }
-//            }
-//            else ->{
-//            }
-//        }
+
+        else -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color(0xFFFFFFFF))
+                    .navigationBarsPadding()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = paddingValue.calculateTopPadding() + 24.dp
+                        )
+                ) {
+                    Text(
+                        text = stringResource(R.string.txt_title_new_alarm),
+                        style = AppTextStyles.TITLE_20_28_SEMI,
+                        color = Color(0xFF171717),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 24.dp, end = 24.dp)
+                    )
+                    CustomNoticeList(
+                        pagingItems = unReadNotify,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    )
+
+                    Spacer(Modifier.height(24.dp))
+
+                    Text(
+                        text = stringResource(R.string.txt_title_read_alarm),
+                        style = AppTextStyles.TITLE_20_28_SEMI,
+                        color = Color(0xFF171717),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 24.dp, end = 24.dp)
+                    )
+
+                    CustomNoticeList(
+                        pagingItems = readNotify,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
     }
 }
