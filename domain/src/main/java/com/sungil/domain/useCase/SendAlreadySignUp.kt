@@ -26,7 +26,7 @@ class SendAlreadySignUp @Inject constructor(
             200 -> {
                 val saveUserData = database.saveUserInfo(
                     name = requestUserInfo.data.userName,
-                    nickName = requestUserInfo.data.nickName,
+                    nickName = requestUserInfo.data.nickName ?: "error",
                     platform = "KAKAO",
                     phoneNumber = requestUserInfo.data.phoneNumber,
                     jobList = Pair("NONE", "NONE"),
@@ -55,7 +55,7 @@ class SendAlreadySignUp @Inject constructor(
                 }
                 val saveUserData = database.saveUserInfo(
                     name = reRequest.data.userName,
-                    nickName = reRequest.data.nickName,
+                    nickName = reRequest.data.nickName ?:"error" ,
                     platform = "KAKAO",
                     phoneNumber = reRequest.data.phoneNumber,
                     jobList = Pair("NONE", "NONE"),

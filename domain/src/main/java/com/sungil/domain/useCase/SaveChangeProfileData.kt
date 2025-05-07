@@ -28,7 +28,7 @@ class SaveChangeProfileData @Inject constructor(private val database: DatabaseRe
         beforeUserData.language = param.language
         val saveResult = database.saveUserInfo(
             name = beforeUserData.userName,
-            nickName = beforeUserData.nickName,
+            nickName = beforeUserData.nickName ?: "error",
             platform = "KAKAO",
             phoneNumber = beforeUserData.phoneNumber,
             jobList = beforeUserData.job,

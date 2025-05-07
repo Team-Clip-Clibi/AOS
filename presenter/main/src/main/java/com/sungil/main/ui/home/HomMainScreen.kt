@@ -146,7 +146,7 @@ internal fun HomMainScreen(
         ) {
             HomeTitleText(
                 text = if (userData is MainViewModel.UiState.Success)
-                    stringResource(R.string.txt_home_title, userData.data.nickName)
+                    stringResource(R.string.txt_home_title, userData.data.nickName ?: "error")
                 else stringResource(R.string.txt_home_title, "ERROR"),
                 size = visibleCards.size.toString()
             )

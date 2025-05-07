@@ -7,5 +7,5 @@ data class RequestUserInfo(
     val username: String,
     val platform: String,
     val phoneNumber: String,
-    val nickname: String,
+    val nickname: String?,
 )

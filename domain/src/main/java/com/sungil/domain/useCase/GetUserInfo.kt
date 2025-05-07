@@ -29,7 +29,7 @@ class GetUserInfo @Inject constructor(
 
         val saveResult = database.saveUserInfo(
             name = userData.userName,
-            nickName = userData.nickName,
+            nickName = userData.nickName ?: "error",
             platform = "KAKAO",
             phoneNumber = userData.phoneNumber,
             jobList = userData.job,

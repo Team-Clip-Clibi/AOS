@@ -96,7 +96,7 @@ internal fun MyPageScreenMain(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = stringResource(R.string.txt_myPage_sir, userName),
+                            text = stringResource(R.string.txt_myPage_sir, userName ?: "error"),
                             style = AppTextStyles.SUBTITLE_18_22_SEMI,
                             color = Color(0xFF171717)
                         )

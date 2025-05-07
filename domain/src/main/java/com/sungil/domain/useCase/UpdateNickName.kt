@@ -51,7 +51,7 @@ class UpdateNickName @Inject constructor(
         userData.nickName = name
         val saveResult = database.saveUserInfo(
             name = userData.userName,
-            nickName = userData.nickName,
+            nickName = userData.nickName ?: "error",
             platform = "KAKAO",
             phoneNumber = userData.phoneNumber,
             jobList = userData.job,

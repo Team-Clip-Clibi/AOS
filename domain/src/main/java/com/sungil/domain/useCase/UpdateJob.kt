@@ -36,7 +36,7 @@ class UpdateJob @Inject constructor(
         userData.job = Pair(param.job.first , param.job.second)
         val saveResult = database.saveUserInfo(
             name = userData.userName,
-            nickName = userData.nickName,
+            nickName = userData.nickName ?: "error",
             platform = "KAKAO",
             phoneNumber = userData.phoneNumber,
             jobList = userData.job,
