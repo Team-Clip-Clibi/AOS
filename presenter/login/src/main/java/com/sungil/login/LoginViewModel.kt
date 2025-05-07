@@ -1,6 +1,8 @@
 package com.sungil.login
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.CheckAlreadySignUp
@@ -98,6 +100,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun requestLogin() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = login.invoke()) {

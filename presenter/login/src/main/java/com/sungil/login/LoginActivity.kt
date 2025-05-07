@@ -4,11 +4,13 @@ import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.material3.SnackbarHostState
 import com.sungil.domain.model.Router
 import com.sungil.login.ui.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +26,7 @@ class LoginActivity : ComponentActivity() {
     @Inject
     lateinit var router: Router
 
+    private val snackbarHostState = SnackbarHostState()
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +85,9 @@ class LoginActivity : ComponentActivity() {
                                 finish()
                             }
 
-                            else -> throw IllegalArgumentException("UNKNOW ERROR")
+                            else -> {
+                                Toast.makeText(this@LoginActivity , it.errorMessage , Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
