@@ -24,6 +24,7 @@
             <option value="$PROJECT_DIR$/presenter/main/alarm" />
             <option value="$PROJECT_DIR$/presenter/main/editProfile" />
             <option value="$PROJECT_DIR$/presenter/main/low" />
+            <option value="$PROJECT_DIR$/presenter/main/oneThingMatch" />
             <option value="$PROJECT_DIR$/presenter/main/report" />
             <option value="$PROJECT_DIR$/presenter/signup" />
           </set>

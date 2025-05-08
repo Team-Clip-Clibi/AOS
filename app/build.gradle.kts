@@ -107,6 +107,7 @@ dependencies {
     implementation(project(":presenter:main:report"))
     implementation(project(":presenter:main:low"))
     implementation(project(":presenter:main:alarm"))
+    implementation(project(":presenter:main:oneThingMatch"))
     implementation(project(":kakao"))
     implementation(project(":domain"))
     implementation(project(":database"))

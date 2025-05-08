@@ -3,11 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.sungil.main"
+    namespace = "com.sungil.onethingmatch"
     compileSdk = 35
 
     defaultConfig {
@@ -40,9 +39,7 @@ android {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
-kapt {
-    correctErrorTypes = true
-}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -61,15 +58,7 @@ dependencies {
     kapt(libs.hilt.compiler)
     //nav
     implementation(libs.compose.nav)
-    implementation(libs.androidx.compose.material)
-    //image
-    implementation(libs.glide.compose)
     //project
     implementation(project(":domain"))
     implementation(project(":core"))
-    implementation(project(":presenter:main:editProfile"))
-    implementation(project(":presenter:main:report"))
-    implementation(project(":presenter:main:alarm"))
-    implementation(project(":presenter:main:oneThingMatch"))
-    implementation(libs.jetbrains.kotlinx.serialization.json)
 }
