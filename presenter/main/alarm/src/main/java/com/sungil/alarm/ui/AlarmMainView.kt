@@ -1,5 +1,7 @@
 package com.sungil.alarm.ui
 
+import android.content.Context
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -29,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.wear.compose.material3.Text
 import com.example.core.AppTextStyles
@@ -38,6 +43,7 @@ import com.sungil.alarm.component.CustomNoticeList
 import com.sungil.alarm.component.ERROR_RE_LOGIN
 import com.sungil.alarm.component.ERROR_SAVE
 import com.sungil.alarm.component.ERROR_SERVER
+import com.sungil.domain.model.Notification
 
 @Composable
 internal fun AlarmMainView(
@@ -46,159 +52,154 @@ internal fun AlarmMainView(
     snackBarHost: SnackbarHostState,
     reLogin: () -> Unit,
 ) {
+    val context = LocalContext.current
     val unReadNotify = viewModel.unReadNotificationPagingFlow.collectAsLazyPagingItems()
     val readNotify = viewModel.readNotificationPagingFlow.collectAsLazyPagingItems()
-    val unReadState = unReadNotify.loadState.refresh
-    val readState = readNotify.loadState.refresh
-    val context = LocalContext.current
-    val emptyAlarmPage = viewModel.isAlarmEmpty.collectAsState()
-    if (readNotify.itemCount == 0 && unReadNotify.itemCount == 0) {
-        viewModel.setAlarmIsEmpty(true)
+    val isEmptyAlarm = viewModel.isAlarmEmpty.collectAsState()
+
+    LaunchedEffect(unReadNotify.loadState.refresh) {
+        handleLoadError(
+            loadState = unReadNotify.loadState.refresh,
+            context = context,
+            snackBarHost = snackBarHost,
+            reLogin = reLogin
+        )
+    }
+
+    LaunchedEffect(readNotify.loadState.refresh) {
+        handleLoadError(
+            loadState = readNotify.loadState.refresh,
+            context = context,
+            snackBarHost = snackBarHost,
+            reLogin = reLogin
+        )
+    }
+
+    viewModel.setAlarmIsEmpty(
+        unReadNotify.itemCount == 0 && readNotify.itemCount == 0
+    )
+
+    if (isEmptyAlarm.value) {
+        EmptyAlarmScreen()
     } else {
-        viewModel.setAlarmIsEmpty(false)
+        AlarmContent(
+            paddingValue = paddingValue,
+            unReadNotify = unReadNotify,
+            readNotify = readNotify
+        )
     }
-    LaunchedEffect(Unit) {
-        when (unReadState) {
-            is LoadState.Error -> {
-                when (unReadState.error.message) {
-                    ERROR_SERVER -> {
-                        snackBarHost.showSnackbar(
-                            message = context.getString(R.string.msg_server_error),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
+}
 
-                    ERROR_SAVE -> {
-                        snackBarHost.showSnackbar(
-                            message = context.getString(R.string.msg_app_error),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
+@Composable
+private fun EmptyAlarmScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .size(60.dp)
+                .background(Color(0xFFF7F7F7), shape = CircleShape)
+                .border(1.dp, Color(0xFFDCDCDC), shape = CircleShape)
+                .padding(12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_notify_gray),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
-                    ERROR_RE_LOGIN -> {
-                        reLogin()
+        Spacer(Modifier.height(12.dp))
+
+        Text(
+            text = stringResource(R.string.txt_empty_alarm),
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = Color(0xFF989898),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+private fun AlarmContent(
+    paddingValue: PaddingValues,
+    unReadNotify: LazyPagingItems<Notification>,
+    readNotify: LazyPagingItems<Notification>
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .navigationBarsPadding()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = paddingValue.calculateTopPadding() + 24.dp)
+        ) {
+            if (unReadNotify.itemCount > 0) {
+                SectionTitle(R.string.txt_title_new_alarm)
+
+                CustomNoticeList(
+                    pagingItems = unReadNotify,
+                    modifier = if (readNotify.itemCount == 0) {
+                        Modifier.weight(1f)
+                    } else {
+                        Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
                     }
-                }
+                )
+
+                Spacer(Modifier.height(24.dp))
             }
 
-            else -> Unit
-        }
-    }
+            if (readNotify.itemCount > 0) {
+                SectionTitle(R.string.txt_title_read_alarm)
 
-    LaunchedEffect(Unit) {
-        when (readState) {
-            is LoadState.Error -> {
-                when (readState.error.message) {
-                    ERROR_SERVER -> {
-                        snackBarHost.showSnackbar(
-                            message = context.getString(R.string.msg_server_error),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
-
-                    ERROR_SAVE -> {
-                        snackBarHost.showSnackbar(
-                            message = context.getString(R.string.msg_app_error),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
-
-                    ERROR_RE_LOGIN -> {
-                        reLogin()
-                    }
-                }
-            }
-
-            else -> Unit
-        }
-    }
-    when {
-        emptyAlarmPage.value -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color(0xFFFFFFFF)),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(60.dp)
-                        .height(60.dp)
-                        .background(
-                            color = Color(0xFFF7F7F7),
-                            shape = RoundedCornerShape(size = 100.dp)
-                        )
-                        .border(
-                            width = 1.dp,
-                            color = Color(0xFFDCDCDC),
-                            shape = RoundedCornerShape(size = 100.dp)
-                        )
-                        .padding(12.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_notify_gray),
-                        contentDescription = "alarm",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    text = stringResource(R.string.txt_empty_alarm),
-                    style = AppTextStyles.BODY_14_20_MEDIUM,
-                    color = Color(0xFF989898),
-                    textAlign = TextAlign.Center,
+                CustomNoticeList(
+                    pagingItems = readNotify,
+                    modifier = Modifier.weight(1f)
                 )
             }
         }
+    }
+}
 
-        else -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color(0xFFFFFFFF))
-                    .navigationBarsPadding()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(
-                            top = paddingValue.calculateTopPadding() + 24.dp
-                        )
-                ) {
-                    Text(
-                        text = stringResource(R.string.txt_title_new_alarm),
-                        style = AppTextStyles.TITLE_20_28_SEMI,
-                        color = Color(0xFF171717),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 24.dp, end = 24.dp)
-                    )
-                    CustomNoticeList(
-                        pagingItems = unReadNotify,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                    )
+@Composable
+private fun SectionTitle(@StringRes titleRes: Int) {
+    Text(
+        text = stringResource(id = titleRes),
+        style = AppTextStyles.TITLE_20_28_SEMI,
+        color = Color(0xFF171717),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+    )
+}
 
-                    Spacer(Modifier.height(24.dp))
-
-                    Text(
-                        text = stringResource(R.string.txt_title_read_alarm),
-                        style = AppTextStyles.TITLE_20_28_SEMI,
-                        color = Color(0xFF171717),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 24.dp, end = 24.dp)
-                    )
-
-                    CustomNoticeList(
-                        pagingItems = readNotify,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
+private suspend fun handleLoadError(
+    loadState: LoadState,
+    context: Context,
+    snackBarHost: SnackbarHostState,
+    reLogin: () -> Unit
+) {
+    if (loadState is LoadState.Error) {
+        when (loadState.error.message) {
+            ERROR_SERVER -> snackBarHost.showSnackbar(
+                message = context.getString(R.string.msg_server_error),
+                duration = SnackbarDuration.Short
+            )
+            ERROR_SAVE -> snackBarHost.showSnackbar(
+                message = context.getString(R.string.msg_app_error),
+                duration = SnackbarDuration.Short
+            )
+            ERROR_RE_LOGIN -> reLogin()
         }
     }
 }
