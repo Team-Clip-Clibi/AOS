@@ -1,6 +1,7 @@
 package com.sungil.onethingmatch.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +29,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 internal fun IntroView(
-    goOneThingPage : () -> Unit
+    goOneThingPage: () -> Unit,
 ) {
     val pageState = rememberPagerState(pageCount = {
         3
@@ -38,7 +39,7 @@ internal fun IntroView(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(start = 17.dp, end = 16.dp, top = 40.dp)
+            .padding(start = 17.dp, end = 16.dp, top = 40.dp, bottom = 12.dp)
             .navigationBarsPadding()
     ) {
         Text(
@@ -73,7 +74,13 @@ internal fun IntroView(
                     },
                 shape = RoundedCornerShape(16.dp)
             ) {
-                // 아직 콘텐츠 미정?
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color(0xFFF7F7F7))
+                ) {
+
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -86,7 +93,7 @@ internal fun IntroView(
         )
         Spacer(modifier = Modifier.height(47.dp))
         CustomButton(
-            onClick = {goOneThingPage()},
+            onClick = { goOneThingPage() },
             buttonText = stringResource(R.string.btn_next),
             modifier = Modifier
                 .fillMaxWidth()
