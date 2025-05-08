@@ -39,7 +39,7 @@ import kotlin.math.absoluteValue
 @Composable
 internal fun LoginScreen(
     kakaoLogin: () -> Unit,
-    viewModel : LoginViewModel
+    viewModel: LoginViewModel,
 ) {
     val test = listOf(
         "한 가지 주제로 깊이 있게",
@@ -66,7 +66,7 @@ internal fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 17.dp , end = 16.dp  , top = 20.dp),
+                .padding(start = 17.dp, end = 16.dp, top = 20.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.Start
         ) {
@@ -115,8 +115,9 @@ internal fun LoginScreen(
                         shape = RoundedCornerShape(16.dp)
                     ) {
                         Box(
-                            modifier = Modifier.fillMaxSize()
-                                .background(color  =Color(0xFFF7F7F7))
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color = Color(0xFFF7F7F7))
                                 .padding(bottom = 44.dp)
                         ) {
                             Column(
@@ -149,7 +150,7 @@ internal fun LoginScreen(
                 PageIndicator(
                     numberOfPages = pageState.pageCount,
                     selectedPage = pageState.currentPage,
-                    selectedColor = Color(0xFF9254DE) ,
+                    selectedColor = Color(0xFF9254DE),
                     defaultColor = Color(0xFFDCDCDC),
                     defaultRadius = 10.dp,
                     selectedLength = 16.dp,
@@ -191,8 +192,3 @@ internal fun LoginScreen(
         }
     }
 }
-//@Preview
-//@Composable
-//private fun preview() {
-//    LoginScreen()
-//}
