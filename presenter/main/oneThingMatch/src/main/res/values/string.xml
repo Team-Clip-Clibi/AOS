@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txt_intro_title">원띵 모임은,\n매주 금, 토, 일에 열려요</string>
+    <string name="txt_intro_sub_title">subTitle</string>
+    <string name="txt_intro_below_page">content</string>
+    <string name="btn_next">다음</string>
+</resources>

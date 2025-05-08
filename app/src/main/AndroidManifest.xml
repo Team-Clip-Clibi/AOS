@@ -66,6 +66,8 @@
         <activity android:name="com.sungil.alarm.AlarmMainActivity"
             android:exported="true"/>
 
+        <activity android:name="com.sungil.onethingmatch.OneThinMatchActivity"
+            android:exported="true"/>
 
     </application>
 

@@ -21,6 +21,7 @@ const val NAV_EDIT_PROFILE = "MainEditProfile"
 const val NAV_REPORT = "report"
 const val NAV_LOW = "low"
 const val NAV_ALARM = "alarm"
+const val NAV_ONE_THING = "oneThing"
 
 const val ERROR_RE_LOGIN = "reLogin"
 const val ERROR_SAVE_ERROR = "save error"

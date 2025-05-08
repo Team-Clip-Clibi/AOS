@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.sungil.main.MainViewModel
 import com.sungil.main.component.BottomNavigation
@@ -19,7 +18,8 @@ fun MainScreenView(
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
     lowClick: () -> Unit,
-    alarmClick : () -> Unit
+    alarmClick : () -> Unit,
+    oneThingClick : () -> Unit
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -33,7 +33,8 @@ fun MainScreenView(
                 profileButtonClick = profileButtonClick,
                 reportClick = reportClick,
                 lowClick = lowClick,
-                alarmClick = alarmClick
+                alarmClick = alarmClick,
+                oneThingClick = oneThingClick
             )
         }
     }
