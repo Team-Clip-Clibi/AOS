@@ -729,7 +729,7 @@ fun PageIndicator(
     selectedColor: Color = Color.White,
     defaultColor: Color = Color.Gray,
     space: Dp = 6.dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
