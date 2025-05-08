@@ -81,7 +81,7 @@ class ProfileEditViewModel @Inject constructor(
                 is GetUserInfo.Result.Success -> {
                     val data = UserInfo(
                         name = result.data.userName,
-                        nickName = result.data.nickName,
+                        nickName = result.data.nickName ?: "error",
                         phoneNumber = result.data.phoneNumber,
                         job = result.data.job,
                         loveState = result.data.loveState,
