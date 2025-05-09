@@ -29,7 +29,7 @@ internal fun InputSubjectView(
 ) {
     val testData = listOf(
         "ex. 유럽 여행기 대화 나눠요",
-        "ex. 이것도 서버에서 가져와야 할듯요",
+        "ex. 다들 면접 준비 어떻게 하고 있는지 궁금해요",
         "ex. 상해 여행기 대화 나눠요"
     )
     Column(
