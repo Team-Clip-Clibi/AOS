@@ -198,13 +198,14 @@ fun CustomNotifyAdapter(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = Color(0xFFEFEFEF),
+                modifier = Modifier.fillMaxWidth()
+            )
         }
 
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = Color(0xFFEFEFEF),
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 
