@@ -7,12 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sungil.onethingmatch.NAV_INTRO
-import com.sungil.onethingmatch.OneThinViewModel
+import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.ui.IntroView
 
 @Composable
 internal fun OneThingNav(
-    viewModel: OneThinViewModel,
+    viewModel: OneThingViewModel,
 ) {
     val navController = rememberNavController()
 
