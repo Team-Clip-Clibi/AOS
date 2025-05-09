@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ButtonPurple400TITLE
 import com.sungil.onethingmatch.R
-import com.sungil.onethingmatch.component.CustomButton
 import kotlin.math.absoluteValue
 
 @Composable
