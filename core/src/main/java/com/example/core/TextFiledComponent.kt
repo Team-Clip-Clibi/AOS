@@ -37,19 +37,14 @@ fun TextFieldComponent(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .padding(top = 10.dp, bottom = 10.dp)
-            .border(
-                width = 1.dp,
-                color = ColorStyle.GRAY_500,
-                shape = RoundedCornerShape(4.dp)
-            ),
+            .padding(top = 10.dp, bottom = 10.dp),
         colors = TextFieldDefaults.colors(
             focusedTextColor = ColorStyle.GRAY_800,
             unfocusedTextColor = ColorStyle.GRAY_800,
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
+            focusedContainerColor = Color.White, // ✅ 텍스트 표시되게 수정
+            unfocusedContainerColor = Color.White,
+            focusedIndicatorColor = ColorStyle.GRAY_500,
+            unfocusedIndicatorColor = ColorStyle.GRAY_300,
             disabledIndicatorColor = Color.Transparent,
             cursorColor = ColorStyle.GRAY_800,
             focusedPlaceholderColor = ColorStyle.GRAY_500,
@@ -58,3 +53,4 @@ fun TextFieldComponent(
         shape = RoundedCornerShape(4.dp)
     )
 }
+

@@ -65,7 +65,8 @@ fun ButtonPurple400TITLE(
                 else ->{
                     ColorStyle.GRAY_200
                 }
-            }),
+            },
+                shape =RoundedCornerShape(12.dp) ),
         onClick = onClick,
         enabled = isEnable,
         shape = RoundedCornerShape(12.dp),
