@@ -53,18 +53,32 @@ fun ButtonPurple400TITLE(
     onClick: () -> Unit,
     buttonText: String,
     modifier: Modifier,
+    isEnable : Boolean = true
 ) {
     Button(
         modifier = modifier
             .height(60.dp)
-            .background(color = ColorStyle.PURPLE_400),
+            .background(color = when(isEnable){
+                true ->{
+                    ColorStyle.PURPLE_400
+                }
+                else ->{
+                    ColorStyle.GRAY_200
+                }
+            }),
         onClick = onClick,
+        enabled = isEnable,
         shape = RoundedCornerShape(12.dp),
     ) {
         Text(
             text = buttonText,
             style = AppTextStyles.TITLE_20_28_SEMI,
-            color = ColorStyle.WHITE_100
+            color = when(isEnable){
+                true ->{
+                    ColorStyle.WHITE_100
+                }
+                else -> ColorStyle.GRAY_800
+            }
         )
     }
 }

@@ -4,5 +4,11 @@
     <string name="txt_intro_sub_title">subTitle</string>
     <string name="txt_intro_below_page">content</string>
     <string name="btn_next">다음</string>
+    <string name="btn_finish">완료</string>
     <string name="top_app_bar">원띵 모임 신청</string>
+
+    <!--InputSubject-->
+    <string name="txt_subject_title">모임에서 나누고 싶은\n대화 주제를 입력해주세요</string>
+    <string name="txt_subject_hint">최소 8자, 최대 50자까지 입력할 수 있어요</string>
+
 </resources>

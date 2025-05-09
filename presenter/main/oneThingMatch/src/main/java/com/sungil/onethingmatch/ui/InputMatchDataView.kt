@@ -77,7 +77,7 @@ internal fun InputMatchDataView(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 when (page) {
-
+                    0 -> InputSubjectView(viewModel)
                 }
             }
         }

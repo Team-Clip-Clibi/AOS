@@ -6,8 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sungil.onethingmatch.NAV_INPUT_DATA
 import com.sungil.onethingmatch.NAV_INTRO
 import com.sungil.onethingmatch.OneThingViewModel
+import com.sungil.onethingmatch.ui.InputMatchDataView
 import com.sungil.onethingmatch.ui.IntroView
 
 @Composable
@@ -22,10 +24,11 @@ internal fun OneThingNav(
     ) {
         composable(NAV_INTRO,
             enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(700)
-            )},
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            },
             popEnterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
@@ -33,7 +36,26 @@ internal fun OneThingNav(
                 )
             }) {
             IntroView(
-                goOneThingPage = {}
+                goOneThingPage = { navController.navigate(NAV_INPUT_DATA) }
+            )
+        }
+
+        composable(NAV_INPUT_DATA, enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(700)
+            )
+        },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(700)
+                )
+            }) {
+            InputMatchDataView(
+                nextPage = {},
+                home = {},
+                viewModel = viewModel
             )
         }
     }
