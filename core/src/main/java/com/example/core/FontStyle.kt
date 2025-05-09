@@ -100,6 +100,14 @@ object AppTextStyles {
         color = Color(0xFF171717),
     )
 
+    val CAPTION_10_14_MEDIUM = TextStyle(
+        fontSize = 10.sp,
+        lineHeight = 14.sp,
+        fontFamily = FontFamily(Font(R.font.medium)),
+        fontWeight = FontWeight(500),
+        color = Color(0xFF171717),
+    )
+
     val SUBTITLE_18_26_SEMI = TextStyle(
         fontSize = 18.sp,
         lineHeight = 26.sp,

@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.Text
 import com.example.core.AppTextStyles
 import com.example.core.ButtonPurple400TITLE
@@ -33,8 +35,9 @@ internal fun InputSubjectView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(color = ColorStyle.WHITE_100)
-            .padding(top = 32.dp, bottom = 8.dp, start = 17.dp, end = 16.dp)
+            .padding(top = 32.dp, start = 17.dp, end = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.txt_subject_title),
@@ -46,15 +49,26 @@ internal fun InputSubjectView(
         TextFieldComponent(
             value = viewModel.subjectText,
             onValueChange = viewModel::onSubjectChanged,
-            maxLine = 50,
-            maxLength = 1
+            maxLine = 1,
+            maxLength = 50,
+            hint = stringResource(R.string.txt_subject_hint)
         )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "${viewModel.subjectText.length}/50",
+            style = AppTextStyles.CAPTION_10_14_MEDIUM,
+            color =  ColorStyle.GRAY_700,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.End
+        )
+
         Spacer(modifier = Modifier.weight(1f))
         ButtonPurple400TITLE(
-            onClick = {},
+            onClick = { /* TODO */ },
             buttonText = stringResource(R.string.btn_finish),
             modifier = Modifier.fillMaxWidth(),
-            isEnable = viewModel.subjectText.trim() != "" && viewModel.subjectText.length <= 50
+            isEnable = viewModel.subjectText.trim().isNotEmpty()
+                    && viewModel.subjectText.length <= 50
         )
     }
 }

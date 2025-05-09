@@ -72,8 +72,7 @@ internal fun InputMatchDataView(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-                    .verticalScroll(rememberScrollState()),
+                    .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 when (page) {
