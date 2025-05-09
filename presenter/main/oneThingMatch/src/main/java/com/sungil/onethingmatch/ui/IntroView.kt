@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
+import com.example.core.ButtonPurple400TITLE
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.component.CustomButton
 import kotlin.math.absoluteValue
@@ -92,13 +93,12 @@ internal fun IntroView(
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(47.dp))
-        CustomButton(
-            onClick = { goOneThingPage() },
+
+        ButtonPurple400TITLE(
+            onClick = goOneThingPage,
             buttonText = stringResource(R.string.btn_next),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .background(color = Color(0xFF6700CE), shape = RoundedCornerShape(size = 12.dp))
+            modifier = Modifier.fillMaxWidth()
         )
+
     }
 }
