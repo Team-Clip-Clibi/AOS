@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class OneThinMatchActivity : ComponentActivity() {
-    private val viewModel : OneThinViewModel by viewModels()
+    private val viewModel : OneThingViewModel by viewModels()
     @Inject
     lateinit var router: Router
 
