@@ -12,16 +12,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core.Purple400Progress
+import com.example.core.ProgressPurple400
 import com.example.core.TopAppBarNumber
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -56,7 +54,7 @@ internal fun InputMatchDataView(
                     }
                 )
                 val progress = (pagerState.currentPage * 0.1f) + 0.5f
-                Purple400Progress(progress = progress.coerceIn(0f, 1f))
+                ProgressPurple400(progress = progress.coerceIn(0f, 1f))
             }
         },
     ) { paddingValues ->
