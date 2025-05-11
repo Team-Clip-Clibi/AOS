@@ -11,7 +11,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class OneThinMatchActivity : ComponentActivity() {
-    private val viewModel : OneThingViewModel by viewModels()
+    private val viewModel: OneThingViewModel by viewModels()
+
     @Inject
     lateinit var router: Router
 
@@ -19,7 +20,8 @@ class OneThinMatchActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OneThingNav(
-                viewModel = viewModel
+                viewModel = viewModel,
+                home = { router.navigation(NAV_HOME) }
             )
         }
     }

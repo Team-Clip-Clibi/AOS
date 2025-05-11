@@ -15,6 +15,7 @@ import com.sungil.onethingmatch.ui.IntroView
 @Composable
 internal fun OneThingNav(
     viewModel: OneThingViewModel,
+    home: () -> Unit,
 ) {
     val navController = rememberNavController()
 
@@ -54,7 +55,7 @@ internal fun OneThingNav(
             }) {
             InputMatchDataView(
                 nextPage = {},
-                home = {},
+                home = home,
                 viewModel = viewModel
             )
         }
