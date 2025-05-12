@@ -24,6 +24,7 @@ fun TopAppBarNumber(
     currentPage: Int,
     totalPage: Int,
     onBackClick: () -> Unit,
+    isPageTextShow : Boolean = false
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier
@@ -50,7 +51,7 @@ fun TopAppBarNumber(
         },
         actions = {
             Text(
-                text = if (currentPage == 0 || totalPage == 0) "" else "$currentPage/$totalPage",
+                text = if (!isPageTextShow) "" else "$currentPage/$totalPage",
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 color = ColorStyle.PURPLE_400
             )

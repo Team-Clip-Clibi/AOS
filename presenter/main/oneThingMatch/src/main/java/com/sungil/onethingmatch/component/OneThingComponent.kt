@@ -12,6 +12,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
+import com.example.core.TopAppBarNumber
 import com.sungil.onethingmatch.CATEGORY
 import kotlinx.coroutines.delay
 
@@ -106,5 +108,32 @@ fun CategoryItemView(
                 color = ColorStyle.GRAY_800
             )
         }
+    }
+}
+
+@Composable
+fun TopAppBarWithProgress(
+    title: String = "제목",
+    currentPage: Int,
+    totalPage: Int,
+    onBackClick: () -> Unit
+) {
+    Column {
+        TopAppBarNumber(
+            title = title,
+            currentPage = currentPage,
+            totalPage = totalPage,
+            onBackClick = onBackClick
+        )
+
+        // 게이지 바
+        LinearProgressIndicator(
+            progress = {currentPage / totalPage.toFloat()},
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(4.dp),
+            color = ColorStyle.PURPLE_400,
+            trackColor = ColorStyle.GRAY_200
+        )
     }
 }
