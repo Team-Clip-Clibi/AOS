@@ -1,6 +1,5 @@
 package com.sungil.onethingmatch.component
 
-import android.provider.CalendarContract.Colors
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -19,10 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.example.core.TopAppBarNumber
@@ -115,17 +111,13 @@ fun CategoryItemView(
 
 @Composable
 fun TopAppBarWithProgress(
-    title: String = "제목",
+    title: String,
     currentPage: Int,
     totalPage: Int,
     onBackClick: () -> Unit
 ) {
-    val progressValue = remember(currentPage, totalPage) {
-        currentPage / totalPage.toFloat()
-    }
-
     val animatedProgress by animateFloatAsState(
-        targetValue = progressValue,
+        targetValue = if (currentPage >= 0) currentPage / totalPage.toFloat() else 0f,
         animationSpec = tween(durationMillis = 500),
         label = "progress"
     )
@@ -133,18 +125,21 @@ fun TopAppBarWithProgress(
     Column {
         TopAppBarNumber(
             title = title,
-            currentPage = currentPage,
+            currentPage = if (currentPage >= 0) currentPage else 0,
             totalPage = totalPage,
             onBackClick = onBackClick
         )
-
-        LinearProgressIndicator(
-            progress = { animatedProgress },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(4.dp),
-            color = ColorStyle.PURPLE_400,
-            trackColor = ColorStyle.GRAY_200
-        )
+        if (currentPage >= 0) {
+            LinearProgressIndicator(
+                progress = { animatedProgress },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp),
+                color = ColorStyle.PURPLE_400,
+                trackColor = ColorStyle.GRAY_200
+            )
+        } else {
+            Spacer(modifier = Modifier.height(0.dp))
+        }
     }
 }
