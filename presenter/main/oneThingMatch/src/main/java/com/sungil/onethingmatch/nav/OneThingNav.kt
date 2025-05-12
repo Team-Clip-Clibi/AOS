@@ -1,5 +1,7 @@
 package com.sungil.onethingmatch.nav
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -51,24 +53,60 @@ fun OneThingNav(
             startDestination = NAV_INTRO,
             modifier = Modifier.weight(1f)
         ) {
-            composable(NAV_INTRO) {
+            composable(NAV_INTRO,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
                 IntroView(
                     goSubjectPage = { navController.navigate(NAV_SUBJECT) },
                     viewModel = viewModel
                 )
             }
 
-            composable(NAV_SUBJECT) {
+            composable(NAV_SUBJECT,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
                 InputSubjectView(
                     viewModel = viewModel,
                     goNextPage = { navController.navigate(NAV_CATEGORY) }
                 )
             }
 
-            composable(NAV_CATEGORY) {
+            composable(NAV_CATEGORY,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
                 CategoryView(
                     viewModel = viewModel,
-                    goNextPage = { navController.navigate(NAV_SUBJECT) }
+                    goNextPage = {  }
                 )
             }
         }
