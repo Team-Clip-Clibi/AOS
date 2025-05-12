@@ -2,6 +2,8 @@ package com.sungil.onethingmatch.component
 
 import android.provider.CalendarContract.Colors
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -118,6 +120,16 @@ fun TopAppBarWithProgress(
     totalPage: Int,
     onBackClick: () -> Unit
 ) {
+    val progressValue = remember(currentPage, totalPage) {
+        currentPage / totalPage.toFloat()
+    }
+
+    val animatedProgress by animateFloatAsState(
+        targetValue = progressValue,
+        animationSpec = tween(durationMillis = 500),
+        label = "progress"
+    )
+
     Column {
         TopAppBarNumber(
             title = title,
@@ -126,9 +138,8 @@ fun TopAppBarWithProgress(
             onBackClick = onBackClick
         )
 
-        // 게이지 바
         LinearProgressIndicator(
-            progress = {currentPage / totalPage.toFloat()},
+            progress = { animatedProgress },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(4.dp),
