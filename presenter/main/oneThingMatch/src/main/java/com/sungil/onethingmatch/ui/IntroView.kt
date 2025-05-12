@@ -57,7 +57,7 @@ internal fun IntroView(
             state = pageState,
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .height(460.dp)
         ) { page ->
             Card(
                 modifier = Modifier
@@ -84,14 +84,6 @@ internal fun IntroView(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(R.string.txt_intro_below_page),
-            style = AppTextStyles.SUBTITLE_18_26_SEMI,
-            color = Color(0xFF171717),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(47.dp))
 
         ButtonPurple400TITLE(
             onClick = goOneThingPage,
