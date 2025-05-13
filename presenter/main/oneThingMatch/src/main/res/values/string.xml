@@ -19,4 +19,7 @@
     <string name="txt_date_title">참여 가능한 모임 날짜를\n선택해주세요</string>
     <string name="txt_date_sub_title">최대 3개까지 선택할 수 있어요.</string>
     <string name="txt_date_select">선택한 날짜</string>
+    <!--Budget View-->
+    <string name="txt_budget_title">식사에 사용하고 싶은 대략적인\n금액대를 선택해 주세요</string>
+    <string name="txt_budget_sub_title">선택하신 금액대는 식당 선정에 참고할 예정이에요</string>
 </resources>

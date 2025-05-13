@@ -7,6 +7,7 @@ const val NAV_SUBJECT = "subject"
 const val NAV_CATEGORY = "category"
 const val NAV_LOCATION = "location"
 const val NAV_DATE = "date"
+const val NAV_BUDGET = "budget"
 const val NAV_INPUT_DATA = "input"
 
 enum class CATEGORY(val displayName: String) {
@@ -44,6 +45,15 @@ enum class Location(val displayName: String) {
     YEOUIDO_YEONGDEUNGPO("여의도/영등포"),
     YONGSAN_YEONGDEUNGPO("용산/영등포"),
     KONDAE_SEONGSU("건대/성수");
+
+    override fun toString(): String = displayName
+}
+
+enum class Budget(val displayName: String) {
+    RANGE_10_30("10,000~30,000원"),
+    RANGE_30_50("30,000~50,000원"),
+    RANGE_50_70("50,000~70,000원"),
+    RANGE_NONE("None");
 
     override fun toString(): String = displayName
 }

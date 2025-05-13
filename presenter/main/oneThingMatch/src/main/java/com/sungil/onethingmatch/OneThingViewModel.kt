@@ -19,6 +19,10 @@ class OneThingViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(OneThingData())
     val uiState: StateFlow<OneThingData> = _uiState.asStateFlow()
 
+    init {
+        date()
+    }
+
     fun onSubjectChanged(newValue: String) {
         _uiState.update { it.copy(subject = newValue) }
     }
@@ -65,18 +69,20 @@ class OneThingViewModel @Inject constructor(
         }
     }
 
-    fun selectDate(date : WeekData){
+    fun selectDate(date: WeekData) {
         _uiState.update { current ->
             val currentSet = current.selectDate
-            when{
+            when {
                 date in currentSet -> current.copy(
                     selectDate = currentSet - date,
                     error = UiError.None
                 )
+
                 currentSet.size < 3 -> current.copy(
                     selectDate = currentSet + date,
                     error = UiError.None
                 )
+
                 else -> current.copy(
                     error = UiError.MaxDateSelected
                 )
@@ -84,14 +90,15 @@ class OneThingViewModel @Inject constructor(
         }
     }
 
-    fun removeDate(date : WeekData){
+    fun removeDate(date: WeekData) {
         _uiState.update { current ->
             val currentSet = current.selectDate
-            when{
+            when {
                 date in currentSet -> current.copy(
                     selectDate = currentSet - date,
                     error = UiError.None
                 )
+
                 else -> current.copy(
                     error = UiError.NullDataSelect
                 )
@@ -119,6 +126,13 @@ class OneThingViewModel @Inject constructor(
             }
         }
     }
+
+    fun onBudgetChanged(data: Budget) {
+        _uiState.update { current ->
+            current.copy(budget = data, error = UiError.None)
+        }
+    }
+
 }
 
 data class OneThingData(
@@ -126,7 +140,8 @@ data class OneThingData(
     val selectedCategories: Set<CATEGORY> = emptySet(),
     val location: Set<Location> = emptySet(),
     val dateData: List<WeekData> = emptyList(),
-    val selectDate : Set<WeekData> = emptySet(),
+    val selectDate: Set<WeekData> = emptySet(),
+    val budget: Budget = Budget.RANGE_NONE,
     val error: UiError = UiError.None,
 )
 

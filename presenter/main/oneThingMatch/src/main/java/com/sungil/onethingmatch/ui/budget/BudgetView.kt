@@ -1,4 +1,4 @@
-package com.sungil.onethingmatch.ui.day
+package com.sungil.onethingmatch.ui.budget
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,24 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
+import com.example.core.ButtonCheckBoxLeftL
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
+import com.sungil.onethingmatch.Budget
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
-import com.sungil.onethingmatch.UiError
-import com.sungil.onethingmatch.component.OneThingDayList
-import com.sungil.onethingmatch.component.SelectDateList
 
 @Composable
-internal fun OneThingDayView(
+internal fun BudgetView(
     viewModel: OneThingViewModel,
     goNextPage: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val subTextColor = when (uiState.error) {
-        UiError.MaxDateSelected -> ColorStyle.RED_100
-        else -> ColorStyle.GRAY_600
-    }
+
     Scaffold(
         bottomBar = {
             Column(
@@ -54,7 +50,7 @@ internal fun OneThingDayView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),
-                    isEnable = uiState.selectDate.isNotEmpty()
+                    isEnable = uiState.budget != Budget.RANGE_NONE
                 )
             }
         },
@@ -63,53 +59,48 @@ internal fun OneThingDayView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding() + 32.dp, start = 17.dp)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    start = 17.dp,
+                    end = 16.dp
+                )
         ) {
             Text(
-                text = stringResource(R.string.txt_date_title),
+                text = stringResource(R.string.txt_budget_title),
                 style = AppTextStyles.HEAD_28_40_BOLD,
                 color = ColorStyle.GRAY_800,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp)
-            )
-
-            Text(
-                text = stringResource(R.string.txt_date_sub_title),
-                style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                color = subTextColor,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp)
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            OneThingDayList(
-                selectData = uiState.selectDate,
-                item = uiState.dateData,
-                onItemSelect = { date ->
-                    viewModel.selectDate(date)
-                }
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Text(
-                text = stringResource(R.string.txt_date_select),
-                style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = ColorStyle.GRAY_800,
                 modifier = Modifier.fillMaxWidth()
-                    .padding(end = 16.dp)
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            SelectDateList(
-                selectItem = uiState.selectDate,
-                onRemoveClick = { date ->
-                    viewModel.removeDate(date)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp)
+
+            Text(
+                text = stringResource(R.string.txt_budget_sub_title),
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.GRAY_600,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            ButtonCheckBoxLeftL(
+                content = Budget.RANGE_10_30.displayName,
+                isChecked = uiState.budget == Budget.RANGE_10_30,
+                onCheckChange = { viewModel.onBudgetChanged(Budget.RANGE_10_30) }
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            ButtonCheckBoxLeftL(
+                content = Budget.RANGE_30_50.displayName,
+                isChecked = uiState.budget.name == Budget.RANGE_30_50.name,
+                onCheckChange = { viewModel.onBudgetChanged(Budget.RANGE_30_50) }
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            ButtonCheckBoxLeftL(
+                content = Budget.RANGE_50_70.displayName,
+                isChecked = uiState.budget.name == Budget.RANGE_50_70.name,
+                onCheckChange = { viewModel.onBudgetChanged(Budget.RANGE_50_70) }
             )
         }
     }
