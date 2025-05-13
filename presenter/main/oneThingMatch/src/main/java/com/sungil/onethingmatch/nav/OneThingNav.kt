@@ -71,7 +71,7 @@ fun OneThingNav(
                 }) {
                 IntroView(
                     viewModel = viewModel,
-                    goSubjectPage = {
+                    goNextPage = {
                         if (navController.currentDestination?.route != NAV_SUBJECT) {
                             navController.navigate(NAV_SUBJECT)
                         }

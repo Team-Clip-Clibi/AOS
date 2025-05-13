@@ -31,7 +31,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 internal fun IntroView(
-    goSubjectPage: () -> Unit,
+    goNextPage: () -> Unit,
     viewModel : OneThingViewModel
 ) {
     val pageState = rememberPagerState(pageCount = {
@@ -96,7 +96,7 @@ internal fun IntroView(
         }
 
         ButtonXXLPurple400(
-            onClick = goSubjectPage,
+            onClick = goNextPage,
             buttonText = stringResource(R.string.btn_next),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
