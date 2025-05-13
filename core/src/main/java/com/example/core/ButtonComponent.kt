@@ -58,15 +58,18 @@ fun ButtonXXLPurple400(
     Button(
         modifier = modifier
             .height(60.dp)
-            .background(color = when(isEnable){
-                true ->{
-                    ColorStyle.PURPLE_400
-                }
-                else ->{
-                    ColorStyle.GRAY_200
-                }
-            },
-                shape =RoundedCornerShape(12.dp) ),
+            .background(
+                color = when (isEnable) {
+                    true -> {
+                        ColorStyle.PURPLE_400
+                    }
+
+                    else -> {
+                        ColorStyle.GRAY_200
+                    }
+                },
+                shape = RoundedCornerShape(12.dp)
+            ),
         onClick = onClick,
         enabled = isEnable,
         shape = RoundedCornerShape(12.dp),
@@ -359,37 +362,37 @@ fun ButtonGray200SMALL(
 }
 
 @Composable
-fun CheckBoxRowLarge(
+fun ButtonCheckBoxLeftL(
     content: String,
     isChecked: Boolean,
     onCheckChange: (Boolean) -> Unit,
 ) {
-    val baseModifier = Modifier
-        .fillMaxWidth()
-        .height(48.dp)
-        .padding(start = 17.dp, end = 16.dp)
-        .clickable { onCheckChange(!isChecked) }
-
-    val backgroundColor = if (isChecked) ColorStyle.PURPLE_100 else ColorStyle.WHITE_100
-    val borderModifier = if (isChecked) {
-        Modifier.border(
-            width = 1.dp,
-            color = ColorStyle.PURPLE_200,
-            shape = RoundedCornerShape(8.dp)
-        )
-    } else Modifier
+    val shape = RoundedCornerShape(8.dp)
 
     Row(
-        modifier = baseModifier
-            .then(borderModifier)
-            .background(color = backgroundColor, shape = RoundedCornerShape(8.dp)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .then(
+                if (isChecked) Modifier.border(
+                    width = 1.dp,
+                    color = ColorStyle.PURPLE_200,
+                    shape = shape
+                ) else Modifier
+            )
+            .background(
+                color = if (isChecked) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+                shape = shape
+            )
+            .padding(start = 17.dp, end = 16.dp)
+            .clickable { onCheckChange(!isChecked) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         CircularCheckBoxLarge(
             checked = isChecked,
             onCheckChange = onCheckChange
         )
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(14.dp))
         Text(
             text = content,
             style = AppTextStyles.BODY_14_20_MEDIUM,
@@ -399,7 +402,6 @@ fun CheckBoxRowLarge(
         Spacer(modifier = Modifier.width(8.dp))
     }
 }
-
 @Composable
 fun CircularCheckBoxLarge(
     checked: Boolean,

@@ -5,9 +5,10 @@ const val NAV_HOME = "Main"
 const val NAV_INTRO = "intro"
 const val NAV_SUBJECT = "subject"
 const val NAV_CATEGORY = "category"
+const val NAV_LOCATION = "location"
 const val NAV_INPUT_DATA = "input"
 
-enum class CATEGORY(val displayName : String){
+enum class CATEGORY(val displayName: String) {
     ECONOMY("경제"),
     GRADUATE_SCHOOL("대학원"),
     PET("반려동물"),
@@ -32,6 +33,16 @@ enum class CATEGORY(val displayName : String){
     JOB_CHANGE("취업/이직"),
     CAREER("커리어"),
     ETC("기타");
+
+    override fun toString(): String = displayName
+}
+
+enum class Location(val displayName: String) {
+    HONGDAE_HAPJEONG("홍대/합정"),
+    GANGNAM("강남"),
+    YEOUIDO_YEONGDEUNGPO("여의도/영등포"),
+    YONGSAN_YEONGDEUNGPO("용산/영등포"),
+    KONDAE_SEONGSU("건대/성수");
 
     override fun toString(): String = displayName
 }

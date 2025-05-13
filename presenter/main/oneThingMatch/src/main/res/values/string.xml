@@ -12,4 +12,7 @@
     <!--InputCategory-->
     <string name="txt_category_title">원띵 모임의 카테고리를\n선택해 주세요</string>
     <string name="txt_category_sub_title">최대 2개까지 선택할 수 있어요</string>
+    <!--LocationView-->
+    <string name="txt_location_title">이번 원띵 모임을 하고싶은\n지역을 선택해주세요</string>
+    <string name="txt_location_subject">최대 2개까지 선택할 수 있어요.</string>
 </resources>

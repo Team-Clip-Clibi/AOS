@@ -14,12 +14,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sungil.onethingmatch.NAV_CATEGORY
 import com.sungil.onethingmatch.NAV_INTRO
+import com.sungil.onethingmatch.NAV_LOCATION
 import com.sungil.onethingmatch.NAV_SUBJECT
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.component.TopAppBarWithProgress
 import com.sungil.onethingmatch.ui.categort.CategoryView
 import com.sungil.onethingmatch.ui.intro.IntroView
+import com.sungil.onethingmatch.ui.location.LocationView
 import com.sungil.onethingmatch.ui.subject.InputSubjectView
 
 @Composable
@@ -34,6 +36,7 @@ fun OneThingNav(
     val pageInfo = when (currentRoute) {
         NAV_SUBJECT -> 1
         NAV_CATEGORY -> 2
+        NAV_LOCATION -> 3
         NAV_INTRO -> -1
         else -> -1
     }
@@ -67,8 +70,12 @@ fun OneThingNav(
                     )
                 }) {
                 IntroView(
-                    goSubjectPage = { navController.navigate(NAV_SUBJECT) },
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    goSubjectPage = {
+                        if (navController.currentDestination?.route != NAV_SUBJECT) {
+                            navController.navigate(NAV_SUBJECT)
+                        }
+                    }
                 )
             }
 
@@ -87,7 +94,11 @@ fun OneThingNav(
                 }) {
                 InputSubjectView(
                     viewModel = viewModel,
-                    goNextPage = { navController.navigate(NAV_CATEGORY) }
+                    goNextPage = {
+                        if (navController.currentDestination?.route != NAV_CATEGORY) {
+                            navController.navigate(NAV_CATEGORY)
+                        }
+                    }
                 )
             }
 
@@ -106,7 +117,30 @@ fun OneThingNav(
                 }) {
                 CategoryView(
                     viewModel = viewModel,
-                    goNextPage = {  }
+                    goNextPage = {
+                        if (navController.currentDestination?.route != NAV_LOCATION) {
+                            navController.navigate(NAV_LOCATION)
+                        }
+                    }
+                )
+            }
+
+            composable(NAV_LOCATION,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                LocationView(
+                    viewModel = viewModel,
+                    goNextPage = {}
                 )
             }
         }
