@@ -73,7 +73,7 @@ class OneThingViewModel @Inject constructor(
                     selectDate = currentSet - date,
                     error = UiError.None
                 )
-                currentSet.size < 2 -> current.copy(
+                currentSet.size < 3 -> current.copy(
                     selectDate = currentSet + date,
                     error = UiError.None
                 )
