@@ -49,7 +49,7 @@ fun OneThingNav(
         TopAppBarWithProgress(
             title = stringResource(R.string.top_app_bar),
             currentPage = pageInfo,
-            totalPage = 5,
+            totalPage = 10,
             onBackClick = {
                 if (!navController.popBackStack()) home()
             }
