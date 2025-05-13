@@ -31,6 +31,7 @@ glide-version= "1.0.0-beta01"
 paging-version = "3.3.2"
 firebase-crash = "19.4.2"
 firebase-crash-plugin = "3.0.3"
+uiTextAndroid = "1.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -72,6 +73,7 @@ glide-compose = { group = "com.github.bumptech.glide", name = "compose", version
 paging-runtime = {group = "androidx.paging" , name = "paging-runtime" , version.ref = "paging-version"}
 paging-compose = {group = "androidx.paging" , name = "paging-compose" , version.ref = "paging-version"}
 firebase-crash = {group ="com.google.firebase" , name = "firebase-crashlytics" , version.ref = "firebase-crash"}
+androidx-ui-text-android = { group = "androidx.compose.ui", name = "ui-text-android", version.ref = "uiTextAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -15,4 +15,8 @@
     <!--LocationView-->
     <string name="txt_location_title">이번 원띵 모임을 하고싶은\n지역을 선택해주세요</string>
     <string name="txt_location_subject">최대 2개까지 선택할 수 있어요.</string>
+    <!--OneThingDayView-->
+    <string name="txt_date_title">참여 가능한 모임 날짜를\n선택해주세요</string>
+    <string name="txt_date_sub_title">최대 3개까지 선택할 수 있어요.</string>
+    <string name="txt_date_select">선택한 날짜</string>
 </resources>

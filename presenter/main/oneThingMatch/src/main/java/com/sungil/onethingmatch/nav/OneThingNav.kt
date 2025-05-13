@@ -13,13 +13,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sungil.onethingmatch.NAV_CATEGORY
+import com.sungil.onethingmatch.NAV_DATE
 import com.sungil.onethingmatch.NAV_INTRO
 import com.sungil.onethingmatch.NAV_LOCATION
 import com.sungil.onethingmatch.NAV_SUBJECT
+import com.sungil.onethingmatch.OneThingData
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.component.TopAppBarWithProgress
 import com.sungil.onethingmatch.ui.categort.CategoryView
+import com.sungil.onethingmatch.ui.day.OneThingDayView
 import com.sungil.onethingmatch.ui.intro.IntroView
 import com.sungil.onethingmatch.ui.location.LocationView
 import com.sungil.onethingmatch.ui.subject.InputSubjectView
@@ -37,6 +40,7 @@ fun OneThingNav(
         NAV_SUBJECT -> 1
         NAV_CATEGORY -> 2
         NAV_LOCATION -> 3
+        NAV_DATE -> 4
         NAV_INTRO -> -1
         else -> -1
     }
@@ -139,6 +143,29 @@ fun OneThingNav(
                     )
                 }) {
                 LocationView(
+                    viewModel = viewModel,
+                    goNextPage = {
+                        if (navController.currentDestination?.route != NAV_DATE) {
+                            navController.navigate(NAV_DATE)
+                        }
+                    }
+                )
+            }
+
+            composable(NAV_DATE,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                OneThingDayView(
                     viewModel = viewModel,
                     goNextPage = {}
                 )
