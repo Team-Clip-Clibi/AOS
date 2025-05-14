@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.sungil.billing"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 31
@@ -40,4 +40,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    //payApi
+    implementation(libs.pay.api)
 }
