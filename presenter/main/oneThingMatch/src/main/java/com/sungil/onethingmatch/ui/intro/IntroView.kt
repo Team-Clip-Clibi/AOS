@@ -13,6 +13,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,22 +34,46 @@ import kotlin.math.absoluteValue
 @Composable
 internal fun IntroView(
     goNextPage: () -> Unit,
-    viewModel : OneThingViewModel
+    viewModel: OneThingViewModel,
 ) {
     val pageState = rememberPagerState(pageCount = {
         3
     })
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .navigationBarsPadding()
-    ) {
+    Scaffold(
+        bottomBar = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(bottom = 8.dp)
+            ) {
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = ColorStyle.GRAY_200
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                ButtonXXLPurple400(
+                    onClick = goNextPage,
+                    buttonText = stringResource(R.string.btn_next),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 17.dp),
+                    isEnable = true
+                )
+            }
+        },
+        contentColor = ColorStyle.WHITE_100
+    ) { paddingValues ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopStart)
-                .padding(top = 16.dp, bottom = 16.dp)
+                .fillMaxSize()
+                .background(ColorStyle.WHITE_100)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + 16.dp,
+                    start = 17.dp,
+                    end = 16.dp,
+                    bottom = paddingValues.calculateBottomPadding()+42.dp
+                )
         ) {
             Text(
                 text = stringResource(R.string.txt_intro_title),
@@ -91,18 +117,7 @@ internal fun IntroView(
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.weight(1f))
         }
-
-        ButtonXXLPurple400(
-            onClick = goNextPage,
-            buttonText = stringResource(R.string.btn_next),
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-        )
     }
 
 }

@@ -53,7 +53,9 @@ internal fun CategoryView(
                 ButtonXXLPurple400(
                     onClick = goNextPage,
                     buttonText = stringResource(R.string.btn_next),
-                    modifier = Modifier.fillMaxWidth().padding(start = 16.dp , end = 17.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 17.dp),
                     isEnable = uiState.selectedCategories.isNotEmpty()
                 )
             }
@@ -63,8 +65,12 @@ internal fun CategoryView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(start = 16.dp , end = 17.dp)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    start = 16.dp,
+                    end = 17.dp,
+                    bottom = paddingValues.calculateBottomPadding()
+                )
         ) {
             Spacer(modifier = Modifier.height(32.dp))
 

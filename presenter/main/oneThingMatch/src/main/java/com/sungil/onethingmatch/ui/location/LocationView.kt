@@ -69,7 +69,10 @@ internal fun LocationView(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 32.dp, start = 17.dp, end = 16.dp
+                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    start = 17.dp,
+                    end = 16.dp,
+                    bottom = paddingValues.calculateBottomPadding()
                 )
                 .verticalScroll(rememberScrollState())
         ) {

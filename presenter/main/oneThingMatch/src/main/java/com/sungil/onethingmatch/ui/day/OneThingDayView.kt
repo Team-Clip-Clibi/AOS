@@ -63,7 +63,11 @@ internal fun OneThingDayView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding() + 32.dp, start = 17.dp)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    start = 17.dp,
+                    bottom = paddingValues.calculateBottomPadding()
+                )
         ) {
             Text(
                 text = stringResource(R.string.txt_date_title),
@@ -98,7 +102,8 @@ internal fun OneThingDayView(
                 text = stringResource(R.string.txt_date_select),
                 style = AppTextStyles.BODY_14_20_MEDIUM,
                 color = ColorStyle.GRAY_800,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(end = 16.dp)
             )
             Spacer(modifier = Modifier.height(4.dp))

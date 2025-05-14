@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.tmi
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -65,10 +66,12 @@ internal fun TmiView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(ColorStyle.WHITE_100)
                 .padding(
                     top = paddingValues.calculateTopPadding() + 32.dp,
                     start = 17.dp,
-                    end = 16.dp
+                    end = 16.dp,
+                    bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
             Text(

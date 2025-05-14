@@ -28,8 +28,8 @@ fun TopAppBarNumber(
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier
-            .border(width = 1.dp, color = ColorStyle.GRAY_200)
             .fillMaxWidth()
+            .border(width = 1.dp, color = ColorStyle.GRAY_200)
             .padding(start = 5.dp, end = 16.dp),
         title = {
             Text(

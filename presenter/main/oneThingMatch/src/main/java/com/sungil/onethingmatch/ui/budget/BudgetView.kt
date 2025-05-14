@@ -62,7 +62,8 @@ internal fun BudgetView(
                 .padding(
                     top = paddingValues.calculateTopPadding() + 32.dp,
                     start = 17.dp,
-                    end = 16.dp
+                    end = 16.dp,
+                    bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
             Text(
