@@ -44,7 +44,7 @@ internal fun TmiView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .padding(8.dp)
+                    .padding(bottom = 8.dp)
             ) {
                 HorizontalDivider(
                     thickness = 1.dp,
