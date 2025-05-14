@@ -18,6 +18,7 @@ import com.sungil.onethingmatch.NAV_DATE
 import com.sungil.onethingmatch.NAV_INTRO
 import com.sungil.onethingmatch.NAV_LOCATION
 import com.sungil.onethingmatch.NAV_SUBJECT
+import com.sungil.onethingmatch.NAV_TMI
 import com.sungil.onethingmatch.OneThingData
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
@@ -28,6 +29,7 @@ import com.sungil.onethingmatch.ui.day.OneThingDayView
 import com.sungil.onethingmatch.ui.intro.IntroView
 import com.sungil.onethingmatch.ui.location.LocationView
 import com.sungil.onethingmatch.ui.subject.InputSubjectView
+import com.sungil.onethingmatch.ui.tmi.TmiView
 
 @Composable
 fun OneThingNav(
@@ -44,7 +46,7 @@ fun OneThingNav(
         NAV_LOCATION -> 3
         NAV_DATE -> 4
         NAV_BUDGET -> 5
-        NAV_INTRO -> -1
+        NAV_TMI -> 6
         else -> -1
     }
 
@@ -52,7 +54,7 @@ fun OneThingNav(
         TopAppBarWithProgress(
             title = stringResource(R.string.top_app_bar),
             currentPage = pageInfo,
-            totalPage = 10,
+            totalPage = 6,
             onBackClick = {
                 if (!navController.popBackStack()) home()
             }
@@ -192,6 +194,29 @@ fun OneThingNav(
                     )
                 }) {
                 BudgetView(
+                    viewModel = viewModel,
+                    goNextPage = {
+                        if (navController.currentDestination?.route != NAV_TMI) {
+                            navController.navigate(NAV_TMI)
+                        }
+                    }
+                )
+            }
+
+            composable(NAV_TMI,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                TmiView(
                     viewModel = viewModel,
                     goNextPage = {}
                 )

@@ -8,6 +8,7 @@ const val NAV_CATEGORY = "category"
 const val NAV_LOCATION = "location"
 const val NAV_DATE = "date"
 const val NAV_BUDGET = "budget"
+const val NAV_TMI = "tmi"
 const val NAV_INPUT_DATA = "input"
 
 enum class CATEGORY(val displayName: String) {

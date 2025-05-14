@@ -8,7 +8,7 @@
     <string name="top_app_bar">원띵 모임 신청</string>
     <!--InputSubject-->
     <string name="txt_subject_title">모임에서 나누고 싶은\n대화 주제를 입력해주세요</string>
-    <string name="txt_subject_hint">최소 8자, 최대 50자까지 입력할 수 있어요</string>
+    <string name="txt_hint">최소 8자, 최대 50자까지 입력할 수 있어요</string>
     <!--InputCategory-->
     <string name="txt_category_title">원띵 모임의 카테고리를\n선택해 주세요</string>
     <string name="txt_category_sub_title">최대 2개까지 선택할 수 있어요</string>
@@ -22,4 +22,6 @@
     <!--Budget View-->
     <string name="txt_budget_title">식사에 사용하고 싶은 대략적인\n금액대를 선택해 주세요</string>
     <string name="txt_budget_sub_title">선택하신 금액대는 식당 선정에 참고할 예정이에요</string>
+    <!--TmiView-->
+    <string name="txt_tmi_title">마지막으로 모임에서 나눌\nTMI를 입력해주세요</string>
 </resources>

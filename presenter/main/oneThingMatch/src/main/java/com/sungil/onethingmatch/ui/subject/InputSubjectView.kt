@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -67,7 +66,7 @@ internal fun InputSubjectView(
                 onValueChange = viewModel::onSubjectChanged,
                 maxLine = 1,
                 maxLength = 50,
-                hint = stringResource(R.string.txt_subject_hint)
+                hint = stringResource(R.string.txt_hint)
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(

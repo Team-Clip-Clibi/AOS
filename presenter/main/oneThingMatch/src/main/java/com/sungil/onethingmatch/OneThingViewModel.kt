@@ -27,6 +27,10 @@ class OneThingViewModel @Inject constructor(
         _uiState.update { it.copy(subject = newValue) }
     }
 
+    fun onTmiChanged(newValue: String) {
+        _uiState.update { it.copy(tmi = newValue) }
+    }
+
     fun toggleCategory(category: CATEGORY) {
         _uiState.update { current ->
             val currentSet = current.selectedCategories
@@ -106,7 +110,7 @@ class OneThingViewModel @Inject constructor(
         }
     }
 
-    fun date() {
+    private fun date() {
         viewModelScope.launch {
             when (val result = oneThingDate.invoke()) {
                 is GetOneThingDay.Result.Success -> {
@@ -137,6 +141,7 @@ class OneThingViewModel @Inject constructor(
 
 data class OneThingData(
     val subject: String = "",
+    val tmi: String = "",
     val selectedCategories: Set<CATEGORY> = emptySet(),
     val location: Set<Location> = emptySet(),
     val dateData: List<WeekData> = emptyList(),
