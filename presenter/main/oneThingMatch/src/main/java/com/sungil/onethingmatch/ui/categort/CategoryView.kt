@@ -27,6 +27,7 @@ import com.example.core.ColorStyle
 import com.sungil.onethingmatch.CATEGORY
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
+import com.sungil.onethingmatch.UiError
 import com.sungil.onethingmatch.component.CategoryItemView
 
 @Composable
@@ -35,6 +36,10 @@ internal fun CategoryView(
     viewModel: OneThingViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val subTextColor = when(uiState.error){
+        UiError.MaxCategorySelected -> ColorStyle.RED_100
+        else -> ColorStyle.GRAY_600
+    }
 
     Scaffold(
         bottomBar = {
@@ -82,7 +87,7 @@ internal fun CategoryView(
             Text(
                 text = stringResource(R.string.txt_category_sub_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                color = ColorStyle.GRAY_600,
+                color = subTextColor,
                 modifier = Modifier.padding(top = 4.dp, bottom = 24.dp)
             )
 
