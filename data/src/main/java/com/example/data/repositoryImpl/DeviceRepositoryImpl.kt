@@ -14,4 +14,8 @@ class DeviceRepositoryImpl @Inject constructor(private val device: Device) : Dev
         return device.getOsVersion()
     }
 
+    override suspend fun checkTossInstall(): Boolean {
+        return device.checkTossInstall()
+    }
+
 }

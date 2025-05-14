@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.telephony.TelephonyManager
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -31,6 +32,16 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
             34 -> 14
             35 -> 15
             else -> 0
+        }
+    }
+
+    override suspend fun checkTossInstall(): Boolean {
+        return try{
+            application.packageManager.getPackageInfo("viva.republica.toss", 0)
+            true
+        }catch (e : PackageManager.NameNotFoundException){
+            Log.d(javaClass.name.toString() , "error message : ${e.printStackTrace()}")
+            false
         }
     }
 
