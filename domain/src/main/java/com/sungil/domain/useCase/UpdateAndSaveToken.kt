@@ -24,7 +24,7 @@ class UpdateAndSaveToken @Inject constructor(
     override suspend fun invoke(param: Param): Result {
         val beforeToken = repo.getFcmToken()
         return when {
-            beforeToken.isEmpty() -> {
+            beforeToken.isEmpty() || beforeToken != param.fcmToken -> {
                 val result = repo.saveFcmToken(param.fcmToken)
                 if (result) {
                     Result.Success("Success to save token (no previous token)")
