@@ -368,20 +368,20 @@ fun ButtonCheckBoxLeftL(
     onCheckChange: (Boolean) -> Unit,
 ) {
     val shape = RoundedCornerShape(8.dp)
+    val borderColor = if (isChecked) ColorStyle.PURPLE_200 else Color.Transparent
+    val backgroundColor = if (isChecked) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .then(
-                if (isChecked) Modifier.border(
-                    width = 1.dp,
-                    color = ColorStyle.PURPLE_200,
-                    shape = shape
-                ) else Modifier
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = shape
             )
             .background(
-                color = if (isChecked) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+                color = backgroundColor,
                 shape = shape
             )
             .padding(start = 17.dp, end = 16.dp)
@@ -402,6 +402,7 @@ fun ButtonCheckBoxLeftL(
         Spacer(modifier = Modifier.width(8.dp))
     }
 }
+
 @Composable
 fun CircularCheckBoxLarge(
     checked: Boolean,
