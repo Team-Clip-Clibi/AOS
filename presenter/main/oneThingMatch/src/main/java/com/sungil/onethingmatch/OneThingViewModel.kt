@@ -3,6 +3,7 @@ package com.sungil.onethingmatch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.WeekData
+import com.sungil.domain.useCase.CheckTossInstall
 import com.sungil.domain.useCase.GetOneThingDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OneThingViewModel @Inject constructor(
     private val oneThingDate: GetOneThingDay,
+    private val checkInstall: CheckTossInstall,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OneThingData())
     val uiState: StateFlow<OneThingData> = _uiState.asStateFlow()
@@ -137,6 +139,30 @@ class OneThingViewModel @Inject constructor(
         }
     }
 
+    fun checkInstall() {
+        viewModelScope.launch {
+            when (val result = checkInstall.invoke()) {
+                is CheckTossInstall.Result.Success -> {
+                    _uiState.update { current ->
+                        current.copy(tosInstall = result.message)
+                    }
+                }
+
+                is CheckTossInstall.Result.Fail -> {
+                    _uiState.update { errorData ->
+                        errorData.copy(error = UiError.TossNotInstall)
+                    }
+                }
+            }
+        }
+    }
+
+    fun initError(){
+        _uiState.update { errorData ->
+            errorData.copy(error = UiError.None)
+        }
+    }
+
 }
 
 data class OneThingData(
@@ -147,6 +173,7 @@ data class OneThingData(
     val dateData: List<WeekData> = emptyList(),
     val selectDate: Set<WeekData> = emptySet(),
     val budget: Budget = Budget.RANGE_NONE,
+    val tosInstall: String = "",
     val error: UiError = UiError.None,
 )
 
@@ -156,5 +183,6 @@ sealed class UiError {
     data object MaxDateSelected : UiError()
     data object NullDataSelect : UiError()
     data object FailToGetDate : UiError()
+    data object TossNotInstall : UiError()
     data object None : UiError()
 }

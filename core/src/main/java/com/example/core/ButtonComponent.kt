@@ -240,15 +240,14 @@ fun ButtonPurple100MEDIUM(
     Button(
         modifier = modifier
             .height(48.dp)
-            .border(width = 1.dp, color = ColorStyle.PURPLE_200, shape = RoundedCornerShape(8.dp))
-            .background(color = ColorStyle.PURPLE_100),
+            .background(color = ColorStyle.PURPLE_400, shape = RoundedCornerShape(size = 12.dp)),
         onClick = onClick,
         shape = RoundedCornerShape(8.dp),
     ) {
         Text(
             text = buttonText,
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = ColorStyle.GRAY_800
+            style = AppTextStyles.SUBTITLE_16_24_SEMI,
+            color = ColorStyle.WHITE_100
         )
     }
 }

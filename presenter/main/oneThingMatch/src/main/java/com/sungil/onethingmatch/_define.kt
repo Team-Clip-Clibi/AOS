@@ -9,7 +9,7 @@ const val NAV_LOCATION = "location"
 const val NAV_DATE = "date"
 const val NAV_BUDGET = "budget"
 const val NAV_TMI = "tmi"
-const val NAV_INPUT_DATA = "input"
+const val NAV_BEFORE_PAY = "beforePay"
 
 enum class CATEGORY(val displayName: String) {
     ECONOMY("경제"),

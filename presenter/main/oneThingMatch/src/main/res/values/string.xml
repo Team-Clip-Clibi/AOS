@@ -5,6 +5,7 @@
     <string name="txt_intro_below_page">content</string>
     <string name="btn_next">다음</string>
     <string name="btn_finish">완료</string>
+    <string name="btn_okay">확인</string>
     <string name="top_app_bar">원띵 모임 신청</string>
     <!--InputSubject-->
     <string name="txt_subject_title">모임에서 나누고 싶은\n대화 주제를 입력해주세요</string>
@@ -24,4 +25,11 @@
     <string name="txt_budget_sub_title">선택하신 금액대는 식당 선정에 참고할 예정이에요</string>
     <!--TmiView-->
     <string name="txt_tmi_title">마지막으로 모임에서 나눌\nTMI를 입력해주세요</string>
+    <!--BeforePayView-->
+    <string name="txt_before_pay_title">매칭된 모임에 참여할까요?</string>
+    <string name="txt_before_pay_sub_title">아래 내용을 꼼꼼히 확인하고, 결제해주세요.</string>
+    <!--ErrorDialog-->
+    <string name="txt_toss_dialog_title">원띵은 토스페이 결제만 가능해요</string>
+    <string name="txt_toss_dialog_sub_title">토스 앱이 설치되어 있지 않다면, 설치 후 결제를\n진행해주세요.</string>
+
 </resources>

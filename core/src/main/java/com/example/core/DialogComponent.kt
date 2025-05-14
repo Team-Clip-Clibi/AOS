@@ -69,10 +69,11 @@ fun CustomDialogOneButton(
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                ButtonPurple400MEDIUM(
+                ButtonPurple100MEDIUM(
                     onClick = buttonClick,
                     buttonText = buttonText,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                 )
             }
         }

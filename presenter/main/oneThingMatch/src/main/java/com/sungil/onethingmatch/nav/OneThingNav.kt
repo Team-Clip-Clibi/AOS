@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.sungil.onethingmatch.NAV_BEFORE_PAY
 import com.sungil.onethingmatch.NAV_BUDGET
 import com.sungil.onethingmatch.NAV_CATEGORY
 import com.sungil.onethingmatch.NAV_DATE
@@ -28,6 +29,7 @@ import com.sungil.onethingmatch.ui.categort.CategoryView
 import com.sungil.onethingmatch.ui.day.OneThingDayView
 import com.sungil.onethingmatch.ui.intro.IntroView
 import com.sungil.onethingmatch.ui.location.LocationView
+import com.sungil.onethingmatch.ui.pay.BeforePayView
 import com.sungil.onethingmatch.ui.subject.InputSubjectView
 import com.sungil.onethingmatch.ui.tmi.TmiView
 
@@ -62,7 +64,7 @@ fun OneThingNav(
 
         NavHost(
             navController = navController,
-            startDestination = NAV_INTRO,
+            startDestination = NAV_BEFORE_PAY,
             modifier = Modifier.weight(1f)
         ) {
             composable(NAV_INTRO,
@@ -218,9 +220,33 @@ fun OneThingNav(
                 }) {
                 TmiView(
                     viewModel = viewModel,
+                    goNextPage = {
+                        if (navController.currentDestination?.route != NAV_BEFORE_PAY) {
+                            navController.navigate(NAV_BEFORE_PAY)
+                        }
+                    }
+                )
+            }
+
+            composable(NAV_BEFORE_PAY,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                BeforePayView(
+                    viewModel = viewModel,
                     goNextPage = {}
                 )
             }
+
         }
     }
 }

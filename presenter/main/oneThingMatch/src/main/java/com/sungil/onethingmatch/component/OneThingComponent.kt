@@ -300,3 +300,39 @@ fun SelectDate(
         )
     }
 }
+
+@Composable
+fun EventView(
+    title: String,
+    content: String,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .height(68.dp)
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 12.dp))
+            .padding(start = 16.dp, end = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_discount),
+            contentDescription = "discount",
+            tint = Color.Unspecified,
+            modifier = Modifier.size(36.dp)
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = title,
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = ColorStyle.PURPLE_400
+            )
+            Text(
+                text = content,
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.GRAY_800
+            )
+        }
+    }
+}
