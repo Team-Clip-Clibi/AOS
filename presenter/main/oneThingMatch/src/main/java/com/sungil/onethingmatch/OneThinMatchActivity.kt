@@ -21,7 +21,8 @@ class OneThinMatchActivity : ComponentActivity() {
         setContent {
             OneThingNav(
                 viewModel = viewModel,
-                home = { router.navigation(NAV_HOME) }
+                home = { router.navigation(NAV_HOME) },
+                pay = { router.navigation(NAV_PAY) }
             )
         }
     }

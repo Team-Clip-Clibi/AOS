@@ -69,6 +69,10 @@
         <activity android:name="com.sungil.onethingmatch.OneThinMatchActivity"
             android:exported="true"/>
 
+        <activity android:name="com.sungil.billing.BillingActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:exported="true"/>
+        
     </application>
 
 </manifest>

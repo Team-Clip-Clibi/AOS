@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.signup.SignUpActivity
 import com.sungil.alarm.AlarmMainActivity
+import com.sungil.billing.BillingActivity
 import com.sungil.domain.model.Router
 import com.sungil.editprofile.ProfileEditMainActivity
 import com.sungil.kakao.com.kakao.sdk.auth.AuthCodeHandlerActivity
@@ -73,6 +74,12 @@ class Router(private val context: Context) : Router {
             }
             "oneThing" ->{
                 val intent = Intent(context , OneThinMatchActivity:: class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                context.startActivity(intent)
+            }
+            "pay" ->{
+                val intent = Intent(context , BillingActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)

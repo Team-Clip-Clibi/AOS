@@ -30,7 +30,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
         UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
             if (error != null || token == null) {
                 Log.e(javaClass.name.toString() , "error $error")
-                viewModel.saveKaKaoId("testData4")
+                viewModel.saveKaKaoId("3975324589")
                 return@loginWithKakaoTalk
             }
             Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")

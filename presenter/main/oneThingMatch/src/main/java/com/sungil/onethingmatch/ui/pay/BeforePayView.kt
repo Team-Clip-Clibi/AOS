@@ -41,9 +41,9 @@ internal fun BeforePayView(
     var hasNavigated by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.tosInstall) {
-        if (uiState.tosInstall.isNotEmpty() && !hasNavigated) {
+        if (uiState.tosInstall.isNotEmpty()) {
+            viewModel.initInstallResult()
             goNextPage()
-            hasNavigated = true
         }
     }
 

@@ -163,6 +163,11 @@ class OneThingViewModel @Inject constructor(
         }
     }
 
+    fun initInstallResult(){
+        _uiState.update { install ->
+            install.copy(tosInstall = "")
+        }
+    }
 }
 
 data class OneThingData(

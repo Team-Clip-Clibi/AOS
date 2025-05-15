@@ -37,6 +37,7 @@ import com.sungil.onethingmatch.ui.tmi.TmiView
 fun OneThingNav(
     viewModel: OneThingViewModel,
     home: () -> Unit,
+    pay : () -> Unit
 ) {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -243,7 +244,7 @@ fun OneThingNav(
                 }) {
                 BeforePayView(
                     viewModel = viewModel,
-                    goNextPage = {}
+                    goNextPage = pay
                 )
             }
 
