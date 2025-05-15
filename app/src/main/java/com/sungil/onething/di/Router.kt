@@ -2,6 +2,7 @@ package com.sungil.onething.di
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import com.example.signup.SignUpActivity
 import com.sungil.alarm.AlarmMainActivity
 import com.sungil.billing.BillingActivity
@@ -15,7 +16,7 @@ import com.sungil.onethingmatch.OneThinMatchActivity
 import com.sungil.report.ReportMainActivity
 
 class Router(private val context: Context) : Router {
-    override fun navigation(target: String) {
+    override fun navigation(target: String, args: Bundle) {
         when (target) {
             "KAKAO" -> {
                 val intent = Intent(context, AuthCodeHandlerActivity::class.java).apply {
@@ -72,18 +73,21 @@ class Router(private val context: Context) : Router {
                 }
                 context.startActivity(intent)
             }
-            "oneThing" ->{
-                val intent = Intent(context , OneThinMatchActivity:: class.java).apply {
+
+            "oneThing" -> {
+                val intent = Intent(context, OneThinMatchActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
             }
-            "pay" ->{
-                val intent = Intent(context , BillingActivity::class.java).apply {
+
+            "pay" -> {
+                val intent = Intent(context, BillingActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
             }
+
             else -> {
                 throw IllegalArgumentException("Unsupported target: $target")
             }
