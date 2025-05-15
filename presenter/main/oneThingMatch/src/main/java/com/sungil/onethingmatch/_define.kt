@@ -46,15 +46,16 @@ enum class Location(val displayName: String) {
     GANGNAM("강남"),
     YEOUIDO_YEONGDEUNGPO("여의도/영등포"),
     YONGSAN_YEONGDEUNGPO("용산/영등포"),
+    YOUNGSAN_ITAEWON("용산/이태원"),
     KONDAE_SEONGSU("건대/성수");
 
     override fun toString(): String = displayName
 }
 
 enum class Budget(val displayName: String) {
-    RANGE_10_30("10,000~30,000원"),
-    RANGE_30_50("30,000~50,000원"),
-    RANGE_50_70("50,000~70,000원"),
+    LOW("10,000~30,000원"),
+    MEDIUM("30,000~50,000원"),
+    HIGH("50,000~70,000원"),
     RANGE_NONE("None");
 
     override fun toString(): String = displayName

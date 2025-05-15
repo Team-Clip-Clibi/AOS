@@ -83,25 +83,25 @@ internal fun BudgetView(
             Spacer(modifier = Modifier.height(24.dp))
 
             ButtonCheckBoxLeftL(
-                content = Budget.RANGE_10_30.displayName,
-                isChecked = uiState.budget == Budget.RANGE_10_30,
-                onCheckChange = { viewModel.onBudgetChanged(Budget.RANGE_10_30) }
+                content = Budget.LOW.displayName,
+                isChecked = uiState.budget == Budget.LOW,
+                onCheckChange = { viewModel.onBudgetChanged(Budget.LOW) }
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             ButtonCheckBoxLeftL(
-                content = Budget.RANGE_30_50.displayName,
-                isChecked = uiState.budget.name == Budget.RANGE_30_50.name,
-                onCheckChange = { viewModel.onBudgetChanged(Budget.RANGE_30_50) }
+                content = Budget.MEDIUM.displayName,
+                isChecked = uiState.budget.name == Budget.MEDIUM.name,
+                onCheckChange = { viewModel.onBudgetChanged(Budget.MEDIUM) }
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             ButtonCheckBoxLeftL(
-                content = Budget.RANGE_50_70.displayName,
-                isChecked = uiState.budget.name == Budget.RANGE_50_70.name,
-                onCheckChange = { viewModel.onBudgetChanged(Budget.RANGE_50_70) }
+                content = Budget.HIGH.displayName,
+                isChecked = uiState.budget.name == Budget.HIGH.name,
+                onCheckChange = { viewModel.onBudgetChanged(Budget.HIGH) }
             )
         }
     }

@@ -21,11 +21,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        val clientKey: String = properties.getProperty("payClientKey", "")
-        val secretKey: String = properties.getProperty("paySecretKey", "")
-
-        buildConfigField("String", "CLIENT_KEY", clientKey)
-        buildConfigField("String", "SECRET_KEY", secretKey)
+//        val clientKey: String = properties.getProperty("payClientKey", "")
+//        val secretKey: String = properties.getProperty("paySecretKey", "")
+//
+//        buildConfigField("String", "CLIENT_KEY", clientKey)
+//        buildConfigField("String", "SECRET_KEY", secretKey)
     }
 
     buildTypes {
