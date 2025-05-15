@@ -3,7 +3,10 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
+
 val properties = Properties()
 val localPropertiesFile = project.rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -11,6 +14,7 @@ if (localPropertiesFile.exists()) {
         properties.load(inputStream)
     }
 }
+
 android {
     namespace = "com.sungil.billing"
     compileSdk = 35
@@ -60,4 +64,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     //payApi
     implementation(libs.pay.api)
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
