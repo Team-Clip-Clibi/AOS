@@ -7,15 +7,22 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.sungil.billing.databinding.ActivityBlillingBinding
+import com.sungil.domain.model.Router
 import com.tosspayments.paymentsdk.PaymentWidget
 import com.tosspayments.paymentsdk.model.PaymentCallback
 import com.tosspayments.paymentsdk.model.PaymentWidgetStatusListener
 import com.tosspayments.paymentsdk.model.TossPaymentResult
 import com.tosspayments.paymentsdk.view.PaymentMethod
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class BillingActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBlillingBinding
     private lateinit var paymentWidget : PaymentWidget
+    @Inject
+    lateinit var router : Router
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBlillingBinding.inflate(layoutInflater)

@@ -87,13 +87,23 @@ interface NetworkRepository {
 
     suspend fun requestUpdateToken(
         refreshToken: String,
-    ): Triple<Int,String?, String?>
+    ): Triple<Int, String?, String?>
 
     suspend fun requestOneThineNotification(
         accessToken: String,
     ): OneThineNotification
 
-    fun requestNotificationPaging() : Flow<PagingData<Notification>>
+    fun requestNotificationPaging(): Flow<PagingData<Notification>>
 
-    fun requestReadNotificationPaging() : Flow<PagingData<Notification>>
+    fun requestReadNotificationPaging(): Flow<PagingData<Notification>>
+
+    suspend fun requestOneThingOrder(
+        token: String,
+        topic: String,
+        districts: String,
+        date: String,
+        timeSlot: String,
+        tmiContent: String,
+        oneThingBudgetRange: String,
+    ): Triple<Int, String?, String?>
 }

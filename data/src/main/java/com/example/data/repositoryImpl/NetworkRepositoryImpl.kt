@@ -38,6 +38,8 @@ import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
 import com.sungil.network.model.OneThinNotify
+import com.sungil.network.model.OneThingOrder
+import com.sungil.network.model.PreferredDate
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
@@ -406,6 +408,31 @@ class NetworkRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    override suspend fun requestOneThingOrder(
+        token: String,
+        topic: String,
+        districts: String,
+        date: String,
+        timeSlot: String,
+        tmiContent: String,
+        oneThingBudgetRange: String,
+    ): Triple<Int, String?, String?> {
+        val result = api.requestOneThingOrder(
+            bearerToken = token,
+            order = OneThingOrder(
+                topic = topic,
+                districts = listOf(districts),
+                preferredDates = listOf(PreferredDate(
+                    date = date,
+                    timeSlot = timeSlot
+                )),
+                tmiContent = tmiContent,
+                oneThingBudgetRange = oneThingBudgetRange
+            )
+        )
+        return Triple(result.code() , result.body()?.orderId , result.body()?.amount.toString())
     }
 
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {

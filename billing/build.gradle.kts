@@ -25,11 +25,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-//        val clientKey: String = properties.getProperty("payClientKey", "")
-//        val secretKey: String = properties.getProperty("paySecretKey", "")
-//
-//        buildConfigField("String", "CLIENT_KEY", clientKey)
-//        buildConfigField("String", "SECRET_KEY", secretKey)
     }
 
     buildTypes {
@@ -53,7 +48,9 @@ android {
         jvmTarget = "1.8"
     }
 }
-
+kapt {
+    correctErrorTypes = true
+}
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -67,4 +64,7 @@ dependencies {
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    //project
+    implementation(project(":domain"))
+    implementation(project(":core"))
 }

@@ -1,6 +1,5 @@
 package com.sungil.network.http
 
-import android.media.session.MediaSession.Token
 import com.sungil.network.BuildConfig
 import com.sungil.network.model.AuthToken
 import com.sungil.network.model.Banner
@@ -13,6 +12,8 @@ import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
 import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingNotificationDTO
+import com.sungil.network.model.OneThingOrder
+import com.sungil.network.model.OneThingOrderResponse
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
@@ -277,5 +278,14 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Path("lastNotificationId") lastNotificationId: String,
     ): Response<List<OneThingNotificationDTO>>
+
+    /**
+     * OneThing 결제서 발행
+     */
+    @POST(BuildConfig.ONETHING_ORDER_URL)
+    suspend fun requestOneThingOrder(
+        @Header("Authorization") bearerToken: String,
+        @Body order: OneThingOrder,
+    ): Response<OneThingOrderResponse>
 
 }
