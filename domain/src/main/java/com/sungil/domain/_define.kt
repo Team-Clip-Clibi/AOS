@@ -6,3 +6,8 @@ enum class CATEGORY {
     CONTENT_ONE_THING,
     CONTENT_RANDOM
 }
+
+enum class MATCHTIME{
+    DINNER,
+    LAUNCH
+}

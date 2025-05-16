@@ -1,5 +1,6 @@
 package com.sungil.domain.useCase
 
+import com.sungil.domain.MATCHTIME
 import java.util.Locale
 import com.sungil.domain.UseCase
 import com.sungil.domain.model.WeekData
@@ -23,7 +24,13 @@ class GetOneThingDay @Inject constructor() {
 
             val weekendList = (0..13)
                 .map { startDate.plusDays(it.toLong()) }
-                .filter { it.dayOfWeek in listOf(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY) }
+                .filter {
+                    it.dayOfWeek in listOf(
+                        DayOfWeek.FRIDAY,
+                        DayOfWeek.SATURDAY,
+                        DayOfWeek.SUNDAY
+                    )
+                }
                 .map { date ->
                     WeekData(
                         date = date.format(dateFormatter),
@@ -40,10 +47,13 @@ class GetOneThingDay @Inject constructor() {
 
     private fun getTimeSlotsFor(dayOfWeek: DayOfWeek): List<String> {
         return when (dayOfWeek) {
-            DayOfWeek.FRIDAY -> listOf("디너 7~9시")
-            DayOfWeek.SATURDAY -> listOf("런치 12~2시", "디너 6~8시", "디너 7~9시")
-            DayOfWeek.SUNDAY -> listOf("런치 12~2시", "디너 6~8시")
-            else -> emptyList()
+            DayOfWeek.FRIDAY -> listOf(MATCHTIME.LAUNCH.name)
+//            DayOfWeek.SATURDAY -> listOf(
+//                MATCHTIME.LAUNCH.name,
+//                MATCHTIME.DINNER.name
+//            )
+//            DayOfWeek.SUNDAY -> listOf(MATCHTIME.LAUNCH.name, MATCHTIME.DINNER.name)
+            else -> listOf(MATCHTIME.LAUNCH.name, MATCHTIME.DINNER.name)
         }
     }
 

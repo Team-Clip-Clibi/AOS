@@ -33,6 +33,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import com.sungil.domain.MATCHTIME
 import com.sungil.onethingmatch.R
 
 @Composable
@@ -232,7 +234,11 @@ fun OneThingDayAdapter(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = timeSlots,
+                text = when(timeSlots){
+                    MATCHTIME.LAUNCH.name -> stringResource(R.string.txt_date_launch)
+                    MATCHTIME.DINNER.name -> stringResource(R.string.txt_date_dinner)
+                    else -> stringResource(R.string.txt_date_dinner)
+                },
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 color = ColorStyle.GRAY_700
             )
@@ -268,6 +274,11 @@ fun SelectDate(
     dayOfWeek: String,
     timeSlots: String,
 ) {
+    val timeDate =  when(timeSlots){
+        MATCHTIME.LAUNCH.name -> stringResource(R.string.txt_date_launch)
+        MATCHTIME.DINNER.name -> stringResource(R.string.txt_date_dinner)
+        else -> stringResource(R.string.txt_date_dinner)
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -279,7 +290,7 @@ fun SelectDate(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "$date($dayOfWeek) · $timeSlots",
+                text = "$date($dayOfWeek) · $timeDate",
                 style = AppTextStyles.BODY_14_20_REGULAR,
                 color = ColorStyle.GRAY_800
             )
