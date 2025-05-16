@@ -83,7 +83,8 @@ class Router(private val context: Context) : Router {
 
             "pay" -> {
                 val intent = Intent(context, BillingActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    putExtras(args)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
             }

@@ -20,6 +20,8 @@ import javax.inject.Inject
 class BillingActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBlillingBinding
     private lateinit var paymentWidget : PaymentWidget
+    private lateinit var orderId : String
+    private lateinit var userId : String
     @Inject
     lateinit var router : Router
 
@@ -37,10 +39,16 @@ class BillingActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        orderId = intent?.getStringExtra(BuildConfig.KEY_ORDER) ?: ""
+        userId = intent?.getStringExtra(BuildConfig.KEY_USER) ?: ""
+        if(orderId.isEmpty() || userId.isEmpty()){
+            finish()
+            return
+        }
         paymentWidget = PaymentWidget(
             activity = this@BillingActivity,
             clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm",
-            customerKey = "JuNm6zJ0Afr7xUwStZAwn"
+            customerKey = userId
         )
         val paymentMethodWidgetStatusListener = object : PaymentWidgetStatusListener {
             override fun onFail(fail: TossPaymentResult.Fail) {
@@ -68,7 +76,7 @@ class BillingActivity : AppCompatActivity() {
     private fun addListener(){
         binding.payButton.setOnClickListener {
             paymentWidget.requestPayment(
-                paymentInfo = PaymentMethod.PaymentInfo(orderId = "test" , orderName = "oneThing"),
+                paymentInfo = PaymentMethod.PaymentInfo(orderId = orderId , orderName = "oneThing"),
                 paymentCallback = object : PaymentCallback{
                     override fun onPaymentFailed(fail: TossPaymentResult.Fail) {
                         Log.e(javaClass.name.toString(),"errorCode : ${fail.errorCode} , message : ${fail.errorMessage}")
