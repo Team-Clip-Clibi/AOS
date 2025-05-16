@@ -20,7 +20,6 @@ import com.sungil.onethingmatch.NAV_INTRO
 import com.sungil.onethingmatch.NAV_LOCATION
 import com.sungil.onethingmatch.NAV_SUBJECT
 import com.sungil.onethingmatch.NAV_TMI
-import com.sungil.onethingmatch.OneThingData
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.component.TopAppBarWithProgress
@@ -65,7 +64,7 @@ fun OneThingNav(
 
         NavHost(
             navController = navController,
-            startDestination = NAV_BEFORE_PAY,
+            startDestination = NAV_INTRO,
             modifier = Modifier.weight(1f)
         ) {
             composable(NAV_INTRO,
