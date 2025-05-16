@@ -121,4 +121,6 @@ dependencies {
     implementation(libs.room.database.runtime)
     implementation(libs.room.database.ktx)
     kapt(libs.room.database.compiler)
+    //payment
+    implementation(libs.pay.api)
 }

@@ -235,7 +235,7 @@ fun OneThingDayAdapter(
         ) {
             Text(
                 text = when(timeSlots){
-                    MATCHTIME.LAUNCH.name -> stringResource(R.string.txt_date_launch)
+                    MATCHTIME.LUNCH.name -> stringResource(R.string.txt_date_launch)
                     MATCHTIME.DINNER.name -> stringResource(R.string.txt_date_dinner)
                     else -> stringResource(R.string.txt_date_dinner)
                 },
@@ -275,7 +275,7 @@ fun SelectDate(
     timeSlots: String,
 ) {
     val timeDate =  when(timeSlots){
-        MATCHTIME.LAUNCH.name -> stringResource(R.string.txt_date_launch)
+        MATCHTIME.LUNCH.name -> stringResource(R.string.txt_date_launch)
         MATCHTIME.DINNER.name -> stringResource(R.string.txt_date_dinner)
         else -> stringResource(R.string.txt_date_dinner)
     }

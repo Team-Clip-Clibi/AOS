@@ -72,6 +72,12 @@
         <activity android:name="com.sungil.billing.BillingActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true"/>
+
+        <activity
+            android:name="com.tosspayments.paymentsdk.activity.TossPaymentActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="false" />
+
         
     </application>
 

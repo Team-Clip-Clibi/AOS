@@ -5,6 +5,9 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 class OneThingMatchOrder @Inject constructor(
@@ -33,11 +36,14 @@ class OneThingMatchOrder @Inject constructor(
         if (token.first.trim() == "" || token.second.trim() == "") {
             return Result.Fail("token is null")
         }
+        val convertedDate = param.date.map {
+            it.copy(date = convertToFullDate(it.date))
+        }
         val requestOrder = network.requestOneThingOrder(
             token = TOKEN_FORM + token.first,
             topic = param.topic,
             districts = param.districts,
-            date = param.date,
+            date = convertedDate,
             tmiContent = param.tmiContent,
             oneThingBudgetRange = param.oneThingBudgetRange
         )
@@ -73,7 +79,7 @@ class OneThingMatchOrder @Inject constructor(
                     token = TOKEN_FORM + refreshToken.second,
                     topic = param.topic,
                     districts = param.districts,
-                    date = param.date,
+                    date = convertedDate,
                     tmiContent = param.tmiContent,
                     oneThingBudgetRange = param.oneThingBudgetRange
                 )
@@ -86,4 +92,17 @@ class OneThingMatchOrder @Inject constructor(
             else -> return Result.Fail("network error")
         }
     }
+
+    private fun convertToFullDate(input: String): String {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val inputFormat = SimpleDateFormat("MM.dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = inputFormat.parse(input)
+        val calendar = Calendar.getInstance().apply {
+            time = date!!
+            set(Calendar.YEAR, currentYear)
+        }
+        return outputFormat.format(calendar.time)
+    }
+
 }

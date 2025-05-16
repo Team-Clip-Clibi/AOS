@@ -35,7 +35,10 @@ internal fun BeforePayView(
     goNextPage: (String , String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-
+    /**
+     * 에러 처리 해라 죽기 싫으면 김성일
+     * amunt도 넘겨
+     */
 
     LaunchedEffect(uiState) {
         if (uiState.tosInstall.isNotEmpty()) {
