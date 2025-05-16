@@ -2,9 +2,9 @@ package com.sungil.domain.useCase
 
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
+import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
-import com.sungil.domain.useCase.SendAlreadySignUp.Result
 import javax.inject.Inject
 
 class OneThingMatchOrder @Inject constructor(
@@ -13,15 +13,14 @@ class OneThingMatchOrder @Inject constructor(
 ) : UseCase<OneThingMatchOrder.Param, OneThingMatchOrder.Result> {
     data class Param(
         val topic: String,
-        val districts: String,
-        val date: String,
-        val timeSlot: String,
+        val districts: List<String>,
+        val date : List<WeekData>,
         val tmiContent: String,
         val oneThingBudgetRange: String,
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
-        data class Success(val orderId: String) : Result
+        data class Success(val orderId: String ,val userId : String) : Result
         data class Fail(val errorMessage: String) : Result
     }
 
@@ -39,7 +38,6 @@ class OneThingMatchOrder @Inject constructor(
             topic = param.topic,
             districts = param.districts,
             date = param.date,
-            timeSlot = param.timeSlot,
             tmiContent = param.tmiContent,
             oneThingBudgetRange = param.oneThingBudgetRange
         )
@@ -49,7 +47,8 @@ class OneThingMatchOrder @Inject constructor(
                     return Result.Fail("network error")
                 }
                 return Result.Success(
-                    orderId = requestOrder.second!!
+                    orderId = requestOrder.second!!,
+                    userId = userId
                 )
             }
 
@@ -75,14 +74,13 @@ class OneThingMatchOrder @Inject constructor(
                     topic = param.topic,
                     districts = param.districts,
                     date = param.date,
-                    timeSlot = param.timeSlot,
                     tmiContent = param.tmiContent,
                     oneThingBudgetRange = param.oneThingBudgetRange
                 )
                 if (reRequest.first != 200 || reRequest.second == null) {
                     return Result.Fail("network error")
                 }
-                return Result.Success(orderId = reRequest.second!!)
+                return Result.Success(orderId = reRequest.second!! , userId = userId)
             }
 
             else -> return Result.Fail("network error")

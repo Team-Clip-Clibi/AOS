@@ -22,9 +22,10 @@ class OneThinMatchActivity : ComponentActivity() {
             OneThingNav(
                 viewModel = viewModel,
                 home = { router.navigation(NAV_HOME) },
-                pay = { router.navigation(NAV_PAY) }
+                pay = { orderId , userId ->
+                    router.navigation(NAV_PAY)
+                }
             )
         }
     }
-
 }

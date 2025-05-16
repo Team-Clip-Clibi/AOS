@@ -12,6 +12,7 @@ import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.UserInfo
+import com.sungil.domain.model.WeekData
 import kotlinx.coroutines.flow.Flow
 
 interface NetworkRepository {
@@ -100,9 +101,8 @@ interface NetworkRepository {
     suspend fun requestOneThingOrder(
         token: String,
         topic: String,
-        districts: String,
-        date: String,
-        timeSlot: String,
+        districts: List<String>,
+        date : List<WeekData>,
         tmiContent: String,
         oneThingBudgetRange: String,
     ): Triple<Int, String?, String?>

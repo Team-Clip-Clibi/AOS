@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.WeekData
 import com.sungil.domain.useCase.CheckTossInstall
 import com.sungil.domain.useCase.GetOneThingDay
+import com.sungil.domain.useCase.OneThingMatchOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class OneThingViewModel @Inject constructor(
     private val oneThingDate: GetOneThingDay,
     private val checkInstall: CheckTossInstall,
+    private val order: OneThingMatchOrder,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OneThingData())
     val uiState: StateFlow<OneThingData> = _uiState.asStateFlow()
@@ -26,7 +28,7 @@ class OneThingViewModel @Inject constructor(
     }
 
     fun onSubjectChanged(newValue: String) {
-        _uiState.update { it.copy(subject = newValue) }
+        _uiState.update { it.copy(topic = newValue) }
     }
 
     fun onTmiChanged(newValue: String) {
@@ -157,21 +159,53 @@ class OneThingViewModel @Inject constructor(
         }
     }
 
-    fun initError(){
+    fun order() {
+        viewModelScope.launch {
+            when (val result = order.invoke(
+                OneThingMatchOrder.Param(
+                    topic = _uiState.value.topic,
+                    districts = _uiState.value.location.map { it.name },
+                    date = _uiState.value.selectDate.toList(),
+                    tmiContent = _uiState.value.tmi,
+                    oneThingBudgetRange = _uiState.value.budget.name
+                )
+            )) {
+                is OneThingMatchOrder.Result.Fail -> {
+                    _uiState.update { error ->
+                        error.copy(error = UiError.FailOrder(result.errorMessage))
+                    }
+                }
+
+                is OneThingMatchOrder.Result.Success -> {
+                    _uiState.update { order ->
+                        order.copy(orderNumber = result.orderId, userId = result.userId)
+                    }
+                }
+            }
+        }
+    }
+
+    fun initError() {
         _uiState.update { errorData ->
             errorData.copy(error = UiError.None)
         }
     }
 
-    fun initInstallResult(){
+    fun initInstallResult() {
         _uiState.update { install ->
             install.copy(tosInstall = "")
+        }
+    }
+
+    fun initOrderNumber() {
+        _uiState.update { order ->
+            order.copy(orderNumber = "", userId = "")
         }
     }
 }
 
 data class OneThingData(
-    val subject: String = "",
+    val topic: String = "",
     val tmi: String = "",
     val selectedCategories: Set<CATEGORY> = emptySet(),
     val location: Set<Location> = emptySet(),
@@ -179,6 +213,8 @@ data class OneThingData(
     val selectDate: Set<WeekData> = emptySet(),
     val budget: Budget = Budget.RANGE_NONE,
     val tosInstall: String = "",
+    val orderNumber: String = "",
+    val userId: String = "",
     val error: UiError = UiError.None,
 )
 
@@ -189,5 +225,6 @@ sealed class UiError {
     data object NullDataSelect : UiError()
     data object FailToGetDate : UiError()
     data object TossNotInstall : UiError()
+    data class FailOrder(val message: String) : UiError()
     data object None : UiError()
 }

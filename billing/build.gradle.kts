@@ -24,7 +24,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
+        val userIdKey: String = properties.getProperty("userIdKey", "")
+        val orderKey: String = properties.getProperty("orderKey", "")
+        buildConfigField("String", "KEY_ORDER", orderKey)
+        buildConfigField("String", "KEY_USER", userIdKey)
     }
 
     buildTypes {

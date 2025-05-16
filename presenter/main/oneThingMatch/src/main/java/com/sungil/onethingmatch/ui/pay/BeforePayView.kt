@@ -17,9 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -35,15 +32,23 @@ import com.sungil.onethingmatch.component.EventView
 @Composable
 internal fun BeforePayView(
     viewModel: OneThingViewModel,
-    goNextPage: () -> Unit,
+    goNextPage: (String , String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var hasNavigated by remember { mutableStateOf(false) }
 
-    LaunchedEffect(uiState.tosInstall) {
+
+    LaunchedEffect(uiState) {
         if (uiState.tosInstall.isNotEmpty()) {
             viewModel.initInstallResult()
-            goNextPage()
+            viewModel.order()
+        }
+
+        if (uiState.orderNumber.isNotEmpty()) {
+            goNextPage(
+                uiState.orderNumber,
+                uiState.userId
+            )
+            viewModel.initOrderNumber()
         }
     }
 

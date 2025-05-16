@@ -26,6 +26,7 @@ import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
+import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
@@ -413,9 +414,8 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun requestOneThingOrder(
         token: String,
         topic: String,
-        districts: String,
-        date: String,
-        timeSlot: String,
+        districts: List<String>,
+        date: List<WeekData>,
         tmiContent: String,
         oneThingBudgetRange: String,
     ): Triple<Int, String?, String?> {
@@ -423,11 +423,12 @@ class NetworkRepositoryImpl @Inject constructor(
             bearerToken = token,
             order = OneThingOrder(
                 topic = topic,
-                districts = listOf(districts),
-                preferredDates = listOf(PreferredDate(
-                    date = date,
-                    timeSlot = timeSlot
-                )),
+                districts = districts,
+                preferredDates = date.flatMap { week ->
+                    week.timeSlots.map { timeSlot ->
+                        PreferredDate(date = week.date, timeSlot = timeSlot)
+                    }
+                },
                 tmiContent = tmiContent,
                 oneThingBudgetRange = oneThingBudgetRange
             )

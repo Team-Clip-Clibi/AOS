@@ -1,7 +1,6 @@
 package com.sungil.onethingmatch.ui.subject
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -60,8 +58,8 @@ internal fun InputSubjectView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),
-                    isEnable = uiState.subject.trim().isNotEmpty() &&
-                            uiState.subject.length <= 50
+                    isEnable = uiState.topic.trim().isNotEmpty() &&
+                            uiState.topic.length <= 50
                 )
             }
         },
@@ -87,7 +85,7 @@ internal fun InputSubjectView(
             Spacer(Modifier.height(24.dp))
             SlidingTextBox(subjectData)
             TextFieldComponent(
-                value = uiState.subject,
+                value = uiState.topic,
                 onValueChange = viewModel::onSubjectChanged,
                 maxLine = 1,
                 maxLength = 50,
@@ -95,7 +93,7 @@ internal fun InputSubjectView(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "${uiState.subject.length}/50",
+                text = "${uiState.topic.length}/50",
                 style = AppTextStyles.CAPTION_10_14_MEDIUM,
                 color = ColorStyle.GRAY_700,
                 modifier = Modifier.fillMaxWidth(),
