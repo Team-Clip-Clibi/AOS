@@ -26,8 +26,11 @@ android {
         consumerProguardFiles("consumer-rules.pro")
         val userIdKey: String = properties.getProperty("userIdKey", "")
         val orderKey: String = properties.getProperty("orderKey", "")
+        val amountKey : String = properties.getProperty("amountKey" ,"")
+
         buildConfigField("String", "KEY_ORDER", orderKey)
         buildConfigField("String", "KEY_USER", userIdKey)
+        buildConfigField("String", "KEY_AMOUNT", amountKey)
     }
 
     buildTypes {

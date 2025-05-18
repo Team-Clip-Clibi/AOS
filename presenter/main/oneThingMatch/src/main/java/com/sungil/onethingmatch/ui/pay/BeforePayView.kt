@@ -32,12 +32,12 @@ import com.sungil.onethingmatch.component.EventView
 @Composable
 internal fun BeforePayView(
     viewModel: OneThingViewModel,
-    goNextPage: (String , String) -> Unit,
+    goNextPage: (String , String , Int) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     /**
      * 에러 처리 해라 죽기 싫으면 김성일
-     * amunt도 넘겨
+     * amunt도 넘겨 -> 완료
      */
 
     LaunchedEffect(uiState) {
@@ -49,7 +49,8 @@ internal fun BeforePayView(
         if (uiState.orderNumber.isNotEmpty()) {
             goNextPage(
                 uiState.orderNumber,
-                uiState.userId
+                uiState.userId,
+                uiState.amount
             )
             viewModel.initOrderNumber()
         }

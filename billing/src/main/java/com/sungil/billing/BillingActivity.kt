@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.sungil.billing.databinding.ActivityBlillingBinding
 import com.sungil.domain.model.Router
@@ -18,12 +17,14 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class BillingActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityBlillingBinding
-    private lateinit var paymentWidget : PaymentWidget
-    private lateinit var orderId : String
-    private lateinit var userId : String
+    private lateinit var binding: ActivityBlillingBinding
+    private lateinit var paymentWidget: PaymentWidget
+    private lateinit var orderId: String
+    private lateinit var userId: String
+    private var amount: Int = 0
+
     @Inject
-    lateinit var router : Router
+    lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,9 @@ class BillingActivity : AppCompatActivity() {
     private fun init() {
         orderId = intent?.getStringExtra(BuildConfig.KEY_ORDER) ?: ""
         userId = intent?.getStringExtra(BuildConfig.KEY_USER) ?: ""
-        if(orderId.isEmpty() || userId.isEmpty()){
+        amount = intent?.getIntExtra(BuildConfig.KEY_AMOUNT, 0) ?: 0
+
+        if (orderId.isEmpty() || userId.isEmpty() || amount == 0) {
             finish()
             return
         }
@@ -66,20 +69,23 @@ class BillingActivity : AppCompatActivity() {
         paymentWidget.run {
             renderPaymentMethods(
                 method = binding.paymentWidget,
-                amount = PaymentMethod.Rendering.Amount(10000),
+                amount = PaymentMethod.Rendering.Amount(amount),
                 paymentWidgetStatusListener = paymentMethodWidgetStatusListener
             )
             renderAgreement(binding.agreementWidget)
         }
     }
 
-    private fun addListener(){
+    private fun addListener() {
         binding.payButton.setOnClickListener {
             paymentWidget.requestPayment(
-                paymentInfo = PaymentMethod.PaymentInfo(orderId = orderId , orderName = "oneThing"),
-                paymentCallback = object : PaymentCallback{
+                paymentInfo = PaymentMethod.PaymentInfo(orderId = orderId, orderName = "oneThing"),
+                paymentCallback = object : PaymentCallback {
                     override fun onPaymentFailed(fail: TossPaymentResult.Fail) {
-                        Log.e(javaClass.name.toString(),"errorCode : ${fail.errorCode} , message : ${fail.errorMessage}")
+                        Log.e(
+                            javaClass.name.toString(),
+                            "errorCode : ${fail.errorCode} , message : ${fail.errorMessage}"
+                        )
                     }
 
                     override fun onPaymentSuccess(success: TossPaymentResult.Success) {

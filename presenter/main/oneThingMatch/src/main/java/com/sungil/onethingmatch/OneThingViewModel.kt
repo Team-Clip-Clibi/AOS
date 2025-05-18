@@ -178,7 +178,11 @@ class OneThingViewModel @Inject constructor(
 
                 is OneThingMatchOrder.Result.Success -> {
                     _uiState.update { order ->
-                        order.copy(orderNumber = result.orderId, userId = result.userId)
+                        order.copy(
+                            orderNumber = result.orderId,
+                            userId = result.userId,
+                            amount = result.amount
+                        )
                     }
                 }
             }
@@ -199,7 +203,7 @@ class OneThingViewModel @Inject constructor(
 
     fun initOrderNumber() {
         _uiState.update { order ->
-            order.copy(orderNumber = "", userId = "")
+            order.copy(orderNumber = "", userId = "", amount = -1)
         }
     }
 }
@@ -215,6 +219,7 @@ data class OneThingData(
     val tosInstall: String = "",
     val orderNumber: String = "",
     val userId: String = "",
+    val amount: Int = -1,
     val error: UiError = UiError.None,
 )
 

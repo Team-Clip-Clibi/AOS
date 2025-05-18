@@ -17,13 +17,13 @@ class OneThingMatchOrder @Inject constructor(
     data class Param(
         val topic: String,
         val districts: List<String>,
-        val date : List<WeekData>,
+        val date: List<WeekData>,
         val tmiContent: String,
         val oneThingBudgetRange: String,
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
-        data class Success(val orderId: String ,val userId : String) : Result
+        data class Success(val orderId: String, val userId: String, val amount: Int) : Result
         data class Fail(val errorMessage: String) : Result
     }
 
@@ -49,12 +49,13 @@ class OneThingMatchOrder @Inject constructor(
         )
         when (requestOrder.first) {
             200 -> {
-                if (requestOrder.second == null) {
+                if (requestOrder.second == null || requestOrder.third == null) {
                     return Result.Fail("network error")
                 }
                 return Result.Success(
                     orderId = requestOrder.second!!,
-                    userId = userId
+                    userId = userId,
+                    amount = requestOrder.third!!
                 )
             }
 
@@ -83,10 +84,14 @@ class OneThingMatchOrder @Inject constructor(
                     tmiContent = param.tmiContent,
                     oneThingBudgetRange = param.oneThingBudgetRange
                 )
-                if (reRequest.first != 200 || reRequest.second == null) {
+                if (reRequest.first != 200 || reRequest.second == null || requestOrder.third == null) {
                     return Result.Fail("network error")
                 }
-                return Result.Success(orderId = reRequest.second!! , userId = userId)
+                return Result.Success(
+                    orderId = reRequest.second!!,
+                    userId = userId,
+                    amount = requestOrder.third!!
+                )
             }
 
             else -> return Result.Fail("network error")

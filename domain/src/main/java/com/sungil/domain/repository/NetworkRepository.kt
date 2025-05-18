@@ -105,5 +105,5 @@ interface NetworkRepository {
         date : List<WeekData>,
         tmiContent: String,
         oneThingBudgetRange: String,
-    ): Triple<Int, String?, String?>
+    ): Triple<Int, String?, Int?>
 }
