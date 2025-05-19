@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/presenter/main/low" />
             <option value="$PROJECT_DIR$/presenter/main/oneThingMatch" />
             <option value="$PROJECT_DIR$/presenter/main/report" />
+            <option value="$PROJECT_DIR$/presenter/pay_finish" />
             <option value="$PROJECT_DIR$/presenter/signup" />
           </set>
         </option>
