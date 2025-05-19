@@ -37,6 +37,7 @@ fun OneThingNav(
     viewModel: OneThingViewModel,
     home: () -> Unit,
     pay: (String, String, Int , String) -> Unit,
+    startDestination : String = NAV_INTRO
 ) {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -64,7 +65,7 @@ fun OneThingNav(
 
         NavHost(
             navController = navController,
-            startDestination = NAV_INTRO,
+            startDestination = startDestination,
             modifier = Modifier.weight(1f)
         ) {
             composable(NAV_INTRO,

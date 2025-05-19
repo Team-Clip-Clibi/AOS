@@ -88,7 +88,7 @@ fun ButtonXXLPurple400(
 }
 
 @Composable
-fun ButtonWhite100TITLE(
+fun ButtonXXLWhite(
     onClick: () -> Unit,
     buttonText: String,
     modifier: Modifier,
