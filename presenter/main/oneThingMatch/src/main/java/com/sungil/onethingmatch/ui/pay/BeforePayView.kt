@@ -24,6 +24,7 @@ import com.example.core.AppTextStyles
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.example.core.CustomDialogOneButton
+import com.sungil.onethingmatch.BuildConfig
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.UiError
@@ -32,7 +33,7 @@ import com.sungil.onethingmatch.component.EventView
 @Composable
 internal fun BeforePayView(
     viewModel: OneThingViewModel,
-    goNextPage: (String , String , Int) -> Unit,
+    goNextPage: (String , String , Int , String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     /**
@@ -50,7 +51,8 @@ internal fun BeforePayView(
             goNextPage(
                 uiState.orderNumber,
                 uiState.userId,
-                uiState.amount
+                uiState.amount,
+                BuildConfig.MATCH_INFO
             )
             viewModel.initOrderNumber()
         }

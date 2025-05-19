@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btn_pay">결제하기</string>
+    <string name="msg_app_error">Error save Token Fail</string>
+    <string name="msg_re_login">Error Token is Expire</string>
+    <string name="msg_network_error">Error server is close</string>
 </resources>

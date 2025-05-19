@@ -22,11 +22,12 @@ class OneThinMatchActivity : ComponentActivity() {
             OneThingNav(
                 viewModel = viewModel,
                 home = { router.navigation(NAV_HOME) },
-                pay = { orderId, userId, amount ->
+                pay = { orderId, userId, amount, matchInfo ->
                     val bundle = Bundle().apply {
                         putString(BuildConfig.KEY_USER, userId)
                         putString(BuildConfig.KEY_ORDER, orderId)
                         putInt(BuildConfig.KEY_AMOUNT, amount)
+                        putString(BuildConfig.KEY_MATCH, matchInfo)
                     }
                     router.navigation(NAV_PAY, bundle)
                 }

@@ -51,6 +51,7 @@ android {
         val unReadAlarm: String = properties.getProperty("unReadNotification", "")
         val readAlarm: String = properties.getProperty("readNotificaiton", "")
         val oneThingOrder: String = properties.getProperty("oneThingOreder", "")
+        val payment: String = properties.getProperty("paymentUrl", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -78,6 +79,7 @@ android {
         buildConfigField("String", "UN_READ_NOTIFY_URL", unReadAlarm)
         buildConfigField("String", "READ_NOTIFY_URL", readAlarm)
         buildConfigField("String", "ONETHING_ORDER_URL", oneThingOrder)
+        buildConfigField("String", "PAYMENT_URL", payment)
     }
 
     buildTypes {

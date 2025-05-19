@@ -14,6 +14,7 @@ import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingNotificationDTO
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.OneThingOrderResponse
+import com.sungil.network.model.Payment
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
@@ -288,4 +289,12 @@ interface HttpApi {
         @Body order: OneThingOrder,
     ): Response<OneThingOrderResponse>
 
+    /**
+     * 결제 승인 API
+     */
+    @POST(BuildConfig.PAYMENT_URL)
+    suspend fun requestPayment(
+        @Header("Authorization") bearerToken: String,
+        @Body payment: Payment,
+    ): Response<Unit>
 }

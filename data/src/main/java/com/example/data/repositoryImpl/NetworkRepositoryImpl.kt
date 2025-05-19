@@ -1,6 +1,7 @@
 package com.example.data.repositoryImpl
 
 import android.app.Activity
+import androidx.collection.orderedScatterSetOf
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -40,6 +41,7 @@ import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
 import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingOrder
+import com.sungil.network.model.Payment
 import com.sungil.network.model.PreferredDate
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
@@ -434,6 +436,22 @@ class NetworkRepositoryImpl @Inject constructor(
             )
         )
         return Triple(result.code() , result.body()?.orderId , result.body()?.amount)
+    }
+
+    override suspend fun requestPayConfirm(
+        token: String,
+        paymentKey: String,
+        orderId: String,
+        orderType: String,
+    ): Int {
+        return api.requestPayment(
+            token,
+            Payment(
+                paymentKey = paymentKey,
+                orderId = orderId,
+                orderType = orderType
+            )
+        ).code()
     }
 
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {

@@ -27,9 +27,14 @@ android {
         val userIdKey: String = properties.getProperty("userIdKey", "")
         val orderKey: String = properties.getProperty("orderKey", "")
         val amountKey: String = properties.getProperty("amountKey", "")
+        val oneThing: String = properties.getProperty("oneThing", "")
+        val matchKey: String = properties.getProperty("matchKey", "")
+
         buildConfigField("String", "KEY_ORDER", orderKey)
         buildConfigField("String", "KEY_USER", userIdKey)
         buildConfigField("String", "KEY_AMOUNT", amountKey)
+        buildConfigField("String", "MATCH_INFO", oneThing)
+        buildConfigField("String", "KEY_MATCH", matchKey)
     }
 
     buildTypes {

@@ -102,8 +102,15 @@ interface NetworkRepository {
         token: String,
         topic: String,
         districts: List<String>,
-        date : List<WeekData>,
+        date: List<WeekData>,
         tmiContent: String,
         oneThingBudgetRange: String,
     ): Triple<Int, String?, Int?>
+
+    suspend fun requestPayConfirm(
+        token : String,
+        paymentKey: String,
+        orderId: String,
+        orderType: String,
+    ): Int
 }
