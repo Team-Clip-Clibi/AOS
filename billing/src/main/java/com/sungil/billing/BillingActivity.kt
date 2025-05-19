@@ -145,7 +145,10 @@ class BillingActivity : AppCompatActivity() {
                         }
 
                         is BillingViewModel.UiState.Pay -> {
-
+                            val bundle = Bundle().apply {
+                                putString(BuildConfig.KEY_MATCH, matchInfo)
+                            }
+                            router.navigation(NAV_PAY_FINISH, bundle)
                         }
                     }
                 }

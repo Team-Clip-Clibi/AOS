@@ -78,6 +78,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="false" />
 
+        <activity android:name="com.sungil.pay_finish.PayFinishActivity"
+            android:exported="false"/>
+
         
     </application>
 

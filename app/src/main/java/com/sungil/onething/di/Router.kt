@@ -13,6 +13,7 @@ import com.sungil.login.LoginActivity
 import com.sungil.low.ui.low.LowActivity
 import com.sungil.main.MainActivity
 import com.sungil.onethingmatch.OneThinMatchActivity
+import com.sungil.pay_finish.PayFinishActivity
 import com.sungil.report.ReportMainActivity
 
 class Router(private val context: Context) : Router {
@@ -85,6 +86,14 @@ class Router(private val context: Context) : Router {
                 val intent = Intent(context, BillingActivity::class.java).apply {
                     putExtras(args)
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+            }
+
+            "pay_finish" ->{
+                val intent = Intent(context , PayFinishActivity::class.java).apply {
+                    putExtras(args)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
             }
