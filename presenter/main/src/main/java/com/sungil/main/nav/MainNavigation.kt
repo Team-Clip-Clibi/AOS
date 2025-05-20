@@ -18,7 +18,8 @@ fun MainNavigation(
     reportClick: () -> Unit,
     lowClick: () -> Unit,
     alarmClick: () -> Unit,
-    oneThingClick : () -> Unit
+    oneThingClick : () -> Unit,
+    firstMatchClick : (String) -> Unit
 ) {
     NavHost(navController = navController, startDestination = Screen.Home.screenRoute) {
         composable(Screen.Home.screenRoute) {
@@ -27,7 +28,8 @@ fun MainNavigation(
                 alarmClick = alarmClick,
                 notifyClick = {},
                 oneThingMatchClick = oneThingClick,
-                randomMatchClick = {}
+                randomMatchClick = {},
+                firstMatchClick = firstMatchClick
             )
         }
         composable(Screen.Calendar.screenRoute) {

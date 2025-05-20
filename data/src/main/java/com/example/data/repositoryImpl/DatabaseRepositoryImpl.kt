@@ -129,6 +129,14 @@ class DatabaseRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getFirstMatchInput(): Boolean {
+        return database.getFirstMatchInput()
+    }
+
+    override suspend fun setFirstMatchInput(): Boolean {
+        return database.saveFirstMatchInput()
+    }
+
     private fun UserInfo.toDomain(): com.sungil.domain.model.UserData {
         return com.sungil.domain.model.UserData(
             userName = name,

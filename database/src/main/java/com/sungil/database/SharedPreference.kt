@@ -12,4 +12,6 @@ interface SharedPreference {
     suspend fun updateFcmToken(data: String): Boolean
     suspend fun setNotificationState(data : Boolean) : Boolean
     suspend fun getNotificationState() : Boolean
+    suspend fun saveFirstMatchInput() : Boolean
+    suspend fun getFirstMatchInput() : Boolean
 }

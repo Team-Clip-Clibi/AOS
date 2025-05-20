@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sungil.domain.model.MatchInfo
+import com.sungil.main.BuildConfig
 import com.sungil.main.ERROR_NETWORK_ERROR
 import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.ERROR_SAVE_ERROR
@@ -41,6 +42,7 @@ import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.HomeTitleText
 import com.sungil.main.component.MeetingCardList
 import com.sungil.main.component.NotificationBarListStable
+import com.sungil.onethingmatch.OneThingData
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,6 +51,7 @@ internal fun HomMainScreen(
     viewModel: MainViewModel,
     snackBarHost: SnackbarHostState,
     onThingClick: () -> Unit,
+    firstMatchClick : (String) -> Unit,
     notifyClick: (String) -> Unit,
     randomMatchClick: () -> Unit,
     reLogin: () -> Unit,
@@ -58,6 +61,7 @@ internal fun HomMainScreen(
     val coroutineScope = rememberCoroutineScope()
     val state by viewModel.userState.collectAsState()
     val notificationState = state.notificationResponseState
+    val firstMatch = state.firstMatch
     val userData = state.userDataState
     val context = LocalContext.current
     val matchState = state.matchState
@@ -116,6 +120,24 @@ internal fun HomMainScreen(
         }
     }
 
+    LaunchedEffect(firstMatch) {
+        when(firstMatch){
+            is MainViewModel.UiState.Success ->{
+                when(firstMatch.data){
+                    BuildConfig.ONE_THING -> {
+                        onThingClick()
+                    }
+                    BuildConfig.RANDOM ->{
+
+                    }
+                }
+            }
+            is MainViewModel.UiState.Error ->{
+
+            }
+            else -> Unit
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -167,7 +189,9 @@ internal fun HomMainScreen(
             CustomHomeButton(
                 titleText = stringResource(R.string.btn_home_oneThing),
                 contentText = stringResource(R.string.btn_home_oneThing_content),
-                onClick = onThingClick,
+                onClick = {
+                    viewModel.checkFirstMatch(BuildConfig.ONE_THING)
+                },
                 image = R.drawable.ic_one_thing_purple,
                 modifier = Modifier
                     .fillMaxWidth()

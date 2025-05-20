@@ -26,6 +26,7 @@ fun HomeScreen(
     notifyClick: (String) -> Unit,
     oneThingMatchClick: () -> Unit,
     randomMatchClick: () -> Unit,
+    firstMatchClick: (String) -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val alarmState by viewModel.userState.collectAsState()
@@ -53,7 +54,13 @@ fun HomeScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 17.dp, end = 16.dp, bottom = WindowInsets.navigationBars.asPaddingValues().calculateTopPadding() + 16.dp)
+                    .padding(
+                        start = 17.dp,
+                        end = 16.dp,
+                        bottom = WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateTopPadding() + 16.dp
+                    )
             )
         }
     ) { paddingValues ->
@@ -64,7 +71,8 @@ fun HomeScreen(
             onThingClick = oneThingMatchClick,
             notifyClick = notifyClick,
             randomMatchClick = randomMatchClick,
-            reLogin = {}
+            reLogin = {},
+            firstMatchClick = firstMatchClick
         )
     }
 }

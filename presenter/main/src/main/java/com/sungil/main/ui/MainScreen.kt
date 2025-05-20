@@ -18,8 +18,9 @@ fun MainScreenView(
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
     lowClick: () -> Unit,
-    alarmClick : () -> Unit,
-    oneThingClick : () -> Unit
+    alarmClick: () -> Unit,
+    oneThingClick: () -> Unit,
+    firstMatchClick: (String) -> Unit,
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -34,7 +35,8 @@ fun MainScreenView(
                 reportClick = reportClick,
                 lowClick = lowClick,
                 alarmClick = alarmClick,
-                oneThingClick = oneThingClick
+                oneThingClick = oneThingClick,
+                firstMatchClick = firstMatchClick
             )
         }
     }

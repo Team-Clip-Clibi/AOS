@@ -24,7 +24,8 @@ class MainActivity : ComponentActivity() {
                 reportClick = { router.navigation(NAV_REPORT) },
                 lowClick = { router.navigation(NAV_LOW) },
                 alarmClick = { router.navigation(NAV_ALARM) },
-                oneThingClick = { router.navigation(NAV_ONE_THING) }
+                oneThingClick = { router.navigation(NAV_ONE_THING) },
+                firstMatchClick = {}
             )
         }
     }

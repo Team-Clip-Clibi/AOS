@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -5,7 +7,13 @@ plugins {
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.kotlin.serialization)
 }
-
+val properties = Properties()
+val localPropertiesFile = project.rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { inputStream ->
+        properties.load(inputStream)
+    }
+}
 android {
     namespace = "com.sungil.main"
     compileSdk = 35
@@ -15,6 +23,13 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        val matchKey: String = properties.getProperty("matchKey", "")
+        val oneThing: String = properties.getProperty("oneThing", "")
+        val random: String = properties.getProperty("random", "")
+
+        buildConfigField("String", "ONE_THING", oneThing)
+        buildConfigField("String", "RANDOM", random)
+        buildConfigField("String", "KEY_MATCH", matchKey)
     }
 
     buildTypes {
@@ -35,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"

@@ -122,4 +122,24 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
         }
     }
 
+    override suspend fun saveFirstMatchInput(): Boolean {
+        return try {
+            preference.edit().putBoolean(BuildConfig.MATCH_KEY, true).apply()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun getFirstMatchInput(): Boolean {
+        return try {
+            val data = preference.getBoolean(BuildConfig.MATCH_KEY, false)
+            return data
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }

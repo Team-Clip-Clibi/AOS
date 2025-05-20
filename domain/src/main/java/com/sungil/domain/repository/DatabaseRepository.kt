@@ -33,4 +33,6 @@ interface DatabaseRepository {
     suspend fun getSaveMatch() : List<SaveMatch>
     suspend fun deleteSaveMatch(matchId : Int) : Boolean
     suspend fun insetSaveMatch(matchId : Int , time : String , category : String , location : String) : Boolean
+    suspend fun getFirstMatchInput() : Boolean
+    suspend fun setFirstMatchInput() : Boolean
 }
