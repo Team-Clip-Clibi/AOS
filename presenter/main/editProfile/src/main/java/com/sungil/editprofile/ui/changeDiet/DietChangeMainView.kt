@@ -134,7 +134,9 @@ internal fun DietChangeMainView(
             HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
 
             Spacer(modifier = Modifier.height(10.dp))
-
+            /**
+             * TODO -> 해당 TEXT 서버에 업로드 하는 기능 없음
+             */
             if (diet.name == DIET.ETC.name) {
                 CustomChangeDataTextField(
                     beforeText = inputValue,

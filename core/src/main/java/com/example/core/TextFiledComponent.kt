@@ -25,7 +25,7 @@ fun TextFieldComponent(
     hint: String = "",
     maxLength: Int,
     maxLine: Int,
-    inputType: KeyboardType = KeyboardType.Text // ← 커스터마이징 가능하게 추가
+    inputType: KeyboardType = KeyboardType.Text
 ) {
     TextField(
         value = value,
