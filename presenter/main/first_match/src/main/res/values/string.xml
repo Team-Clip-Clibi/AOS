@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="top_app_bar">모임 신청</string>
+    <string name="btn_next">다음</string>
+    <!--intro-->
+    <string name="txt_intro_title">모임 신청을 위해\n몇 가지 정보가 필요해요</string>
+    <string name="txt_intro_sub_title">입력한 정보는 이후 자동으로 적용되며, 수정이 가능해요</string>
+    <string name="txt_intro_image_content">첫 모임 신청을 환영해요!</string>
+    <!--job-->
+    <string name="txt_job_title">현재 하고 계신 일을\n선택해주세요</string>
+    <string name="txt_job_sub_title">최대 2개까지 선택할 수 있어요</string>
+    <!--diet-->
+    <string name="txt_diet_title">식사 메뉴 선정 시 참고할 점을\n알려주세요</string>
+    <string name="txt_diet_sub_title">알레르기나 특별한 식사 취향이 있다면 말씀해 주세요</string>
+    <!--language-->
+    <string name="txt_language_title">사용하는 언어를 선택해주세요</string>
+    <string name="txt_language_sub_title">모임 진행을 위해 주로 사용하는 언어를 알려주세요</string>
+</resources>

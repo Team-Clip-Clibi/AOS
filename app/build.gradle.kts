@@ -108,6 +108,7 @@ dependencies {
     implementation(project(":presenter:main:low"))
     implementation(project(":presenter:main:alarm"))
     implementation(project(":presenter:main:oneThingMatch"))
+    implementation(project(":presenter:main:first_match"))
     implementation(project(":presenter:pay_finish"))
     implementation(project(":kakao"))
     implementation(project(":domain"))
