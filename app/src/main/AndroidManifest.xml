@@ -48,8 +48,7 @@
 
         <activity
             android:name="com.sungil.main.MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"/>
 
         <activity
             android:name="com.sungil.editprofile.ProfileEditMainActivity"
@@ -63,25 +62,32 @@
             android:name="com.sungil.low.ui.low.LowActivity"
             android:exported="true" />
 
-        <activity android:name="com.sungil.alarm.AlarmMainActivity"
-            android:exported="true"/>
+        <activity
+            android:name="com.sungil.alarm.AlarmMainActivity"
+            android:exported="true" />
 
-        <activity android:name="com.sungil.onethingmatch.OneThinMatchActivity"
-            android:exported="true"/>
+        <activity
+            android:name="com.sungil.onethingmatch.OneThinMatchActivity"
+            android:exported="true" />
 
-        <activity android:name="com.sungil.billing.BillingActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:exported="true"/>
+        <activity
+            android:name="com.sungil.billing.BillingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity
             android:name="com.tosspayments.paymentsdk.activity.TossPaymentActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name="com.sungil.pay_finish.PayFinishActivity"
             android:exported="false" />
 
-        <activity android:name="com.sungil.pay_finish.PayFinishActivity"
-            android:exported="false"/>
+        <activity
+            android:name="com.oneThing.first_matrch.FirstMatchActivity"
+            android:exported="true" />
 
-        
     </application>
 
 </manifest>

@@ -22,10 +22,12 @@ const val NAV_REPORT = "report"
 const val NAV_LOW = "low"
 const val NAV_ALARM = "alarm"
 const val NAV_ONE_THING = "oneThing"
+const val NAV_FIRST_MATCH = "first_match"
 
 const val ERROR_RE_LOGIN = "reLogin"
 const val ERROR_SAVE_ERROR = "save error"
 const val ERROR_NETWORK_ERROR = "network error"
+const val ERROR_FIRST_MATCH_DATA_NOT_INPUT = "First match data is not input"
 
 const val CONTENT_NOTICE = "NOTICE"
 const val CONTENT_ARTICLE = "ARTICLE"

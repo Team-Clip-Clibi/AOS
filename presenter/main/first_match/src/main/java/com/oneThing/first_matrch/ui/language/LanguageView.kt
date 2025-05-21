@@ -1,4 +1,4 @@
-package com.oneThing.first_matrch.ui.diet
+package com.oneThing.first_matrch.ui.language
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,14 +20,12 @@ import com.example.core.AppTextStyles
 import com.example.core.ButtonLeftLarge
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
-import com.example.core.TextFieldComponent
-import com.oneThing.first_matrch.DIET
 import com.oneThing.first_matrch.FirstMatchViewModel
+import com.oneThing.first_matrch.LANGUAGE
 import com.oneThing.first_matrch.R
 
-
 @Composable
-internal fun DietView(
+internal fun LanguageView(
     viewModel: FirstMatchViewModel,
     goNextPage: () -> Unit,
 ) {
@@ -47,11 +45,11 @@ internal fun DietView(
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
                     onClick = goNextPage,
-                    buttonText = stringResource(R.string.btn_next),
+                    buttonText = stringResource(R.string.btn_finish),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),
-                    isEnable = uiState.diet != DIET.NONE.displayName
+                    isEnable = uiState.language != ""
                 )
             }
         },
@@ -62,78 +60,47 @@ internal fun DietView(
                 .fillMaxSize()
                 .padding(
                     top = paddingValues.calculateTopPadding() + 32.dp,
-                    bottom = paddingValues.calculateBottomPadding() + 10.dp,
                     start = 17.dp,
                     end = 16.dp
                 )
         ) {
             Text(
-                text = stringResource(R.string.txt_diet_title),
+                text = stringResource(R.string.txt_language_title),
                 style = AppTextStyles.HEAD_28_40_BOLD,
                 color = ColorStyle.GRAY_800,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(R.string.txt_diet_sub_title),
+                text = stringResource(R.string.txt_language_sub_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
                 color = ColorStyle.GRAY_600,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(24.dp))
-
             ButtonLeftLarge(
-                text = stringResource(R.string.txt_diet_item_vg),
-                isSelected = uiState.diet == DIET.VG.displayName,
+                text = stringResource(R.string.txt_language_item_korean),
+                isSelected = uiState.language == LANGUAGE.KOREAN.name,
                 onClick = {
-                    viewModel.diet(DIET.VG.displayName)
+                    viewModel.language(LANGUAGE.KOREAN.name)
                 }
             )
             Spacer(modifier = Modifier.height(10.dp))
             ButtonLeftLarge(
-                text = stringResource(R.string.txt_diet_item_vt),
-                isSelected = uiState.diet == DIET.VT.displayName,
+                text = stringResource(R.string.txt_language_item_english),
+                isSelected = uiState.language == LANGUAGE.ENGLISH.name,
                 onClick = {
-                    viewModel.diet(DIET.VT.displayName)
+                    viewModel.language(LANGUAGE.ENGLISH.name)
                 }
             )
             Spacer(modifier = Modifier.height(10.dp))
             ButtonLeftLarge(
-                text = stringResource(R.string.txt_diet_item_gf),
-                isSelected = uiState.diet == DIET.GF.displayName,
+                text = stringResource(R.string.txT_language_item_both),
+                isSelected = uiState.language == LANGUAGE.BOTH.name,
                 onClick = {
-                    viewModel.diet(DIET.GF.displayName)
+                    viewModel.language(LANGUAGE.BOTH.name)
                 }
             )
-            Spacer(modifier = Modifier.height(10.dp))
-            ButtonLeftLarge(
-                text = stringResource(R.string.txt_diet_item_all),
-                isSelected = uiState.diet == DIET.ALL.displayName,
-                onClick = {
-                    viewModel.diet(DIET.ALL.displayName)
-                }
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            ButtonLeftLarge(
-                text = stringResource(R.string.txt_diet_item_etc),
-                isSelected = uiState.diet == DIET.ETC.displayName,
-                onClick = {
-                    viewModel.diet(DIET.ETC.displayName)
-                }
-            )
-            if (uiState.diet == DIET.ETC.displayName) {
-                TextFieldComponent(
-                    value = if (uiState.diet == DIET.NONE.displayName) {
-                        ""
-                    } else {
-                        uiState.diet
-                    },
-                    onValueChange = viewModel::diet,
-                    maxLength = 1,
-                    maxLine = 200,
-                    hint = stringResource(R.string.txt_diet_item_hint)
-                )
-            }
         }
     }
 }

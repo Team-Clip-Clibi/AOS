@@ -24,7 +24,7 @@ import com.oneThing.first_matrch.FirstMatchViewModel
 import com.oneThing.first_matrch.JOB
 import com.oneThing.first_matrch.R
 import com.oneThing.first_matrch.UiError
-import com.oneThing.first_matrch.ui.JobGridSelector
+import com.oneThing.first_matrch.component.JobGridSelector
 
 
 @Composable
@@ -85,6 +85,7 @@ internal fun JobView(
                 color = ColorStyle.GRAY_800,
                 modifier = Modifier.fillMaxWidth()
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.txt_job_sub_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,

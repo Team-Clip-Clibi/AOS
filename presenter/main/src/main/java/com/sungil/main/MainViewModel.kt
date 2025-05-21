@@ -139,7 +139,7 @@ class MainViewModel @Inject constructor(
 
     fun checkFirstMatch(orderType: String) {
         viewModelScope.launch {
-            when (val result = firstMatch.invoke()) {
+            when (firstMatch.invoke()) {
                 is GetFirstMatchInput.Result.Success -> {
                     _userState.update {
                         it.copy(
@@ -151,7 +151,7 @@ class MainViewModel @Inject constructor(
                 is GetFirstMatchInput.Result.Fail -> {
                     _userState.update {
                         it.copy(
-                            firstMatch = UiState.Error(result.message)
+                            firstMatch = UiState.Error(orderType)
                         )
                     }
                 }

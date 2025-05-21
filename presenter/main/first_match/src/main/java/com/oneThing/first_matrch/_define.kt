@@ -13,21 +13,22 @@ enum class JOB(val displayName: String) {
     ETC("기타"),
     NONE("NONE");
 
-    companion object{
-        fun fromDisplayName(displayName: String) : JOB?{
+    companion object {
+        fun fromDisplayName(displayName: String): JOB? {
             return entries.find { it.displayName == displayName }
         }
+
         fun fromCode(code: String): JOB? {
             return entries.find { it.name == code }
         }
     }
 }
 
-enum class Error(val errorContent : String){
+enum class Error(val errorContent: String) {
     ERROR_TO_MANY_SELECT("To many job select");
 
-    companion object{
-        fun fromCode(code : String) : Error? = entries.find { it.errorContent == code }
+    companion object {
+        fun fromCode(code: String): Error? = entries.find { it.errorContent == code }
     }
 }
 
@@ -39,3 +40,18 @@ enum class DIET(val displayName: String) {
     ETC("기타"),
     NONE("NULL")
 }
+
+enum class LANGUAGE {
+    KOREAN,
+    ENGLISH,
+    BOTH
+}
+
+const val NAV_INTRO = "intro"
+const val NAV_JOB = "job"
+const val NAV_DIET = "diet"
+const val NAV_LANGUAGE = "language"
+
+const val NAV_HOME = "Main"
+const val NAV_ONE_THING = "oneThing"
+const val NAV_RANDOM = ""

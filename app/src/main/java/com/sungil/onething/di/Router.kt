@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.example.signup.SignUpActivity
+import com.oneThing.first_matrch.FirstMatchActivity
+import com.oneThing.first_matrch.FirstMatchViewModel
 import com.sungil.alarm.AlarmMainActivity
 import com.sungil.billing.BillingActivity
 import com.sungil.domain.model.Router
@@ -90,8 +92,16 @@ class Router(private val context: Context) : Router {
                 context.startActivity(intent)
             }
 
-            "pay_finish" ->{
-                val intent = Intent(context , PayFinishActivity::class.java).apply {
+            "pay_finish" -> {
+                val intent = Intent(context, PayFinishActivity::class.java).apply {
+                    putExtras(args)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                context.startActivity(intent)
+            }
+
+            "first_match" -> {
+                val intent = Intent(context, FirstMatchActivity::class.java).apply {
                     putExtras(args)
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }

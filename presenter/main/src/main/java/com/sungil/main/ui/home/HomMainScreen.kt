@@ -133,8 +133,9 @@ internal fun HomMainScreen(
                 }
             }
             is MainViewModel.UiState.Error ->{
-
+                firstMatchClick(firstMatch.message)
             }
+
             else -> Unit
         }
     }

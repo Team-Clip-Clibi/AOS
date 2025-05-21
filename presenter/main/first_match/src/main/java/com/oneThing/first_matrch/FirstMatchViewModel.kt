@@ -13,23 +13,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FirstMatchViewModel @Inject constructor(
-    private val userInfo : GetUserInfo
+    private val userInfo: GetUserInfo,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(FirstMatchData())
     val uiState: StateFlow<FirstMatchData> = _uiState.asStateFlow()
+
+    private var destination: String = ""
 
     init {
         userData()
     }
 
-    private fun userData(){
+    private fun userData() {
         viewModelScope.launch {
-            when(val result = userInfo.invoke()){
+            when (val result = userInfo.invoke()) {
                 is GetUserInfo.Result.Fail -> {
                     _uiState.update { current ->
                         current.copy(error = UiError.Error(result.errorMessage))
                     }
                 }
+
                 is GetUserInfo.Result.Success -> {
                     val (first, second) = result.data.job
                     val job = if (first == "NONE") {
@@ -50,7 +53,7 @@ class FirstMatchViewModel @Inject constructor(
         }
     }
 
-    fun selectJob(data : JOB){
+    fun selectJob(data: JOB) {
         _uiState.update { current ->
             val currentJobs = current.job.toMutableSet()
             val updatedJobs = when {
@@ -63,6 +66,7 @@ class FirstMatchViewModel @Inject constructor(
                     currentJobs.add(data)
                     currentJobs
                 }
+
                 else -> {
                     return@update current.copy(error = UiError.Error("To many job select"))
                 }
@@ -74,10 +78,24 @@ class FirstMatchViewModel @Inject constructor(
         }
     }
 
-    fun diet(data : String){
+    fun diet(data: String) {
         _uiState.update { current ->
             current.copy(diet = data)
         }
+    }
+
+    fun language(data: String) {
+        _uiState.update { current ->
+            current.copy(language = data)
+        }
+    }
+
+    fun destination(data: String) {
+        destination = data
+    }
+
+    fun getDestination(): String {
+        return destination
     }
 }
 
@@ -85,9 +103,10 @@ data class FirstMatchData(
     val job: Set<JOB> = emptySet(),
     val diet: String = DIET.NONE.displayName,
     val language: String = "",
-    val error: UiError = UiError.None
+    val error: UiError = UiError.None,
 )
-sealed class UiError{
+
+sealed class UiError {
     data object None : UiError()
     data class Error(val message: String) : UiError()
 }
