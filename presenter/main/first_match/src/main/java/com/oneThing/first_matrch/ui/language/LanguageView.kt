@@ -9,20 +9,28 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ButtonLeftLarge
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
+import com.oneThing.first_matrch.DomainError
 import com.oneThing.first_matrch.FirstMatchViewModel
 import com.oneThing.first_matrch.LANGUAGE
 import com.oneThing.first_matrch.R
+import com.oneThing.first_matrch.UiError
+import com.oneThing.first_matrch.UiSuccess
 
 @Composable
 internal fun LanguageView(
@@ -30,6 +38,42 @@ internal fun LanguageView(
     goNextPage: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    LaunchedEffect(uiState.error, uiState.success) {
+        when (uiState.success) {
+            is UiSuccess.Success -> {
+                viewModel.initSuccessError()
+                goNextPage()
+            }
+
+            UiSuccess.None -> Unit
+        }
+
+        when (val error = uiState.error) {
+            is UiError.Error -> {
+                viewModel.initSuccessError()
+                when(DomainError.fromCode(error.message)){
+                    DomainError.ERROR_NETWORK_ERROR -> {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+
+                    }
+                    DomainError.ERROR_SAVE_ERROR -> {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_save_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                    else -> Unit
+                }
+            }
+            UiError.None -> Unit
+        }
+    }
+
     Scaffold(
         bottomBar = {
             Column(

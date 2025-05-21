@@ -32,6 +32,16 @@ enum class Error(val errorContent: String) {
     }
 }
 
+enum class DomainError(val errorContent : String){
+    ERROR_SELECT_NONE("No Change"),
+    ERROR_NETWORK_ERROR("network Error"),
+    ERROR_SAVE_ERROR("Save Fail");
+
+    companion object{
+        fun fromCode(code : String) : DomainError? = entries.find { it.errorContent == code }
+    }
+}
+
 enum class DIET(val displayName: String) {
     VG("비건이에요"),
     VT("베지테리언이에요"),

@@ -25,4 +25,9 @@
     <string name="txt_language_item_korean">한국어</string>
     <string name="txt_language_item_english">영어</string>
     <string name="txT_language_item_both">한국어, 영어 모두 가능</string>
+
+<!--    msg-->
+    <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
+    <string name="msg_select_one">선택 해 주세요</string>
+    <string name="msg_network_error">네트워크 에러</string>
 </resources>

@@ -143,6 +143,12 @@ class FirstMatchViewModel @Inject constructor(
         }
     }
 
+    fun initSuccessError() {
+        _uiState.update { current ->
+            current.copy(error = UiError.None, success = UiSuccess.None)
+        }
+    }
+
     fun diet(data: String) {
         _uiState.update { current ->
             current.copy(diet = data)
