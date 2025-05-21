@@ -1,6 +1,5 @@
 package com.sungil.main
 
-import androidx.annotation.DrawableRes
 
 sealed class Screen(val title: Int, val icon: Int, val screenRoute: String) {
     data object Home : Screen(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
@@ -27,7 +26,6 @@ const val NAV_FIRST_MATCH = "first_match"
 const val ERROR_RE_LOGIN = "reLogin"
 const val ERROR_SAVE_ERROR = "save error"
 const val ERROR_NETWORK_ERROR = "network error"
-const val ERROR_FIRST_MATCH_DATA_NOT_INPUT = "First match data is not input"
 
 const val CONTENT_NOTICE = "NOTICE"
 const val CONTENT_ARTICLE = "ARTICLE"

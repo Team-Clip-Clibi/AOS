@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.NotificationData
-import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.UserData
 import com.sungil.domain.useCase.GetBanner
@@ -15,7 +14,6 @@ import com.sungil.domain.useCase.GetMatch
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
 import com.sungil.domain.useCase.GetUserInfo
-import com.sungil.onethingmatch.UiError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -128,7 +126,6 @@ class MainViewModel @Inject constructor(
                 }
 
                 is GetBanner.Result.Success -> {
-                    val test = result.data
                     _userState.update {
                         it.copy(banner = UiState.Success(result.data))
                     }

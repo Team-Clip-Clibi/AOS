@@ -42,7 +42,6 @@ import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.HomeTitleText
 import com.sungil.main.component.MeetingCardList
 import com.sungil.main.component.NotificationBarListStable
-import com.sungil.onethingmatch.OneThingData
 import kotlinx.coroutines.launch
 
 @Composable
