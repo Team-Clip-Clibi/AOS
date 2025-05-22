@@ -61,7 +61,7 @@ class SendUserDetail @Inject constructor(
             nickName = param.nickName,
             platform = "KAKAO",
             phoneNumber = param.phoneNumber,
-            jobList = Pair("NONE" ,"NONE"),
+            jobList = "NONE",
             loveState = Pair("NONE" , false),
             diet = "NONE",
             language = "KOREAN"

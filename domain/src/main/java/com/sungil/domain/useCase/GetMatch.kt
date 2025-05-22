@@ -39,8 +39,6 @@ class GetMatch @Inject constructor(
                 }
                 return Result.Success(reRequest.data)
             }
-
-            -100 -> return Result.Fail("network error")
             200 -> {
                 val serverMatch = MatchData(
                     oneThingMatch = listOf(

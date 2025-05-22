@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
+import com.sungil.editprofile.UiSuccess
 import com.sungil.editprofile.ui.CustomDialog
 import com.sungil.editprofile.ui.CustomLittleTitleText
 import com.sungil.editprofile.ui.CustomProfileItemWithImage
@@ -45,27 +46,20 @@ internal fun EditProfileMainView(
     dietPage : () -> Unit
 ) {
     val scrollState = rememberScrollState()
-    val userInfo by viewModel.userInfo.collectAsState()
-    val showDialog by viewModel.showLogoutDialog.collectAsState()
-    val name = userInfo?.name.orEmpty()
-    val nickName = userInfo?.nickName.orEmpty()
-    val phoneNumber = userInfo?.phoneNumber.orEmpty()
-
-    LaunchedEffect(Unit) {
-        viewModel.editProfileState.collect{ state ->
-            when(state){
-                is ProfileEditViewModel.EditProfileState.SuccessToChange -> {
-                    goToLoginPage()
-                }
-                else -> Unit
+    val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(uiState.success) {
+        when(uiState.success){
+            is UiSuccess.Success ->{
+                goToLoginPage()
             }
+            else -> Unit
         }
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) // 전체 배경 회색
+            .background(Color.White)
             .navigationBarsPadding()
             .verticalScroll(scrollState)
     ) {
@@ -87,7 +81,7 @@ internal fun EditProfileMainView(
                 CustomTwoText(
                     firstText = stringResource(R.string.txt_name),
                     firstTextColor = 0xFF171717,
-                    subText = name,
+                    subText = uiState.name,
                     subTextColor = 0xFF171717
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -102,14 +96,14 @@ internal fun EditProfileMainView(
                 CustomTwoText(
                     firstText = stringResource(R.string.txt_phoneNumber),
                     firstTextColor = 0xFF171717,
-                    subText = phoneNumber,
+                    subText = uiState.phoneNumber,
                     subTextColor = 0xFF171717
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_nickName),
                     textColor = 0xFF171717,
-                    subTitle = nickName,
+                    subTitle = uiState.nickName,
                     subTitleColor = 0xFF171717,
                     buttonClick = editNickNameClick
                 )
@@ -172,7 +166,7 @@ internal fun EditProfileMainView(
                     subTitle = "",
                     subTitleColor = 0xFF171717,
                     buttonClick = {
-                        viewModel.setDialogTrue()
+                        viewModel.isDialogShow(true)
                     }
                 )
                 CustomProfileItemWithMore(
@@ -186,9 +180,9 @@ internal fun EditProfileMainView(
                 )
             }
         }
-        if(showDialog){
+        if(uiState.isDialogShow){
             CustomDialog(
-                onDismiss = {viewModel.disMissDialog()},
+                onDismiss = {viewModel.isDialogShow(false)},
                 buttonClick = {viewModel.logout()},
                 titleText = stringResource(R.string.dialog_logout_title),
                 contentText = stringResource(R.string.dialog_logout_content),

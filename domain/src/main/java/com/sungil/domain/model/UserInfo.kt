@@ -9,7 +9,7 @@ data class UserData(
     val userName: String,
     var nickName: String?,
     var phoneNumber: String,
-    var job: Pair<String, String>,
+    var job: String,
     var loveState: Pair<String, Boolean>,
     var diet: String,
     var language: String,

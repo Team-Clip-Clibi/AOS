@@ -29,7 +29,7 @@ internal fun ChangeLanguageView(
             CustomChangeDataAppBar(
                 text = stringResource(R.string.top_language),
                 onBackClick = {
-                    viewModel.initFlow()
+                    viewModel.initSuccessError()
                     onBackClick()
                 }
             )

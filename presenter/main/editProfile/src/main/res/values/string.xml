@@ -28,10 +28,12 @@
     <string name="txt_message_okay">닉네임 변경 완료</string>
     <!-- Change Job  -->
     <string name="top_job_change_job">하는 일 변경</string>
-    <string name="txt_job_select_two">최대 2개까지 선택할 수 있어요.</string>
+    <string name="txt_job_select_one">최대 1개까지 선택할 수 있어요.</string>
+    <string name="msg_change_job_success">직업 변경 완료</string>
     <!-- msg   -->
     <string name="msg_save_error">데이터 자장 실패!</string>
     <string name="msg_save_success">저장 성공!</string>
+    <string name="msg_select_data">선택하십시오</string>
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <!--Love state-->
     <string name="top_love_state">연애 상태 변경</string>

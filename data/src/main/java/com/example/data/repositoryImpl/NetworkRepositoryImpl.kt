@@ -187,7 +187,7 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.code()
     }
 
-    override suspend fun requestUpdateJob(accessToken: String, data: List<String>): Int {
+    override suspend fun requestUpdateJob(accessToken: String, data: String): Int {
         val result = api.requestChangeJob(accessToken, Job(data))
         return result.code()
     }
@@ -240,12 +240,12 @@ class NetworkRepositoryImpl @Inject constructor(
         if (result.code() != 200) {
             return JobList(
                 result.code(),
-                emptyList()
+                ""
             )
         }
         return JobList(
             result.code(),
-            result.body()!!.jobList
+            result.body()!!.job
         )
     }
 
@@ -460,7 +460,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 userName = username,
                 nickName = nickname,
                 phoneNumber = phoneNumber,
-                job = Pair("NONE", "NONE"),
+                job = "NONE",
                 loveState = Pair("NONE", false),
                 diet = "NONE",
                 language = "KOREAN"

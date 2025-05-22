@@ -9,7 +9,7 @@ interface UserData {
         nickName: String,
         platform: String,
         phoneNumber: String,
-        jobList: Pair<String, String>,
+        job: String,
         loveState: Pair<String, Boolean>,
         diet: String,
         language: String,

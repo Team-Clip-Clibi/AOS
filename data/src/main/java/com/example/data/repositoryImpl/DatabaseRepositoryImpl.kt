@@ -57,7 +57,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         nickName: String,
         platform: String,
         phoneNumber: String,
-        jobList: Pair<String, String>,
+        jobList: String,
         loveState: Pair<String, Boolean>,
         diet: String,
         language: String,
@@ -67,7 +67,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             nickName = nickName,
             platform = platform,
             phoneNumber = phoneNumber,
-            jobList = jobList,
+            job = jobList,
             loveState = loveState,
             diet = diet,
             language = language
@@ -142,7 +142,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             userName = name,
             nickName = nickName,
             phoneNumber = phoneNumber,
-            job = Pair(firstJob, secondJob),
+            job = job,
             loveState = Pair(myLoveState, wantLoveState),
             diet = diet,
             language = language

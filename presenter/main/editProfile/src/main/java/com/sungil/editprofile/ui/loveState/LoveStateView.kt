@@ -30,7 +30,7 @@ internal fun LoveStateView(
             CustomChangeDataAppBar(
                 text = stringResource(R.string.top_love_state),
                 onBackClick = {
-                    viewModel.initFlow()
+                    viewModel.initSuccessError()
                     onBackClick()
                 }
             )

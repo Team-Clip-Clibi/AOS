@@ -3,7 +3,6 @@ package com.sungil.editprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.ActivateHaptic
-import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetUserInfo
 import com.sungil.domain.useCase.LogOut
 import com.sungil.domain.useCase.SaveChangeProfileData
@@ -15,6 +14,7 @@ import com.sungil.domain.useCase.UpdateLove
 import com.sungil.domain.useCase.UpdateNickName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,44 +28,14 @@ class ProfileEditViewModel @Inject constructor(
     private val changeNickName: UpdateNickName,
     private val haptic: ActivateHaptic,
     private val changeJob: UpdateJob,
-    private val saveData: SaveChangeProfileData,
     private val updateLoveState: UpdateLove,
     private val updateLanguage: UpdateLanguage,
     private val logout: LogOut,
     private val signOut: SignOut,
-    private val diet : UpdateDiet
+    private val diet: UpdateDiet,
 ) : ViewModel() {
-
-    private val _editProfileState = MutableStateFlow<EditProfileState>(EditProfileState.Loading)
-    val editProfileState: StateFlow<EditProfileState> = _editProfileState.asStateFlow()
-
-    private val _userInfo = MutableStateFlow<UserInfo?>(null)
-    val userInfo: StateFlow<UserInfo?> = _userInfo.asStateFlow()
-
-    private val _selectedJobs = MutableStateFlow<List<JOB>>(emptyList())
-    val selectedJobs: StateFlow<List<JOB>> = _selectedJobs.asStateFlow()
-
-    private val _jobSelectionError = MutableStateFlow(false)
-    val jobSelectionError: StateFlow<Boolean> = _jobSelectionError.asStateFlow()
-    private var _initialJobSelection: List<JOB> = emptyList()
-
-    private val _loveState = MutableStateFlow(LoveState())
-    val loveState: StateFlow<LoveState> = _loveState
-
-    private var _button = MutableStateFlow(false)
-    val button: StateFlow<Boolean> = _button
-
-    private var _language = MutableStateFlow(LANGUAGE.KOREAN)
-    val language: StateFlow<LANGUAGE> = _language
-
-    private var _showLogoutDialog = MutableStateFlow(false)
-    val showLogoutDialog: StateFlow<Boolean> = _showLogoutDialog
-
-    private var _signOutContent = MutableStateFlow(SignOutData.NOTING)
-    val signOutContent: StateFlow<SignOutData> = _signOutContent
-
-    private var _dietData = MutableStateFlow(DIET.NONE)
-    val dietData : StateFlow<DIET> = _dietData
+    private var _uiState = MutableStateFlow(EditProfileData())
+    val uiState: StateFlow<EditProfileData> = _uiState.asStateFlow()
 
     init {
         getUserInfo()
@@ -75,53 +45,45 @@ class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = userInfoUseCase.invoke()) {
                 is GetUserInfo.Result.Fail -> {
-                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.errorMessage))
+                    }
                 }
 
                 is GetUserInfo.Result.Success -> {
-                    val data = UserInfo(
-                        name = result.data.userName,
-                        nickName = result.data.nickName ?: "error",
-                        phoneNumber = result.data.phoneNumber,
-                        job = result.data.job,
-                        loveState = result.data.loveState,
-                        diet = result.data.diet,
-                        language = result.data.language
-                    )
-                    _userInfo.value = data
-
-                    _initialJobSelection = JOB.entries.filter {
-                        it.name == data.job.first || it.name == data.job.second
+                    _uiState.update { current ->
+                        current.copy(
+                            name = result.data.userName,
+                            nickName = result.data.nickName ?: "Error",
+                            phoneNumber = result.data.phoneNumber,
+                            job = result.data.job,
+                            loveState = result.data.loveState.first,
+                            meetSame = result.data.loveState.second,
+                            diet = result.data.diet,
+                            language = result.data.language
+                        )
                     }
-                    _selectedJobs.value = _initialJobSelection
-
-                    _loveState.value = LoveState(
-                        love = LOVE.entries.find { it.name == data.loveState.first } ?: LOVE.SINGLE,
-                        Meeting = if (data.loveState.second) MEETING.SAME else MEETING.OKAY
-                    )
-                    _language.value = LANGUAGE.entries.find { it.name == data.language } ?: LANGUAGE.KOREAN
-                    _dietData.value = DIET.entries.find { it.displayName == data.diet } ?: DIET.NONE
-                    _editProfileState.value = EditProfileState.Loading
                 }
             }
         }
     }
 
-    fun changeNickName(newNickName: String) {
-        if (_userInfo.value == null) {
-            _editProfileState.value = EditProfileState.Error("사용자 정보를 불러올 수 없습니다.")
-            return
-        }
-
-        _userInfo.update { it?.copy(nickName = newNickName) }
+    fun changeNickName() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = changeNickName.invoke(UpdateNickName.Param(newNickName))) {
+            when (val result =
+                changeNickName.invoke(UpdateNickName.Param(_uiState.value.nickName))) {
                 is UpdateNickName.Result.Fail -> {
-                    _editProfileState.value = EditProfileState.Error(result.message)
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.message))
+                    }
                 }
 
                 is UpdateNickName.Result.Success -> {
-                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                    _uiState.update { current ->
+                        current.copy(
+                            success = UiSuccess.Success(result.message)
+                        )
+                    }
                 }
             }
         }
@@ -129,18 +91,19 @@ class ProfileEditViewModel @Inject constructor(
 
     fun changeJob() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = changeJob.invoke(
-                UpdateJob.Param(
-                    Pair(_selectedJobs.value[0].name, _selectedJobs.value[1].name)
-                )
-            )) {
+            when (val result = changeJob.invoke(UpdateJob.Param(_uiState.value.job))) {
                 is UpdateJob.Result.Fail -> {
-                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.errorMessage))
+                    }
                 }
 
                 is UpdateJob.Result.Success -> {
-                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
-                    updateInitialJobSelection()
+                    _uiState.update { current ->
+                        current.copy(
+                            success = UiSuccess.Success(result.message)
+                        )
+                    }
                 }
             }
         }
@@ -148,15 +111,18 @@ class ProfileEditViewModel @Inject constructor(
 
     fun changeLanguage() {
         viewModelScope.launch {
-            when (val result = updateLanguage.invoke(
-                UpdateLanguage.Param(_language.value.toString())
-            )) {
+            when (val result =
+                updateLanguage.invoke(UpdateLanguage.Param(_uiState.value.language))) {
                 is UpdateLanguage.Result.Fail -> {
-                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.errorMessage))
+                    }
                 }
 
                 is UpdateLanguage.Result.Success -> {
-                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                    _uiState.update { current ->
+                        current.copy(success = UiSuccess.Success(result.message))
+                    }
                 }
             }
         }
@@ -166,16 +132,20 @@ class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = updateLoveState.invoke(
                 UpdateLove.Param(
-                    _loveState.value.love.toString(),
-                    _loveState.value.Meeting.toString()
+                    _uiState.value.loveState,
+                    _uiState.value.meetSame.toString()
                 )
             )) {
                 is UpdateLove.Result.Fail -> {
-                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.errorMessage))
+                    }
                 }
 
                 is UpdateLove.Result.Success -> {
-                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                    _uiState.update { current ->
+                        current.copy(success = UiSuccess.Success(result.message))
+                    }
                 }
             }
         }
@@ -185,11 +155,15 @@ class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = logout.invoke()) {
                 is LogOut.Result.Fail -> {
-                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.errorMessage))
+                    }
                 }
 
                 is LogOut.Result.Success -> {
-                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+                    _uiState.update { current ->
+                        current.copy(success = UiSuccess.Success(result.message))
+                    }
                 }
             }
         }
@@ -199,117 +173,122 @@ class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = signOut.invoke()) {
                 is SignOut.Result.Fail -> {
-                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.errorMessage))
+                    }
                 }
 
                 is SignOut.Result.Success -> {
-                    _editProfileState.value = EditProfileState.GoodBye(result.message)
+                    _uiState.update { current ->
+                        current.copy(success = UiSuccess.Success(result.message))
+                    }
                 }
             }
         }
     }
 
-    fun updateDiet(){
+    fun updateDiet() {
         viewModelScope.launch {
-            when(val result = diet.invoke(UpdateDiet.Param(_dietData.value.displayName))){
+            when (val result = diet.invoke(UpdateDiet.Param(_uiState.value.diet))) {
                 is UpdateDiet.Result.Fail -> {
-                    _editProfileState.value = EditProfileState.Error(result.errorMessage)
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.errorMessage))
+                    }
                 }
-                is UpdateDiet.Result.Success ->{
-                    _editProfileState.value = EditProfileState.SuccessToChange(result.message)
+
+                is UpdateDiet.Result.Success -> {
+                    _uiState.update { current ->
+                        current.copy(success = UiSuccess.Success(result.message))
+                    }
                 }
             }
         }
     }
 
-    fun isJobSelectionChanged(): Boolean {
-        return _selectedJobs.value.toSet() != _initialJobSelection.toSet()
-    }
-
-    private fun updateInitialJobSelection() {
-        _initialJobSelection = _selectedJobs.value.toList()
-    }
-
-    fun disMissDialog() {
-        _showLogoutDialog.value = false
-    }
-
-    fun setDialogTrue() {
-        _showLogoutDialog.value = true
-    }
-
-    fun changeLoveState(data: LOVE) {
-        _loveState.update { it.copy(love = data) }
-        _button.value = true
-    }
-
-    fun changeMeetingState(data: MEETING) {
-        _loveState.update { it.copy(Meeting = data) }
-        _button.value = true
-    }
-
-    fun changeLanguage(data: LANGUAGE) {
-        _language.value = data
-        _button.value = true
-    }
-
-    fun changeSignOutContent(data: SignOutData) {
-        _signOutContent.value = data
-        _button.value = true
-    }
-
-    fun setDiet(data : DIET){
-        _dietData.value = data
-    }
-
-    fun initFlow() {
-        _editProfileState.value = EditProfileState.Loading
-        _button.value = false
-        _showLogoutDialog.value = false
-
-    }
-
-    fun toggleJob(job: JOB) {
-        val current = _selectedJobs.value
-        val newList = when {
-            job in current -> {
-                _jobSelectionError.value = false
-                current - job
-            }
-
-            current.size < 2 -> {
-                _jobSelectionError.value = false
-                current + job
-            }
-
-            else -> {
-                _jobSelectionError.value = true
-                viewModelScope.launch { haptic.invoke() }
-                return
-            }
+    fun isDialogShow(data: Boolean) {
+        _uiState.update { current ->
+            current.copy(isDialogShow = data)
         }
-        _selectedJobs.value = newList
     }
 
-    sealed interface EditProfileState {
-        object Loading : EditProfileState
-        data class SuccessToChange(val message: String) : EditProfileState
-        data class GoodBye(val message: String) : EditProfileState
-        data class Error(val message: String) : EditProfileState
+    fun initSuccessError() {
+        _uiState.update { current ->
+            current.copy(
+                success = UiSuccess.None,
+                error = UiError.None,
+                buttonRun = false
+            )
+        }
+    }
+
+    fun setNickName(data: String) {
+        _uiState.update { current ->
+            current.copy(
+                nickName = data,
+                buttonRun = true
+            )
+        }
+    }
+
+    fun setLanguage(data: LANGUAGE) {
+        _uiState.update { current ->
+            current.copy(
+                language = data.name,
+                buttonRun = true
+            )
+        }
+    }
+
+    fun setJob(data : JOB){
+        _uiState.update { current ->
+            current.copy(
+                job = data.name,
+                buttonRun = true
+            )
+        }
+    }
+
+    fun changeLoveState(data : LOVE){
+        _uiState.update { current ->
+            current.copy(
+                loveState = data.name,
+                buttonRun = true
+            )
+        }
+    }
+
+    fun changeMeetState(data : MEETING){
+        _uiState.update { current ->
+            current.copy(
+                meetSame = data.displayName,
+                buttonRun = true
+            )
+        }
     }
 }
 
-data class UserInfo(
-    val name: String,
-    val nickName: String,
-    val phoneNumber: String,
-    val job: Pair<String, String>,
-    val loveState: Pair<String, Boolean>,
-    val diet: String,
-    val language: String,
+
+data class EditProfileData(
+    val name: String = "",
+    val nickName: String = "",
+    val phoneNumber: String = "",
+    val job: String = "",
+    val loveState: String = "",
+    val meetSame: Boolean = false,
+    val diet: String = "",
+    val language: String = "",
+    val isDialogShow: Boolean = false,
+    val buttonRun: Boolean = false,
+    val success: UiSuccess = UiSuccess.None,
+    val error: UiError = UiError.None,
 )
 
-data class LoveState(
-    var love: LOVE = LOVE.SINGLE,
-    var Meeting: MEETING = MEETING.SAME,
-)
+sealed class UiSuccess {
+    data object None : UiSuccess()
+    data class Success(val message: String) : UiSuccess()
+}
+
+sealed class UiError {
+    data object None : UiError()
+    data class Error(val message: String) : UiError()
+}

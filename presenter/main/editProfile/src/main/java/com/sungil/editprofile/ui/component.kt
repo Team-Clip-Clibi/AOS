@@ -388,7 +388,7 @@ fun CustomTitle1624Semi(
 
 @Composable
 fun JobGridSelector(
-    selectedJobs: List<JOB>,
+    selectedJobs: JOB,
     onJobToggle: (JOB) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -399,31 +399,32 @@ fun JobGridSelector(
         modifier = modifier
     ) {
         items(JOB.entries.toList()) { job ->
-            val isSelected = selectedJobs.contains(job)
+            val isSelected = selectedJobs == job
+            if(job != JOB.NONE){
+                OutlinedButton(
+                    onClick = {
+                        onJobToggle(job)
+                    },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = if (isSelected) Color(0xFFF9F0FF) else Color(0xFFF7F7F7),
+                        contentColor = Color.Black
+                    ),
+                    border = BorderStroke(
+                        1.dp,
+                        if (isSelected) Color(0xFFD3ADF7) else Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .width(175.dp)
+                        .height(48.dp)
 
-            OutlinedButton(
-                onClick = {
-                    onJobToggle(job)
-                },
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (isSelected) Color(0xFFF9F0FF) else Color(0xFFF7F7F7),
-                    contentColor = Color.Black
-                ),
-                border = BorderStroke(
-                    1.dp,
-                    if (isSelected) Color(0xFFD3ADF7) else Color.Transparent
-                ),
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .width(175.dp)
-                    .height(48.dp)
-
-            ) {
-                Text(
-                    text = job.displayName,
-                    style = AppTextStyles.BODY_14_20_MEDIUM,
-                    color = Color(0xFF171717)
-                )
+                ) {
+                    Text(
+                        text = job.displayName,
+                        style = AppTextStyles.BODY_14_20_MEDIUM,
+                        color = Color(0xFF171717)
+                    )
+                }
             }
         }
     }

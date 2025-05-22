@@ -11,7 +11,7 @@ class UpdateJob @Inject constructor(
     private val database: DatabaseRepository,
 ) : UseCase<UpdateJob.Param, UpdateJob.Result> {
     data class Param(
-        val job: Pair<String, String>,
+        val job: String,
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
@@ -21,19 +21,15 @@ class UpdateJob @Inject constructor(
 
     override suspend fun invoke(param: Param): Result {
         val token = database.getToken()
-        if (token.first == null || token.second == null) {
-            return Result.Fail("Token is null")
-        }
-        val jobList = listOf(param.job.first, param.job.second).filter { it != "NONE" }
-        if (jobList.isEmpty()) {
+        if (param.job == "NONE") {
             return Result.Fail("No Change")
         }
-        val updateResult = network.requestUpdateJob(TOKEN_FORM + token.first!!, jobList)
+        val updateResult = network.requestUpdateJob(TOKEN_FORM + token.first, param.job)
         if (updateResult != 204) {
             return Result.Fail("network Error")
         }
         val userData = database.getUserInfo() ?: return Result.Fail("userData is null")
-        userData.job = Pair(param.job.first , param.job.second)
+        userData.job = param.job
         val saveResult = database.saveUserInfo(
             name = userData.userName,
             nickName = userData.nickName ?: "error",

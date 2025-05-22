@@ -30,7 +30,7 @@ internal fun ChangeNickNameView(
             CustomChangeDataAppBar(
                 text = stringResource(R.string.top_bar_change_nick_name),
                 onBackClick = {
-                    viewModel.initFlow()
+                    viewModel.initSuccessError()
                     onBackClick()
                 }
             )

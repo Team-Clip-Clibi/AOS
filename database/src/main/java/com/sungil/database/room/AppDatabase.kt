@@ -11,7 +11,7 @@ import com.sungil.database.room.model.UserInfo
 
 @Database(
     entities = [UserInfo::class , Token :: class , Meeting :: class],
-    version = 6,
+    version = 1,
     exportSchema = false
 )
 

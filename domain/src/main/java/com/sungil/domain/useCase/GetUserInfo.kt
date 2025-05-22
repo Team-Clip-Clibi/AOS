@@ -3,7 +3,6 @@ package com.sungil.domain.useCase
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.model.UserData
-import com.sungil.domain.model.UserInfo
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
@@ -21,12 +20,15 @@ class GetUserInfo @Inject constructor(
         val userData = database.getUserInfo()
         userData.phoneNumber = userData.phoneNumber.reMakePhoneNumber()
         var token = database.getToken()
-
-        updateJobIfNeeded(userData, token)?.let { token = it } ?: return Result.Fail("job error")
-        updateDietIfNeeded(userData, token)?.let { token = it } ?: return Result.Fail("diet error")
-        updateLoveStateIfNeeded(userData, token)?.let { token = it }
-            ?: return Result.Fail("love error")
-
+        val job = requestJob(userData, token) { newToken -> token = newToken }
+        if (job.first == "Fail") return Result.Fail(job.second)
+        userData.job = job.second
+        val diet = requestDiet(userData, token) { newToken -> token = newToken }
+        if (diet.first == "Fail") return Result.Fail(diet.second)
+        userData.diet = diet.second
+        val love = requestLove(userData, token) { newToken -> token = newToken }
+        if (love.first == "Fail") return Result.Fail(love.second)
+        userData.loveState = Pair(love.second, love.third)
         val saveResult = database.saveUserInfo(
             name = userData.userName,
             nickName = userData.nickName ?: "error",
@@ -37,107 +39,133 @@ class GetUserInfo @Inject constructor(
             diet = userData.diet,
             language = userData.language
         )
-
         return if (saveResult) Result.Success(userData) else Result.Fail("save error")
     }
 
-    private suspend fun updateJobIfNeeded(
+
+    private suspend fun requestJob(
         userData: UserData,
         token: Pair<String, String>,
-    ): Pair<String, String>? {
-        if (userData.job.first != "NONE") return token
-
+        updateToken: (Pair<String, String>) -> Unit,
+    ): Pair<String, String> {
+        if (userData.job != "NONE") return Pair("Success", userData.job)
         val result = network.requestJob(TOKEN_FORM + token.first)
-        return when (result.responseCode) {
+        when (result.responseCode) {
             200 -> {
-                userData.job = if (result.jobList.isEmpty()) {
-                    Pair("NONE", "NONE")
-                } else {
-                    Pair(result.jobList[0], result.jobList[1])
+                if (result.job == "") {
+                    return Pair("Success", "NONE")
                 }
-                token
+                return Pair("Success", userData.job)
             }
 
-            401 -> refreshTokenIfNeeded(token.second) { newToken ->
-                val retry = network.requestJob(TOKEN_FORM + newToken)
-                if (retry.responseCode == 200) {
-                    userData.job = Pair(retry.jobList[0], retry.jobList[1])
-                    true
-                } else false
-            }?.also { return it } ?: return null
+            401 -> {
+                val refreshToken = network.requestUpdateToken(token.second)
+                if (refreshToken.first != 200) {
+                    return Pair("Fail", "reLogin")
+                }
+                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
+                if (!saveToken) {
+                    return Pair("Fail", "save error")
+                }
+                updateToken(Pair(refreshToken.second!!, refreshToken.third!!))
+                val reRequest = network.requestJob(TOKEN_FORM + token.first)
+                if (reRequest.responseCode != 200) {
+                    return Pair("Fail", "network error")
+                }
+                if (reRequest.job == "") {
+                    return Pair("Success", "NONE")
+                }
+                return Pair("Success", reRequest.job)
+            }
 
-            else -> null
+            else -> return Pair("Fail", "network error")
         }
     }
 
-    private suspend fun updateDietIfNeeded(
+    private suspend fun requestDiet(
         userData: UserData,
         token: Pair<String, String>,
-    ): Pair<String, String>? {
-        if (userData.diet != "NONE") return token
-
-        val result = network.requestDiet(TOKEN_FORM + token.first)
-        return when (result.response) {
+        updateToken: (Pair<String, String>) -> Unit,
+    ): Pair<String, String> {
+        if (userData.diet != "NONE") return Pair("Success", userData.diet)
+        val requestDiet = network.requestDiet(TOKEN_FORM + token.first)
+        when (requestDiet.response) {
             200 -> {
-                userData.diet = if (result.diet.diet.contains("null")) {
-                    "NONE"
-                } else {
-                    result.diet.diet
+                if (requestDiet.diet.diet.contains("null")) {
+                    return Pair("Success", "NONE")
                 }
-                token
+                return Pair("Success", requestDiet.diet.diet)
             }
 
-            401 -> refreshTokenIfNeeded(token.second) { newToken ->
-                val retry = network.requestDiet(TOKEN_FORM + newToken)
-                if (retry.response == 200) {
-                    userData.diet = retry.diet.diet
-                    true
-                } else false
-            }?.also { return it } ?: return null
+            401 -> {
+                val refreshToken = network.requestUpdateToken(token.second)
+                if (refreshToken.first != 200) {
+                    return Pair("Fail", "reLogin")
+                }
+                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
+                if (!saveToken) {
+                    return Pair("Fail", "save error")
+                }
+                updateToken(Pair(refreshToken.second!!, refreshToken.third!!))
+                val reRequest = network.requestDiet(TOKEN_FORM + token.first)
+                if (reRequest.response != 200) {
+                    return Pair("Fail", "network error")
+                }
+                if (reRequest.diet.diet.contains("null")) {
+                    return Pair("Success", "NONE")
+                }
+                return Pair("Success", reRequest.diet.diet)
+            }
 
-            else -> null
+            else -> return Pair("Fail", "network error")
         }
     }
 
-    private suspend fun updateLoveStateIfNeeded(
+    private suspend fun requestLove(
         userData: UserData,
         token: Pair<String, String>,
-    ): Pair<String, String>? {
-        if (userData.loveState.first != "NONE") return token
-
-        val result = network.requestLove(TOKEN_FORM + token.first)
-        return when (result.responseCode) {
+        updateToken: (Pair<String, String>) -> Unit,
+    ): Triple<String, String, Boolean> {
+        if (userData.loveState.first != "NONE") return Triple(
+            "Success",
+            userData.loveState.first,
+            userData.loveState.second
+        )
+        val requestLoveState = network.requestLove(TOKEN_FORM + token.first)
+        when (requestLoveState.responseCode) {
             200 -> {
-                userData.loveState = Pair(result.data.relationShip, result.data.isSameRelationShip)
-                token
+                return Triple(
+                    "Success",
+                    requestLoveState.data.relationShip,
+                    requestLoveState.data.isSameRelationShip
+                )
             }
 
-            401 -> refreshTokenIfNeeded(token.second) { newToken ->
-                val retry = network.requestLove(TOKEN_FORM + newToken)
-                if (retry.responseCode == 200) {
-                    userData.loveState =
-                        Pair(retry.data.relationShip, retry.data.isSameRelationShip)
-                    true
-                } else false
-            }?.also { return it } ?: return null
+            401 -> {
+                val refreshToken = network.requestUpdateToken(token.second)
+                if (refreshToken.first != 200) {
+                    return Triple("Fail", "reLogin", false)
+                }
+                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
+                if (!saveToken) {
+                    return Triple("Fail", "save error", false)
+                }
+                updateToken(Pair(refreshToken.second!!, refreshToken.third!!))
+                val reRequest = network.requestLove(TOKEN_FORM + token.first)
+                if (reRequest.responseCode != 200) {
+                    return Triple("Fail", "network error", false)
+                }
+                return Triple(
+                    "Success",
+                    reRequest.data.relationShip,
+                    reRequest.data.isSameRelationShip
+                )
+            }
 
-            else -> null
+            else -> return Triple("Fail", "network error", false)
         }
     }
 
-    private suspend fun refreshTokenIfNeeded(
-        oldRefreshToken: String,
-        onSuccess: suspend (newAccessToken: String) -> Boolean,
-    ): Pair<String, String>? {
-        val refreshResult = network.requestUpdateToken(oldRefreshToken)
-        if (refreshResult.first != 200) return null
-
-        val saved = database.setToken(refreshResult.second!!, refreshResult.third!!)
-        if (!saved) return null
-
-        val success = onSuccess(refreshResult.second!!)
-        return if (success) Pair(refreshResult.second!!, refreshResult.third!!) else null
-    }
 
     private fun String.reMakePhoneNumber(): String {
         val digits = this.filter { it.isDigit() }

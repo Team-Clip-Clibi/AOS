@@ -29,7 +29,7 @@ class SendAlreadySignUp @Inject constructor(
                     nickName = requestUserInfo.data.nickName ?: "error",
                     platform = "KAKAO",
                     phoneNumber = requestUserInfo.data.phoneNumber,
-                    jobList = Pair("NONE", "NONE"),
+                    jobList ="NONE",
                     loveState = Pair("NONE", false),
                     diet = "NONE",
                     language = "KOREAN"
@@ -58,7 +58,7 @@ class SendAlreadySignUp @Inject constructor(
                     nickName = reRequest.data.nickName ?:"error" ,
                     platform = "KAKAO",
                     phoneNumber = reRequest.data.phoneNumber,
-                    jobList = Pair("NONE", "NONE"),
+                    jobList = "NONE",
                     loveState = Pair("NONE", false),
                     diet = "NONE",
                     language = "KOREAN"

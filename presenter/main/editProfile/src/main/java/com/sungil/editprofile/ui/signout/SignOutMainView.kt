@@ -138,7 +138,7 @@ internal fun SignOutMainView(
             CustomButton(
                 stringResource(R.string.btn_finish),
                 onclick = {
-                    viewModel.setDialogTrue()
+                    viewModel.isDialogShow(true)
                 },
                 enable = button.value
             )
@@ -146,7 +146,7 @@ internal fun SignOutMainView(
         if (dialog.value) {
             CustomDialog(
                 onDismiss = {
-                    viewModel.disMissDialog()
+                    viewModel.isDialogShow(false)
                     onBackClick() },
                 buttonClick = { viewModel.signOut() },
                 titleText = stringResource(R.string.dialog_sign_out_title),

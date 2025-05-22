@@ -20,6 +20,7 @@ const val ERROR_NETWORK = "network Error"
 const val ERROR_FAIL_TO_UPDATE_LOVE = "Fail to update Love"
 const val ERROR_FAIL_SAVE = "Save Fail"
 const val ERROR_USER_DATA_NULL = "userData is null"
+const val ERROR_NONE_DATA_SELECT = "NONE"
 
 enum class JOB(val displayName: String) {
     STUDENT("학생"),
@@ -31,7 +32,14 @@ enum class JOB(val displayName: String) {
     SALES("판매업"),
     BUSINESS("사업"),
     POLITICS("정치"),
-    ETC("기타")
+    ETC("기타"),
+    NONE("NONE");
+
+    companion object {
+        fun fromDisplayName(displayName: String): JOB {
+            return entries.find { it.displayName == displayName } ?: NONE
+        }
+    }
 }
 
 enum class LOVE(val displayName: String) {
@@ -43,10 +51,16 @@ enum class LOVE(val displayName: String) {
 
 enum class MEETING(val displayName: Boolean) {
     SAME(true),
-    OKAY(false)
+    OKAY(false);
+
+    companion object {
+        fun fromDisplayName(value: Boolean): MEETING {
+            return entries.find { it.displayName == value } ?: OKAY
+        }
+    }
 }
 
-enum class LANGUAGE() {
+enum class LANGUAGE {
     KOREAN,
     ENGLISH,
     BOTH

@@ -19,7 +19,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.core.ButtonXXLPurple400
 import com.sungil.editprofile.ERROR_ALREADY_USE
 import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.editprofile.ERROR_SPECIAL
@@ -38,6 +38,8 @@ import com.sungil.editprofile.ERROR_TO_SHORT
 import com.sungil.editprofile.ERROR_USER_TOKEN_NLL
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
+import com.sungil.editprofile.UiError
+import com.sungil.editprofile.UiSuccess
 import com.sungil.editprofile.ui.CustomButton
 import com.sungil.editprofile.ui.CustomChangeDataTextField
 import com.sungil.editprofile.ui.CustomUnderTextFieldText
@@ -49,65 +51,61 @@ internal fun ChangeNickNameMainView(
     finishedView: () -> Unit,
     snackBarHost: SnackbarHostState,
 ) {
-    val state by viewModel.editProfileState.collectAsState()
-    val userData by viewModel.userInfo.collectAsState()
-
-    var nickname by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsState()
     var nicknameValidationMessage by remember { mutableIntStateOf(R.string.txt_nick_length) }
 
-    LaunchedEffect(userData) {
-        nickname = userData?.nickName ?: "오류"
-    }
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.editProfileState.collect { state ->
-            when (state) {
-                is ProfileEditViewModel.EditProfileState.Error -> {
-                    when (state.message) {
-                        ERROR_TO_LONG -> {
-                            nicknameValidationMessage = R.string.txt_nick_length_over
-                        }
-
-                        ERROR_TO_SHORT -> {
-                            nicknameValidationMessage = R.string.txt_nick_length_low
-                        }
-
-                        ERROR_SPECIAL -> {
-                            nicknameValidationMessage = R.string.txt_nick_no_special
-                        }
-
-                        ERROR_NETWORK, ERROR_TOKEN_NULL, ERROR_USER_TOKEN_NLL -> {
-                            snackBarHost.showSnackbar(
-                                message = context.getString(R.string.txt_network_error),
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-
-                        ERROR_ALREADY_USE -> {
-                            snackBarHost.showSnackbar(
-                                message = context.getString(R.string.txt_already_use),
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-
-                        else -> throw IllegalArgumentException("Unsupported error: ${state.message}")
+    LaunchedEffect(uiState.error, uiState.success) {
+        when (val error = uiState.error) {
+            is UiError.Error -> {
+                when (error.message) {
+                    ERROR_TO_LONG -> {
+                        nicknameValidationMessage = R.string.txt_nick_length_over
                     }
-                }
 
-                is ProfileEditViewModel.EditProfileState.SuccessToChange -> {
-                    snackBarHost.showSnackbar(
-                        message = context.getString(R.string.txt_message_okay),
-                        duration = SnackbarDuration.Short
-                    )
-                    viewModel.initFlow()
-                }
+                    ERROR_TO_SHORT -> {
+                        nicknameValidationMessage = R.string.txt_nick_length_low
+                    }
 
-                else -> Unit
+                    ERROR_SPECIAL -> {
+                        nicknameValidationMessage = R.string.txt_nick_no_special
+                    }
+
+                    ERROR_NETWORK, ERROR_TOKEN_NULL, ERROR_USER_TOKEN_NLL -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.txt_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    ERROR_ALREADY_USE -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.txt_already_use),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    else -> throw IllegalArgumentException("Unsupported error: ${error.message}")
+                }
             }
+
+            UiError.None -> Unit
+        }
+
+        when (uiState.success) {
+            is UiSuccess.Success -> {
+                snackBarHost.showSnackbar(
+                    message = context.getString(R.string.txt_message_okay),
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.initSuccessError()
+            }
+
+            else -> Unit
         }
     }
-    val scrollState = rememberScrollState()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -116,7 +114,7 @@ internal fun ChangeNickNameMainView(
                 bottom = 8.dp
             )
             .navigationBarsPadding()
-            .verticalScroll(scrollState)
+            .verticalScroll(rememberScrollState())
     ) {
         Column(
             modifier = Modifier
@@ -125,10 +123,10 @@ internal fun ChangeNickNameMainView(
                 .padding(start = 17.dp, end = 16.dp)
         ) {
             NicknameTextField(
-                nickname = nickname,
-                onNicknameChange = {
-                    nickname = it
-                    nicknameValidationMessage = validateNickname(it)
+                nickname = uiState.nickName,
+                onNicknameChange = { newNickName ->
+                    viewModel.setNickName(newNickName)
+                    nicknameValidationMessage = validateNickname(newNickName)
                 }
             )
 
@@ -150,10 +148,13 @@ internal fun ChangeNickNameMainView(
         ) {
             HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
             Spacer(modifier = Modifier.height(8.dp))
-            CustomButton(
-                stringResource(R.string.btn_finish),
-                onclick = { viewModel.changeNickName(nickname) },
-                enable = nicknameValidationMessage == R.string.txt_nick_length
+            ButtonXXLPurple400(
+                onClick = { viewModel.changeNickName() },
+                buttonText = stringResource(R.string.btn_finish),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                isEnable = nicknameValidationMessage == R.string.txt_nick_length
             )
         }
     }
