@@ -1,7 +1,6 @@
 package com.sungil.editprofile.ui.signout
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,30 +11,35 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.core.AppTextStyles
+import com.example.core.ButtonLeftLarge
+import com.example.core.ButtonXXLPurple400
+import com.example.core.ColorStyle
+import com.sungil.editprofile.ERROR_DELETE_FAIL
+import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.SignOutData
-import com.sungil.editprofile.ui.CustomButton
+import com.sungil.editprofile.UiError
+import com.sungil.editprofile.UiSuccess
 import com.sungil.editprofile.ui.CustomChangeDataTextField
 import com.sungil.editprofile.ui.CustomDialog
-import com.sungil.editprofile.ui.CustomItemPick
-import com.sungil.editprofile.ui.CustomTitle
 
 
 @Composable
@@ -44,23 +48,27 @@ internal fun SignOutMainView(
     onBackClick: () -> Unit,
     goToLogin: () -> Unit,
     paddingValues: PaddingValues,
+    snackBarHost : SnackbarHostState
 ) {
-    val signOutContent = viewModel.signOutContent.collectAsState()
-    val button = viewModel.button.collectAsState()
-    var inputValue by remember { mutableStateOf("") }
-    val dialog = viewModel.showLogoutDialog.collectAsState()
-    LaunchedEffect(Unit) {
-        viewModel.editProfileState.collect { state ->
-            when (state) {
-                is ProfileEditViewModel.EditProfileState.GoodBye -> {
-                    goToLogin()
-                }
-
-                else -> Unit
+    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    LaunchedEffect(uiState.success , uiState.error) {
+        when(val error = uiState.error){
+            is UiError.Error -> {
+                snackBarHost.showSnackbar(
+                    message = context.getString(R.string.txt_delete_fail),
+                    duration = SnackbarDuration.Short
+                )
+            }
+            UiError.None -> Unit
+        }
+        when(uiState.success){
+            UiSuccess.None -> Unit
+            is UiSuccess.Success -> {
+                goToLogin()
             }
         }
     }
-    val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +76,7 @@ internal fun SignOutMainView(
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = 8.dp
             )
-            .verticalScroll(scrollState)
+            .verticalScroll(rememberScrollState())
             .navigationBarsPadding()
     ) {
         Column(
@@ -77,52 +85,62 @@ internal fun SignOutMainView(
                 .align(Alignment.TopCenter)
                 .padding(start = 17.dp, end = 16.dp)
         ) {
-            CustomTitle(
+            Text(
                 text = stringResource(R.string.txt_sign_out_title),
-                color = Color(0xFF171717)
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color = ColorStyle.GRAY_800
             )
             Spacer(modifier = Modifier.height(24.dp))
-            CustomItemPick(
-                modifier = signOutItemModifier(signOutContent.value == SignOutData.SERVICE),
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_sign_out_content_service),
-                clickable = { viewModel.changeSignOutContent(SignOutData.SERVICE) }
+                isSelected = uiState.signOut == SignOutData.SERVICE.name,
+                onClick = {
+                    viewModel.changeSignOut(SignOutData.SERVICE)
+                }
             )
             Spacer(modifier = Modifier.height(10.dp))
-            CustomItemPick(
-                modifier = signOutItemModifier(signOutContent.value == SignOutData.APPLY),
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_sign_out_content_apply),
-                clickable = { viewModel.changeSignOutContent(SignOutData.APPLY) }
+                isSelected = uiState.signOut == SignOutData.APPLY.name,
+                onClick = {
+                    viewModel.changeSignOut(SignOutData.APPLY)
+                }
             )
             Spacer(modifier = Modifier.height(10.dp))
-            CustomItemPick(
-                modifier = signOutItemModifier(signOutContent.value == SignOutData.NOT_GOOD),
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_sign_out_content_not_good),
-                clickable = { viewModel.changeSignOutContent(SignOutData.NOT_GOOD) }
+                isSelected = uiState.signOut == SignOutData.NOT_GOOD.name,
+                onClick = {
+                    viewModel.changeSignOut(SignOutData.NOT_GOOD)
+                }
             )
             Spacer(modifier = Modifier.height(10.dp))
-            CustomItemPick(
-                modifier = signOutItemModifier(signOutContent.value == SignOutData.NOT_NEED),
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_sign_out_content_not_need),
-                clickable = { viewModel.changeSignOutContent(SignOutData.NOT_NEED) }
+                isSelected = uiState.signOut == SignOutData.NOT_NEED.name,
+                onClick = {
+                    viewModel.changeSignOut(SignOutData.NOT_NEED)
+                }
             )
             Spacer(modifier = Modifier.height(10.dp))
-            CustomItemPick(
-                modifier = signOutItemModifier(signOutContent.value == SignOutData.ETC),
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_sign_out_content_etc),
-                clickable = { viewModel.changeSignOutContent(SignOutData.ETC) }
+                isSelected = uiState.signOut == SignOutData.ETC.name,
+                onClick = {
+                    viewModel.changeSignOut(SignOutData.ETC)
+                }
             )
             Spacer(modifier = Modifier.height(10.dp))
 
             HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
 
             Spacer(modifier = Modifier.height(10.dp))
-
-            if(signOutContent.value == SignOutData.ETC){
+            if (uiState.signOut == SignOutData.ETC.name) {
                 CustomChangeDataTextField(
-                    beforeText = inputValue,
+                    beforeText = uiState.signOutContent,
                     inputType = KeyboardType.Text,
                     onValueChange = { data ->
-                        inputValue = data
+                       viewModel.changeSignOutContent(data)
                     }
                 )
             }
@@ -133,21 +151,23 @@ internal fun SignOutMainView(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
         ) {
-            HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
+            HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
             Spacer(modifier = Modifier.height(8.dp))
-            CustomButton(
-                stringResource(R.string.btn_finish),
-                onclick = {
-                    viewModel.isDialogShow(true)
-                },
-                enable = button.value
+            ButtonXXLPurple400(
+                onClick = { viewModel.isDialogShow(true) },
+                buttonText = stringResource(R.string.btn_finish),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                isEnable = uiState.buttonRun
             )
         }
-        if (dialog.value) {
+        if (uiState.isDialogShow) {
             CustomDialog(
                 onDismiss = {
                     viewModel.isDialogShow(false)
-                    onBackClick() },
+                    onBackClick()
+                },
                 buttonClick = { viewModel.signOut() },
                 titleText = stringResource(R.string.dialog_sign_out_title),
                 contentText = stringResource(R.string.dialog_sign_out_content),
@@ -156,24 +176,4 @@ internal fun SignOutMainView(
             )
         }
     }
-}
-
-@Composable
-fun signOutItemModifier(isSelected: Boolean): Modifier {
-    return Modifier
-        .fillMaxWidth()
-        .height(48.dp)
-        .background(
-            color = if (isSelected) Color(0xFFF9F0FF) else Color(0xFFF7F7F7),
-            shape = RoundedCornerShape(8.dp)
-        )
-        .then(
-            if (isSelected) {
-                Modifier.border(
-                    width = 1.dp,
-                    color = Color(0xFFD3ADF7),
-                    shape = RoundedCornerShape(12.dp)
-                )
-            } else Modifier
-        )
 }

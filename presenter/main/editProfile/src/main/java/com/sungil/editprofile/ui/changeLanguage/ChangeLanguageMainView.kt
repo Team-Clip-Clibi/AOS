@@ -143,7 +143,7 @@ internal fun ChangeLanguageMainView(
             HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
             Spacer(modifier = Modifier.height(8.dp))
             ButtonXXLPurple400(
-                onClick = { viewModel.changeJob() },
+                onClick = { viewModel.changeLanguage() },
                 buttonText = stringResource(R.string.btn_finish),
                 modifier = Modifier
                     .fillMaxWidth()

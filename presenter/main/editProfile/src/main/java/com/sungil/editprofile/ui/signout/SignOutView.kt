@@ -17,7 +17,6 @@ import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.ui.CustomChangeDataAppBar
 import com.sungil.editprofile.ui.CustomSnackBar
-import com.sungil.editprofile.ui.loveState.LoveStateMainView
 
 @Composable
 internal fun SignOutView(
@@ -53,7 +52,8 @@ internal fun SignOutView(
             viewModel = viewModel,
             onBackClick = onBackClick,
             goToLogin = goToLoginPage,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
+            snackBarHost = snackBarHostState
         )
     }
 }

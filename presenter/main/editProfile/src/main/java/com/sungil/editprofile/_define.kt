@@ -21,6 +21,7 @@ const val ERROR_FAIL_TO_UPDATE_LOVE = "Fail to update Love"
 const val ERROR_FAIL_SAVE = "Save Fail"
 const val ERROR_USER_DATA_NULL = "userData is null"
 const val ERROR_NONE_DATA_SELECT = "NONE"
+const val ERROR_DELETE_FAIL = "delete fail"
 
 enum class JOB(val displayName: String) {
     STUDENT("학생"),

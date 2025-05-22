@@ -265,6 +265,23 @@ class ProfileEditViewModel @Inject constructor(
             )
         }
     }
+
+    fun changeSignOut(data : SignOutData){
+        _uiState.update { current ->
+            current.copy(
+                signOut = data.name
+            )
+        }
+    }
+
+    fun changeSignOutContent(data : String){
+        _uiState.update { current ->
+            current.copy(
+                signOutContent = data
+            )
+        }
+    }
+
 }
 
 
@@ -277,6 +294,8 @@ data class EditProfileData(
     val meetSame: Boolean = false,
     val diet: String = "",
     val language: String = "",
+    val signOut : String ="",
+    val signOutContent : String = "",
     val isDialogShow: Boolean = false,
     val buttonRun: Boolean = false,
     val success: UiSuccess = UiSuccess.None,
