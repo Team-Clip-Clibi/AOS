@@ -11,7 +11,7 @@ class SaveKaKaoId @Inject constructor(private val repo: DatabaseRepository) :
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
-        data class Success(val message: String) : Result
+        data class Success(val token: String) : Result
         data class Fail(val errorMessage: String) : Result
     }
 
@@ -20,6 +20,6 @@ class SaveKaKaoId @Inject constructor(private val repo: DatabaseRepository) :
         if (!result) {
             return Result.Fail("fail to save Token")
         }
-        return Result.Success("save Success")
+        return Result.Success(param.token)
     }
 }

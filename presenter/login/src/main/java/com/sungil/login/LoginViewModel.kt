@@ -50,9 +50,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun checkSignUp() {
+    fun checkSignUp(kakaoId: String) {
         viewModelScope.launch {
-            when (val result = signUp.invoke()) {
+            when (val result = signUp.invoke(CheckAlreadySignUp.Param(kakaoId))) {
                 is CheckAlreadySignUp.Result.Success -> {
                     _actionFlow.emit(Action.SignUp(result.message))
                 }
@@ -100,7 +100,6 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun requestLogin() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = login.invoke()) {
@@ -116,7 +115,7 @@ class LoginViewModel @Inject constructor(
     }
 
     sealed interface Action {
-        data class GetSuccess(val message: String) : Action
+        data class GetSuccess(val kakaoId: String) : Action
         data class SignUp(val message: String) : Action
         data class NotSignUp(val message: String) : Action
         data class FCMToken(val message: String) : Action

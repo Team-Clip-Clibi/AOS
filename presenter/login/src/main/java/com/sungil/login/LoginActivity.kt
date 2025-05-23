@@ -45,10 +45,10 @@ class LoginActivity : ComponentActivity() {
 
     private fun addListener() {
         CoroutineScope(Dispatchers.Main).launch {
-            viewModel.actionFlow.collect {
-                when (it) {
+            viewModel.actionFlow.collect { result ->
+                when (result) {
                     is LoginViewModel.Action.GetSuccess -> {
-                        viewModel.checkSignUp()
+                        viewModel.checkSignUp(result.kakaoId)
                     }
 
                     is LoginViewModel.Action.NotSignUp -> {
@@ -56,11 +56,11 @@ class LoginActivity : ComponentActivity() {
                     }
 
                     is LoginViewModel.Action.SignUp -> {
-                        viewModel.requestLogin()
+                        router.navigation(MAIN_VIEW)
                     }
 
                     is LoginViewModel.Action.FCMToken -> {
-                        Log.d(javaClass.name.toString(), it.message)
+                        Log.d(javaClass.name.toString(), result.message)
                     }
 
                     is LoginViewModel.Action.Login -> {
@@ -68,7 +68,7 @@ class LoginActivity : ComponentActivity() {
                     }
 
                     is LoginViewModel.Action.Error -> {
-                        when (it.errorMessage) {
+                        when (result.errorMessage) {
                             ERROR_KAKAO_ID_NULL -> {
                                 router.navigation(KAKAO_VIEW)
                             }
@@ -86,7 +86,7 @@ class LoginActivity : ComponentActivity() {
                             }
 
                             else -> {
-                                Toast.makeText(this@LoginActivity , it.errorMessage , Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@LoginActivity , result.errorMessage , Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
