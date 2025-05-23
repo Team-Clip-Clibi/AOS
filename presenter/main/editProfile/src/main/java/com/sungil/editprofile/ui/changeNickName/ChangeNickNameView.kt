@@ -82,7 +82,8 @@ internal fun ChangeNickNameView(
                     isEnable = uiState.buttonRun
                 )
             }
-        }
+        },
+        contentColor = ColorStyle.WHITE_100
     ) { paddingValues ->
         ChangeNickNameMainView(
             paddingValues = paddingValues,
