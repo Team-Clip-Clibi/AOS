@@ -144,23 +144,6 @@ internal fun SignOutMainView(
                     }
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
-        }
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        ) {
-            HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
-            Spacer(modifier = Modifier.height(8.dp))
-            ButtonXXLPurple400(
-                onClick = { viewModel.isDialogShow(true) },
-                buttonText = stringResource(R.string.btn_finish),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                isEnable = uiState.buttonRun
-            )
         }
         if (uiState.isDialogShow) {
             CustomDialog(
