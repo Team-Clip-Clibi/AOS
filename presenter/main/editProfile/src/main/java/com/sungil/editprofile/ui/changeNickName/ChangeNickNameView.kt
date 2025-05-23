@@ -79,7 +79,7 @@ internal fun ChangeNickNameView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp),
-                    isEnable = uiState.nickName != ""
+                    isEnable = uiState.buttonRun
                 )
             }
         }
