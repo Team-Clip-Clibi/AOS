@@ -58,7 +58,7 @@
     <string name="txt_diet_gf">글루텐프리를 지켜요</string>
     <string name="txt_diet_all">다 잘먹어요</string>
     <string name="txt_diet_etc">기타</string>
-
+    <string name="hint_diet_data">알레르기나 특별한 식사 성향을 입력해주세요</string>
     <!--  btn  -->
     <string name="btn_finish">완료</string>
     <!-- signOut   -->
@@ -69,6 +69,7 @@
     <string name="txt_sign_out_content_not_good">서비스 이용이 불편했어요</string>
     <string name="txt_sign_out_content_not_need">서비스의 필요성을 못 느꼈어요</string>
     <string name="txt_sign_out_content_etc">기타</string>
+    <string name="txt_sign_out_content_etc_hint">기타 사유를 입력해주세요</string>
     <!--  dialog  -->
     <string name="dialog_logout_title">로그아웃 하시겠어요?</string>
     <string name="dialog_logout_content">저장된 정보는 유지되며, 다시 로그인하면 이어서 이용할 수 있습니다</string>
