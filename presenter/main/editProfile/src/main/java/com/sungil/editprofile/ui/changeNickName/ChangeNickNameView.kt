@@ -18,16 +18,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
+import com.example.core.CustomSnackBar
 import com.example.core.TopAppBarNumber
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
-import com.sungil.editprofile.ui.CustomChangeDataAppBar
-import com.sungil.editprofile.ui.CustomSnackBar
 
 @Composable
 internal fun ChangeNickNameView(
