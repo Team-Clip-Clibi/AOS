@@ -86,9 +86,6 @@ internal fun ProfileEditNav(
                 viewModel = viewModel,
                 onBackClick = {
                     navController.popBackStack()
-                },
-                changeDataFinished = {
-                    navController.popBackStack()
                 }
             )
         }

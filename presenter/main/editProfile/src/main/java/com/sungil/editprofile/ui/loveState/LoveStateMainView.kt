@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ButtonLeftLarge
+import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.sungil.editprofile.ERROR_FAIL_SAVE
 import com.sungil.editprofile.ERROR_FAIL_TO_UPDATE_LOVE
@@ -46,7 +47,6 @@ import com.sungil.editprofile.ui.CustomUnderTextFieldText
 @Composable
 internal fun LoveStateMainView(
     viewModel: ProfileEditViewModel,
-    dataChangedFinished: () -> Unit,
     paddingValues: PaddingValues,
     snackBarHost: SnackbarHostState,
 ) {
@@ -77,7 +77,9 @@ internal fun LoveStateMainView(
                         )
                     }
                 }
+                viewModel.initSuccessError()
             }
+
             UiError.None -> Unit
         }
 
@@ -92,104 +94,80 @@ internal fun LoveStateMainView(
             }
         }
     }
-
-    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(top = paddingValues.calculateTopPadding() + 32.dp, bottom = 8.dp)
-            .verticalScroll(scrollState)
-            .navigationBarsPadding()
+            .padding(
+                top = paddingValues.calculateTopPadding() + 32.dp,
+                bottom = paddingValues.calculateBottomPadding(),
+                start = 17.dp,
+                end = 16.dp
+            )
+            .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 17.dp, end = 16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.txt_love_state),
-                style = AppTextStyles.CAPTION_12_18_SEMI,
-                modifier = Modifier.fillMaxWidth(),
-                color = ColorStyle.GRAY_800
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            ButtonLeftLarge(
-                text = stringResource(R.string.txt_love_single),
-                isSelected = uiState.loveState == LOVE.SINGLE.name,
-                onClick = {
-                    viewModel.changeLoveState(LOVE.SINGLE)
-                }
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-            ButtonLeftLarge(
-                text = stringResource(R.string.txt_love_ing),
-                isSelected = uiState.loveState == LOVE.COUPLE.name,
-                onClick = {
-                    viewModel.changeLoveState(LOVE.COUPLE)
-                }
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            ButtonLeftLarge(
-                text = stringResource(R.string.txt_love_married),
-                isSelected = uiState.loveState == LOVE.MARRIAGE.name,
-                onClick = {
-                    viewModel.changeLoveState(LOVE.MARRIAGE)
-                }
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            ButtonLeftLarge(
-                text = stringResource(R.string.txt_love_no_show),
-                isSelected = uiState.loveState == LOVE.SECRET.name,
-                onClick = {
-                    viewModel.changeLoveState(LOVE.SECRET)
-                }
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = ColorStyle.GRAY_200
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 17.dp, end = 16.dp, top = 24.dp)
-            ) {
-                CustomUnderTextFieldText(
-                    text = stringResource(R.string.txt_love_matching),
-                    color = Color(0xFF171717)
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                ButtonLeftLarge(
-                    text = stringResource(R.string.txt_love_same),
-                    isSelected = MEETING.fromDisplayName(uiState.meetSame) == MEETING.SAME,
-                    onClick = {
-                        viewModel.changeMeetState(MEETING.SAME)
-                    }
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                ButtonLeftLarge(
-                    text = stringResource(R.string.txt_love_never_mind),
-                    isSelected = MEETING.fromDisplayName(uiState.meetSame) == MEETING.OKAY,
-                    onClick = {
-                        viewModel.changeMeetState(MEETING.OKAY)
-                    }
-                )
+        Text(
+            text = stringResource(R.string.txt_love_state),
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = ColorStyle.GRAY_800
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        ButtonLeftLarge(
+            text = stringResource(R.string.txt_love_single),
+            isSelected = uiState.loveState == LOVE.SINGLE.name,
+            onClick = {
+                viewModel.changeLoveState(LOVE.SINGLE)
             }
-            Spacer(modifier = Modifier.weight(1f))
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
-                Spacer(modifier = Modifier.height(8.dp))
-                CustomButton(
-                    stringResource(R.string.btn_finish),
-                    onclick = { viewModel.sendLoveState() },
-                    enable = uiState.buttonRun
-                )
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        ButtonLeftLarge(
+            text = stringResource(R.string.txt_love_ing),
+            isSelected = uiState.loveState == LOVE.COUPLE.name,
+            onClick = {
+                viewModel.changeLoveState(LOVE.COUPLE)
             }
-        }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        ButtonLeftLarge(
+            text = stringResource(R.string.txt_love_married),
+            isSelected = uiState.loveState == LOVE.MARRIAGE.name,
+            onClick = {
+                viewModel.changeLoveState(LOVE.MARRIAGE)
+            }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        ButtonLeftLarge(
+            text = stringResource(R.string.txt_love_no_show),
+            isSelected = uiState.loveState == LOVE.SECRET.name,
+            onClick = {
+                viewModel.changeLoveState(LOVE.SECRET)
+            }
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = ColorStyle.GRAY_200
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.txt_love_matching),
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = ColorStyle.GRAY_800
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        ButtonLeftLarge(
+            text = stringResource(R.string.txt_love_same),
+            isSelected = MEETING.fromDisplayName(uiState.meetSame) == MEETING.SAME,
+            onClick = {
+                viewModel.changeMeetState(MEETING.SAME)
+            }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        ButtonLeftLarge(
+            text = stringResource(R.string.txt_love_never_mind),
+            isSelected = MEETING.fromDisplayName(uiState.meetSame) == MEETING.OKAY,
+            onClick = {
+                viewModel.changeMeetState(MEETING.OKAY)
+            }
+        )
     }
 }
