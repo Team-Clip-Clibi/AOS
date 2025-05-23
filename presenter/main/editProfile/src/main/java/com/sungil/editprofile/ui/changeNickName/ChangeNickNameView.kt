@@ -76,7 +76,8 @@ internal fun ChangeNickNameView(
                     buttonText = stringResource(R.string.btn_finish),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(60.dp),
+                        .height(60.dp)
+                        .padding(start = 17.dp, end = 16.dp),
                     isEnable = uiState.buttonRun
                 )
             }

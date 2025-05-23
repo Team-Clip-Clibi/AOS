@@ -41,16 +41,14 @@ class FirstMatchViewModel @Inject constructor(
                 }
 
                 is GetUserInfo.Result.Success -> {
-                    val (first, second) = result.data.job
-                    val job = if (first == "NONE") {
-                        null
+                    val job = if (result.data.job == "NONE") {
+                        JOB.fromCode("NONE") ?: JOB.NONE
                     } else {
-                        JOB.fromDisplayName(first) ?: JOB.fromCode(second)
+                        JOB.fromCode(result.data.job) ?: JOB.NONE
                     }
-
                     _uiState.update { current ->
                         current.copy(
-                            job = job?.let { setOf(it) } ?: emptySet(),
+                            job = job,
                             diet = result.data.diet,
                             language = result.data.language
                         )
@@ -62,24 +60,8 @@ class FirstMatchViewModel @Inject constructor(
 
     fun selectJob(data: JOB) {
         _uiState.update { current ->
-            val currentJobs = current.job.toMutableSet()
-            val updatedJobs = when {
-                currentJobs.contains(data) -> {
-                    currentJobs.remove(data)
-                    currentJobs
-                }
-
-                currentJobs.size < 2 -> {
-                    currentJobs.add(data)
-                    currentJobs
-                }
-
-                else -> {
-                    return@update current.copy(error = UiError.Error("To many job select"))
-                }
-            }
             current.copy(
-                job = updatedJobs,
+                job = data,
                 error = UiError.None
             )
         }
@@ -87,11 +69,7 @@ class FirstMatchViewModel @Inject constructor(
 
     fun updateJob() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = job.invoke(
-                UpdateJob.Param(
-                    Pair(_uiState.value.job.elementAt(0).name, _uiState.value.job.elementAt(1).name)
-                )
-            )) {
+            when (val result = job.invoke(UpdateJob.Param(_uiState.value.job.name))) {
                 is UpdateJob.Result.Fail -> {
                     _uiState.update { current ->
                         current.copy(error = UiError.Error(result.errorMessage))
@@ -171,7 +149,7 @@ class FirstMatchViewModel @Inject constructor(
 }
 
 data class FirstMatchData(
-    val job: Set<JOB> = emptySet(),
+    val job: JOB = JOB.NONE,
     val diet: String = DIET.NONE.displayName,
     val language: String = "",
     val error: UiError = UiError.None,

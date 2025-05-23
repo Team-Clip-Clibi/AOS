@@ -22,7 +22,7 @@ import com.oneThing.first_matrch.JOB
 
 @Composable
 fun JobGridSelector(
-    selectJobs: Set<JOB>,
+    selectJobs: JOB,
     onJobToggle: (JOB) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -33,12 +33,11 @@ fun JobGridSelector(
         modifier = modifier
     ) {
         items(JOB.entries.toList()) { job ->
-            val selected = selectJobs.contains(job)
             ButtonCenterLarge(
                 onClick = {
                     onJobToggle(job)
                 },
-                checked = selected,
+                checked = job == selectJobs,
                 text = job.displayName
             )
         }

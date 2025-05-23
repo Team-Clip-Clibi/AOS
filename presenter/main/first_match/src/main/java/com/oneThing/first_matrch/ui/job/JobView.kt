@@ -116,7 +116,7 @@ internal fun JobView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),
-                    isEnable = uiState.job.first() != JOB.NONE
+                    isEnable = uiState.job != JOB.NONE
                 )
             }
         },
