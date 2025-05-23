@@ -49,7 +49,7 @@ interface NetworkRepository {
         osVersion: String,
         firebaseToken: String,
         isAllowNotify: Boolean,
-    ): Pair<String?, String?>
+    ): Triple<Int,String?, String?>
 
     suspend fun requestUserData(accessToken: String): UserInfo?
 

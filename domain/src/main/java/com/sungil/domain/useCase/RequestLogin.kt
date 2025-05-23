@@ -24,33 +24,31 @@ class RequestLogin @Inject constructor(
     /**
      * 400 번대 에러 대응 필요
      */
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     suspend fun invoke(): Result {
-        return try{
-            val kakaoId: String = database.getKaKaoId()
-            val osVersion: String = device.getAndroidOsVersion().toString()
-            val firebaseToken: String = database.getFcmToken()
-            val isAllowNotify: Boolean = database.getNotifyState()
-            val response = network.login(
-                socialId = kakaoId,
-                osVersion = osVersion,
-                firebaseToken = firebaseToken,
-                isAllowNotify = isAllowNotify
-            )
-            if (response.first == null || response.second == null) {
+        val kakaoId: String = database.getKaKaoId()
+        val osVersion: String = device.getAndroidOsVersion().toString()
+        val firebaseToken: String = database.getFcmToken()
+        val isAllowNotify: Boolean = database.getNotifyState()
+        val response = network.login(
+            socialId = kakaoId,
+            osVersion = osVersion,
+            firebaseToken = firebaseToken,
+            isAllowNotify = isAllowNotify
+        )
+        when (response.first) {
+            400 -> {
                 return Result.Fail("Fail to login")
             }
-            val saveResult = database.setToken(response.first!!, response.second!!)
-            if (!saveResult) {
-                return Result.Fail("Fail to save token")
+            200 -> {
+                if (response.second == null || response.third == null) {
+                    return Result.Fail("Fail to login")
+                }
+                database.setToken(response.second!!, response.third!!)
+                return Result.Success("Success to Login")
             }
-            return Result.Success("Success to Login")
-        }catch (e : HttpException){
-            Result.Fail("Server error : ${e.message}")
-        }catch (e : IOException){
-            Result.Fail("Server error : ${e.message}")
-        }catch (e : Exception){
-            Result.Fail("Server error : ${e.message}")
+            else -> {
+                return Result.Fail("Server error : ${response.first}")
+            }
         }
     }
 }

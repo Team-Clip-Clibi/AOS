@@ -161,7 +161,7 @@ class NetworkRepositoryImpl @Inject constructor(
         osVersion: String,
         firebaseToken: String,
         isAllowNotify: Boolean,
-    ): Pair<String?, String?> {
+    ): Triple<Int, String?, String?> {
         val tokenData = api.requestLogin(
             LoginRequest(
                 socialId = socialId,
@@ -174,7 +174,7 @@ class NetworkRepositoryImpl @Inject constructor(
         )
         val accessToken = tokenData.body()?.accessToken
         val refreshToken = tokenData.body()?.refreshToken
-        return accessToken to refreshToken
+        return Triple(tokenData.code(), accessToken, refreshToken)
     }
 
     override suspend fun requestUserData(accessToken: String): UserInfo? {
