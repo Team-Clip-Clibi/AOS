@@ -31,15 +31,15 @@ class SMSViewModel @Inject constructor(
                 }
 
                 is SaveKaKaoId.Result.Success -> {
-                    _actionFlow.emit(Action.SaveSuccess(result.message))
+                    _actionFlow.emit(Action.SaveSuccess(result.token))
                 }
             }
         }
     }
 
-    fun checkAlreadySignUp() {
+    fun checkAlreadySignUp(socialId: String) {
         viewModelScope.launch {
-            when (val result = signUp.invoke()) {
+            when (val result = signUp.invoke(CheckAlreadySignUp.Param(socialId))) {
                 is CheckAlreadySignUp.Result.Success -> {
                     _actionFlow.emit(Action.AlreadySignUp(result.message))
                 }
@@ -51,25 +51,11 @@ class SMSViewModel @Inject constructor(
         }
     }
 
-    fun requestLogin() {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = login.invoke()) {
-                is RequestLogin.Result.Success -> {
-                    _actionFlow.emit(Action.LoginSuccess(result.message))
-                }
-
-                is RequestLogin.Result.Fail -> {
-                    _actionFlow.emit(Action.Error(result.errorMessage))
-                }
-            }
-        }
-    }
 
     sealed interface Action {
-        data class SaveSuccess(val message: String) : Action
+        data class SaveSuccess(val kakaoId: String) : Action
         data class AlreadySignUp(val message: String) : Action
         data class NotSignUp(val message: String) : Action
-        data class LoginSuccess(val message: String) : Action
         data class Error(val errorMessage: String) : Action
     }
 }

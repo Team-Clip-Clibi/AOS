@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//import androidx.activity.viewModels
 
 @AndroidEntryPoint
 class AuthCodeHandlerActivity : AppCompatActivity() {
@@ -29,17 +28,17 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
     private fun startKakaoLogin() {
         UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
             if (error != null || token == null) {
-                Log.e(javaClass.name.toString() , "error $error")
+                Log.e(javaClass.name.toString(), "error $error")
                 viewModel.saveKaKaoId("3975324589")
                 return@loginWithKakaoTalk
             }
             Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")
             UserApiClient.instance.me { user, error ->
-                if(user == null){
-                    Log.e(javaClass.name.toString() , "the user data is null $error")
+                if (user == null) {
+                    Log.e(javaClass.name.toString(), "the user data is null $error")
                     return@me
                 }
-                Log.d(javaClass.name.toString(),"userId : ${user.id}")
+                Log.d(javaClass.name.toString(), "userId : ${user.id}")
                 viewModel.saveKaKaoId(user.id.toString())
             }
         }
@@ -47,26 +46,25 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
 
     private fun addListener() {
         CoroutineScope(Dispatchers.Main).launch {
-            viewModel.actionFlow.collect {
-                when (it) {
+            viewModel.actionFlow.collect { result ->
+                when (result) {
                     is SMSViewModel.Action.SaveSuccess -> {
-                        viewModel.checkAlreadySignUp()
+                        viewModel.checkAlreadySignUp(result.kakaoId)
                     }
+
                     is SMSViewModel.Action.AlreadySignUp -> {
-                        viewModel.requestLogin()
+                        router.navigation("Main")
                     }
-                    is SMSViewModel.Action.NotSignUp ->{
+
+                    is SMSViewModel.Action.NotSignUp -> {
                         router.navigation("SignUp")
                     }
-                    is SMSViewModel.Action.LoginSuccess -> {
-                        Log.d(javaClass.name.toString() , it.message)
-                    }
-                    is SMSViewModel.Action.Error ->{
-                        Log.e(javaClass.name.toString() , it.errorMessage)
+
+                    is SMSViewModel.Action.Error -> {
+                        Log.e(javaClass.name.toString(), result.errorMessage)
                     }
                 }
             }
         }
     }
-
 }
