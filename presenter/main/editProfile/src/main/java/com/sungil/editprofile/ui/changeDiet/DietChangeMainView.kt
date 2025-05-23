@@ -31,12 +31,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.core.ButtonLeftLarge
+import com.example.core.ButtonXXLPurple400
+import com.example.core.ColorStyle
 import com.sungil.editprofile.DIET
 import com.sungil.editprofile.ERROR_FAIL_SAVE
 import com.sungil.editprofile.ERROR_FAIL_TO_UPDATE_LOVE
 import com.sungil.editprofile.ERROR_TOKEN_NULL
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
+import com.sungil.editprofile.UiError
+import com.sungil.editprofile.UiSuccess
 import com.sungil.editprofile.ui.CustomButton
 import com.sungil.editprofile.ui.CustomChangeDataTextField
 import com.sungil.editprofile.ui.CustomItemPick
@@ -47,54 +52,57 @@ internal fun DietChangeMainView(
     paddingValues: PaddingValues,
     snackBarHost: SnackbarHostState,
 ) {
-    val diet by viewModel.dietData.collectAsState()
-    var inputValue by remember { mutableStateOf("") }
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        viewModel.editProfileState.collect{ state ->
-            when(state){
-                is ProfileEditViewModel.EditProfileState.SuccessToChange -> {
-                    snackBarHost.showSnackbar(
-                        message = context.getString(R.string.msg_save_success),
-                        duration = SnackbarDuration.Short
-                    )
-                    viewModel.initFlow()
-                }
-                is ProfileEditViewModel.EditProfileState.Error ->{
-                    when(state.message){
-                        ERROR_TOKEN_NULL  ->{
-                            snackBarHost.showSnackbar(
-                                message = context.getString(R.string.txt_network_error),
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-                        ERROR_FAIL_TO_UPDATE_LOVE ->{
-                            snackBarHost.showSnackbar(
-                                message = context.getString(R.string.txt_network_error),
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-                        ERROR_FAIL_SAVE ->{
-                            snackBarHost.showSnackbar(
-                                message = context.getString(R.string.msg_save_error),
-                                duration = SnackbarDuration.Short
-                            )
-                        }
+    val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(uiState.success, uiState.error) {
+        when (val error = uiState.error) {
+            is UiError.Error -> {
+                when (error.message) {
+                    ERROR_TOKEN_NULL -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.txt_network_error),
+                            duration = SnackbarDuration.Short
+                        )
                     }
-                    viewModel.initFlow()
+
+                    ERROR_FAIL_TO_UPDATE_LOVE -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.txt_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    ERROR_FAIL_SAVE -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_save_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
                 }
-                else -> Unit
+                viewModel.initSuccessError()
+            }
+
+            UiError.None -> Unit
+        }
+        when (uiState.success) {
+            UiSuccess.None -> Unit
+            is UiSuccess.Success -> {
+                snackBarHost.showSnackbar(
+                    message = context.getString(R.string.msg_save_success),
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.initSuccessError()
             }
         }
     }
-    val scrollState = rememberScrollState()
+
     Box(
         Modifier
-            .background(Color(0xFFFFFFFF))
+            .background(ColorStyle.WHITE_100)
             .fillMaxSize()
             .padding(top = paddingValues.calculateTopPadding() + 32.dp, bottom = 8.dp)
             .navigationBarsPadding()
-            .verticalScroll(scrollState)
+            .verticalScroll(rememberScrollState())
     ) {
         Column(
             Modifier
@@ -102,47 +110,56 @@ internal fun DietChangeMainView(
                 .align(Alignment.TopCenter)
                 .padding(start = 17.dp, end = 16.dp)
         ) {
-            CustomItemPick(
-                modifier = Modifier.dietItemModifier((diet.name == DIET.VG.name)),
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_diet_vg),
-                clickable = { viewModel.setDiet(DIET.VG) }
+                isSelected = uiState.diet == DIET.VG.displayName,
+                onClick = {
+                    viewModel.changeDiet(DIET.VG)
+                }
             )
             Spacer(Modifier.height(10.dp))
-
-            CustomItemPick(
-                modifier = Modifier.dietItemModifier((diet.name == DIET.VT.name)),
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_diet_vt),
-                clickable = { viewModel.setDiet(DIET.VT) }
+                isSelected = uiState.diet == DIET.VT.displayName,
+                onClick = {
+                    viewModel.changeDiet(DIET.VT)
+                }
             )
             Spacer(Modifier.height(10.dp))
-
-            CustomItemPick(
-                modifier = Modifier.dietItemModifier((diet.name == DIET.GF.name)),
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_diet_gf),
-                clickable = { viewModel.setDiet(DIET.GF) }
+                isSelected = uiState.diet == DIET.GF.displayName,
+                onClick = {
+                    viewModel.changeDiet(DIET.GF)
+                }
             )
-
             Spacer(Modifier.height(10.dp))
-
-            CustomItemPick(
-                modifier = Modifier.dietItemModifier((diet.name == DIET.ETC.name)),
+            ButtonLeftLarge(
+                text = stringResource(R.string.txt_diet_all),
+                isSelected = uiState.diet == DIET.ALL.displayName,
+                onClick = {
+                    viewModel.changeDiet(DIET.ALL)
+                }
+            )
+            Spacer(Modifier.height(10.dp))
+            ButtonLeftLarge(
                 text = stringResource(R.string.txt_diet_etc),
-                clickable = { viewModel.setDiet(DIET.ETC) }
+                isSelected = uiState.diet == DIET.ETC.displayName,
+                onClick = {
+                    viewModel.changeDiet(DIET.ETC)
+                }
             )
             Spacer(modifier = Modifier.height(10.dp))
-
             HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
 
             Spacer(modifier = Modifier.height(10.dp))
-            /**
-             * TODO -> 해당 TEXT 서버에 업로드 하는 기능 없음
-             */
-            if (diet.name == DIET.ETC.name) {
+
+            if (uiState.diet == DIET.ETC.displayName) {
                 CustomChangeDataTextField(
-                    beforeText = inputValue,
+                    beforeText = uiState.diet,
                     inputType = KeyboardType.Text,
                     onValueChange = { data ->
-                        inputValue = data
+                        viewModel.changeDietETCContent(data)
                     }
                 )
             }
@@ -156,37 +173,14 @@ internal fun DietChangeMainView(
         ) {
             HorizontalDivider(thickness = 1.dp, color = Color(0xFFEFEFEF))
             Spacer(modifier = Modifier.height(8.dp))
-            CustomButton(
-                stringResource(R.string.btn_finish),
-                onclick = {
-                    viewModel.updateDiet()
-                },
-                enable = when {
-                    diet.name == DIET.NONE.name -> false
-                    diet.name == DIET.ETC.name && inputValue.isBlank() -> false
-                    else -> true
-                }
+            ButtonXXLPurple400(
+                onClick = { viewModel.updateDiet() },
+                buttonText = stringResource(R.string.btn_finish),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                isEnable = uiState.diet != DIET.NONE.displayName
             )
         }
-
     }
-}
-
-fun Modifier.dietItemModifier(isSelected: Boolean): Modifier {
-    return this
-        .fillMaxWidth()
-        .height(48.dp)
-        .background(
-            color = if (isSelected) Color(0xFFF9F0FF) else Color(0xFFF7F7F7),
-            shape = RoundedCornerShape(8.dp)
-        )
-        .let {
-            if (isSelected) {
-                it.border(
-                    width = 1.dp,
-                    color = Color(0xFFD3ADF7),
-                    shape = RoundedCornerShape(12.dp)
-                )
-            } else it
-        }
 }

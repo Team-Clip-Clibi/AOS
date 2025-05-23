@@ -250,3 +250,36 @@ fun ButtonLeftLarge(
         )
     }
 }
+
+@Composable
+fun ButtonSmall(
+    text: String,
+    isEnable: Boolean = true,
+    onClick: () -> Unit,
+) {
+    val borderModifier = if (isEnable) {
+        Modifier.border(
+            width = 1.dp,
+            color = ColorStyle.PURPLE_200,
+            shape = RoundedCornerShape(12.dp)
+        )
+    } else Modifier
+    Button(
+        modifier = Modifier
+            .width(96.dp)
+            .height(36.dp)
+            .background(
+                color = if (isEnable) ColorStyle.PURPLE_100 else ColorStyle.GRAY_200,
+                shape = RoundedCornerShape(size = 8.dp)
+            )
+            .then(borderModifier),
+        enabled = isEnable,
+        onClick = onClick
+    ) {
+        Text(
+            text = text,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = if (isEnable) ColorStyle.PURPLE_400 else ColorStyle.GRAY_600
+        )
+    }
+}

@@ -282,6 +282,21 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
+    fun changeDiet(data : DIET){
+        _uiState.update { current ->
+            current.copy(
+                diet = data.displayName
+            )
+        }
+    }
+
+    fun changeDietETCContent(data : String){
+        _uiState.update { current ->
+            current.copy(
+                dietContent = data
+            )
+        }
+    }
 }
 
 
@@ -292,7 +307,8 @@ data class EditProfileData(
     val job: String = "",
     val loveState: String = "",
     val meetSame: Boolean = false,
-    val diet: String = "",
+    val diet: String = "NULL",
+    val dietContent : String ="",
     val language: String = "",
     val signOut : String ="",
     val signOutContent : String = "",

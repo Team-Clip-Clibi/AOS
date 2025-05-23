@@ -27,6 +27,7 @@
     <string name="txt_already_use">사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해 주세요.</string>
     <string name="txt_nick_name_okay">사용 가능한 닉네임입니다.</string>
     <string name="txt_message_okay">닉네임 변경 완료</string>
+    <string name="btn_nickname_check">중복 확인</string>
     <!-- Change Job  -->
     <string name="top_job_change_job">하는 일 변경</string>
     <string name="txt_job_select_one">최대 1개까지 선택할 수 있어요.</string>
