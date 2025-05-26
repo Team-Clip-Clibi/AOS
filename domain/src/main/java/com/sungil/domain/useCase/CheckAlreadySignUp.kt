@@ -21,10 +21,6 @@ class CheckAlreadySignUp @Inject constructor(
     }
 
     override suspend fun invoke(param: Param): Result {
-        val result = database.getSingUpData()
-        if (!result) {
-            return Result.Fail("Not SignUp")
-        }
         val requestLogin = network.login(
             socialId = param.socialId,
             osVersion = device.getAndroidOsVersion().toString(),
