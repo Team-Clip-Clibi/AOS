@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
+import com.example.core.TopAppBarWithCloseButton
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
-import com.sungil.editprofile.ui.CustomChangeDataAppBar
 
 @Composable
 internal fun LoveStateView(
@@ -32,12 +32,14 @@ internal fun LoveStateView(
     val snackBarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
-            CustomChangeDataAppBar(
-                text = stringResource(R.string.top_love_state),
+            TopAppBarWithCloseButton(
+                title = stringResource(R.string.top_love_state),
                 onBackClick = {
                     viewModel.initSuccessError()
                     onBackClick()
-                }
+                },
+                isNavigationShow = false,
+                isActionShow = true,
             )
         },
         snackbarHost = {
@@ -57,7 +59,9 @@ internal fun LoveStateView(
             )
         },
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(
+                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 8.dp
+            )) {
                 HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
@@ -66,7 +70,7 @@ internal fun LoveStateView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                        .padding(start = 17.dp, end = 16.dp, bottom = 8.dp)
+                        .padding(start = 17.dp, end = 16.dp)
                 )
             }
         }

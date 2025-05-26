@@ -85,41 +85,6 @@ fun CustomTopBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CustomChangeDataAppBar(
-    text : String,
-    onBackClick: () -> Unit
-){
-    CenterAlignedTopAppBar(
-        modifier = Modifier
-            .border(width = 1.dp, color = Color(0xFFEFEFEF))
-            .fillMaxWidth()
-            .padding(start = 5.dp, end = 5.dp),
-        title = {
-            Text(
-                text = text,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF000000),
-                textAlign = TextAlign.Center
-            )
-        },
-        navigationIcon = {},
-        actions = {
-            Image(
-                painter = painterResource(id=  R.drawable.ic_close_x),
-                contentDescription = "화면닫기",
-                modifier = Modifier
-                    .padding(12.dp)
-                    .size(24.dp)
-                    .clickable { onBackClick() }
-            )
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.White
-        )
-    )
-}
 
 @Composable
 fun CustomLittleTitleText(
@@ -267,126 +232,6 @@ fun GraySpacer() {
 }
 
 @Composable
-fun CustomChangeDataTextField(
-    beforeText: String,
-    onValueChange: (String) -> Unit,
-    inputType: KeyboardType,
-) {
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            ,
-        value = beforeText,
-        onValueChange = onValueChange,
-        textStyle = AppTextStyles.BODY_14_20_MEDIUM,
-        keyboardOptions = KeyboardOptions(keyboardType = inputType),
-        singleLine = true,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color(0xFF989898),   // 아래 줄 색상
-            unfocusedIndicatorColor = Color(0xFF989898),
-            disabledIndicatorColor = Color(0xFF989898)
-        )
-    )
-}
-
-
-@Composable
-fun CustomUnderTextFieldText(text: String, color: Color) {
-    Text(
-        text = text,
-        style = AppTextStyles.CAPTION_12_18_SEMI,
-        color = color
-    )
-}
-@Composable
-fun CustomButton(
-    text: String,
-    onclick: () -> Unit,
-    enable: Boolean,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .padding(
-                start = 17.dp,
-                end = 17.dp
-            ),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-
-            when (enable) {
-                true -> {
-                    Color(0xFF6700CE)
-                }
-
-                false -> {
-                    Color(0xFFEFEFEF)
-                }
-            }
-
-        ),
-        onClick = { onclick() },
-        enabled = enable
-    ) {
-        Text(
-            text = text,
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
-            color = if (enable) {
-                Color(0xFFFFFFFF)
-            } else {
-                Color(0xFF171717)
-            }
-        )
-    }
-}
-
-@Composable
-fun CustomSnackBar(data: SnackbarData) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(color = Color(0xFF383838), shape = RoundedCornerShape(size = 8.dp))
-            .padding(start = 16.dp, end = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_message),
-            contentDescription = "message",
-            contentScale = ContentScale.None,
-            modifier = Modifier
-                .width(24.dp)
-                .height(24.dp)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = data.visuals.message,
-            style = AppTextStyles.CAPTION_12_18_SEMI,
-            color = Color(0xFFFFFFFF)
-        )
-    }
-}
-
-@Composable
-fun CustomTitle1624Semi(
-    text: String,
-    color: Long,
-) {
-    Text(
-        text = text,
-        style = AppTextStyles.SUBTITLE_16_24_SEMI,
-        color = Color(color)
-    )
-}
-
-@Composable
 fun JobGridSelector(
     selectedJobs: JOB,
     onJobToggle: (JOB) -> Unit,
@@ -430,29 +275,6 @@ fun JobGridSelector(
     }
 }
 
-@Composable
-fun CustomItemPick(
-    text: String,
-    modifier: Modifier = Modifier,
-    clickable: () -> Unit,
-) {
-    Box(
-        modifier = modifier.clickable(
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() }
-        ) {
-            clickable()
-        },
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(start = 17.dp),
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = Color(0xFF171717)
-        )
-    }
-}
 
 @Composable
 fun CustomDialog(
@@ -538,17 +360,3 @@ fun CustomDialog(
         }
     }
 }
-
-@Composable
-fun CustomTitle(
-    text : String,
-    color : Color
-){
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        text = text,
-        color = color,
-        style = AppTextStyles.TITLE_20_28_SEMI
-    )
-}
-

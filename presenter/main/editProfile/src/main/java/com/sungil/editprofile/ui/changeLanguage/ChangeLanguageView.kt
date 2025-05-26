@@ -63,7 +63,9 @@ internal fun ChangeLanguageView(
             )
         },
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(
+                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 8.dp
+            )) {
                 HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(

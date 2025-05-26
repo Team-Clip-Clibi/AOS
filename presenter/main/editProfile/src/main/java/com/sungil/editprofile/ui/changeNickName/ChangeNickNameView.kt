@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
-import com.example.core.TopAppBarNumber
+import com.example.core.TopAppBarWithCloseButton
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 
@@ -37,15 +37,14 @@ internal fun ChangeNickNameView(
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
         topBar = {
-            TopAppBarNumber(
+            TopAppBarWithCloseButton(
                 title = stringResource(R.string.top_bar_change_nick_name),
-                currentPage = 0,
-                totalPage = 0,
-                isPageTextShow = false,
                 onBackClick = {
                     viewModel.initSuccessError()
                     onBackClick()
-                }
+                },
+                isNavigationShow = false,
+                isActionShow = true,
             )
         },
         snackbarHost = {
@@ -68,6 +67,11 @@ internal fun ChangeNickNameView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = ColorStyle.WHITE_100)
+                    .padding(
+                        bottom = WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateBottomPadding() + 8.dp
+                    )
             ) {
                 HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
                 Spacer(modifier = Modifier.height(8.dp))
