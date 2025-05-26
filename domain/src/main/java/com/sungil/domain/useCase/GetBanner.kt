@@ -23,7 +23,13 @@ class GetBanner @Inject constructor(
         val token = database.getToken()
         val banner = network.requestBanner(TOKEN_FORM + token.first, param.bannerHost)
         when (banner.responseCode) {
-            200 -> return Result.Success(banner.bannerResponse)
+            200 -> {
+                if (banner.bannerResponse.isEmpty()) {
+                    return Result.Fail("banner is null")
+                }
+                return Result.Success(banner.bannerResponse)
+            }
+
             401 -> {
                 val refreshToken = network.requestUpdateToken(token.second)
                 if (refreshToken.first != 200) {
@@ -44,5 +50,4 @@ class GetBanner @Inject constructor(
             else -> return Result.Fail("network error")
         }
     }
-
 }
