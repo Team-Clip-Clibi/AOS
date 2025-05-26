@@ -88,7 +88,7 @@ internal fun LanguageView(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
-                    onClick = goNextPage,
+                    onClick = viewModel::updateLanguage,
                     buttonText = stringResource(R.string.btn_finish),
                     modifier = Modifier
                         .fillMaxWidth()
