@@ -90,7 +90,7 @@ internal fun DietView(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
-                    onClick = goNextPage,
+                    onClick = viewModel::updateDiet,
                     buttonText = stringResource(R.string.btn_next),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -172,7 +172,7 @@ internal fun DietView(
                     } else {
                         uiState.diet
                     },
-                    onValueChange = viewModel::diet,
+                    onValueChange = viewModel::dietContent,
                     maxLength = 1,
                     maxLine = 200,
                     hint = stringResource(R.string.txt_diet_item_hint)
