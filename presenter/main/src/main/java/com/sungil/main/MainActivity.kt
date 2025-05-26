@@ -25,7 +25,12 @@ class MainActivity : ComponentActivity() {
                 lowClick = { router.navigation(NAV_LOW) },
                 alarmClick = { router.navigation(NAV_ALARM) },
                 oneThingClick = { router.navigation(NAV_ONE_THING) },
-                firstMatchClick = { router.navigation(NAV_FIRST_MATCH) }
+                firstMatchClick = { destination ->
+                    val bundle = Bundle().apply {
+                        putString(BuildConfig.KEY_MATCH, destination)
+                    }
+                    router.navigation(NAV_FIRST_MATCH, bundle)
+                }
             )
         }
     }
