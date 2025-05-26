@@ -57,7 +57,6 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", userData.job)
             }
-
             401 -> {
                 val refreshToken = network.requestUpdateToken(token.second)
                 if (refreshToken.first != 200) {
@@ -77,7 +76,9 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", reRequest.job)
             }
-
+            500 -> {
+                return Pair("Success", "NONE")
+            }
             else -> return Pair("Fail", "network error")
         }
     }
@@ -96,7 +97,6 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", requestDiet.diet.diet)
             }
-
             401 -> {
                 val refreshToken = network.requestUpdateToken(token.second)
                 if (refreshToken.first != 200) {
@@ -116,7 +116,9 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", reRequest.diet.diet)
             }
-
+            500 -> {
+                return Pair("Success", "NONE")
+            }
             else -> return Pair("Fail", "network error")
         }
     }
@@ -140,7 +142,6 @@ class GetUserInfo @Inject constructor(
                     requestLoveState.data.isSameRelationShip
                 )
             }
-
             401 -> {
                 val refreshToken = network.requestUpdateToken(token.second)
                 if (refreshToken.first != 200) {
@@ -161,7 +162,9 @@ class GetUserInfo @Inject constructor(
                     reRequest.data.isSameRelationShip
                 )
             }
-
+            500 -> {
+                return Triple("Success", "NONE", false)
+            }
             else -> return Triple("Fail", "network error", false)
         }
     }
@@ -173,10 +176,8 @@ class GetUserInfo @Inject constructor(
         return when {
             digits.startsWith("011") && digits.length == 10 ->
                 "${digits.substring(0, 3)}-${digits.substring(3, 6)}-${digits.substring(6, 10)}"
-
             digits.length == 11 ->
                 "${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7, 11)}"
-
             else -> this
         }
     }
