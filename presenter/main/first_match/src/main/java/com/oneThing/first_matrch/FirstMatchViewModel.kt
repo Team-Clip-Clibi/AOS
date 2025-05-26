@@ -133,6 +133,12 @@ class FirstMatchViewModel @Inject constructor(
         }
     }
 
+    fun dietContent(data: String) {
+        _uiState.update { current ->
+            current.copy(dietContent = data)
+        }
+    }
+
     fun language(data: String) {
         _uiState.update { current ->
             current.copy(language = data)
@@ -151,6 +157,7 @@ class FirstMatchViewModel @Inject constructor(
 data class FirstMatchData(
     val job: JOB = JOB.NONE,
     val diet: String = DIET.NONE.displayName,
+    val dietContent: String = "",
     val language: String = "",
     val error: UiError = UiError.None,
     val success: UiSuccess = UiSuccess.None,
