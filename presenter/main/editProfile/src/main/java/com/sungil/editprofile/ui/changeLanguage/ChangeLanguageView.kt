@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
-import com.example.core.TopAppBarNumber
+import com.example.core.TopAppBarWithCloseButton
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 
@@ -35,15 +35,14 @@ internal fun ChangeLanguageView(
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
         topBar = {
-            TopAppBarNumber(
+            TopAppBarWithCloseButton(
                 title = stringResource(R.string.top_language),
-                currentPage = 0,
-                totalPage = 0,
-                isPageTextShow = false,
                 onBackClick = {
                     viewModel.initSuccessError()
                     onBackClick()
-                }
+                },
+                isNavigationShow = false,
+                isActionShow = true
             )
         },
         snackbarHost = {
