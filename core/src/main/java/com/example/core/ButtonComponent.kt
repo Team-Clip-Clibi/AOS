@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -257,29 +256,32 @@ fun ButtonSmall(
     isEnable: Boolean = true,
     onClick: () -> Unit,
 ) {
-    val borderModifier = if (isEnable) {
-        Modifier.border(
-            width = 1.dp,
-            color = ColorStyle.PURPLE_200,
-            shape = RoundedCornerShape(12.dp)
-        )
-    } else Modifier
     Button(
         modifier = Modifier
-            .width(96.dp)
-            .height(36.dp)
-            .background(
-                color = if (isEnable) ColorStyle.PURPLE_100 else ColorStyle.GRAY_200,
-                shape = RoundedCornerShape(size = 8.dp)
-            )
-            .then(borderModifier),
-        enabled = isEnable,
-        onClick = onClick
+            .width(104.dp)
+            .height(36.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            when (isEnable) {
+                true -> ColorStyle.PURPLE_100
+                false -> ColorStyle.GRAY_200
+            }
+        ),
+        onClick = onClick,
+        enabled = isEnable
     ) {
         Text(
             text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = if (isEnable) ColorStyle.PURPLE_400 else ColorStyle.GRAY_600
+            modifier = Modifier
+                .width(52.dp)
+                .height(20.dp),
+            color = when (isEnable) {
+                true -> ColorStyle.PURPLE_400
+                false -> ColorStyle.GRAY_800
+            }
         )
     }
 }
