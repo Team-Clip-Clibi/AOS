@@ -107,7 +107,7 @@ class ProfileEditViewModel @Inject constructor(
                     _uiState.update { current ->
                         current.copy(
                             success = UiSuccess.Success(result.message),
-                            job = _uiState.value.job,
+                            job = _uiState.value.newJob,
                             newJob = ""
                         )
                     }
