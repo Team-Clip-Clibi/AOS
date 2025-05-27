@@ -1,5 +1,6 @@
 package com.sungil.editprofile.ui.changeNickName
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,11 +31,16 @@ import com.example.core.ColorStyle
 import com.example.core.TextFieldComponent
 import com.sungil.editprofile.ERROR_ALREADY_USE
 import com.sungil.editprofile.ERROR_NETWORK
+import com.sungil.editprofile.ERROR_SAVE_DATA_FAIL
 import com.sungil.editprofile.ERROR_SPECIAL
+import com.sungil.editprofile.ERROR_TOKEN_EXPIRE
 import com.sungil.editprofile.ERROR_TOKEN_NULL
 import com.sungil.editprofile.ERROR_TO_LONG
 import com.sungil.editprofile.ERROR_TO_SHORT
+import com.sungil.editprofile.ERROR_UPDATE_FAIL
 import com.sungil.editprofile.ERROR_USER_TOKEN_NLL
+import com.sungil.editprofile.MESSAGE_NICKNAME_OKAY
+import com.sungil.editprofile.MESSAGE_NICKNAME_UPDATE_SUCCESS
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.UiError
@@ -44,7 +50,6 @@ import com.sungil.editprofile.UiSuccess
 internal fun ChangeNickNameMainView(
     paddingValues: PaddingValues,
     viewModel: ProfileEditViewModel,
-    finishedView: () -> Unit,
     snackBarHost: SnackbarHostState,
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -76,12 +81,29 @@ internal fun ChangeNickNameMainView(
                     }
 
                     ERROR_ALREADY_USE -> {
+                        nicknameValidationMessage = R.string.txt_already_use
+                    }
+                    ERROR_TOKEN_EXPIRE ->{
                         snackBarHost.showSnackbar(
-                            message = context.getString(R.string.txt_already_use),
+                            message = context.getString(R.string.msg_token_expire),
+                            duration = SnackbarDuration.Short
+                        )
+                        /**
+                         * TODO 로그인 화면으로 보내는 로직  추가해야함
+                         */
+                    }
+                    ERROR_SAVE_DATA_FAIL ->{
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_save_error),
                             duration = SnackbarDuration.Short
                         )
                     }
-
+                    ERROR_UPDATE_FAIL ->{
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_update_nick_name_fail),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
                     else -> throw IllegalArgumentException("Unsupported error: ${error.message}")
                 }
             }
@@ -89,13 +111,17 @@ internal fun ChangeNickNameMainView(
             UiError.None -> Unit
         }
 
-        when (uiState.success) {
+        when (val uiSuccess = uiState.success) {
             is UiSuccess.Success -> {
-                snackBarHost.showSnackbar(
-                    message = context.getString(R.string.txt_message_okay),
-                    duration = SnackbarDuration.Short
-                )
-                viewModel.initSuccessError()
+                when (uiSuccess.message) {
+                    MESSAGE_NICKNAME_OKAY -> nicknameValidationMessage = R.string.txt_nick_name_okay
+                    MESSAGE_NICKNAME_UPDATE_SUCCESS -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.txt_message_okay),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
             }
 
             else -> Unit
@@ -104,34 +130,42 @@ internal fun ChangeNickNameMainView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = ColorStyle.WHITE_100)
             .padding(top = paddingValues.calculateTopPadding() + 32.dp, start = 17.dp, end = 16.dp)
     ) {
         TextFieldComponent(
-            value = uiState.nickName,
+            value = if (uiState.newNickName.trim()
+                    .isNotEmpty() || uiState.nickNameChange
+            ) uiState.newNickName else uiState.nickName,
             onValueChange = { text ->
                 viewModel.setNickName(text)
-                validateNickname(text)
+                nicknameValidationMessage = validateNickname(text)
             },
             maxLine = 1,
-            maxLength = 9,
+            maxLength = 100,
         )
         Spacer(modifier = Modifier.height(19.dp))
         Row(
-            modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = stringResource(nicknameValidationMessage),
                 style = AppTextStyles.CAPTION_12_18_SEMI,
-                color = ColorStyle.GRAY_600
+                color = when (nicknameValidationMessage) {
+                    R.string.txt_nick_length -> ColorStyle.GRAY_600
+                    R.string.txt_nick_name_okay -> ColorStyle.GRAY_800
+                    else -> ColorStyle.RED_100
+                },
+                modifier = Modifier.align(Alignment.Top)
             )
             ButtonSmall(
                 text = stringResource(R.string.btn_nickname_check),
-                isEnable = if (nicknameValidationMessage == R.string.txt_nick_length) true else false,
+                isEnable = nicknameValidationMessage == R.string.txt_nick_length && uiState.newNickName.trim()
+                    .isNotEmpty() && uiState.nickName != uiState.newNickName,
                 onClick = {
-                    /**
-                     * 닉네임 중복 검사 로직 구현
-                     */
+                    viewModel.checkNickName()
                 }
             )
         }

@@ -3,9 +3,9 @@ package com.sungil.editprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.ActivateHaptic
+import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetUserInfo
 import com.sungil.domain.useCase.LogOut
-import com.sungil.domain.useCase.SaveChangeProfileData
 import com.sungil.domain.useCase.SignOut
 import com.sungil.domain.useCase.UpdateDiet
 import com.sungil.domain.useCase.UpdateJob
@@ -14,7 +14,6 @@ import com.sungil.domain.useCase.UpdateLove
 import com.sungil.domain.useCase.UpdateNickName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,6 +32,7 @@ class ProfileEditViewModel @Inject constructor(
     private val logout: LogOut,
     private val signOut: SignOut,
     private val diet: UpdateDiet,
+    private val checkNickName: CheckNickName,
 ) : ViewModel() {
     private var _uiState = MutableStateFlow(EditProfileData())
     val uiState: StateFlow<EditProfileData> = _uiState.asStateFlow()
@@ -71,17 +71,21 @@ class ProfileEditViewModel @Inject constructor(
     fun changeNickName() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result =
-                changeNickName.invoke(UpdateNickName.Param(_uiState.value.nickName))) {
+                changeNickName.invoke(UpdateNickName.Param(_uiState.value.newNickName))) {
                 is UpdateNickName.Result.Fail -> {
                     _uiState.update { current ->
-                        current.copy(error = UiError.Error(result.message))
+                        current.copy(error = UiError.Error(result.message) , success =  UiSuccess.None)
                     }
                 }
 
                 is UpdateNickName.Result.Success -> {
                     _uiState.update { current ->
                         current.copy(
-                            success = UiSuccess.Success(result.message)
+                            success = UiSuccess.Success(result.message),
+                            buttonRun = false,
+                            nickName = _uiState.value.newNickName,
+                            newNickName = "",
+                            nickNameChange = false
                         )
                     }
                 }
@@ -205,6 +209,25 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
+    fun checkNickName() {
+        viewModelScope.launch {
+            when (val result =
+                checkNickName.invoke(CheckNickName.Param(_uiState.value.newNickName))) {
+                is CheckNickName.Result.Fail -> {
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.message))
+                    }
+                }
+
+                is CheckNickName.Result.Success -> {
+                    _uiState.update { current ->
+                        current.copy(success = UiSuccess.Success(result.message), buttonRun = true)
+                    }
+                }
+            }
+        }
+    }
+
     fun isDialogShow(data: Boolean) {
         _uiState.update { current ->
             current.copy(isDialogShow = data)
@@ -216,7 +239,9 @@ class ProfileEditViewModel @Inject constructor(
             current.copy(
                 success = UiSuccess.None,
                 error = UiError.None,
-                buttonRun = false
+                buttonRun = false,
+                newNickName = "",
+                nickNameChange = false
             )
         }
     }
@@ -224,8 +249,8 @@ class ProfileEditViewModel @Inject constructor(
     fun setNickName(data: String) {
         _uiState.update { current ->
             current.copy(
-                nickName = data,
-                buttonRun = true
+                newNickName = data,
+                nickNameChange = true
             )
         }
     }
@@ -239,7 +264,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun setJob(data : JOB){
+    fun setJob(data: JOB) {
         _uiState.update { current ->
             current.copy(
                 job = data.name,
@@ -248,7 +273,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun changeLoveState(data : LOVE){
+    fun changeLoveState(data: LOVE) {
         _uiState.update { current ->
             current.copy(
                 loveState = data.name,
@@ -257,7 +282,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun changeMeetState(data : MEETING){
+    fun changeMeetState(data: MEETING) {
         _uiState.update { current ->
             current.copy(
                 meetSame = data.displayName,
@@ -266,7 +291,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun changeSignOut(data : SignOutData){
+    fun changeSignOut(data: SignOutData) {
         _uiState.update { current ->
             current.copy(
                 signOut = data.name
@@ -274,7 +299,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun changeSignOutContent(data : String){
+    fun changeSignOutContent(data: String) {
         _uiState.update { current ->
             current.copy(
                 signOutContent = data
@@ -282,7 +307,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun changeDiet(data : DIET){
+    fun changeDiet(data: DIET) {
         _uiState.update { current ->
             current.copy(
                 diet = data.displayName
@@ -290,7 +315,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun changeDietETCContent(data : String){
+    fun changeDietETCContent(data: String) {
         _uiState.update { current ->
             current.copy(
                 dietContent = data
@@ -303,15 +328,17 @@ class ProfileEditViewModel @Inject constructor(
 data class EditProfileData(
     val name: String = "",
     val nickName: String = "",
+    val newNickName: String = "",
+    val nickNameChange: Boolean = false,
     val phoneNumber: String = "",
     val job: String = "",
     val loveState: String = "",
     val meetSame: Boolean = false,
     val diet: String = "NULL",
-    val dietContent : String ="",
+    val dietContent: String = "",
     val language: String = "",
-    val signOut : String ="",
-    val signOutContent : String = "",
+    val signOut: String = "",
+    val signOutContent: String = "",
     val isDialogShow: Boolean = false,
     val buttonRun: Boolean = false,
     val success: UiSuccess = UiSuccess.None,

@@ -1,8 +1,6 @@
 package com.sungil.editprofile.nav
 
-import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -66,9 +64,6 @@ internal fun ProfileEditNav(
             ChangeNickNameView(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.popBackStack()
-                },
-                changeDataFinished = {
                     navController.popBackStack()
                 }
             )

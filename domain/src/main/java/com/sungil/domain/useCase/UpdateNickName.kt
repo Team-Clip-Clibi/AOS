@@ -11,10 +11,11 @@ class UpdateNickName @Inject constructor(
     private val deviceRepo: DeviceRepository,
     private val networkRepo: NetworkRepository,
     private val database: DatabaseRepository,
-) : UseCase<UpdateNickName.Param, UpdateNickName.Result>{
+) : UseCase<UpdateNickName.Param, UpdateNickName.Result> {
     data class Param(
         val name: String,
     ) : UseCase.Param
+
     sealed interface Result : UseCase.Result {
         data class Success(val message: String) : Result
         data class Fail(val message: String) : Result
@@ -30,38 +31,52 @@ class UpdateNickName @Inject constructor(
             deviceRepo.requestVibrate()
             return Result.Fail("to short")
         }
-        if (!name.matches(Regex("^[a-zA-Z가-힣]+$"))) {
+        if (name.matches(Regex("[^a-zA-Z0-9가-힣]"))) {
             deviceRepo.requestVibrate()
             return Result.Fail("no special")
         }
         val token = database.getToken()
-        if (token.first == null || token.second == null) {
-            return Result.Fail("token is null")
-        }
-        val apiResult = networkRepo.checkNickName(name, TOKEN_FORM + token.first!!)
-        if (apiResult != 200) {
-            deviceRepo.requestVibrate()
-            return Result.Fail("Already use")
-        }
         val inputResult = networkRepo.inputNickName(name, TOKEN_FORM + token.first)
-        if (inputResult != 204) {
-            return Result.Fail("network Error")
+        when (inputResult) {
+            204 -> {
+                val userData = database.getUserInfo()
+                val saveResult = database.saveUserInfo(
+                    name = userData.userName,
+                    nickName = name,
+                    platform = "KAKAO",
+                    phoneNumber = userData.phoneNumber,
+                    jobList = userData.job,
+                    loveState = userData.loveState,
+                    diet = userData.diet,
+                    language = userData.language
+                )
+                if (!saveResult) {
+                    return Result.Fail("Save Fail")
+                }
+                return Result.Success("nick name update Success")
+            }
+
+            401 -> {
+                val reFreshToken = networkRepo.requestUpdateToken(token.second)
+                if (reFreshToken.first != 200) {
+                    return Result.Fail("reLogin")
+                }
+                val saveToken = database.setToken(reFreshToken.second!!, reFreshToken.third!!)
+                if (!saveToken) {
+                    return Result.Fail("save error")
+                }
+                val reRequest = networkRepo.inputNickName(name, TOKEN_FORM + reFreshToken.second)
+                if (reRequest != 204) {
+                    return Result.Fail("update fail")
+                }
+                return Result.Success("nick name update Success")
+            }
+
+            400 -> {
+                return Result.Fail("update fail")
+            }
+
+            else -> return Result.Fail("network Error")
         }
-        val userData = database.getUserInfo() ?: return Result.Fail("userData is null")
-        userData.nickName = name
-        val saveResult = database.saveUserInfo(
-            name = userData.userName,
-            nickName = userData.nickName ?: "error",
-            platform = "KAKAO",
-            phoneNumber = userData.phoneNumber,
-            jobList = userData.job,
-            loveState = userData.loveState,
-            diet = userData.diet,
-            language = userData.language
-        )
-        if (!saveResult) {
-            return Result.Fail("Save Fail")
-        }
-        return Result.Success("name okay")
     }
 }

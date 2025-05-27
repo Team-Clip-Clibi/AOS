@@ -31,7 +31,6 @@ import com.sungil.editprofile.R
 internal fun ChangeNickNameView(
     viewModel: ProfileEditViewModel,
     onBackClick: () -> Unit,
-    changeDataFinished: () -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.uiState.collectAsState()
@@ -56,9 +55,11 @@ internal fun ChangeNickNameView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        start = 17.dp, end = 16.dp, bottom = WindowInsets.navigationBars
+                        start = 17.dp,
+                        end = 16.dp,
+                        bottom = WindowInsets.navigationBars
                             .asPaddingValues()
-                            .calculateTopPadding() + 70.dp
+                            .calculateBottomPadding()
                     )
             )
         },
@@ -91,7 +92,6 @@ internal fun ChangeNickNameView(
         ChangeNickNameMainView(
             paddingValues = paddingValues,
             viewModel = viewModel,
-            finishedView = { changeDataFinished() },
             snackBarHost = snackBarHostState
         )
     }

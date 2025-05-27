@@ -22,6 +22,11 @@ const val ERROR_FAIL_SAVE = "Save Fail"
 const val ERROR_USER_DATA_NULL = "userData is null"
 const val ERROR_NONE_DATA_SELECT = "NONE"
 const val ERROR_DELETE_FAIL = "delete fail"
+const val ERROR_TOKEN_EXPIRE = "reLogin"
+const val ERROR_SAVE_DATA_FAIL = "save error"
+const val ERROR_UPDATE_FAIL = "update fail"
+const val MESSAGE_NICKNAME_OKAY = "name okay"
+const val MESSAGE_NICKNAME_UPDATE_SUCCESS = "nick name update Success"
 
 enum class JOB(val displayName: String) {
     STUDENT("학생"),
