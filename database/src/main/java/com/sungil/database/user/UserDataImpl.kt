@@ -58,4 +58,8 @@ class UserDataImpl @Inject constructor(private val userDao: UserInfoDao) : UserD
             false
         }
     }
+
+    override suspend fun isUserDataIsNull(): Boolean {
+        return cachedUserInfo == null && userDao.getUserInfo() == null
+    }
 }

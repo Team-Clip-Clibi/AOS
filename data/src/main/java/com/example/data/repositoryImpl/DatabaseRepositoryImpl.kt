@@ -15,8 +15,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     private val userInfo: UserData,
     private val tokenManger: TokenManager,
     private val meetingManger: MeetingManger,
-) :
-    DatabaseRepository {
+) : DatabaseRepository {
 
     override suspend fun saveKaKaoId(kakaoId: String): Boolean {
         return database.saveKaKaoId(
@@ -135,6 +134,10 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun setFirstMatchInput(): Boolean {
         return database.saveFirstMatchInput()
+    }
+
+    override suspend fun getUserDataStatus(): Boolean {
+        return userInfo.isUserDataIsNull()
     }
 
     private fun UserInfo.toDomain(): com.sungil.domain.model.UserData {

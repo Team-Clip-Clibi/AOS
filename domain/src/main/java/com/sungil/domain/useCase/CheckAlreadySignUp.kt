@@ -1,5 +1,6 @@
 package com.sungil.domain.useCase
 
+import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.DeviceRepository
@@ -38,6 +39,25 @@ class CheckAlreadySignUp @Inject constructor(
                     return Result.Fail("Not SignUp")
                 }
                 database.setToken(requestLogin.second!!, requestLogin.third!!)
+                val userDataStatus = database.getUserDataStatus()
+                if (!userDataStatus) {
+                    return Result.Success("SignUp")
+                }
+                val requestUserInfo = network.requestUserData(TOKEN_FORM + requestLogin.second!!)
+                    ?: return Result.Fail("Network Error")
+                val saveUserInfo = database.saveUserInfo(
+                    name = requestUserInfo.data.userName,
+                    nickName = requestUserInfo.data.nickName ?: "ERROR",
+                    platform = "KAKAO",
+                    phoneNumber = requestUserInfo.data.phoneNumber,
+                    jobList = requestUserInfo.data.job,
+                    loveState = requestUserInfo.data.loveState,
+                    diet = requestUserInfo.data.diet,
+                    language = requestUserInfo.data.language
+                )
+                if (!saveUserInfo) {
+                    return Result.Fail("Save error")
+                }
                 return Result.Success("SignUp")
             }
 

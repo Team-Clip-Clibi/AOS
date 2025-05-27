@@ -16,4 +16,6 @@ interface UserData {
     ): Boolean
 
     suspend fun deleteUserInfo(): Boolean
+
+    suspend fun isUserDataIsNull() : Boolean
 }

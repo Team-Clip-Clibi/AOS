@@ -28,11 +28,18 @@ interface DatabaseRepository {
     suspend fun setToken(accessToken: String, refreshToken: String): Boolean
     suspend fun getToken(): Pair<String, String>
     suspend fun getUserInfo(): UserData
-    suspend fun deleteUserIfo() : Boolean
+    suspend fun deleteUserIfo(): Boolean
     suspend fun removeToken(): Boolean
-    suspend fun getSaveMatch() : List<SaveMatch>
-    suspend fun deleteSaveMatch(matchId : Int) : Boolean
-    suspend fun insetSaveMatch(matchId : Int , time : String , category : String , location : String) : Boolean
-    suspend fun getFirstMatchInput() : Boolean
-    suspend fun setFirstMatchInput() : Boolean
+    suspend fun getSaveMatch(): List<SaveMatch>
+    suspend fun deleteSaveMatch(matchId: Int): Boolean
+    suspend fun insetSaveMatch(
+        matchId: Int,
+        time: String,
+        category: String,
+        location: String,
+    ): Boolean
+
+    suspend fun getFirstMatchInput(): Boolean
+    suspend fun setFirstMatchInput(): Boolean
+    suspend fun getUserDataStatus(): Boolean
 }
