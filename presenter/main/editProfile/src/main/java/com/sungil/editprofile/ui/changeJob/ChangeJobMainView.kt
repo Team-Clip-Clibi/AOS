@@ -1,5 +1,6 @@
 package com.sungil.editprofile.ui.changeJob
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +26,7 @@ import com.sungil.editprofile.ERROR_FAIL_SAVE
 import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.editprofile.ERROR_NONE_DATA_SELECT
 import com.sungil.editprofile.JOB
+import com.sungil.editprofile.MESSAGE_FAIL_UPDATE_JOB
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.UiError
@@ -63,6 +65,12 @@ internal fun ChangeJobMainView(
                             duration = SnackbarDuration.Short
                         )
                     }
+                    MESSAGE_FAIL_UPDATE_JOB -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_update_job_fail),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
                 }
                 viewModel.initSuccessError()
             }
@@ -83,13 +91,13 @@ internal fun ChangeJobMainView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = ColorStyle.WHITE_100)
             .padding(
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 start = 17.dp,
                 end = 16.dp,
                 bottom = paddingValues.calculateBottomPadding()
             )
-            .verticalScroll(rememberScrollState())
     ) {
         Text(
             text = stringResource(R.string.txt_job_select_one),
@@ -98,7 +106,9 @@ internal fun ChangeJobMainView(
         )
         Spacer(modifier = Modifier.height(24.dp))
         JobGridSelector(
-            selectedJobs = JOB.fromDisplayName(uiState.job),
+            selectedJobs = if (uiState.newJob.trim()
+                    .isNotEmpty()
+            ) JOB.fromName(uiState.newJob) else JOB.fromName(uiState.job),
             onJobToggle = viewModel::setJob,
             modifier = Modifier.fillMaxWidth()
         )

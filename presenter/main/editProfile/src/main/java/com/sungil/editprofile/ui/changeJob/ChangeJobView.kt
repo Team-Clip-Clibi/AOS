@@ -1,6 +1,8 @@
 package com.sungil.editprofile.ui.changeJob
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -58,7 +60,7 @@ internal fun ChangeJobView(
                         end = 16.dp,
                         bottom = WindowInsets.navigationBars
                             .asPaddingValues()
-                            .calculateTopPadding() + 70.dp
+                            .calculateTopPadding()
                     )
             )
         },
@@ -66,6 +68,7 @@ internal fun ChangeJobView(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(color = ColorStyle.WHITE_100)
                     .padding(
                         bottom = WindowInsets.navigationBars
                             .asPaddingValues()
@@ -73,6 +76,7 @@ internal fun ChangeJobView(
                     )
             ) {
                 HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
+                Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
                     onClick = viewModel::changeJob,
                     buttonText = stringResource(R.string.btn_finish),
@@ -84,7 +88,6 @@ internal fun ChangeJobView(
                 )
             }
         },
-        contentColor = ColorStyle.WHITE_100
     ) { paddingValues ->
         ChangeJobMainView(
             paddingValues = paddingValues,

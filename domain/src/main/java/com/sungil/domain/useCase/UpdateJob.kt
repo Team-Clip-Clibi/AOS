@@ -25,24 +25,47 @@ class UpdateJob @Inject constructor(
             return Result.Fail("No Change")
         }
         val updateResult = network.requestUpdateJob(TOKEN_FORM + token.first, param.job)
-        if (updateResult != 204) {
-            return Result.Fail("network Error")
+        when (updateResult) {
+            204 -> {
+                val userData = database.getUserInfo()
+                userData.job = param.job
+                val saveResult = database.saveUserInfo(
+                    name = userData.userName,
+                    nickName = userData.nickName ?: "error",
+                    platform = "KAKAO",
+                    phoneNumber = userData.phoneNumber,
+                    jobList = userData.job,
+                    loveState = userData.loveState,
+                    diet = userData.diet,
+                    language = userData.language
+                )
+                if (!saveResult) {
+                    return Result.Fail("Save Fail")
+                }
+                return Result.Success("Save Success")
+            }
+
+            401 -> {
+                val refreshToken = network.requestUpdateToken(token.second)
+                if (refreshToken.first != 200) {
+                    return Result.Fail("reLogin")
+                }
+                if (refreshToken.second == null || refreshToken.third == null) {
+                    return Result.Fail("network error")
+                }
+                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
+                if (!saveToken) {
+                    return Result.Fail("Save Fail")
+                }
+                val reRequest =
+                    network.requestUpdateJob(TOKEN_FORM + refreshToken.second, param.job)
+                if (reRequest != 204) {
+                    return Result.Fail("Fail to update job")
+                }
+                return Result.Success("Save Success")
+            }
+
+            else -> return Result.Fail("network error")
         }
-        val userData = database.getUserInfo() ?: return Result.Fail("userData is null")
-        userData.job = param.job
-        val saveResult = database.saveUserInfo(
-            name = userData.userName,
-            nickName = userData.nickName ?: "error",
-            platform = "KAKAO",
-            phoneNumber = userData.phoneNumber,
-            jobList = userData.job,
-            loveState = userData.loveState,
-            diet = userData.diet,
-            language = userData.language
-        )
-        if (!saveResult) {
-            return Result.Fail("Save Fail")
-        }
-        return Result.Success("Save Success")
     }
 }

@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -95,7 +96,7 @@ class ProfileEditViewModel @Inject constructor(
 
     fun changeJob() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = changeJob.invoke(UpdateJob.Param(_uiState.value.job))) {
+            when (val result = changeJob.invoke(UpdateJob.Param(_uiState.value.newJob))) {
                 is UpdateJob.Result.Fail -> {
                     _uiState.update { current ->
                         current.copy(error = UiError.Error(result.errorMessage))
@@ -105,7 +106,9 @@ class ProfileEditViewModel @Inject constructor(
                 is UpdateJob.Result.Success -> {
                     _uiState.update { current ->
                         current.copy(
-                            success = UiSuccess.Success(result.message)
+                            success = UiSuccess.Success(result.message),
+                            job = _uiState.value.job,
+                            newJob = ""
                         )
                     }
                 }
@@ -241,7 +244,8 @@ class ProfileEditViewModel @Inject constructor(
                 error = UiError.None,
                 buttonRun = false,
                 newNickName = "",
-                nickNameChange = false
+                nickNameChange = false,
+                newJob =  ""
             )
         }
     }
@@ -267,8 +271,8 @@ class ProfileEditViewModel @Inject constructor(
     fun setJob(data: JOB) {
         _uiState.update { current ->
             current.copy(
-                job = data.name,
-                buttonRun = true
+                newJob = data.name,
+                buttonRun = _uiState.value.job != _uiState.value.newJob
             )
         }
     }
@@ -332,6 +336,7 @@ data class EditProfileData(
     val nickNameChange: Boolean = false,
     val phoneNumber: String = "",
     val job: String = "",
+    val newJob : String = "",
     val loveState: String = "",
     val meetSame: Boolean = false,
     val diet: String = "NULL",

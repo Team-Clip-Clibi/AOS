@@ -38,6 +38,7 @@
     <string name="msg_save_error">데이터 자장 실패!</string>
     <string name="msg_save_success">저장 성공!</string>
     <string name="msg_select_data">선택하십시오</string>
+    <string name="msg_update_job_fail">직업 업데이트 실패</string>
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <!--Love state-->
     <string name="top_love_state">연애 상태 변경</string>

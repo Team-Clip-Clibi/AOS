@@ -16,7 +16,7 @@ const val ERROR_SPECIAL = "no special"
 const val ERROR_TOKEN_NULL = "token is null"
 const val ERROR_USER_TOKEN_NLL = "Token is null"
 const val ERROR_ALREADY_USE = "Already use"
-const val ERROR_NETWORK = "network Error"
+const val ERROR_NETWORK = "network error"
 const val ERROR_FAIL_TO_UPDATE_LOVE = "Fail to update Love"
 const val ERROR_FAIL_SAVE = "Save Fail"
 const val ERROR_USER_DATA_NULL = "userData is null"
@@ -28,6 +28,8 @@ const val ERROR_UPDATE_FAIL = "update fail"
 const val MESSAGE_NICKNAME_OKAY = "name okay"
 const val MESSAGE_NICKNAME_UPDATE_SUCCESS = "nick name update Success"
 
+const val MESSAGE_SAVE_SUCCESS ="Save Success"
+const val MESSAGE_FAIL_UPDATE_JOB = "Fail to update job"
 enum class JOB(val displayName: String) {
     STUDENT("학생"),
     MANUFACTURING("제조업"),
@@ -44,6 +46,10 @@ enum class JOB(val displayName: String) {
     companion object {
         fun fromDisplayName(displayName: String): JOB {
             return entries.find { it.displayName == displayName } ?: NONE
+        }
+
+        fun fromName(name : String) : JOB {
+            return entries.find { it.name == name } ?: NONE
         }
     }
 }
