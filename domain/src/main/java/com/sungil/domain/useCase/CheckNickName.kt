@@ -39,21 +39,43 @@ class CheckNickName @Inject constructor(
         }
         val token = database.getToken()
         val apiResult = networkRepo.checkNickName(name, TOKEN_FORM + token.first)
-        if (apiResult == 401) {
-            return Result.Fail("reLogin")
+        when (apiResult) {
+            200 -> {
+                deviceRepo.requestVibrate()
+                return Result.Success("name okay")
+            }
+
+            204 -> {
+                deviceRepo.requestVibrate()
+                return Result.Success("Already use")
+            }
+
+            401 -> {
+                val refreshToken = networkRepo.requestUpdateToken(token.second)
+                if (refreshToken.first != 200) {
+                    return Result.Fail("reLogin")
+                }
+                if (refreshToken.second == null || refreshToken.third == null) {
+                    return Result.Fail("network Error")
+                }
+                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
+                if (!saveToken) {
+                    return Result.Fail("save error")
+                }
+                val reRequest = networkRepo.checkNickName(name, TOKEN_FORM + refreshToken.second!!)
+                if (reRequest == 200) {
+                    deviceRepo.requestVibrate()
+                    return Result.Success("name okay")
+                }
+                if (reRequest == 204) {
+                    deviceRepo.requestVibrate()
+                    return Result.Fail("Already use")
+                }
+                return Result.Fail("network Error")
+            }
+
+            else -> return Result.Fail("network Error")
         }
-        if (apiResult != 200) {
-            deviceRepo.requestVibrate()
-            return Result.Fail("Already use")
-        }
-        val inputResult = networkRepo.inputNickName(name, TOKEN_FORM + token.first)
-        if (inputResult == 401) {
-            return Result.Fail("reLogin")
-        }
-        if (inputResult != 204) {
-            return Result.Fail("network Error")
-        }
-        return Result.Success("name okay")
     }
 
 }
