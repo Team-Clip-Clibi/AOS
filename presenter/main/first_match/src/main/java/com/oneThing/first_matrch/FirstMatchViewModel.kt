@@ -49,7 +49,8 @@ class FirstMatchViewModel @Inject constructor(
                     _uiState.update { current ->
                         current.copy(
                             job = job,
-                            diet = result.data.diet,
+                            diet = DIET.fromDisplayNameOrEtc(result.data.diet).displayName,
+                            dietContent = if (DIET.fromDisplayNameOrEtc(result.data.diet) == DIET.ETC) result.data.diet else "",
                             language = result.data.language
                         )
                     }
@@ -62,7 +63,8 @@ class FirstMatchViewModel @Inject constructor(
         _uiState.update { current ->
             current.copy(
                 job = data,
-                error = UiError.None
+                error = UiError.None,
+                dataChange = true
             )
         }
     }
@@ -87,7 +89,12 @@ class FirstMatchViewModel @Inject constructor(
 
     fun updateDiet() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = diet.invoke(UpdateDiet.Param(_uiState.value.diet))) {
+            when (val result = diet.invoke(
+                UpdateDiet.Param(
+                    diet = _uiState.value.diet,
+                    dietContent = _uiState.value.dietContent
+                )
+            )) {
                 is UpdateDiet.Result.Fail -> {
                     _uiState.update { current ->
                         current.copy(error = UiError.Error(result.errorMessage))
@@ -123,25 +130,35 @@ class FirstMatchViewModel @Inject constructor(
 
     fun initSuccessError() {
         _uiState.update { current ->
-            current.copy(error = UiError.None, success = UiSuccess.None)
+            current.copy(error = UiError.None, success = UiSuccess.None, dataChange = false)
         }
     }
 
     fun diet(data: String) {
         _uiState.update { current ->
-            current.copy(diet = data)
+            current.copy(
+                diet = data,
+                dietContent = "",
+                dataChange = true
+            )
         }
     }
 
     fun dietContent(data: String) {
         _uiState.update { current ->
-            current.copy(dietContent = data)
+            current.copy(
+                dietContent = data,
+                dataChange = true
+            )
         }
     }
 
     fun language(data: String) {
         _uiState.update { current ->
-            current.copy(language = data)
+            current.copy(
+                language = data,
+                dataChange = true
+            )
         }
     }
 
@@ -159,6 +176,7 @@ data class FirstMatchData(
     val diet: String = DIET.NONE.displayName,
     val dietContent: String = "",
     val language: String = "",
+    val dataChange: Boolean = false,
     val error: UiError = UiError.None,
     val success: UiSuccess = UiSuccess.None,
 )

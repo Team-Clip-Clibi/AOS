@@ -55,7 +55,7 @@ internal fun DietView(
         when (val error = uiState.error) {
             is UiError.Error -> {
                 viewModel.initSuccessError()
-                when(DomainError.fromCode(error.message)){
+                when (DomainError.fromCode(error.message)) {
                     DomainError.ERROR_NETWORK_ERROR -> {
                         snackbarHostState.showSnackbar(
                             message = context.getString(R.string.msg_network_error),
@@ -63,15 +63,18 @@ internal fun DietView(
                         )
 
                     }
+
                     DomainError.ERROR_SAVE_ERROR -> {
                         snackbarHostState.showSnackbar(
                             message = context.getString(R.string.msg_save_error),
                             duration = SnackbarDuration.Short
                         )
                     }
+
                     else -> Unit
                 }
             }
+
             UiError.None -> Unit
         }
     }
@@ -90,7 +93,10 @@ internal fun DietView(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
-                    onClick = viewModel::updateDiet,
+                    onClick = {
+                        if(uiState.dataChange) viewModel.updateDiet()
+                        else goNextPage()
+                    },
                     buttonText = stringResource(R.string.btn_next),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -167,11 +173,7 @@ internal fun DietView(
             )
             if (uiState.diet == DIET.ETC.displayName) {
                 TextFieldComponent(
-                    value = if (uiState.diet == DIET.NONE.displayName) {
-                        ""
-                    } else {
-                        uiState.diet
-                    },
+                    value = uiState.dietContent,
                     onValueChange = viewModel::dietContent,
                     maxLength = 1,
                     maxLine = 200,

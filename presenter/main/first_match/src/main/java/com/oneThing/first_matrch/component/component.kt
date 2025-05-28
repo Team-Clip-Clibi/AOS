@@ -33,13 +33,15 @@ fun JobGridSelector(
         modifier = modifier
     ) {
         items(JOB.entries.toList()) { job ->
-            ButtonCenterLarge(
-                onClick = {
-                    onJobToggle(job)
-                },
-                checked = job == selectJobs,
-                text = job.displayName
-            )
+            if (job != JOB.NONE) {
+                ButtonCenterLarge(
+                    onClick = {
+                        onJobToggle(job)
+                    },
+                    checked = job == selectJobs,
+                    text = job.displayName
+                )
+            }
         }
     }
 }

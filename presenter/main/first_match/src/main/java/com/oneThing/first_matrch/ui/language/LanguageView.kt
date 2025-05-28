@@ -53,7 +53,7 @@ internal fun LanguageView(
         when (val error = uiState.error) {
             is UiError.Error -> {
                 viewModel.initSuccessError()
-                when(DomainError.fromCode(error.message)){
+                when (DomainError.fromCode(error.message)) {
                     DomainError.ERROR_NETWORK_ERROR -> {
                         snackbarHostState.showSnackbar(
                             message = context.getString(R.string.msg_network_error),
@@ -61,15 +61,18 @@ internal fun LanguageView(
                         )
 
                     }
+
                     DomainError.ERROR_SAVE_ERROR -> {
                         snackbarHostState.showSnackbar(
                             message = context.getString(R.string.msg_save_error),
                             duration = SnackbarDuration.Short
                         )
                     }
+
                     else -> Unit
                 }
             }
+
             UiError.None -> Unit
         }
     }
@@ -88,7 +91,10 @@ internal fun LanguageView(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
-                    onClick = viewModel::updateLanguage,
+                    onClick = {
+                        if (uiState.dataChange) viewModel.updateLanguage()
+                        else goNextPage()
+                    },
                     buttonText = stringResource(R.string.btn_finish),
                     modifier = Modifier
                         .fillMaxWidth()

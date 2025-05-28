@@ -93,5 +93,11 @@ enum class DIET(val displayName: String) {
     GF("글루텐프리를 지켜요"),
     ALL("다 잘먹어요"),
     ETC("기타"),
-    NONE("NULL")
+    NONE("NULL");
+
+    companion object{
+        fun fromDisplayName(value : String) : DIET{
+            return entries.find { data -> data.displayName == value } ?: ETC
+        }
+    }
 }

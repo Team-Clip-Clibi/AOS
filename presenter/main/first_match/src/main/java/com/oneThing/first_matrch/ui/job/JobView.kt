@@ -69,7 +69,6 @@ internal fun JobView(
 
         when (val error = uiState.error) {
             is UiError.Error -> {
-                viewModel.initSuccessError()
                 when(DomainError.fromCode(error.message)){
                     DomainError.ERROR_SELECT_NONE -> {
                         snackbarHostState.showSnackbar(
@@ -92,6 +91,7 @@ internal fun JobView(
                     }
                     else -> Unit
                 }
+                viewModel.initSuccessError()
             }
             UiError.None -> Unit
         }
@@ -111,7 +111,10 @@ internal fun JobView(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
-                    onClick = viewModel::updateJob,
+                    onClick = {
+                       if(uiState.dataChange) viewModel.updateJob()
+                       else goNextPage()
+                    },
                     buttonText = stringResource(R.string.btn_next),
                     modifier = Modifier
                         .fillMaxWidth()

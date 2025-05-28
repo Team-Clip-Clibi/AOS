@@ -59,7 +59,12 @@ class ProfileEditViewModel @Inject constructor(
                             job = result.data.job,
                             loveState = result.data.loveState.first,
                             meetSame = result.data.loveState.second,
-                            diet = result.data.diet,
+                            diet = DIET.fromDisplayName(result.data.diet).displayName,
+                            dietContent = if (DIET.fromDisplayName(result.data.diet) == DIET.ETC) {
+                                result.data.diet
+                            } else {
+                                ""
+                            },
                             language = result.data.language
                         )
                     }
@@ -74,7 +79,10 @@ class ProfileEditViewModel @Inject constructor(
                 changeNickName.invoke(UpdateNickName.Param(_uiState.value.newNickName))) {
                 is UpdateNickName.Result.Fail -> {
                     _uiState.update { current ->
-                        current.copy(error = UiError.Error(result.message) , success =  UiSuccess.None)
+                        current.copy(
+                            error = UiError.Error(result.message),
+                            success = UiSuccess.None
+                        )
                     }
                 }
 
@@ -195,12 +203,12 @@ class ProfileEditViewModel @Inject constructor(
 
     fun updateDiet() {
         viewModelScope.launch {
-            val content = if(_uiState.value.dietContent.trim().isNotEmpty()){
-                _uiState.value.dietContent
-            }else{
-                _uiState.value.diet
-            }
-            when (val result = diet.invoke(UpdateDiet.Param(content))) {
+            when (val result = diet.invoke(
+                UpdateDiet.Param(
+                    diet = _uiState.value.diet,
+                    dietContent = _uiState.value.dietContent
+                )
+            )) {
                 is UpdateDiet.Result.Fail -> {
                     _uiState.update { current ->
                         current.copy(error = UiError.Error(result.errorMessage))
@@ -249,7 +257,7 @@ class ProfileEditViewModel @Inject constructor(
                 buttonRun = false,
                 newNickName = "",
                 nickNameChange = false,
-                newJob =  ""
+                newJob = ""
             )
         }
     }
@@ -328,6 +336,7 @@ class ProfileEditViewModel @Inject constructor(
     fun changeDietETCContent(data: String) {
         _uiState.update { current ->
             current.copy(
+                diet = DIET.ETC.displayName,
                 dietContent = data
             )
         }
@@ -342,7 +351,7 @@ data class EditProfileData(
     val nickNameChange: Boolean = false,
     val phoneNumber: String = "",
     val job: String = "",
-    val newJob : String = "",
+    val newJob: String = "",
     val loveState: String = "",
     val meetSame: Boolean = false,
     val diet: String = "NULL",
