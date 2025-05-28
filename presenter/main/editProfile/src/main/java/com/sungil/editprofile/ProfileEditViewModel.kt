@@ -2,7 +2,6 @@ package com.sungil.editprofile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sungil.domain.useCase.ActivateHaptic
 import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetUserInfo
 import com.sungil.domain.useCase.LogOut
