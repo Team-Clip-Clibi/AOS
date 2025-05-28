@@ -1,5 +1,6 @@
 package com.sungil.editprofile.ui.loveState
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -75,17 +76,18 @@ internal fun LoveStateMainView(
         when (uiState.success) {
             UiSuccess.None -> Unit
             is UiSuccess.Success -> {
-                viewModel.initSuccessError()
                 snackBarHost.showSnackbar(
                     message = context.getString(R.string.msg_save_success),
                     duration = SnackbarDuration.Short
                 )
+                viewModel.initSuccessError()
             }
         }
     }
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = ColorStyle.WHITE_100)
             .padding(
                 top = paddingValues.calculateTopPadding() + 32.dp,
                 bottom = paddingValues.calculateBottomPadding(),
