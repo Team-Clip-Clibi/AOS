@@ -19,16 +19,20 @@ class GetUserInfo @Inject constructor(
     suspend fun invoke(): Result {
         val userData = database.getUserInfo()
         userData.phoneNumber = userData.phoneNumber.reMakePhoneNumber()
+        var updateData = userData.copy(phoneNumber = userData.phoneNumber)
         var token = database.getToken()
-        val job = requestJob(userData, token) { newToken -> token = newToken }
+        val job = requestJob(updateData, token) { newToken -> token = newToken }
         if (job.first == "Fail") return Result.Fail(job.second)
-        userData.job = job.second
-        val diet = requestDiet(userData, token) { newToken -> token = newToken }
+        updateData = updateData.copy(job = job.second)
+        val diet = requestDiet(updateData, token) { newToken -> token = newToken }
         if (diet.first == "Fail") return Result.Fail(diet.second)
-        userData.diet = diet.second
-        val love = requestLove(userData, token) { newToken -> token = newToken }
+        updateData = updateData.copy(diet = diet.second)
+        val love = requestLove(updateData, token) { newToken -> token = newToken }
         if (love.first == "Fail") return Result.Fail(love.second)
-        userData.loveState = Pair(love.second, love.third)
+        updateData = updateData.copy(loveState = Pair(love.second, love.third))
+        if (userData == updateData) {
+            return Result.Success(userData)
+        }
         val saveResult = database.saveUserInfo(
             name = userData.userName,
             nickName = userData.nickName ?: "error",
@@ -57,6 +61,7 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", userData.job)
             }
+
             401 -> {
                 val refreshToken = network.requestUpdateToken(token.second)
                 if (refreshToken.first != 200) {
@@ -76,9 +81,11 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", reRequest.job)
             }
+
             500 -> {
                 return Pair("Success", "NONE")
             }
+
             else -> return Pair("Fail", "network error")
         }
     }
@@ -97,6 +104,7 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", requestDiet.diet.diet)
             }
+
             401 -> {
                 val refreshToken = network.requestUpdateToken(token.second)
                 if (refreshToken.first != 200) {
@@ -116,9 +124,11 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", reRequest.diet.diet)
             }
+
             500 -> {
                 return Pair("Success", "NONE")
             }
+
             else -> return Pair("Fail", "network error")
         }
     }
@@ -142,6 +152,7 @@ class GetUserInfo @Inject constructor(
                     requestLoveState.data.isSameRelationShip
                 )
             }
+
             401 -> {
                 val refreshToken = network.requestUpdateToken(token.second)
                 if (refreshToken.first != 200) {
@@ -162,9 +173,11 @@ class GetUserInfo @Inject constructor(
                     reRequest.data.isSameRelationShip
                 )
             }
+
             500 -> {
                 return Triple("Success", "NONE", false)
             }
+
             else -> return Triple("Fail", "network error", false)
         }
     }
@@ -176,8 +189,10 @@ class GetUserInfo @Inject constructor(
         return when {
             digits.startsWith("011") && digits.length == 10 ->
                 "${digits.substring(0, 3)}-${digits.substring(3, 6)}-${digits.substring(6, 10)}"
+
             digits.length == 11 ->
                 "${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7, 11)}"
+
             else -> this
         }
     }
