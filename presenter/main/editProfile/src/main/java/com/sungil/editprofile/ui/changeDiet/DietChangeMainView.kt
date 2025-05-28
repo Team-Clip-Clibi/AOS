@@ -146,7 +146,7 @@ internal fun DietChangeMainView(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "${uiState.dietContent}/100",
+                text = "${uiState.dietContent.length}/100",
                 style = AppTextStyles.CAPTION_10_14_MEDIUM,
                 color = ColorStyle.GRAY_700,
                 modifier = Modifier.fillMaxWidth(),

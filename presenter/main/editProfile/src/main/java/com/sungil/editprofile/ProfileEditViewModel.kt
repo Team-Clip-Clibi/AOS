@@ -196,7 +196,12 @@ class ProfileEditViewModel @Inject constructor(
 
     fun updateDiet() {
         viewModelScope.launch {
-            when (val result = diet.invoke(UpdateDiet.Param(_uiState.value.diet))) {
+            val content = if(_uiState.value.dietContent.trim().isNotEmpty()){
+                _uiState.value.dietContent
+            }else{
+                _uiState.value.diet
+            }
+            when (val result = diet.invoke(UpdateDiet.Param(content))) {
                 is UpdateDiet.Result.Fail -> {
                     _uiState.update { current ->
                         current.copy(error = UiError.Error(result.errorMessage))
@@ -314,7 +319,9 @@ class ProfileEditViewModel @Inject constructor(
     fun changeDiet(data: DIET) {
         _uiState.update { current ->
             current.copy(
-                diet = data.displayName
+                diet = data.displayName,
+                dietContent = "",
+                buttonRun = true
             )
         }
     }

@@ -59,24 +59,30 @@ internal fun DietView(
                         end = 16.dp,
                         bottom = WindowInsets.navigationBars
                             .asPaddingValues()
-                            .calculateTopPadding() + 70.dp
+                            .calculateTopPadding()
                     )
             )
         },
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth().padding(
-                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 8.dp
-            )) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        bottom = WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateBottomPadding() + 8.dp
+                    )
+            ) {
                 HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
-                    onClick =  viewModel::updateDiet ,
+                    onClick = viewModel::updateDiet,
                     buttonText = stringResource(R.string.btn_finish),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                        .padding(start = 17.dp , end = 16.dp),
-                    isEnable = uiState.diet != DIET.NONE.displayName
+                        .padding(start = 17.dp, end = 16.dp),
+                    isEnable = uiState.buttonRun
                 )
             }
         },
