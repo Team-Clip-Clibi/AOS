@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,6 +33,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.sungil.domain.MATCHTIME
@@ -84,8 +86,7 @@ fun CategoryItemView(
     val modifier = when (isSelect) {
         true -> {
             Modifier
-                .width(114.dp)
-                .height(88.dp)
+                .fillMaxWidth()
                 .border(
                     width = 1.dp,
                     color = ColorStyle.PURPLE_200,
@@ -112,6 +113,14 @@ fun CategoryItemView(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Image(
+                painter = painterResource(R.drawable.ic_growth),
+                        contentDescription = "message",
+                contentScale = ContentScale.None,
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(40.dp)
+            )
             Text(
                 text = category.displayName,
                 style = AppTextStyles.BODY_14_20_MEDIUM,

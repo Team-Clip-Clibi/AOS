@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.categort
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -65,11 +66,11 @@ internal fun CategoryView(
                 )
             }
         },
-        containerColor = ColorStyle.WHITE_100
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = ColorStyle.WHITE_100)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     start = 16.dp,
@@ -78,7 +79,6 @@ internal fun CategoryView(
                 )
         ) {
             Spacer(modifier = Modifier.height(32.dp))
-
             Text(
                 text = stringResource(R.string.txt_category_title),
                 style = AppTextStyles.HEAD_28_40_BOLD,
@@ -90,7 +90,6 @@ internal fun CategoryView(
                 color = subTextColor,
                 modifier = Modifier.padding(top = 4.dp, bottom = 24.dp)
             )
-
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 modifier = Modifier

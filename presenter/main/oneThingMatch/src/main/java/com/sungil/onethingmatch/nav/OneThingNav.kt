@@ -36,20 +36,20 @@ import com.sungil.onethingmatch.ui.tmi.TmiView
 fun OneThingNav(
     viewModel: OneThingViewModel,
     home: () -> Unit,
-    pay: (String, String, Int , String) -> Unit,
-    startDestination : String = NAV_INTRO
+    pay: (String, String, Int, String) -> Unit,
+    startDestination: String = NAV_INTRO,
 ) {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
     val pageInfo = when (currentRoute) {
-        NAV_SUBJECT -> 1
-        NAV_CATEGORY -> 2
+        NAV_CATEGORY -> 1
+        NAV_SUBJECT -> 2
         NAV_LOCATION -> 3
-        NAV_DATE -> 4
-        NAV_BUDGET -> 5
-        NAV_TMI -> 6
+        NAV_BUDGET -> 4
+        NAV_TMI -> 5
+        NAV_DATE -> 6
         else -> -1
     }
 
@@ -85,29 +85,6 @@ fun OneThingNav(
                     viewModel = viewModel,
                     goNextPage = {
                         if (navController.currentDestination?.route != NAV_SUBJECT) {
-                            navController.navigate(NAV_SUBJECT)
-                        }
-                    }
-                )
-            }
-
-            composable(NAV_SUBJECT,
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(700)
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(700)
-                    )
-                }) {
-                InputSubjectView(
-                    viewModel = viewModel,
-                    goNextPage = {
-                        if (navController.currentDestination?.route != NAV_CATEGORY) {
                             navController.navigate(NAV_CATEGORY)
                         }
                     }
@@ -131,6 +108,28 @@ fun OneThingNav(
                     viewModel = viewModel,
                     goNextPage = {
                         if (navController.currentDestination?.route != NAV_LOCATION) {
+                            navController.navigate(NAV_SUBJECT)
+                        }
+                    }
+                )
+            }
+            composable(NAV_SUBJECT,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                InputSubjectView(
+                    viewModel = viewModel,
+                    goNextPage = {
+                        if (navController.currentDestination?.route != NAV_CATEGORY) {
                             navController.navigate(NAV_LOCATION)
                         }
                     }
@@ -154,29 +153,6 @@ fun OneThingNav(
                     viewModel = viewModel,
                     goNextPage = {
                         if (navController.currentDestination?.route != NAV_DATE) {
-                            navController.navigate(NAV_DATE)
-                        }
-                    }
-                )
-            }
-
-            composable(NAV_DATE,
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(700)
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(700)
-                    )
-                }) {
-                OneThingDayView(
-                    viewModel = viewModel,
-                    goNextPage = {
-                        if (navController.currentDestination?.route != NAV_BUDGET) {
                             navController.navigate(NAV_BUDGET)
                         }
                     }
@@ -228,6 +204,30 @@ fun OneThingNav(
                     }
                 )
             }
+            composable(NAV_DATE,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                OneThingDayView(
+                    viewModel = viewModel,
+                    goNextPage = {
+                        if (navController.currentDestination?.route != NAV_BUDGET) {
+                            navController.navigate(NAV_BEFORE_PAY)
+                        }
+                    }
+                )
+            }
+
+
 
             composable(NAV_BEFORE_PAY,
                 enterTransition = {
@@ -247,7 +247,6 @@ fun OneThingNav(
                     goNextPage = pay
                 )
             }
-
         }
     }
 }

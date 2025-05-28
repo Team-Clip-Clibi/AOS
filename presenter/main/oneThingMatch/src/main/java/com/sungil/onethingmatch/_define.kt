@@ -43,11 +43,7 @@ enum class CATEGORY(val displayName: String) {
 
 enum class Location(val displayName: String) {
     HONGDAE_HAPJEONG("홍대/합정"),
-    GANGNAM("강남"),
-    YEOUIDO_YEONGDEUNGPO("여의도/영등포"),
-    YONGSAN_YEONGDEUNGPO("용산/영등포"),
-    YOUNGSAN_ITAEWON("용산/이태원"),
-    KONDAE_SEONGSU("건대/성수");
+    GANGNAM("강남");
 
     override fun toString(): String = displayName
 }
