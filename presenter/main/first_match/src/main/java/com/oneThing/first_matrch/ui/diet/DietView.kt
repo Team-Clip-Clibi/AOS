@@ -1,5 +1,6 @@
 package com.oneThing.first_matrch.ui.diet
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -83,6 +84,7 @@ internal fun DietView(
         bottomBar = {
             Column(
                 modifier = Modifier
+                    .background(color = ColorStyle.WHITE_100)
                     .fillMaxWidth()
                     .navigationBarsPadding()
                     .padding(bottom = 8.dp)

@@ -1,5 +1,6 @@
 package com.oneThing.first_matrch.ui.job
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -144,6 +145,7 @@ internal fun JobView(
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .background(color = ColorStyle.WHITE_100)
                 .fillMaxSize()
                 .padding(
                     top = paddingValues.calculateTopPadding() + 32.dp,
