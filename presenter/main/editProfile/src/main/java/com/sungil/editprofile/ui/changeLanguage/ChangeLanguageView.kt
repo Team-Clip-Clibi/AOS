@@ -57,7 +57,7 @@ internal fun ChangeLanguageView(
                         start = 17.dp, end = 16.dp,
                         bottom = WindowInsets.navigationBars
                             .asPaddingValues()
-                            .calculateTopPadding() + 70.dp
+                            .calculateTopPadding()
                     )
             )
         },
