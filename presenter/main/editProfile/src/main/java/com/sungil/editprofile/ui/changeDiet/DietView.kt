@@ -23,7 +23,6 @@ import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
 import com.example.core.TopAppBarWithCloseButton
-import com.sungil.editprofile.DIET
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 
