@@ -108,37 +108,6 @@ internal fun LocationView(
                     viewModel.location(Location.GANGNAM)
                 }
             )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            ButtonCheckBoxLeftL(
-                content = Location.YEOUIDO_YEONGDEUNGPO.displayName,
-                isChecked = uiState.location.contains(Location.YEOUIDO_YEONGDEUNGPO),
-                onCheckChange = {
-                    viewModel.location(Location.YEOUIDO_YEONGDEUNGPO)
-                }
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            ButtonCheckBoxLeftL(
-                content = Location.YONGSAN_YEONGDEUNGPO.displayName,
-                isChecked = uiState.location.contains(Location.YONGSAN_YEONGDEUNGPO),
-                onCheckChange = {
-                    viewModel.location(Location.YONGSAN_YEONGDEUNGPO)
-                }
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            ButtonCheckBoxLeftL(
-                content = Location.KONDAE_SEONGSU.displayName,
-                isChecked = uiState.location.contains(Location.KONDAE_SEONGSU),
-                onCheckChange = {
-                    viewModel.location(Location.KONDAE_SEONGSU)
-                }
-            )
-
         }
     }
 
