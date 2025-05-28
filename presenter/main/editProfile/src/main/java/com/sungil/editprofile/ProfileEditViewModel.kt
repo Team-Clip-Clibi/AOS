@@ -25,7 +25,6 @@ import javax.inject.Inject
 class ProfileEditViewModel @Inject constructor(
     private val userInfoUseCase: GetUserInfo,
     private val changeNickName: UpdateNickName,
-    private val haptic: ActivateHaptic,
     private val changeJob: UpdateJob,
     private val updateLoveState: UpdateLove,
     private val updateLanguage: UpdateLanguage,

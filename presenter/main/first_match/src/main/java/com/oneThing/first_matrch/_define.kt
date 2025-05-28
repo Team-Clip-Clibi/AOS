@@ -14,10 +14,6 @@ enum class JOB(val displayName: String) {
     NONE("NONE");
 
     companion object {
-        fun fromDisplayName(displayName: String): JOB? {
-            return entries.find { it.displayName == displayName }
-        }
-
         fun fromCode(code: String): JOB? {
             return entries.find { it.name == code }
         }
@@ -42,7 +38,7 @@ enum class DomainError(val errorContent : String){
     }
 }
 
-enum class DIET(val displayName: String, val customValue: String = "") {
+enum class DIET(val displayName: String) {
     VG("비건이에요"),
     VT("베지테리언이에요"),
     GF("글루텐프리를 지켜요"),

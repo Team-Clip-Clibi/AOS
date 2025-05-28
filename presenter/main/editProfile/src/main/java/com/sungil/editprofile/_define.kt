@@ -21,14 +21,12 @@ const val ERROR_FAIL_TO_UPDATE_LOVE = "Fail to update Love"
 const val ERROR_FAIL_SAVE = "Save Fail"
 const val ERROR_USER_DATA_NULL = "userData is null"
 const val ERROR_NONE_DATA_SELECT = "NONE"
-const val ERROR_DELETE_FAIL = "delete fail"
 const val ERROR_TOKEN_EXPIRE = "reLogin"
 const val ERROR_SAVE_DATA_FAIL = "save error"
 const val ERROR_UPDATE_FAIL = "update fail"
 const val MESSAGE_NICKNAME_OKAY = "name okay"
 const val MESSAGE_NICKNAME_UPDATE_SUCCESS = "nick name update Success"
 
-const val MESSAGE_SAVE_SUCCESS ="Save Success"
 const val MESSAGE_FAIL_UPDATE_JOB = "Fail to update job"
 enum class JOB(val displayName: String) {
     STUDENT("학생"),
@@ -44,10 +42,6 @@ enum class JOB(val displayName: String) {
     NONE("NONE");
 
     companion object {
-        fun fromDisplayName(displayName: String): JOB {
-            return entries.find { it.displayName == displayName } ?: NONE
-        }
-
         fun fromName(name : String) : JOB {
             return entries.find { it.name == name } ?: NONE
         }
@@ -83,8 +77,7 @@ enum class SignOutData {
     APPLY,
     NOT_GOOD,
     NOT_NEED,
-    ETC,
-    NOTING
+    ETC
 }
 
 enum class DIET(val displayName: String) {
