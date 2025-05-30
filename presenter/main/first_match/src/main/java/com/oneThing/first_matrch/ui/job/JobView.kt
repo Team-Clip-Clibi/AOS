@@ -149,8 +149,8 @@ internal fun JobView(
                 .background(color = ColorStyle.WHITE_100)
                 .fillMaxSize()
                 .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 32.dp,
-                    bottom = paddingValues.calculateBottomPadding() + 10.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
                     start = 17.dp,
                     end = 16.dp
                 )

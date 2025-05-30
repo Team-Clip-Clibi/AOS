@@ -69,8 +69,8 @@ internal fun FirstMatchIntroView(
                 .fillMaxSize()
                 .background(color = ColorStyle.WHITE_100)
                 .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 18.dp,
-                    bottom = paddingValues.calculateBottomPadding() + 36.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
                     start = 17.dp,
                     end = 16.dp
                 )
@@ -83,7 +83,7 @@ internal fun FirstMatchIntroView(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "아 이거 왜이러냐 진짜",
+                text = stringResource(R.string.first_match_intro_sub_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
                 color = ColorStyle.GRAY_600,
                 modifier = Modifier.fillMaxWidth()
