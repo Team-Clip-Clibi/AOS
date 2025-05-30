@@ -3,9 +3,9 @@ package com.sungil.editprofile.ui.editProfile
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.example.core.TopAppBarNumber
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
-import com.sungil.editprofile.ui.CustomTopBar
 
 @Composable
 internal fun EditProfileView(
@@ -21,9 +21,11 @@ internal fun EditProfileView(
 ) {
     Scaffold(
         topBar = {
-            CustomTopBar(
+            TopAppBarNumber(
                 title = stringResource(R.string.top_bar_profile),
-                onBackClick = { actionButtonClick() }
+                currentPage = 0,
+                totalPage =  0,
+                onBackClick = actionButtonClick,
             )
         }
     ) { paddingValues ->
