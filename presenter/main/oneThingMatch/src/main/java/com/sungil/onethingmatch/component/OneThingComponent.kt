@@ -87,6 +87,7 @@ fun CategoryItemView(
         true -> {
             Modifier
                 .fillMaxWidth()
+                .height(88.dp)
                 .border(
                     width = 1.dp,
                     color = ColorStyle.PURPLE_200,
@@ -98,7 +99,7 @@ fun CategoryItemView(
 
         false -> {
             Modifier
-                .width(114.dp)
+                .fillMaxWidth()
                 .height(88.dp)
                 .background(ColorStyle.GRAY_100, shape = RoundedCornerShape(8.dp))
                 .padding(10.dp)

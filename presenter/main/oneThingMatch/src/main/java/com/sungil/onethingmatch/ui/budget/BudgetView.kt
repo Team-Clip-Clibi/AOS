@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.budget
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,13 +55,14 @@ internal fun BudgetView(
                 )
             }
         },
-        containerColor = ColorStyle.WHITE_100
+        containerColor = ColorStyle.GRAY_100
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = ColorStyle.GRAY_100)
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    top = paddingValues.calculateTopPadding(),
                     start = 17.dp,
                     end = 16.dp,
                     bottom = paddingValues.calculateBottomPadding()

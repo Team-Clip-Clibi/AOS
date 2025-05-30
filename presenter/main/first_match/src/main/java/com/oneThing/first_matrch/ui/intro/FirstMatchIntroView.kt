@@ -69,7 +69,7 @@ internal fun FirstMatchIntroView(
                 .fillMaxSize()
                 .background(color = ColorStyle.WHITE_100)
                 .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                    top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
                     start = 17.dp,
                     end = 16.dp

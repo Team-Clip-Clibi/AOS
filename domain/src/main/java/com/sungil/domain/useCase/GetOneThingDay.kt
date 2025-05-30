@@ -47,12 +47,10 @@ class GetOneThingDay @Inject constructor() {
 
     private fun getTimeSlotsFor(dayOfWeek: DayOfWeek): List<String> {
         return when (dayOfWeek) {
-            DayOfWeek.FRIDAY -> listOf(MATCHTIME.LUNCH.name)
-//            DayOfWeek.SATURDAY -> listOf(
-//                MATCHTIME.LAUNCH.name,
-//                MATCHTIME.DINNER.name
-//            )
-//            DayOfWeek.SUNDAY -> listOf(MATCHTIME.LAUNCH.name, MATCHTIME.DINNER.name)
+            DayOfWeek.SATURDAY -> listOf(
+                MATCHTIME.DINNER.name
+            )
+            DayOfWeek.SUNDAY -> listOf(MATCHTIME.DINNER.name)
             else -> listOf(MATCHTIME.LUNCH.name, MATCHTIME.DINNER.name)
         }
     }

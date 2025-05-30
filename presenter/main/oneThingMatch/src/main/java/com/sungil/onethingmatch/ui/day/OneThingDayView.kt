@@ -35,6 +35,10 @@ internal fun OneThingDayView(
         UiError.MaxDateSelected -> ColorStyle.RED_100
         else -> ColorStyle.GRAY_600
     }
+    val subText = when(uiState.error) {
+        UiError.MaxDateSelected -> stringResource(R.string.txt_date_sub_title_error)
+        else -> stringResource(R.string.txt_date_sub_title)
+    }
     Scaffold(
         bottomBar = {
             Column(
@@ -77,18 +81,16 @@ internal fun OneThingDayView(
                     .fillMaxWidth()
                     .padding(end = 16.dp)
             )
-
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(R.string.txt_date_sub_title),
+                text = subText,
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
                 color = subTextColor,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 16.dp)
             )
-
             Spacer(modifier = Modifier.height(32.dp))
-
             OneThingDayList(
                 selectData = uiState.selectDate,
                 item = uiState.dateData,
@@ -97,7 +99,6 @@ internal fun OneThingDayView(
                 }
             )
             Spacer(modifier = Modifier.height(32.dp))
-
             Text(
                 text = stringResource(R.string.txt_date_select),
                 style = AppTextStyles.BODY_14_20_MEDIUM,

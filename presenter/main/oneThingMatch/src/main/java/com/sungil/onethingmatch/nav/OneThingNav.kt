@@ -84,7 +84,7 @@ fun OneThingNav(
                 IntroView(
                     viewModel = viewModel,
                     goNextPage = {
-                        if (navController.currentDestination?.route != NAV_SUBJECT) {
+                        if (navController.currentDestination?.route != NAV_CATEGORY) {
                             navController.navigate(NAV_CATEGORY)
                         }
                     }
@@ -107,7 +107,7 @@ fun OneThingNav(
                 CategoryView(
                     viewModel = viewModel,
                     goNextPage = {
-                        if (navController.currentDestination?.route != NAV_LOCATION) {
+                        if (navController.currentDestination?.route != NAV_SUBJECT) {
                             navController.navigate(NAV_SUBJECT)
                         }
                     }
@@ -129,7 +129,7 @@ fun OneThingNav(
                 InputSubjectView(
                     viewModel = viewModel,
                     goNextPage = {
-                        if (navController.currentDestination?.route != NAV_CATEGORY) {
+                        if (navController.currentDestination?.route != NAV_LOCATION) {
                             navController.navigate(NAV_LOCATION)
                         }
                     }
@@ -152,7 +152,7 @@ fun OneThingNav(
                 LocationView(
                     viewModel = viewModel,
                     goNextPage = {
-                        if (navController.currentDestination?.route != NAV_DATE) {
+                        if (navController.currentDestination?.route != NAV_BUDGET) {
                             navController.navigate(NAV_BUDGET)
                         }
                     }
@@ -198,8 +198,8 @@ fun OneThingNav(
                 TmiView(
                     viewModel = viewModel,
                     goNextPage = {
-                        if (navController.currentDestination?.route != NAV_BEFORE_PAY) {
-                            navController.navigate(NAV_BEFORE_PAY)
+                        if (navController.currentDestination?.route != NAV_DATE) {
+                            navController.navigate(NAV_DATE)
                         }
                     }
                 )

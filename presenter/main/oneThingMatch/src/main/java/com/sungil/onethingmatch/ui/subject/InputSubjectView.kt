@@ -70,7 +70,7 @@ internal fun InputSubjectView(
                 .fillMaxSize()
                 .background(ColorStyle.WHITE_100)
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    top = paddingValues.calculateTopPadding(),
                     start = 17.dp,
                     end = 16.dp,
                     bottom = paddingValues.calculateBottomPadding()

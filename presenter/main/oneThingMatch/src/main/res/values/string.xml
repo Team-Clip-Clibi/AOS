@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="txt_intro_title">원띵 모임은,\n매주 금, 토, 일에 열려요</string>
-    <string name="txt_intro_sub_title">subTitle</string>
+    <string name="txt_intro_sub_title">대화 주제가 맞는 사람과 만나 ‘Onething’을 나눠요</string>
     <string name="txt_intro_below_page">content</string>
     <string name="btn_next">다음</string>
     <string name="btn_finish">완료</string>
     <string name="btn_okay">확인</string>
     <string name="top_app_bar">원띵 모임 신청</string>
+    <string name="btn_pay">결제하고 참여하기</string>
     <!--InputSubject-->
-    <string name="txt_subject_title">모임에서 나누고 싶은\n대화 주제를 입력해주세요</string>
+    <string name="txt_subject_title">모임에서 이야기하고 싶은\n주제를 알려주세요</string>
     <string name="txt_hint">최소 8자, 최대 50자까지 입력할 수 있어요</string>
     <!--InputCategory-->
     <string name="txt_category_title">원띵 모임의 카테고리를\n선택해 주세요</string>
     <string name="txt_category_sub_title">최대 2개까지 선택할 수 있어요</string>
     <!--LocationView-->
-    <string name="txt_location_title">이번 원띵 모임을 하고싶은\n지역을 선택해주세요</string>
+    <string name="txt_location_title">만나고 싶은 지역을 선택해주세요</string>
     <string name="txt_location_subject">최대 2개까지 선택할 수 있어요.</string>
     <!--OneThingDayView-->
     <string name="txt_date_title">참여 가능한 모임 날짜를\n선택해주세요</string>
     <string name="txt_date_sub_title">최대 3개까지 선택할 수 있어요.</string>
+    <string name="txt_date_sub_title_error">*최대 3개까지 선택할 수 있어요</string>
     <string name="txt_date_select">선택한 날짜</string>
     <string name="txt_date_launch">런치 12~2시</string>
     <string name="txt_date_dinner">디너 6~8시</string>
@@ -26,10 +28,10 @@
     <string name="txt_budget_title">식사에 사용하고 싶은 대략적인\n금액대를 선택해 주세요</string>
     <string name="txt_budget_sub_title">선택하신 금액대는 식당 선정에 참고할 예정이에요</string>
     <!--TmiView-->
-    <string name="txt_tmi_title">마지막으로 모임에서 나눌\nTMI를 입력해주세요</string>
+    <string name="txt_tmi_title">모임에서 나눌 나의 TMI를\n입력해주세요</string>
     <!--BeforePayView-->
-    <string name="txt_before_pay_title">매칭된 모임에 참여할까요?</string>
-    <string name="txt_before_pay_sub_title">아래 내용을 꼼꼼히 확인하고, 결제해주세요.</string>
+    <string name="txt_before_pay_title">당신을 위한 모임 준비되었어요</string>
+    <string name="txt_before_pay_sub_title">아래 내용을 확인하고, 결제하시면 신청이 완료됩니다.</string>
     <!--ErrorDialog-->
     <string name="txt_toss_dialog_title">원띵은 토스페이 결제만 가능해요</string>
     <string name="txt_toss_dialog_sub_title">토스 앱이 설치되어 있지 않다면, 설치 후 결제를\n진행해주세요.</string>

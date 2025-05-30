@@ -68,10 +68,10 @@ internal fun IntroView(
                 .fillMaxSize()
                 .background(ColorStyle.WHITE_100)
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 16.dp,
+                    top = paddingValues.calculateTopPadding(),
                     start = 17.dp,
                     end = 16.dp,
-                    bottom = paddingValues.calculateBottomPadding()+42.dp
+                    bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
             Text(
@@ -83,7 +83,7 @@ internal fun IntroView(
             Text(
                 text = stringResource(R.string.txt_intro_sub_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                color = Color(0xFF666666),
+                color = ColorStyle.GRAY_600,
                 modifier = Modifier.padding(start = 17.dp, end = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))

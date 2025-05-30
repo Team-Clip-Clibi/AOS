@@ -66,6 +66,7 @@ internal fun CategoryView(
                 )
             }
         },
+        containerColor = ColorStyle.WHITE_100
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -78,12 +79,12 @@ internal fun CategoryView(
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = stringResource(R.string.txt_category_title),
                 style = AppTextStyles.HEAD_28_40_BOLD,
                 color = ColorStyle.GRAY_800
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.txt_category_sub_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,

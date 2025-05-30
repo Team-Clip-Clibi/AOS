@@ -68,8 +68,9 @@ internal fun LocationView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = ColorStyle.WHITE_100)
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    top = paddingValues.calculateTopPadding(),
                     start = 17.dp,
                     end = 16.dp,
                     bottom = paddingValues.calculateBottomPadding()
@@ -82,15 +83,7 @@ internal fun LocationView(
                 color = ColorStyle.GRAY_800,
                 modifier = Modifier.fillMaxWidth()
             )
-            Text(
-                text = stringResource(R.string.txt_location_subject),
-                style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                color = subTextColor,
-                modifier = Modifier.fillMaxWidth()
-            )
-
             Spacer(modifier = Modifier.height(24.dp))
-
             ButtonCheckBoxLeftL(
                 content = Location.HONGDAE_HAPJEONG.displayName,
                 isChecked = uiState.location.contains(Location.HONGDAE_HAPJEONG),
@@ -98,9 +91,7 @@ internal fun LocationView(
                     viewModel.location(Location.HONGDAE_HAPJEONG)
                 }
             )
-
             Spacer(modifier = Modifier.height(10.dp))
-
             ButtonCheckBoxLeftL(
                 content = Location.GANGNAM.displayName,
                 isChecked = uiState.location.contains(Location.GANGNAM),

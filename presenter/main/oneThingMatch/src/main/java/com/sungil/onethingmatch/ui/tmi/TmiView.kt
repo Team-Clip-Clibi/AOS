@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ButtonXXLPurple400
@@ -68,7 +69,7 @@ internal fun TmiView(
                 .fillMaxSize()
                 .background(ColorStyle.WHITE_100)
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    top = paddingValues.calculateTopPadding(),
                     start = 17.dp,
                     end = 16.dp,
                     bottom = paddingValues.calculateBottomPadding()
@@ -89,6 +90,13 @@ internal fun TmiView(
                 maxLine = 1,
                 maxLength = 50,
                 hint = stringResource(R.string.txt_hint)
+            )
+             Text(
+                text = "${uiState.tmi.length}/50",
+                style = AppTextStyles.CAPTION_10_14_MEDIUM,
+                color = ColorStyle.GRAY_700,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.End
             )
         }
     }

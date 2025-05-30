@@ -88,8 +88,9 @@ internal fun BeforePayView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = ColorStyle.GRAY_100)
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    top = paddingValues.calculateTopPadding(),
                     start = 17.dp,
                     end = 16.dp,
                     bottom = paddingValues.calculateBottomPadding()
