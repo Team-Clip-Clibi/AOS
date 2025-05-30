@@ -25,27 +25,27 @@ class GetUserInfo @Inject constructor(
         var token = database.getToken()
         val job = requestJob(updateData, token) { newToken -> token = newToken }
         if (job.first == "Fail") return Result.Fail(job.second)
-        updateData = updateData.copy(job = job.second)
+        updateData.job = job.second
         val diet = requestDiet(updateData, token) { newToken -> token = newToken }
         if (diet.first == "Fail") return Result.Fail(diet.second)
-        updateData = updateData.copy(diet = diet.second)
+        updateData.diet = diet.second
         val love = requestLove(updateData, token) { newToken -> token = newToken }
         if (love.first == "Fail") return Result.Fail(love.second)
-        updateData = updateData.copy(loveState = Pair(love.second, love.third))
+        updateData.loveState = Pair(love.second, love.third)
         if (userData == updateData) {
             return Result.Success(userData)
         }
         val saveResult = database.saveUserInfo(
-            name = userData.userName,
-            nickName = userData.nickName ?: "error",
+            name = updateData.userName,
+            nickName = updateData.nickName ?: "error",
             platform = "KAKAO",
-            phoneNumber = userData.phoneNumber,
-            jobList = userData.job,
-            loveState = userData.loveState,
-            diet = userData.diet,
-            language = userData.language
+            phoneNumber = updateData.phoneNumber,
+            jobList = updateData.job,
+            loveState = updateData.loveState,
+            diet = updateData.diet,
+            language = updateData.language
         )
-        return if (saveResult) Result.Success(userData) else Result.Fail("save error")
+        return if (saveResult) Result.Success(updateData) else Result.Fail("save error")
     }
 
 
@@ -61,7 +61,7 @@ class GetUserInfo @Inject constructor(
                 if (result.job == "") {
                     return Pair("Success", "NONE")
                 }
-                return Pair("Success", userData.job)
+                return Pair("Success", result.job)
             }
 
             401 -> {
@@ -101,7 +101,12 @@ class GetUserInfo @Inject constructor(
                 if (requestDiet.diet.diet.contains("null")) {
                     return Pair("Success", "NONE")
                 }
-                return Pair("Success", requestDiet.diet.diet)
+                val regex = Regex("dietaryOption=([^)]*)")
+                val result = regex.find(requestDiet.diet.diet)?.groupValues?.get(1)
+                if (result.isNullOrEmpty()) {
+                    return Pair("Success", "NONE")
+                }
+                return Pair("Success", result)
             }
 
             401 -> {
