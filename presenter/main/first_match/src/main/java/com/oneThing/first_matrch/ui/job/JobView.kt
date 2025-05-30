@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.HorizontalDivider
@@ -148,7 +149,7 @@ internal fun JobView(
                 .background(color = ColorStyle.WHITE_100)
                 .fillMaxSize()
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 32.dp,
                     bottom = paddingValues.calculateBottomPadding() + 10.dp,
                     start = 17.dp,
                     end = 16.dp
