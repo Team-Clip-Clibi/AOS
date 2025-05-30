@@ -5,12 +5,14 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.DeviceRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.tokenManger.TokenMangerController
 import javax.inject.Inject
 
 class CheckNickName @Inject constructor(
     private val deviceRepo: DeviceRepository,
     private val networkRepo: NetworkRepository,
     private val database: DatabaseRepository,
+    private val tokenManger: TokenMangerController,
 ) :
     UseCase<CheckNickName.Param, CheckNickName.Result> {
 
@@ -51,25 +53,23 @@ class CheckNickName @Inject constructor(
             }
 
             401 -> {
-                val refreshToken = networkRepo.requestUpdateToken(token.second)
-                if (refreshToken.first != 200) {
-                    return Result.Fail("reLogin")
-                }
-                if (refreshToken.second == null || refreshToken.third == null) {
-                    return Result.Fail("network Error")
-                }
-                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
-                if (!saveToken) {
-                    return Result.Fail("save error")
-                }
-                val reRequest = networkRepo.checkNickName(name, TOKEN_FORM + refreshToken.second!!)
-                if (reRequest == 200) {
+                val refreshToken = tokenManger.requestUpdateToken(token.second)
+                if (!refreshToken) return Result.Fail("reLogin")
+                val newToken = database.getToken()
+                val retry = networkRepo.checkNickName(
+                    data = name,
+                    token = TOKEN_FORM + newToken.first
+                )
+                if (retry == 200) {
                     deviceRepo.requestVibrate()
                     return Result.Success("name okay")
                 }
-                if (reRequest == 204) {
+                if (retry == 204) {
                     deviceRepo.requestVibrate()
-                    return Result.Fail("Already use")
+                    return Result.Success("Already use")
+                }
+                if (retry == 401) {
+                    return Result.Fail("reLogin")
                 }
                 return Result.Fail("network Error")
             }

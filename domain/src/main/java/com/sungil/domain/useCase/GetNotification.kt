@@ -6,11 +6,13 @@ import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.tokenManger.TokenMangerController
 import javax.inject.Inject
 
 class GetNotification @Inject constructor(
     private val database: DatabaseRepository,
     private val network: NetworkRepository,
+    private val tokenManger : TokenMangerController
 ) {
 
     sealed interface Result : UseCase.Result {
@@ -23,22 +25,41 @@ class GetNotification @Inject constructor(
         val notification = network.requestNotification(TOKEN_FORM + token.first)
         when (notification.responseCode) {
             401 -> {
-                val refreshToken = network.requestUpdateToken(token.second)
-                if (refreshToken.first != 200) {
-                    return Result.Fail("reLogin")
+                val refreshToken = tokenManger.requestUpdateToken(token.second)
+                if (!refreshToken) return Result.Fail("reLogin")
+                val newToken = database.getToken()
+                val retry = network.requestNotification(TOKEN_FORM + newToken.first)
+                when (retry.responseCode) {
+                    200 -> {
+                        return Result.Success(retry.notificationDataList)
+                    }
+
+                    204 -> {
+                        /**
+                         * TODO -> 배포시 서버 데이터로만 출력
+                         */
+                        return Result.Success(
+                            listOf(
+                                NotificationData(
+                                    noticeType = "NOTICE",
+                                    content = "테스트에용",
+                                    link = "www.naver.com"
+                                ),
+                                NotificationData(
+                                    noticeType = "ARTICLE",
+                                    content = "테스트에용2",
+                                    link = "www.naver.com"
+                                ),
+                                NotificationData(
+                                    noticeType = "NOTICE",
+                                    content = "테스트에용3",
+                                    link = "www.naver.com"
+                                ),
+                            )
+                        )
+                    }
+                    else -> return Result.Fail("network error")
                 }
-                val saveNewToken = database.setToken(
-                    accessToken = refreshToken.second!!,
-                    refreshToken = refreshToken.third!!
-                )
-                if (!saveNewToken) {
-                    return Result.Fail("save error")
-                }
-                val reRequest = network.requestNotification(TOKEN_FORM + refreshToken.second)
-                if (reRequest.responseCode != 200) {
-                    return Result.Fail("network error")
-                }
-                return Result.Success(reRequest.notificationDataList)
             }
 
             200 -> {

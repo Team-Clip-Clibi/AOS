@@ -4,11 +4,13 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.tokenManger.TokenMangerController
 import javax.inject.Inject
 
 class UpdateJob @Inject constructor(
     private val network: NetworkRepository,
     private val database: DatabaseRepository,
+    private val tokenMangerController: TokenMangerController,
 ) : UseCase<UpdateJob.Param, UpdateJob.Result> {
     data class Param(
         val job: String,
@@ -46,21 +48,30 @@ class UpdateJob @Inject constructor(
             }
 
             401 -> {
-                val refreshToken = network.requestUpdateToken(token.second)
-                if (refreshToken.first != 200) {
-                    return Result.Fail("reLogin")
-                }
-                if (refreshToken.second == null || refreshToken.third == null) {
-                    return Result.Fail("network error")
-                }
-                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
-                if (!saveToken) {
-                    return Result.Fail("Save Fail")
-                }
-                val reRequest =
-                    network.requestUpdateJob(TOKEN_FORM + refreshToken.second, param.job)
+                val refreshToken = tokenMangerController.requestUpdateToken(token.second)
+                if (!refreshToken) return Result.Fail("reLogin")
+                val newToken = database.getToken()
+                val reRequest = network.requestUpdateJob(
+                    accessToken = TOKEN_FORM + newToken.first,
+                    data = param.job
+                )
                 if (reRequest != 204) {
                     return Result.Fail("Fail to update job")
+                }
+                val userData = database.getUserInfo()
+                userData.job = param.job
+                val saveResult = database.saveUserInfo(
+                    name = userData.userName,
+                    nickName = userData.nickName ?: "error",
+                    platform = "KAKAO",
+                    phoneNumber = userData.phoneNumber,
+                    jobList = userData.job,
+                    loveState = userData.loveState,
+                    diet = userData.diet,
+                    language = userData.language
+                )
+                if (!saveResult) {
+                    return Result.Fail("Save Fail")
                 }
                 return Result.Success("Save Success")
             }

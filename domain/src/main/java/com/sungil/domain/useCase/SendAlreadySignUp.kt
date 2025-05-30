@@ -4,11 +4,13 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.tokenManger.TokenMangerController
 import javax.inject.Inject
 
 class SendAlreadySignUp @Inject constructor(
     private val database: DatabaseRepository,
     private val network: NetworkRepository,
+    private val tokenMangerController: TokenMangerController
 ) {
     sealed interface Result : UseCase.Result {
         data class Success(val message: String) : Result
@@ -41,21 +43,18 @@ class SendAlreadySignUp @Inject constructor(
             }
 
             401 -> {
-                val refreshToken = network.requestUpdateToken(token.second)
-                if(refreshToken.first != 200){
+                val refreshToken = tokenMangerController.requestUpdateToken(token.second)
+                if (!refreshToken) {
                     return Result.Fail("reLogin")
                 }
-                val setToken = database.setToken(accessToken = refreshToken.second !!, refreshToken =  refreshToken.third!!)
-                if(!setToken){
-                    return Result.Fail("save error")
-                }
-                val reRequest = network.requestUserData(TOKEN_FORM+refreshToken.second)
-                if(reRequest!!.responseCode != 201){
+                val newToken = database.getToken()
+                val reRequest = network.requestUserData(TOKEN_FORM + newToken.first)
+                if (reRequest!!.responseCode != 200) {
                     return Result.Fail("network error")
                 }
                 val saveUserData = database.saveUserInfo(
                     name = reRequest.data.userName,
-                    nickName = reRequest.data.nickName ?:"error" ,
+                    nickName = reRequest.data.nickName ?: "error",
                     platform = "KAKAO",
                     phoneNumber = reRequest.data.phoneNumber,
                     jobList = "NONE",

@@ -5,11 +5,13 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.model.UserData
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.tokenManger.TokenMangerController
 import javax.inject.Inject
 
 class GetUserInfo @Inject constructor(
     private val database: DatabaseRepository,
     private val network: NetworkRepository,
+    private val tokenManger: TokenMangerController,
 ) {
     sealed interface Result : UseCase.Result {
         data class Success(val data: UserData) : Result
@@ -63,23 +65,20 @@ class GetUserInfo @Inject constructor(
             }
 
             401 -> {
-                val refreshToken = network.requestUpdateToken(token.second)
-                if (refreshToken.first != 200) {
+                val refreshToken = tokenManger.requestUpdateToken(token.second)
+                if (!refreshToken) {
                     return Pair("Fail", "reLogin")
                 }
-                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
-                if (!saveToken) {
-                    return Pair("Fail", "save error")
-                }
-                updateToken(Pair(refreshToken.second!!, refreshToken.third!!))
-                val reRequest = network.requestJob(TOKEN_FORM + token.first)
-                if (reRequest.responseCode != 200) {
+                val newToken = database.getToken()
+                updateToken(Pair(newToken.first, newToken.second))
+                val retry = network.requestJob(TOKEN_FORM + newToken.first)
+                if (retry.responseCode != 200) {
                     return Pair("Fail", "network error")
                 }
-                if (reRequest.job == "") {
+                if (retry.job == "") {
                     return Pair("Success", "NONE")
                 }
-                return Pair("Success", reRequest.job)
+                return Pair("Success", retry.job)
             }
 
             500 -> {
@@ -106,16 +105,13 @@ class GetUserInfo @Inject constructor(
             }
 
             401 -> {
-                val refreshToken = network.requestUpdateToken(token.second)
-                if (refreshToken.first != 200) {
+                val refreshToken = tokenManger.requestUpdateToken(token.second)
+                if (!refreshToken) {
                     return Pair("Fail", "reLogin")
                 }
-                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
-                if (!saveToken) {
-                    return Pair("Fail", "save error")
-                }
-                updateToken(Pair(refreshToken.second!!, refreshToken.third!!))
-                val reRequest = network.requestDiet(TOKEN_FORM + token.first)
+                val newToken = database.getToken()
+                updateToken(Pair(newToken.first, newToken.second))
+                val reRequest = network.requestDiet(TOKEN_FORM + newToken.first)
                 if (reRequest.response != 200) {
                     return Pair("Fail", "network error")
                 }
@@ -154,16 +150,13 @@ class GetUserInfo @Inject constructor(
             }
 
             401 -> {
-                val refreshToken = network.requestUpdateToken(token.second)
-                if (refreshToken.first != 200) {
+                val refreshToken = tokenManger.requestUpdateToken(token.second)
+                if (!refreshToken) {
                     return Triple("Fail", "reLogin", false)
                 }
-                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
-                if (!saveToken) {
-                    return Triple("Fail", "save error", false)
-                }
-                updateToken(Pair(refreshToken.second!!, refreshToken.third!!))
-                val reRequest = network.requestLove(TOKEN_FORM + token.first)
+                val newToken = database.getToken()
+                updateToken(Pair(newToken.first, newToken.second))
+                val reRequest = network.requestLove(TOKEN_FORM + newToken.first)
                 if (reRequest.responseCode != 200) {
                     return Triple("Fail", "network error", false)
                 }

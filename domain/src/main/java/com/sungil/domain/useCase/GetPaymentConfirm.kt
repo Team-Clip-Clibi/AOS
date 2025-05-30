@@ -4,11 +4,13 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.tokenManger.TokenMangerController
 import javax.inject.Inject
 
 class GetPaymentConfirm @Inject constructor(
     private val database: DatabaseRepository,
     private val network: NetworkRepository,
+    private val tokenManger: TokenMangerController
 ) : UseCase<GetPaymentConfirm.Param, GetPaymentConfirm.Result> {
     data class Param(
         val paymentKey: String,
@@ -32,24 +34,19 @@ class GetPaymentConfirm @Inject constructor(
         when (result) {
             200 -> return Result.Success("Success to pay")
             401 -> {
-                val refreshToken = network.requestUpdateToken(token.second)
-                if (refreshToken.first != 200) {
-                    return Result.Fail("reLogin")
-                }
-                val saveToken = database.setToken(refreshToken.second!!, refreshToken.third!!)
-                if (!saveToken) {
-                    return Result.Fail("save error")
-                }
+                val refreshToken = tokenManger.requestUpdateToken(token.second)
+                if (!refreshToken) return Result.Fail("reLogin")
+                val newToken = database.getToken()
                 val reRequest = network.requestPayConfirm(
-                    token = TOKEN_FORM + refreshToken.second,
+                    token = TOKEN_FORM + newToken.first,
+                    paymentKey = param.paymentKey,
                     orderId = param.orderId,
-                    orderType = param.orderType,
-                    paymentKey = param.paymentKey
+                    orderType = param.orderType
                 )
-                if (reRequest != 200) {
-                    return Result.Fail("network error")
+                if (reRequest == 200) {
+                    return Result.Success("Success to pay")
                 }
-                return Result.Success("Success to pay")
+                return Result.Fail("network error")
             }
 
             else -> return Result.Fail("network error")

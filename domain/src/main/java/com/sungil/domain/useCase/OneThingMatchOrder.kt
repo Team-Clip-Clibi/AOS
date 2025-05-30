@@ -5,6 +5,7 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.tokenManger.TokenMangerController
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -13,6 +14,7 @@ import javax.inject.Inject
 class OneThingMatchOrder @Inject constructor(
     private val database: DatabaseRepository,
     private val network: NetworkRepository,
+    private val tokenManger : TokenMangerController
 ) : UseCase<OneThingMatchOrder.Param, OneThingMatchOrder.Result> {
     data class Param(
         val topic: String,
@@ -60,38 +62,28 @@ class OneThingMatchOrder @Inject constructor(
             }
 
             401 -> {
-                val refreshToken = network.requestUpdateToken(
-                    refreshToken = token.second
-                )
-                if (refreshToken.first != 200) {
-                    return Result.Fail("reLogin")
-                }
-                if (refreshToken.second == null || refreshToken.third == null) {
-                    return Result.Fail("network error")
-                }
-                val saveToken = database.setToken(
-                    accessToken = refreshToken.second!!,
-                    refreshToken = refreshToken.third!!
-                )
-                if (!saveToken) {
-                    return Result.Fail("save error")
-                }
+                val refreshToken = tokenManger.requestUpdateToken(token.second)
+                if (!refreshToken) return Result.Fail("reLogin")
+                val newToken = database.getToken()
                 val reRequest = network.requestOneThingOrder(
-                    token = TOKEN_FORM + refreshToken.second,
+                    token = TOKEN_FORM + newToken.first,
                     topic = param.topic,
                     districts = param.districts,
                     date = convertedDate,
                     tmiContent = param.tmiContent,
                     oneThingBudgetRange = param.oneThingBudgetRange
                 )
-                if (reRequest.first != 200 || reRequest.second == null || requestOrder.third == null) {
-                    return Result.Fail("network error")
+                if (reRequest.first == 200) {
+                    if (reRequest.second == null || reRequest.third == null) {
+                        return Result.Fail("network error")
+                    }
+                    return Result.Success(
+                        orderId = reRequest.second!!,
+                        userId = userId,
+                        amount = reRequest.third!!
+                    )
                 }
-                return Result.Success(
-                    orderId = reRequest.second!!,
-                    userId = userId,
-                    amount = requestOrder.third!!
-                )
+                return Result.Fail("network error")
             }
 
             else -> return Result.Fail("network error")
