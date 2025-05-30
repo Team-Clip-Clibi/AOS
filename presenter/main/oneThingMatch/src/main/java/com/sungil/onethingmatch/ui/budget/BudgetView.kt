@@ -74,7 +74,7 @@ internal fun BudgetView(
                 color = ColorStyle.GRAY_800,
                 modifier = Modifier.fillMaxWidth()
             )
-
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.txt_budget_sub_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,

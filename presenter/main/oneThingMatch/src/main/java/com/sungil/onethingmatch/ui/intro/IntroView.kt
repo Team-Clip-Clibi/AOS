@@ -80,6 +80,7 @@ internal fun IntroView(
                 color = ColorStyle.GRAY_800,
                 modifier = Modifier.padding(start = 17.dp, end = 16.dp)
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.txt_intro_sub_title),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
