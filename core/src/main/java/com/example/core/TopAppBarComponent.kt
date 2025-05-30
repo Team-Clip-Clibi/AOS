@@ -40,7 +40,7 @@ fun TopAppBarNumber(
         },
         navigationIcon = {
             Image(
-                painter = painterResource(id = R.drawable.ic_back_gray),
+                painter = painterResource(id = R.drawable.ic_back_black),
                 contentDescription = "go back",
                 modifier = Modifier
                     .padding(12.dp)
