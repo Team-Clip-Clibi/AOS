@@ -114,8 +114,8 @@ fun CategoryItemView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(R.drawable.ic_growth),
-                        contentDescription = "message",
+                painter = painterResource(category.imageId),
+                contentDescription = "message",
                 contentScale = ContentScale.None,
                 modifier = Modifier
                     .width(40.dp)

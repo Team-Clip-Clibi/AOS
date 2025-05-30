@@ -12,31 +12,14 @@ const val NAV_BUDGET = "budget"
 const val NAV_TMI = "tmi"
 const val NAV_BEFORE_PAY = "beforePay"
 
-enum class CATEGORY(val displayName: String) {
-    ECONOMY("경제"),
-    GRADUATE_SCHOOL("대학원"),
-    PET("반려동물"),
-    BEAUTY("뷰티"),
-    VOLUNTEER("봉사"),
-    REAL_ESTATE("부동산"),
-    BUSINESS("사업"),
-    STUDY("스터디"),
-    TRAVEL("여행"),
-    RELATIONSHIP("연애/결혼"),
-    ENTERTAINMENT("영화/드라마/유튜브"),
-    LANGUAGE("외국어"),
-    STUDY_ABROAD("유학"),
-    MEDICAL("의료"),
-    FOOD("음식"),
-    MUSIC("음악"),
-    EXERCISE("운동"),
-    SELF_DEVELOPMENT("자기개발"),
-    INDEPENDENT_LIVING("자취"),
-    STOCK_COIN("주식/코인"),
-    HOBBY("취미생활"),
-    JOB_CHANGE("취업/이직"),
-    CAREER("커리어"),
-    ETC("기타");
+enum class CATEGORY(val displayName: String, val imageId: Int) {
+    HEALTH("건강", R.drawable.ic_health),
+    MONEY("돈", R.drawable.ic_money),
+    LIFE("인생", R.drawable.ic_life),
+    RELATIONSHIP("연애", R.drawable.ic_love),
+    SELF_IMPROVEMENT("자기계발", R.drawable.ic_growth),
+    WORK("직장", R.drawable.ic_job),
+    HOBBY("취미", R.drawable.ic_hobby);
 
     override fun toString(): String = displayName
 }
