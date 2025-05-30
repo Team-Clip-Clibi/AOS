@@ -22,12 +22,6 @@ class UpdateLanguage @Inject constructor(
     override suspend fun invoke(param: Param): Result {
         val token = database.getToken()
         val userData = database.getUserInfo()
-        if (token.first == null) {
-            return Result.Fail("token is null")
-        }
-        if (userData == null) {
-            return Result.Fail("userData is null")
-        }
         val updateResult = network.requestUpdateLanguage(
             TOKEN_FORM + token.first,
             param.language

@@ -29,6 +29,8 @@ import com.example.core.ColorStyle
 import com.oneThing.first_matrch.DomainError
 import com.oneThing.first_matrch.FirstMatchViewModel
 import com.oneThing.first_matrch.LANGUAGE
+import com.oneThing.first_matrch.MESSAGE_SAVE_SUCCESS
+import com.oneThing.first_matrch.MESSAGE_SUCCESS
 import com.oneThing.first_matrch.R
 import com.oneThing.first_matrch.UiError
 import com.oneThing.first_matrch.UiSuccess
@@ -42,10 +44,19 @@ internal fun LanguageView(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     LaunchedEffect(uiState.error, uiState.success) {
-        when (uiState.success) {
+        when (val success = uiState.success) {
             is UiSuccess.Success -> {
-                viewModel.initSuccessError()
-                goNextPage()
+                when (success.message) {
+                    MESSAGE_SUCCESS -> {
+                        viewModel.initSuccessError()
+                        viewModel.saveFirstMatch()
+                    }
+
+                    MESSAGE_SAVE_SUCCESS -> {
+                        viewModel.initSuccessError()
+                        goNextPage()
+                    }
+                }
             }
 
             UiSuccess.None -> Unit
@@ -94,7 +105,7 @@ internal fun LanguageView(
                 ButtonXXLPurple400(
                     onClick = {
                         if (uiState.dataChange) viewModel.updateLanguage()
-                        else goNextPage()
+                        else viewModel.saveFirstMatch()
                     },
                     buttonText = stringResource(R.string.btn_finish),
                     modifier = Modifier

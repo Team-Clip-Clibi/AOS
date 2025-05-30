@@ -67,3 +67,6 @@ const val NAV_LANGUAGE = "language"
 const val NAV_HOME = "Main"
 const val NAV_ONE_THING = "oneThing"
 const val NAV_RANDOM = ""
+
+const val MESSAGE_SUCCESS = "Success"
+const val MESSAGE_SAVE_SUCCESS = "Save success"

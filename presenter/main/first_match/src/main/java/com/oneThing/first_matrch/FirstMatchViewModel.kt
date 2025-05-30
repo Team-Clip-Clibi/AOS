@@ -3,6 +3,7 @@ package com.oneThing.first_matrch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.GetUserInfo
+import com.sungil.domain.useCase.SaveFirstMatchInput
 import com.sungil.domain.useCase.UpdateDiet
 import com.sungil.domain.useCase.UpdateJob
 import com.sungil.domain.useCase.UpdateLanguage
@@ -21,6 +22,7 @@ class FirstMatchViewModel @Inject constructor(
     private val job: UpdateJob,
     private val diet: UpdateDiet,
     private val language: UpdateLanguage,
+    private val saveMatchInput : SaveFirstMatchInput
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(FirstMatchData())
     val uiState: StateFlow<FirstMatchData> = _uiState.asStateFlow()
@@ -120,6 +122,23 @@ class FirstMatchViewModel @Inject constructor(
                 }
 
                 is UpdateLanguage.Result.Success -> {
+                    _uiState.update { current ->
+                        current.copy(success = UiSuccess.Success(result.message))
+                    }
+                }
+            }
+        }
+    }
+
+    fun saveFirstMatch(){
+        viewModelScope.launch {
+            when(val result = saveMatchInput.invoke()){
+                is SaveFirstMatchInput.Result.Fail -> {
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.message))
+                    }
+                }
+                is SaveFirstMatchInput.Result.Success -> {
                     _uiState.update { current ->
                         current.copy(success = UiSuccess.Success(result.message))
                     }
