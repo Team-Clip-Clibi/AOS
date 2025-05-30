@@ -20,7 +20,7 @@ import com.oneThing.first_matrch.NAV_LANGUAGE
 import com.oneThing.first_matrch.R
 import com.oneThing.first_matrch.component.TopAppBarWithProgress
 import com.oneThing.first_matrch.ui.diet.DietView
-import com.oneThing.first_matrch.ui.intro.IntroView
+import com.oneThing.first_matrch.ui.intro.FirstMatchIntroView
 import com.oneThing.first_matrch.ui.job.JobView
 import com.oneThing.first_matrch.ui.language.LanguageView
 
@@ -42,7 +42,7 @@ internal fun FirstMatchNav(
     }
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBarWithProgress(
-            title = stringResource(R.string.top_app_bar),
+            title = stringResource(R.string.top_app_bar_first_match),
             currentPage = pageInfo,
             totalPage = 4,
             onBackClick = {
@@ -68,7 +68,7 @@ internal fun FirstMatchNav(
                         animationSpec = tween(700)
                     )
                 }) {
-                IntroView(
+                FirstMatchIntroView(
                     goNextPage = {
                         navController.navigate(NAV_JOB)
                     }

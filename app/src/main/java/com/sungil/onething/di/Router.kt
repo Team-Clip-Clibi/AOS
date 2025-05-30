@@ -83,6 +83,13 @@ class Router(private val context: Context) : Router {
                 context.startActivity(intent)
             }
 
+            "first_match" -> {
+                val intent = Intent(context, FirstMatchActivity::class.java).apply {
+                    putExtras(args)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                context.startActivity(intent)
+            }
             "pay" -> {
                 val intent = Intent(context, BillingActivity::class.java).apply {
                     putExtras(args)
@@ -93,14 +100,6 @@ class Router(private val context: Context) : Router {
 
             "pay_finish" -> {
                 val intent = Intent(context, PayFinishActivity::class.java).apply {
-                    putExtras(args)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                context.startActivity(intent)
-            }
-
-            "first_match" -> {
-                val intent = Intent(context, FirstMatchActivity::class.java).apply {
                     putExtras(args)
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }

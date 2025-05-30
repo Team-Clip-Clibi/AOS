@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="top_app_bar">모임 신청</string>
+    <string name="top_app_bar_first_match">모임 신청</string>
     <string name="btn_next">다음</string>
     <string name="btn_finish">완료</string>
     <!--intro-->
-    <string name="txt_intro_title">모임 신청을 위해\n몇 가지 정보가 필요해요</string>
+    <string name="first_match_intro_title">모임 신청을 위해\n몇 가지 정보가 필요해요</string>
     <string name="txt_intro_sub_title">입력한 정보는 이후 자동으로 적용되며, 수정이 가능해요</string>
     <string name="txt_intro_image_content">첫 모임 신청을 환영해요!</string>
     <!--job-->

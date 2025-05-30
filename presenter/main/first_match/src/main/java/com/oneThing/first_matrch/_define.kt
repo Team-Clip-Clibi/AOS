@@ -59,7 +59,7 @@ enum class LANGUAGE {
     BOTH
 }
 
-const val NAV_INTRO = "intro"
+const val NAV_INTRO = "firstmatch_intro"
 const val NAV_JOB = "job"
 const val NAV_DIET = "diet"
 const val NAV_LANGUAGE = "language"

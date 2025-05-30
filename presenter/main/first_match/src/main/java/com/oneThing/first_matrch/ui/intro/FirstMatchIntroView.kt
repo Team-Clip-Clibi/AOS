@@ -33,7 +33,7 @@ import com.oneThing.first_matrch.R
 import kotlin.math.absoluteValue
 
 @Composable
-internal fun IntroView(
+internal fun FirstMatchIntroView(
     goNextPage: () -> Unit,
 ) {
     val pageState = rememberPagerState(pageCount = {
@@ -76,14 +76,14 @@ internal fun IntroView(
                 )
         ) {
             Text(
-                text = stringResource(R.string.txt_intro_title),
+                text = stringResource(R.string.first_match_intro_title),
                 style = AppTextStyles.HEAD_28_40_BOLD,
                 color = ColorStyle.GRAY_800,
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(R.string.txt_intro_sub_title),
+                text = "아 이거 왜이러냐 진짜",
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
                 color = ColorStyle.GRAY_600,
                 modifier = Modifier.fillMaxWidth()
