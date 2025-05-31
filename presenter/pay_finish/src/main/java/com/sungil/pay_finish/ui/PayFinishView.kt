@@ -66,7 +66,7 @@ internal fun PayFinishView(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = Color(0xFFFBFBFD))
+                        .background(color = ColorStyle.WHITE_100)
                         .padding(start = 17.dp, end = 16.dp)
                 ) {
                     ButtonXXLWhite(
