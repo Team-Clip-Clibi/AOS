@@ -34,10 +34,6 @@ class BillingActivity : AppCompatActivity() {
 
     @Inject
     lateinit var router: Router
-
-    /**
-     * TODO 버튼 텍스트 title1 으로 수정
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBlillingBinding.inflate(layoutInflater)
