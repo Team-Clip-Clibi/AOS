@@ -91,6 +91,7 @@ internal fun TmiView(
                 maxLength = 50,
                 hint = stringResource(R.string.txt_hint)
             )
+            Spacer(modifier = Modifier.height(4.dp))
              Text(
                 text = "${uiState.tmi.length}/50",
                 style = AppTextStyles.CAPTION_10_14_MEDIUM,
