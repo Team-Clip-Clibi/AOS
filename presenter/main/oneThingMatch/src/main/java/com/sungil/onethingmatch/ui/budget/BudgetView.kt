@@ -55,12 +55,12 @@ internal fun BudgetView(
                 )
             }
         },
-        containerColor = ColorStyle.GRAY_100
+        containerColor = ColorStyle.WHITE_100
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = ColorStyle.GRAY_100)
+                .background(color = ColorStyle.WHITE_100)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     start = 17.dp,
