@@ -26,7 +26,6 @@ class GetOneThingDay @Inject constructor() {
                 .map { startDate.plusDays(it.toLong()) }
                 .filter {
                     it.dayOfWeek in listOf(
-                        DayOfWeek.FRIDAY,
                         DayOfWeek.SATURDAY,
                         DayOfWeek.SUNDAY
                     )
