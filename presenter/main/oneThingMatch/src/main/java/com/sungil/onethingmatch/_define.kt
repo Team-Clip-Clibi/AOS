@@ -27,7 +27,8 @@ enum class CATEGORY(val displayName: String, val imageId: Int = -1) {
 
 enum class Location(val displayName: String) {
     HONGDAE_HAPJEONG("홍대/합정"),
-    GANGNAM("강남");
+    GANGNAM("강남"),
+    NONE("선택안함"),;
 
     override fun toString(): String = displayName
 }

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OneThingOrder(
     val topic: String,
-    val districts: List<String>,
+    val district: String,
     val preferredDates: List<PreferredDate>,
     val tmiContent: String,
     val oneThingBudgetRange: String,

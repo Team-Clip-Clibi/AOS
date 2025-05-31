@@ -59,7 +59,7 @@ internal fun LocationView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),
-                    isEnable = uiState.location.isNotEmpty()
+                    isEnable = uiState.location != Location.NONE,
                 )
             }
         },
@@ -86,7 +86,7 @@ internal fun LocationView(
             Spacer(modifier = Modifier.height(24.dp))
             ButtonCheckBoxLeftL(
                 content = Location.HONGDAE_HAPJEONG.displayName,
-                isChecked = uiState.location.contains(Location.HONGDAE_HAPJEONG),
+                isChecked = uiState.location == Location.HONGDAE_HAPJEONG,
                 onCheckChange = {
                     viewModel.location(Location.HONGDAE_HAPJEONG)
                 }
@@ -94,7 +94,7 @@ internal fun LocationView(
             Spacer(modifier = Modifier.height(10.dp))
             ButtonCheckBoxLeftL(
                 content = Location.GANGNAM.displayName,
-                isChecked = uiState.location.contains(Location.GANGNAM),
+                isChecked = uiState.location == Location.GANGNAM,
                 onCheckChange = {
                     viewModel.location(Location.GANGNAM)
                 }

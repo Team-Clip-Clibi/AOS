@@ -62,7 +62,7 @@ internal fun CategoryView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),
-                    isEnable = uiState.selectedCategories.isNotEmpty()
+                    isEnable = uiState.selectedCategories != CATEGORY.NONE
                 )
             }
         },
@@ -100,11 +100,13 @@ internal fun CategoryView(
                 contentPadding = PaddingValues(bottom = 32.dp)
             ) {
                 items(CATEGORY.entries) { category ->
-                    CategoryItemView(
-                        category = category,
-                        isSelect = category in uiState.selectedCategories,
-                        onClick = { viewModel.toggleCategory(category) }
-                    )
+                    if(category != CATEGORY.NONE) {
+                        CategoryItemView(
+                            category = category,
+                            isSelect = category == uiState.selectedCategories,
+                            onClick = { viewModel.toggleCategory(category) }
+                        )
+                    }
                 }
             }
         }

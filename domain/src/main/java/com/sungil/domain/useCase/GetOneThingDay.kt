@@ -51,7 +51,7 @@ class GetOneThingDay @Inject constructor() {
                 MATCHTIME.DINNER.name
             )
             DayOfWeek.SUNDAY -> listOf(MATCHTIME.DINNER.name)
-            else -> listOf(MATCHTIME.LUNCH.name, MATCHTIME.DINNER.name)
+            else -> listOf(MATCHTIME.DINNER.name)
         }
     }
 

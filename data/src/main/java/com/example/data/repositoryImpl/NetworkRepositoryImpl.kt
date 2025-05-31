@@ -415,7 +415,7 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun requestOneThingOrder(
         token: String,
         topic: String,
-        districts: List<String>,
+        districts: String,
         date: List<WeekData>,
         tmiContent: String,
         oneThingBudgetRange: String,
@@ -425,7 +425,7 @@ class NetworkRepositoryImpl @Inject constructor(
             bearerToken = token,
             order = OneThingOrder(
                 topic = topic,
-                districts = districts,
+                district = districts,
                 preferredDates = date.flatMap { week ->
                     week.timeSlots.map { timeSlot ->
                         PreferredDate(date = week.date, timeSlot = timeSlot)

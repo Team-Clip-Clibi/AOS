@@ -101,7 +101,7 @@ interface NetworkRepository {
     suspend fun requestOneThingOrder(
         token: String,
         topic: String,
-        districts: List<String>,
+        districts: String,
         date: List<WeekData>,
         tmiContent: String,
         oneThingBudgetRange: String,

@@ -18,7 +18,7 @@ class OneThingMatchOrder @Inject constructor(
 ) : UseCase<OneThingMatchOrder.Param, OneThingMatchOrder.Result> {
     data class Param(
         val topic: String,
-        val districts: List<String>,
+        val districts: String,
         val date: List<WeekData>,
         val tmiContent: String,
         val oneThingBudgetRange: String,

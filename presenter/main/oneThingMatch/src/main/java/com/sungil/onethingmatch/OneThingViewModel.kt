@@ -43,22 +43,7 @@ class OneThingViewModel @Inject constructor(
 
     fun location(location: Location) {
         _uiState.update { current ->
-            val currentSet = current.location
-            when {
-                location in currentSet -> current.copy(
-                    location = currentSet - location,
-                    error = UiError.None
-                )
-
-                currentSet.size < 2 -> current.copy(
-                    location = currentSet + location,
-                    error = UiError.None
-                )
-
-                else -> current.copy(
-                    error = UiError.MaxLocationSelected
-                )
-            }
+            current.copy(location = location)
         }
     }
 
@@ -149,7 +134,7 @@ class OneThingViewModel @Inject constructor(
             when (val result = order.invoke(
                 OneThingMatchOrder.Param(
                     topic = _uiState.value.topic,
-                    districts = _uiState.value.location.map { it.name },
+                    districts = _uiState.value.location.name,
                     date = _uiState.value.selectDate.toList(),
                     tmiContent = _uiState.value.tmi,
                     oneThingBudgetRange = _uiState.value.budget.name,
@@ -198,7 +183,7 @@ data class OneThingData(
     val topic: String = "",
     val tmi: String = "",
     val selectedCategories: CATEGORY = CATEGORY.NONE,
-    val location: Set<Location> = emptySet(),
+    val location: Location = Location.NONE,
     val dateData: List<WeekData> = emptyList(),
     val selectDate: Set<WeekData> = emptySet(),
     val budget: Budget = Budget.RANGE_NONE,
