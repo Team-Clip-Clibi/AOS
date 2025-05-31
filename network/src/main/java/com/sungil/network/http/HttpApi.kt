@@ -15,6 +15,7 @@ import com.sungil.network.model.OneThingNotificationDTO
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.OneThingOrderResponse
 import com.sungil.network.model.Payment
+import com.sungil.network.model.RefreshToken
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
@@ -243,7 +244,7 @@ interface HttpApi {
     @POST(BuildConfig.REFRESH_URL)
     suspend fun requestRefreshToken(
         bearerToken: String,
-    ): Response<AuthToken>
+    ): Response<RefreshToken>
 
     /**
      * 새로운 알람 조회 api

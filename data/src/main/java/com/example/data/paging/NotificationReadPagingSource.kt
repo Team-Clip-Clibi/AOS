@@ -16,9 +16,9 @@ import javax.inject.Inject
  * 이미 읽은 알람 API 추가
  */
 class NotificationReadPagingSource @Inject constructor(
-    private val api : HttpApi,
-    private val tokenManager : TokenManager
-) : PagingSource<String , Notification>() {
+    private val api: HttpApi,
+    private val tokenManager: TokenManager,
+) : PagingSource<String, Notification>() {
     override fun getRefreshKey(state: PagingState<String, Notification>): String? = null
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, Notification> {
@@ -44,8 +44,8 @@ class NotificationReadPagingSource @Inject constructor(
                         }
 
                         !tokenManager.updateToken(
-                            refreshResponse.body()!!.accessToken,
-                            refreshResponse.body()!!.refreshToken
+                            accessToken = refreshResponse.body()!!.accessToken,
+                            refreshToken = refreshToken
                         ) -> {
                             LoadResult.Error(TokenSaveException("save error"))
                         }
@@ -53,7 +53,10 @@ class NotificationReadPagingSource @Inject constructor(
                         else -> {
                             val retry = when (params.key) {
                                 null -> api.requestReadNotify(TOKEN_FORM + refreshResponse.body()!!.accessToken)
-                                else -> api.requestReadNotifyNext(TOKEN_FORM + refreshResponse.body()!!.accessToken, params.key!!)
+                                else -> api.requestReadNotifyNext(
+                                    TOKEN_FORM + refreshResponse.body()!!.accessToken,
+                                    params.key!!
+                                )
                             }
 
                             if (retry.isSuccessful) {
@@ -64,11 +67,13 @@ class NotificationReadPagingSource @Inject constructor(
                         }
                     }
                 }
+
                 204 -> LoadResult.Page(
                     data = emptyList(),
                     prevKey = null,
                     nextKey = null
                 )
+
                 else -> LoadResult.Error(HttpException(response))
             }
 
@@ -76,5 +81,4 @@ class NotificationReadPagingSource @Inject constructor(
             LoadResult.Error(e)
         }
     }
-
 }

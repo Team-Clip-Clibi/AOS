@@ -45,8 +45,8 @@ class NotificationPagingSource @Inject constructor(
                         }
 
                         !tokenManager.updateToken(
-                            refreshResponse.body()!!.accessToken,
-                            refreshResponse.body()!!.refreshToken
+                            accessToken = refreshResponse.body()!!.accessToken,
+                            refreshToken = refreshToken
                         ) -> {
                             LoadResult.Error(TokenSaveException("save error"))
                         }

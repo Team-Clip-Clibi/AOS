@@ -371,7 +371,7 @@ class NetworkRepositoryImpl @Inject constructor(
         if (result.code() != 204) {
             return Triple(result.code(), "", "")
         }
-        return Triple(result.code(), result.body()?.accessToken, result.body()?.refreshToken)
+        return Triple(result.code(), result.body()?.accessToken, refreshToken)
     }
 
     override suspend fun requestOneThineNotification(accessToken: String): OneThineNotification {
