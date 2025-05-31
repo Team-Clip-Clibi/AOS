@@ -22,6 +22,7 @@ class OneThingMatchOrder @Inject constructor(
         val date: List<WeekData>,
         val tmiContent: String,
         val oneThingBudgetRange: String,
+        val oneThingCategory : String
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
@@ -47,7 +48,8 @@ class OneThingMatchOrder @Inject constructor(
             districts = param.districts,
             date = convertedDate,
             tmiContent = param.tmiContent,
-            oneThingBudgetRange = param.oneThingBudgetRange
+            oneThingBudgetRange = param.oneThingBudgetRange,
+            oneThingCategory = param.oneThingCategory
         )
         when (requestOrder.first) {
             200 -> {
@@ -71,7 +73,8 @@ class OneThingMatchOrder @Inject constructor(
                     districts = param.districts,
                     date = convertedDate,
                     tmiContent = param.tmiContent,
-                    oneThingBudgetRange = param.oneThingBudgetRange
+                    oneThingBudgetRange = param.oneThingBudgetRange,
+                    oneThingCategory = param.oneThingCategory
                 )
                 if (reRequest.first == 200) {
                     if (reRequest.second == null || reRequest.third == null) {

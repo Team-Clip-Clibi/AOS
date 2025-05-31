@@ -419,6 +419,7 @@ class NetworkRepositoryImpl @Inject constructor(
         date: List<WeekData>,
         tmiContent: String,
         oneThingBudgetRange: String,
+        oneThingCategory: String,
     ): Triple<Int, String?, Int?> {
         val result = api.requestOneThingOrder(
             bearerToken = token,
@@ -431,7 +432,8 @@ class NetworkRepositoryImpl @Inject constructor(
                     }
                 },
                 tmiContent = tmiContent,
-                oneThingBudgetRange = oneThingBudgetRange
+                oneThingBudgetRange = oneThingBudgetRange,
+                oneThingCategory = oneThingCategory
             )
         )
         return Triple(result.code() , result.body()?.orderId , result.body()?.amount)

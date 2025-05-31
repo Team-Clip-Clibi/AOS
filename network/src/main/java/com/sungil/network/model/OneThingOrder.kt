@@ -8,7 +8,8 @@ data class OneThingOrder(
     val districts: List<String>,
     val preferredDates: List<PreferredDate>,
     val tmiContent: String,
-    val oneThingBudgetRange: String
+    val oneThingBudgetRange: String,
+    val oneThingCategory : String
 )
 
 @Serializable

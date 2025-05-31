@@ -37,22 +37,7 @@ class OneThingViewModel @Inject constructor(
 
     fun toggleCategory(category: CATEGORY) {
         _uiState.update { current ->
-            val currentSet = current.selectedCategories
-            when {
-                category in currentSet -> current.copy(
-                    selectedCategories = currentSet - category,
-                    error = UiError.None
-                )
-
-                currentSet.size < 2 -> current.copy(
-                    selectedCategories = currentSet + category,
-                    error = UiError.None
-                )
-
-                else -> current.copy(
-                    error = UiError.MaxCategorySelected
-                )
-            }
+            current.copy(selectedCategories = category)
         }
     }
 
@@ -167,7 +152,8 @@ class OneThingViewModel @Inject constructor(
                     districts = _uiState.value.location.map { it.name },
                     date = _uiState.value.selectDate.toList(),
                     tmiContent = _uiState.value.tmi,
-                    oneThingBudgetRange = _uiState.value.budget.name
+                    oneThingBudgetRange = _uiState.value.budget.name,
+                    oneThingCategory = _uiState.value.selectedCategories.name,
                 )
             )) {
                 is OneThingMatchOrder.Result.Fail -> {
@@ -211,7 +197,7 @@ class OneThingViewModel @Inject constructor(
 data class OneThingData(
     val topic: String = "",
     val tmi: String = "",
-    val selectedCategories: Set<CATEGORY> = emptySet(),
+    val selectedCategories: CATEGORY = CATEGORY.NONE,
     val location: Set<Location> = emptySet(),
     val dateData: List<WeekData> = emptyList(),
     val selectDate: Set<WeekData> = emptySet(),

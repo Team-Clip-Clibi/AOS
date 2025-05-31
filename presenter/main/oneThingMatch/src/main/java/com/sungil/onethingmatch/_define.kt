@@ -12,14 +12,15 @@ const val NAV_BUDGET = "budget"
 const val NAV_TMI = "tmi"
 const val NAV_BEFORE_PAY = "beforePay"
 
-enum class CATEGORY(val displayName: String, val imageId: Int) {
+enum class CATEGORY(val displayName: String, val imageId: Int = -1) {
     HEALTH("건강", R.drawable.ic_health),
     MONEY("돈", R.drawable.ic_money),
     LIFE("인생", R.drawable.ic_life),
     RELATIONSHIP("연애", R.drawable.ic_love),
     SELF_IMPROVEMENT("자기계발", R.drawable.ic_growth),
     WORK("직장", R.drawable.ic_job),
-    HOBBY("취미", R.drawable.ic_hobby);
+    HOBBY("취미", R.drawable.ic_hobby),
+    NONE("선택안함");
 
     override fun toString(): String = displayName
 }

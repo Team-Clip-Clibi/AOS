@@ -105,6 +105,7 @@ interface NetworkRepository {
         date: List<WeekData>,
         tmiContent: String,
         oneThingBudgetRange: String,
+        oneThingCategory: String,
     ): Triple<Int, String?, Int?>
 
     suspend fun requestPayConfirm(
