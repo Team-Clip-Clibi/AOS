@@ -26,7 +26,6 @@ import com.example.core.ColorStyle
 import com.sungil.onethingmatch.Location
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
-import com.sungil.onethingmatch.UiError
 
 @Composable
 internal fun LocationView(
@@ -34,10 +33,6 @@ internal fun LocationView(
     viewModel: OneThingViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val subTextColor = when (uiState.error) {
-        UiError.MaxLocationSelected -> ColorStyle.RED_100
-        else -> ColorStyle.GRAY_600
-    }
     Scaffold(
         bottomBar = {
             Column(

@@ -15,8 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -54,7 +52,7 @@ internal fun TmiView(
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
                     onClick = goNextPage,
-                    buttonText = stringResource(R.string.btn_finish),
+                    buttonText = stringResource(R.string.btn_next),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),

@@ -57,7 +57,7 @@ internal fun OneThingDayView(
                 Spacer(modifier = Modifier.height(8.dp))
                 ButtonXXLPurple400(
                     onClick = goNextPage,
-                    buttonText = stringResource(R.string.btn_next),
+                    buttonText = stringResource(R.string.btn_finish),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),
