@@ -22,6 +22,7 @@ import com.example.core.ColorStyle
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.UiError
+import com.sungil.onethingmatch.component.NotifyMeeting
 import com.sungil.onethingmatch.component.OneThingDayList
 import com.sungil.onethingmatch.component.SelectDateList
 
@@ -47,6 +48,8 @@ internal fun OneThingDayView(
                     .navigationBarsPadding()
                     .padding(bottom = 8.dp)
             ) {
+                NotifyMeeting()
+                Spacer(modifier = Modifier.height(12.dp))
                 HorizontalDivider(
                     thickness = 1.dp,
                     color = ColorStyle.GRAY_200
@@ -68,7 +71,7 @@ internal fun OneThingDayView(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    top = paddingValues.calculateTopPadding() + 32.dp,
+                    top = paddingValues.calculateTopPadding(),
                     start = 17.dp,
                     bottom = paddingValues.calculateBottomPadding()
                 )

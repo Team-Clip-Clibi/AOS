@@ -8,6 +8,8 @@
     <string name="btn_okay">확인</string>
     <string name="top_app_bar">원띵 모임 신청</string>
     <string name="btn_pay">결제하고 참여하기</string>
+<!-- intro    -->
+    <string name="txt_one_thing_intro_content">관심있는 하나의 주제로,\n집중적으로 대화해요</string>
     <!--InputSubject-->
     <string name="txt_subject_title">모임에서 이야기하고 싶은\n주제를 알려주세요</string>
     <string name="txt_hint">최소 8자, 최대 50자까지 입력할 수 있어요</string>
@@ -23,10 +25,12 @@
     <string name="txt_date_sub_title_error">*최대 3개까지 선택할 수 있어요</string>
     <string name="txt_date_select">선택한 날짜</string>
     <string name="txt_date_launch">런치 12~2시</string>
-    <string name="txt_date_dinner">디너 6~8시</string>
+    <string name="txt_date_dinner">오후 7시</string>
+    <string name="txt_notify_meeting_title">모임 신청 시 안내사항</string>
+    <string name="txt_notify_meeting_content">선택하신 모임 날짜를 기준으로 4일 전 자정(23:59) 전까지 완료된 경우에만 신청이 접수됩니다. 신청 마감일 이후 결제 시, 결제 단계에서 신청이 거부될 수 있습니다.</string>
     <!--Budget View-->
-    <string name="txt_budget_title">식사에 사용하고 싶은 대략적인\n금액대를 선택해 주세요</string>
-    <string name="txt_budget_sub_title">선택하신 금액대는 식당 선정에 참고할 예정이에요</string>
+    <string name="txt_budget_title">식사에 사용하고 싶은 금액을\n선택해주세요</string>
+    <string name="txt_budget_sub_title">선택하신 금액은 식당 선정 시에 참고할게요</string>
     <!--TmiView-->
     <string name="txt_tmi_title">모임에서 나눌 나의 TMI를\n입력해주세요</string>
     <!--BeforePayView-->

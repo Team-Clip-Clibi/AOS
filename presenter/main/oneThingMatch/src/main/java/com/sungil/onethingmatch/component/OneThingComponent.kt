@@ -180,8 +180,7 @@ fun OneThingDayList(
 
     LazyRow(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(flattened) { current ->
@@ -355,5 +354,45 @@ fun EventView(
                 color = ColorStyle.GRAY_800
             )
         }
+    }
+}
+
+@Composable
+fun NotifyMeeting() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp)
+            .background(color = ColorStyle.GRAY_100, shape = RoundedCornerShape(size = 4.dp))
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(top = 12.dp ,start =12.dp,end = 12.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_notify),
+                contentDescription = "notify",
+                modifier = Modifier
+                    .width(18.dp)
+                    .height(18.dp),
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = stringResource(R.string.txt_notify_meeting_title),
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = ColorStyle.PURPLE_400,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.txt_notify_meeting_content),
+            style = AppTextStyles.CAPTION_10_14_MEDIUM,
+            color = ColorStyle.GRAY_600,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 28.dp, end = 12.dp)
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+
     }
 }
