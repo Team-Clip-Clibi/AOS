@@ -113,7 +113,7 @@ internal fun FirstMatchIntroView(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(color = Color(0xFFF7F7F7))
+                            .background(color = ColorStyle.PURPLE_100)
                     )
                 }
             }
