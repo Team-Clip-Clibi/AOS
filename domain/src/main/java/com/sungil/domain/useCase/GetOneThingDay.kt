@@ -16,7 +16,7 @@ class GetOneThingDay @Inject constructor() {
         data class Fail(val errorMessage: String) : Result
     }
 
-    suspend fun invoke(): Result {
+    fun invoke(): Result {
         return try {
             val today = LocalDate.now()
             val startDate = today.plusDays(4)
