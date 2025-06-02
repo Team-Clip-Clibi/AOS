@@ -84,14 +84,13 @@ class OneThingViewModel @Inject constructor(
         }
     }
 
-    private fun date() {
+    fun date() {
         viewModelScope.launch {
             when (val result = oneThingDate.invoke()) {
                 is GetOneThingDay.Result.Success -> {
                     _uiState.update { data ->
                         data.copy(
                             dateData = result.data,
-                            enterTime = result.enterTime,
                             error = UiError.None
                         )
                     }
@@ -140,7 +139,6 @@ class OneThingViewModel @Inject constructor(
                     tmiContent = _uiState.value.tmi,
                     oneThingBudgetRange = _uiState.value.budget.name,
                     oneThingCategory = _uiState.value.selectedCategories.name,
-                    enterDay = _uiState.value.enterTime
                 )
             )) {
                 is OneThingMatchOrder.Result.Fail -> {
@@ -193,7 +191,6 @@ data class OneThingData(
     val orderNumber: String = "",
     val userId: String = "",
     val amount: Int = -1,
-    val enterTime : String = "",
     val error: UiError = UiError.None,
 )
 

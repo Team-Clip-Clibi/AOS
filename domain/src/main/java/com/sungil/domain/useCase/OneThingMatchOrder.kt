@@ -7,6 +7,9 @@ import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
@@ -14,7 +17,7 @@ import javax.inject.Inject
 class OneThingMatchOrder @Inject constructor(
     private val database: DatabaseRepository,
     private val network: NetworkRepository,
-    private val tokenManger : TokenMangerController
+    private val tokenManger: TokenMangerController,
 ) : UseCase<OneThingMatchOrder.Param, OneThingMatchOrder.Result> {
     data class Param(
         val topic: String,
@@ -22,8 +25,7 @@ class OneThingMatchOrder @Inject constructor(
         val date: List<WeekData>,
         val tmiContent: String,
         val oneThingBudgetRange: String,
-        val oneThingCategory : String,
-        val enterDay : String
+        val oneThingCategory: String,
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
@@ -37,11 +39,14 @@ class OneThingMatchOrder @Inject constructor(
             return Result.Fail("user id is null")
         }
         val token = database.getToken()
-        if (token.first.trim() == "" || token.second.trim() == "") {
-            return Result.Fail("token is null")
+        param.date.forEach { date ->
+            val checkOrderTime = calculateDaysRemainingFromDate(date)
+            if (checkOrderTime == null || checkOrderTime < 4) {
+                return Result.Fail("order time is not valid")
+            }
         }
-        val convertedDate = param.date.map {
-            it.copy(date = convertToFullDate(it.date))
+        val convertedDate = param.date.map { date ->
+            date.copy(date = convertToFullDate(date.date))
         }
         val requestOrder = network.requestOneThingOrder(
             token = TOKEN_FORM + token.first,
@@ -91,6 +96,23 @@ class OneThingMatchOrder @Inject constructor(
             }
 
             else -> return Result.Fail("network error")
+        }
+    }
+
+    /**
+     * 현재 날짜를 기준으로 몇일이 남앗는지 계산
+     */
+    private fun calculateDaysRemainingFromDate(weekData: WeekData): Long? {
+        val today = LocalDate.now()
+        val year = today.year
+        val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
+
+        return try {
+            val fullDateStr = "$year.${weekData.date}"
+            val targetDate = LocalDate.parse(fullDateStr, formatter)
+            ChronoUnit.DAYS.between(today, targetDate)
+        } catch (e: Exception) {
+            null
         }
     }
 

@@ -8,7 +8,7 @@
     <string name="btn_okay">확인</string>
     <string name="top_app_bar">원띵 모임 신청</string>
     <string name="btn_pay">결제하고 참여하기</string>
-<!-- intro    -->
+    <!-- intro-->
     <string name="txt_one_thing_intro_content">관심있는 하나의 주제로,\n집중적으로 대화해요</string>
     <!--InputSubject-->
     <string name="txt_subject_title">모임에서 이야기하고 싶은\n주제를 알려주세요</string>
@@ -39,5 +39,12 @@
     <!--ErrorDialog-->
     <string name="txt_toss_dialog_title">원띵은 토스페이 결제만 가능해요</string>
     <string name="txt_toss_dialog_sub_title">토스 앱이 설치되어 있지 않다면, 설치 후 결제를\n진행해주세요.</string>
-
+    <!--msg-->
+    <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
+    <string name="msg_select_one">선택 해 주세요</string>
+    <string name="msg_network_error">네트워크 에러</string>
+    <string name="msg_re_login">Error Token is Expire</string>
+    <string name="txt_order_time_late_title">선택한 모임의 신청기간이 지났어요</string>
+    <string name="txt_order_time_late_sub_title">모임 4일 전까지만 신청할 수 있어요. 다른 날짜로 다시 선택하시겠어요?</string>
+    <string name="btn_order_time_late_yes">날짜 변경하기</string>
 </resources>

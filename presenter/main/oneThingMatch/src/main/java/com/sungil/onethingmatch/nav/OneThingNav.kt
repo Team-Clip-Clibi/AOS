@@ -38,6 +38,7 @@ fun OneThingNav(
     home: () -> Unit,
     pay: (String, String, Int, String) -> Unit,
     startDestination: String = NAV_INTRO,
+    goLoginPage : () -> Unit
 ) {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -244,7 +245,11 @@ fun OneThingNav(
                 }) {
                 BeforePayView(
                     viewModel = viewModel,
-                    goNextPage = pay
+                    goNextPage = pay,
+                    goDayPage = {
+                       navController.popBackStack()
+                    },
+                    goLoginPage = goLoginPage
                 )
             }
         }
