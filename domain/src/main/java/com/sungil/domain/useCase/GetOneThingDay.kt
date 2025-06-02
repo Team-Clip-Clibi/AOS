@@ -18,40 +18,32 @@ class GetOneThingDay @Inject constructor() {
 
     suspend fun invoke(): Result {
         return try {
-            val startDate = LocalDate.now().plusDays(14)
+            val today = LocalDate.now()
+            val startDate = today.plusDays(4)
+            val endDate = today.plusDays(20)
+
             val dateFormatter = DateTimeFormatter.ofPattern("MM.dd", Locale.KOREAN)
             val dayOfWeekFormatter = DateTimeFormatter.ofPattern("E", Locale.KOREAN)
 
-            val weekendList = (0..13)
-                .map { startDate.plusDays(it.toLong()) }
-                .filter {
-                    it.dayOfWeek in listOf(
-                        DayOfWeek.SATURDAY,
-                        DayOfWeek.SUNDAY
+            val weekendList = mutableListOf<WeekData>()
+
+            var currentDate = startDate
+            while (!currentDate.isAfter(endDate)) {
+                if (currentDate.dayOfWeek == DayOfWeek.SATURDAY || currentDate.dayOfWeek == DayOfWeek.SUNDAY) {
+                    weekendList.add(
+                        WeekData(
+                            date = currentDate.format(dateFormatter),
+                            dayOfWeek = currentDate.format(dayOfWeekFormatter),
+                            timeSlots = listOf(MATCHTIME.DINNER.name)
+                        )
                     )
                 }
-                .map { date ->
-                    WeekData(
-                        date = date.format(dateFormatter),
-                        dayOfWeek = date.format(dayOfWeekFormatter),
-                        timeSlots = getTimeSlotsFor(date.dayOfWeek)
-                    )
-                }
+                currentDate = currentDate.plusDays(1)
+            }
+
             Result.Success(weekendList)
         } catch (e: Exception) {
             Result.Fail(errorMessage = e.message ?: "Unknown error")
         }
     }
-
-
-    private fun getTimeSlotsFor(dayOfWeek: DayOfWeek): List<String> {
-        return when (dayOfWeek) {
-            DayOfWeek.SATURDAY -> listOf(
-                MATCHTIME.DINNER.name
-            )
-            DayOfWeek.SUNDAY -> listOf(MATCHTIME.DINNER.name)
-            else -> listOf(MATCHTIME.DINNER.name)
-        }
-    }
-
 }
