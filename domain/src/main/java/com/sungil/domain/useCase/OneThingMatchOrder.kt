@@ -22,7 +22,8 @@ class OneThingMatchOrder @Inject constructor(
         val date: List<WeekData>,
         val tmiContent: String,
         val oneThingBudgetRange: String,
-        val oneThingCategory : String
+        val oneThingCategory : String,
+        val enterDay : String
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {

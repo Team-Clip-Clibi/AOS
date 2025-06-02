@@ -140,6 +140,7 @@ class OneThingViewModel @Inject constructor(
                     tmiContent = _uiState.value.tmi,
                     oneThingBudgetRange = _uiState.value.budget.name,
                     oneThingCategory = _uiState.value.selectedCategories.name,
+                    enterDay = _uiState.value.enterTime
                 )
             )) {
                 is OneThingMatchOrder.Result.Fail -> {
@@ -197,7 +198,6 @@ data class OneThingData(
 )
 
 sealed class UiError {
-    data object MaxLocationSelected : UiError()
     data object MaxCategorySelected : UiError()
     data object MaxDateSelected : UiError()
     data object NullDataSelect : UiError()
