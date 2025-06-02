@@ -30,6 +30,9 @@ class OneThinMatchActivity : ComponentActivity() {
                         putString(BuildConfig.KEY_MATCH, matchInfo)
                     }
                     router.navigation(NAV_PAY, bundle)
+                },
+                goLoginPage = {
+                    router.navigation(NAV_LOGIN)
                 }
             )
         }

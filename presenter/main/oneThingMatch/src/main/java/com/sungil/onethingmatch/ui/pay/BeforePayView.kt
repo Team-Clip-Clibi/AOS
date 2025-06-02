@@ -3,28 +3,41 @@ package com.sungil.onethingmatch.ui.pay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.example.core.CustomDialogOneButton
+import com.example.core.CustomSnackBar
 import com.sungil.onethingmatch.BuildConfig
+import com.sungil.onethingmatch.ERROR_NETWORK_ERROR
+import com.sungil.onethingmatch.ERROR_ORDER_TIME_LATE
+import com.sungil.onethingmatch.ERROR_RE_LOGIN
+import com.sungil.onethingmatch.ERROR_USER_ID_NULL
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.UiError
@@ -33,15 +46,49 @@ import com.sungil.onethingmatch.component.EventView
 @Composable
 internal fun BeforePayView(
     viewModel: OneThingViewModel,
-    goNextPage: (String , String , Int , String) -> Unit,
+    goNextPage: (String, String, Int, String) -> Unit,
+    goDayPage : () -> Unit,
+    goLoginPage : () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    /**
-     * 에러 처리 해라 죽기 싫으면 김성일
-     * amunt도 넘겨 -> 완료
-     */
-
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
     LaunchedEffect(uiState) {
+        when (val error = uiState.error) {
+            is UiError.TossNotInstall -> {
+                viewModel.initError()
+            }
+
+            is UiError.FailOrder -> {
+                when (error.message) {
+                    ERROR_NETWORK_ERROR -> {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                        viewModel.initError()
+                    }
+
+                    ERROR_RE_LOGIN -> {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        goLoginPage()
+                    }
+
+                    ERROR_USER_ID_NULL -> {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_save_error),
+                            duration = SnackbarDuration.Short
+                        )
+                        goLoginPage()
+                    }
+                }
+            }
+            else -> Unit
+        }
+
         if (uiState.tosInstall.isNotEmpty()) {
             viewModel.initInstallResult()
             viewModel.order()
@@ -82,6 +129,23 @@ internal fun BeforePayView(
                     isEnable = true
                 )
             }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    CustomSnackBar(data)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 17.dp,
+                        end = 16.dp,
+                        bottom = WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateBottomPadding() + 32.dp
+                    )
+            )
         },
         contentColor = ColorStyle.GRAY_100
     ) { paddingValues ->
@@ -126,6 +190,23 @@ internal fun BeforePayView(
                     titleText = stringResource(R.string.txt_toss_dialog_title),
                     contentText = stringResource(R.string.txt_toss_dialog_sub_title),
                     buttonText = stringResource(R.string.btn_okay)
+                )
+            }
+            if(uiState.error is UiError.FailOrder && (uiState.error as UiError.FailOrder).message == ERROR_ORDER_TIME_LATE) {
+                CustomDialogOneButton(
+                    onDismiss = {
+                        viewModel.initError()
+                        viewModel.date()
+                        goDayPage()
+                    },
+                    buttonClick = {
+                        viewModel.initError()
+                        viewModel.date()
+                        goDayPage()
+                    },
+                    titleText = stringResource(R.string.txt_order_time_late_title),
+                    contentText = stringResource(R.string.txt_order_time_late_sub_title),
+                    buttonText = stringResource(R.string.btn_order_time_late_yes)
                 )
             }
         }

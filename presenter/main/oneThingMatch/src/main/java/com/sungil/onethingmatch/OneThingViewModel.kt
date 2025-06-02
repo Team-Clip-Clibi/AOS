@@ -84,7 +84,7 @@ class OneThingViewModel @Inject constructor(
         }
     }
 
-    private fun date() {
+    fun date() {
         viewModelScope.launch {
             when (val result = oneThingDate.invoke()) {
                 is GetOneThingDay.Result.Success -> {
@@ -195,7 +195,6 @@ data class OneThingData(
 )
 
 sealed class UiError {
-    data object MaxLocationSelected : UiError()
     data object MaxCategorySelected : UiError()
     data object MaxDateSelected : UiError()
     data object NullDataSelect : UiError()

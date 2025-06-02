@@ -41,3 +41,9 @@ enum class Budget(val displayName: String) {
 
     override fun toString(): String = displayName
 }
+
+const val ERROR_NETWORK_ERROR ="network Error"
+const val ERROR_RE_LOGIN ="reLogin"
+const val ERROR_ORDER_TIME_LATE = "order time is not valid"
+const val ERROR_USER_ID_NULL = "user id is null"
+const val NAV_LOGIN = "Login"
