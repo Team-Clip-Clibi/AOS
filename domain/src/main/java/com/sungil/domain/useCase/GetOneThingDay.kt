@@ -12,7 +12,7 @@ import javax.inject.Inject
 class GetOneThingDay @Inject constructor() {
 
     sealed interface Result : UseCase.Result {
-        data class Success(val data: List<WeekData>) : Result
+        data class Success(val data: List<WeekData>, val enterTime: String) : Result
         data class Fail(val errorMessage: String) : Result
     }
 
@@ -24,7 +24,7 @@ class GetOneThingDay @Inject constructor() {
 
             val dateFormatter = DateTimeFormatter.ofPattern("MM.dd", Locale.KOREAN)
             val dayOfWeekFormatter = DateTimeFormatter.ofPattern("E", Locale.KOREAN)
-
+            val enterTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.KOREAN)
             val weekendList = mutableListOf<WeekData>()
 
             var currentDate = startDate
@@ -40,8 +40,8 @@ class GetOneThingDay @Inject constructor() {
                 }
                 currentDate = currentDate.plusDays(1)
             }
-
-            Result.Success(weekendList)
+            val enterTime = today.format(enterTimeFormatter)
+            Result.Success(weekendList, enterTime)
         } catch (e: Exception) {
             Result.Fail(errorMessage = e.message ?: "Unknown error")
         }

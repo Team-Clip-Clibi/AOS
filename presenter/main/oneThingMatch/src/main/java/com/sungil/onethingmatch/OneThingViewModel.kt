@@ -91,6 +91,7 @@ class OneThingViewModel @Inject constructor(
                     _uiState.update { data ->
                         data.copy(
                             dateData = result.data,
+                            enterTime = result.enterTime,
                             error = UiError.None
                         )
                     }
@@ -191,6 +192,7 @@ data class OneThingData(
     val orderNumber: String = "",
     val userId: String = "",
     val amount: Int = -1,
+    val enterTime : String = "",
     val error: UiError = UiError.None,
 )
 
