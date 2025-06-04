@@ -11,6 +11,7 @@ import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
+import com.sungil.domain.model.RandomInfo
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import kotlinx.coroutines.flow.Flow
@@ -118,4 +119,11 @@ interface NetworkRepository {
     suspend fun requestRandomMatchDuplicate(
         token: String,
     ): Triple<Int, String?, Boolean?>
+
+    suspend fun requestRandomMatch(
+        token: String,
+        topic: String,
+        tmiContent: String,
+        district: String,
+    ): RandomInfo
 }
