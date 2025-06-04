@@ -49,7 +49,7 @@ interface NetworkRepository {
         osVersion: String,
         firebaseToken: String,
         isAllowNotify: Boolean,
-    ): Triple<Int,String?, String?>
+    ): Triple<Int, String?, String?>
 
     suspend fun requestUserData(accessToken: String): UserInfo?
 
@@ -109,9 +109,13 @@ interface NetworkRepository {
     ): Triple<Int, String?, Int?>
 
     suspend fun requestPayConfirm(
-        token : String,
+        token: String,
         paymentKey: String,
         orderId: String,
         orderType: String,
     ): Int
+
+    suspend fun requestRandomMatchDuplicate(
+        token: String,
+    ): Triple<Int, String?, Boolean?>
 }

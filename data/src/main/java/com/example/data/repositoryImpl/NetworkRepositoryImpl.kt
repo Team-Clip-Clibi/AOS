@@ -55,7 +55,7 @@ class NetworkRepositoryImpl @Inject constructor(
     private val firebase: FirebaseSMSRepo,
     private val api: HttpApi,
     private val fcmRepo: FirebaseFCM,
-    private val tokenManger : TokenManager
+    private val tokenManger: TokenManager,
 ) :
     NetworkRepository {
     override suspend fun requestSMS(phoneNumber: String, activity: Activity): Boolean {
@@ -436,7 +436,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 oneThingCategory = oneThingCategory
             )
         )
-        return Triple(result.code() , result.body()?.orderId , result.body()?.amount)
+        return Triple(result.code(), result.body()?.orderId, result.body()?.amount)
     }
 
     override suspend fun requestPayConfirm(
@@ -453,6 +453,18 @@ class NetworkRepositoryImpl @Inject constructor(
                 orderType = orderType
             )
         ).code()
+    }
+
+    override suspend fun requestRandomMatchDuplicate(token: String): Triple<Int, String?, Boolean?> {
+        return api.requestCheckRandomDuplicate(
+            token
+        ).let { response ->
+            Triple(
+                response.code(),
+                response.body()?.meetingTime,
+                response.body()?.isDuplicated
+            )
+        }
     }
 
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {

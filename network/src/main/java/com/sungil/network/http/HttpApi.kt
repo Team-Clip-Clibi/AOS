@@ -15,6 +15,7 @@ import com.sungil.network.model.OneThingNotificationDTO
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.OneThingOrderResponse
 import com.sungil.network.model.Payment
+import com.sungil.network.model.RandomDuplicate
 import com.sungil.network.model.RefreshToken
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
@@ -298,4 +299,12 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Body payment: Payment,
     ): Response<Unit>
+
+    /**
+     * 랜덤 매칭 신청 중복 검사
+     */
+    @GET(BuildConfig.RANDOM_DUPLICATE_URL)
+    suspend fun requestCheckRandomDuplicate(
+        @Header("Authorization") bearerToken: String,
+    ): Response<RandomDuplicate>
 }
