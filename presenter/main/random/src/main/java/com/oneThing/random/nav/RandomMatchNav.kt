@@ -25,15 +25,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.core.CustomSnackBar
+import com.example.core.TopAppBarWithCloseButton
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
 import com.oneThing.random.UiError
 import com.oneThing.random.UiSuccess
 import com.oneThing.random.component.BottomBar
+import com.oneThing.random.component.DuplicateBottomBar
 import com.oneThing.random.component.ERROR_NETWORK_ERROR
 import com.oneThing.random.component.ERROR_RE_LOGIN
+import com.oneThing.random.component.NAV_RANDOM_MATCH_DUPLICATE
 import com.oneThing.random.component.NAV_RANDOM_MATCH_INTRO
+import com.oneThing.random.component.NEXT_DATE_EMPTY
 import com.oneThing.random.component.TopAppBarWithProgress
+import com.oneThing.random.ui.DuplicateMatch
 import com.oneThing.random.ui.RandomMatchIntro
 
 @Composable
@@ -41,6 +46,7 @@ internal fun RandomMatchNav(
     onBack: () -> Unit,
     loginPage: () -> Unit,
     viewModel: RandomMatchViewModel,
+    goMeeting: () -> Unit,
 ) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -64,52 +70,90 @@ internal fun RandomMatchNav(
                     }
 
                     else -> {
-
+                        throw IllegalArgumentException("Unhandled error message: ${error.message}")
                     }
                 }
             }
+
             else -> Unit
         }
     }
     LaunchedEffect(uiState.success) {
         when (val success = uiState.success) {
-            is UiSuccess.Success -> {
-                navController.navigate(NAV_RANDOM_MATCH_INTRO)
+            is UiSuccess.DuplicateSuccess -> {
+                when (success.nextDate) {
+                    NEXT_DATE_EMPTY -> {
+
+                    }
+
+                    else -> {
+                        navController.navigate(NAV_RANDOM_MATCH_DUPLICATE) {
+                            popUpTo(NAV_RANDOM_MATCH_DUPLICATE) { inclusive = true }
+                        }
+                    }
+                }
             }
 
-            else -> {}
+            else -> Unit
         }
     }
     val pageInfo = when (currentRoute) {
         NAV_RANDOM_MATCH_INTRO -> -1
+        NAV_RANDOM_MATCH_DUPLICATE -> -1
         else -> -1
     }
     Scaffold(
         topBar = {
-            TopAppBarWithProgress(
-                title = stringResource(R.string.top_app_bar_random_match),
-                currentPage = pageInfo,
-                totalPage = 4,
-                onBackClick = {
-                    if (!navController.popBackStack()) onBack()
+            when (currentRoute) {
+                NAV_RANDOM_MATCH_DUPLICATE -> {
+                    TopAppBarWithCloseButton(
+                        title = stringResource(R.string.top_app_bar_random_match),
+                        onBackClick = {
+                            if (!navController.popBackStack()) onBack()
+                        },
+                        isNavigationShow = false,
+                        isActionShow = true
+                    )
                 }
-            )
+
+                else -> {
+                    TopAppBarWithProgress(
+                        title = stringResource(R.string.top_app_bar_random_match),
+                        currentPage = pageInfo,
+                        totalPage = 4,
+                        onBackClick = {
+                            if (!navController.popBackStack()) onBack()
+                        }
+                    )
+                }
+            }
         },
         bottomBar = {
-            BottomBar(
-                isEnable = true,
-                buttonText = when (currentRoute) {
-                    NAV_RANDOM_MATCH_INTRO -> stringResource(R.string.random_btn_next)
-                    else -> ""
-                },
-                onClick = {
-                    when (currentRoute) {
-                        NAV_RANDOM_MATCH_INTRO -> {
-                            viewModel.duplicateCheck()
-                        }
-                    }
+            when (currentRoute) {
+                NAV_RANDOM_MATCH_DUPLICATE -> {
+                    DuplicateBottomBar(
+                        goMeeting = goMeeting,
+                        goHome = onBack
+                    )
                 }
-            )
+
+                else -> {
+                    BottomBar(
+                        isEnable = true,
+                        buttonText = when (currentRoute) {
+                            NAV_RANDOM_MATCH_INTRO -> stringResource(R.string.random_btn_next)
+                            else -> ""
+                        },
+                        onClick = {
+                            when (currentRoute) {
+                                NAV_RANDOM_MATCH_INTRO -> {
+                                    viewModel.duplicateCheck()
+                                }
+                            }
+                        }
+                    )
+                }
+            }
         },
         snackbarHost = {
             SnackbarHost(
@@ -151,6 +195,25 @@ internal fun RandomMatchNav(
                     )
                 }) {
                 RandomMatchIntro()
+            }
+
+            composable(
+                NAV_RANDOM_MATCH_DUPLICATE,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                DuplicateMatch(
+                    viewModel = viewModel
+                )
             }
         }
     }

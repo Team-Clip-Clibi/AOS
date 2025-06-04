@@ -22,13 +22,18 @@ class RandomMatchViewModel @Inject constructor(private val checkDuplicate: Check
             when (val result = checkDuplicate.invoke()) {
                 is CheckRandomMatchDuplicate.Result.Fail -> {
                     _uiState.update { current ->
-                        current.copy(error = UiError.Error(result.meetTime))
+                        current.copy(error = UiError.Error(result.errorMessage))
                     }
                 }
 
                 is CheckRandomMatchDuplicate.Result.Success -> {
                     _uiState.update { current ->
-                        current.copy(success = UiSuccess.Success(result.message))
+                        current.copy(
+                            success = UiSuccess.DuplicateSuccess(
+                                result.meetTime,
+                                result.nextMeetTime
+                            )
+                        )
                     }
                 }
             }
@@ -43,7 +48,7 @@ class RandomMatchViewModel @Inject constructor(private val checkDuplicate: Check
 
 sealed interface UiSuccess {
     data object None : UiSuccess
-    data class Success(val message: String) : UiSuccess
+    data class DuplicateSuccess(val date: String, val nextDate: String) : UiSuccess
 }
 
 sealed class UiError {
