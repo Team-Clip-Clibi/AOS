@@ -12,6 +12,8 @@
     <string name="random_duplicate_subtitle">다음 랜덤 모임은 %1$s부터 신청할 수 있어요</string>
     <string name="random_duplicate_button_meet">모임 내역 보기</string>
     <string name="random_duplicate_button_home">홈으로 돌아가기</string>
+    <!--Location-->
+    <string name="random_location_title">만나고 싶은 지역을 선택해주세요</string>
     <!--msg-->
     <string name="msg_network_error">네트워크 에러</string>
     <string name="msg_re_login">Error Token is Expire</string>

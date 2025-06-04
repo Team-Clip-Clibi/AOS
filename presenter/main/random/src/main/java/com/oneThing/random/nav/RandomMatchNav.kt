@@ -34,11 +34,14 @@ import com.oneThing.random.component.BottomBar
 import com.oneThing.random.component.DuplicateBottomBar
 import com.oneThing.random.component.ERROR_NETWORK_ERROR
 import com.oneThing.random.component.ERROR_RE_LOGIN
+import com.oneThing.random.component.Location
+import com.oneThing.random.component.NAV_RANDOM_LOCATION
 import com.oneThing.random.component.NAV_RANDOM_MATCH_DUPLICATE
 import com.oneThing.random.component.NAV_RANDOM_MATCH_INTRO
 import com.oneThing.random.component.NEXT_DATE_EMPTY
 import com.oneThing.random.component.TopAppBarWithProgress
 import com.oneThing.random.ui.DuplicateMatch
+import com.oneThing.random.ui.RandomLocation
 import com.oneThing.random.ui.RandomMatchIntro
 
 @Composable
@@ -100,6 +103,7 @@ internal fun RandomMatchNav(
     val pageInfo = when (currentRoute) {
         NAV_RANDOM_MATCH_INTRO -> -1
         NAV_RANDOM_MATCH_DUPLICATE -> -1
+        NAV_RANDOM_LOCATION -> 1
         else -> -1
     }
     Scaffold(
@@ -139,7 +143,11 @@ internal fun RandomMatchNav(
 
                 else -> {
                     BottomBar(
-                        isEnable = true,
+                        isEnable = when(currentRoute){
+                            NAV_RANDOM_MATCH_INTRO -> true
+                            NAV_RANDOM_LOCATION -> uiState.location != Location.NONE
+                            else -> false
+                        },
                         buttonText = when (currentRoute) {
                             NAV_RANDOM_MATCH_INTRO -> stringResource(R.string.random_btn_next)
                             else -> ""
@@ -213,6 +221,25 @@ internal fun RandomMatchNav(
                 }) {
                 DuplicateMatch(
                     viewModel = viewModel
+                )
+            }
+
+            composable(
+                NAV_RANDOM_LOCATION,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                RandomLocation(
+                    viewModel = viewModel,
                 )
             }
         }
