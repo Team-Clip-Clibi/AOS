@@ -28,7 +28,6 @@ import androidx.compose.ui.util.lerp
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.oneThing.random.R
-import com.oneThing.random.RandomMatchViewModel
 import kotlin.math.absoluteValue
 
 @Composable
