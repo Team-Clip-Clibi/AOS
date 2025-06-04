@@ -23,12 +23,12 @@ import com.oneThing.random.RandomMatchViewModel
 import com.oneThing.random.component.SlidingTextBox
 
 @Composable
-internal fun RandomTmi(viewModel: RandomMatchViewModel) {
+internal fun RandomTopic(viewModel: RandomMatchViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     val tmiData = listOf(
-        "ex. 저는 시드니에 사는 것이 꿈이에요",
-        "ex. 저는 매년 생일마다 증명사진을 찍어서 모아요",
-        "ex. 저는 피자를 좋아 해요."
+        "ex. 유럽 여행기 대화 나눠요",
+        "ex. 다들 면접 준비 어떻게 하고 있는지 궁금해요",
+        "ex. 상해 여행기 대화 나눠요"
     )
     Column(
         modifier = Modifier
@@ -37,7 +37,7 @@ internal fun RandomTmi(viewModel: RandomMatchViewModel) {
             .padding(top = 32.dp, start = 17.dp, end = 16.dp)
     ) {
         Text(
-            text = stringResource(R.string.random_tmi_title),
+            text = stringResource(R.string.random_topic_title),
             style = AppTextStyles.HEAD_28_40_BOLD,
             color = ColorStyle.GRAY_800
         )
@@ -47,15 +47,15 @@ internal fun RandomTmi(viewModel: RandomMatchViewModel) {
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextFieldComponent(
-            value = uiState.tmi,
-            onValueChange = viewModel::tmi,
+            value = uiState.topic,
+            onValueChange = viewModel::topic,
             maxLine = 1,
             maxLength = 50,
             hint = stringResource(R.string.random_hint)
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "${uiState.tmi.length}/50",
+            text = "${uiState.topic.length}/50",
             style = AppTextStyles.CAPTION_10_14_MEDIUM,
             color = ColorStyle.GRAY_700,
             modifier = Modifier.fillMaxWidth(),

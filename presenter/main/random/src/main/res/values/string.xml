@@ -14,9 +14,11 @@
     <string name="random_duplicate_button_home">홈으로 돌아가기</string>
     <!--Location-->
     <string name="random_location_title">만나고 싶은 지역을 선택해주세요</string>
+    <!--Topic-->
+    <string name="random_topic_title">모임에서 나누고 싶은\n대화 주제를 입력해주세요</string>
     <!--TMI-->
     <string name="random_tmi_title">모임에서 나눌 나의 TMI를\n입력해주세요</string>
-    <string name="random_tmi_hint">최소 8자, 최대 50자까지 입력할 수 있어요</string>
+    <string name="random_hint">최소 8자, 최대 50자까지 입력할 수 있어요</string>
     <!--msg-->
     <string name="msg_network_error">네트워크 에러</string>
     <string name="msg_re_login">Error Token is Expire</string>

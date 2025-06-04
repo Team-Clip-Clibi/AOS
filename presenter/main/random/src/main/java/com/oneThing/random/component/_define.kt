@@ -4,6 +4,7 @@ const val NAV_RANDOM_MATCH_INTRO = "randomMatchIntro"
 const val NAV_RANDOM_MATCH_DUPLICATE = "randomMatchDuplicate"
 const val NAV_RANDOM_LOCATION = "randomLocation"
 const val NAV_RANDOM_TMI = "randomTmi"
+const val NAV_RANDOM_TOPIC = "randomTopic"
 
 const val ERROR_NETWORK_ERROR = "network Error"
 const val ERROR_RE_LOGIN = "reLogin"

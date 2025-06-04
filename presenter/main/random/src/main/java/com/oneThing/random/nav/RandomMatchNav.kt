@@ -39,12 +39,14 @@ import com.oneThing.random.component.NAV_RANDOM_LOCATION
 import com.oneThing.random.component.NAV_RANDOM_MATCH_DUPLICATE
 import com.oneThing.random.component.NAV_RANDOM_MATCH_INTRO
 import com.oneThing.random.component.NAV_RANDOM_TMI
+import com.oneThing.random.component.NAV_RANDOM_TOPIC
 import com.oneThing.random.component.NEXT_DATE_EMPTY
 import com.oneThing.random.component.TopAppBarWithProgress
 import com.oneThing.random.ui.DuplicateMatch
 import com.oneThing.random.ui.RandomLocation
 import com.oneThing.random.ui.RandomMatchIntro
 import com.oneThing.random.ui.RandomTmi
+import com.oneThing.random.ui.RandomTopic
 
 @Composable
 internal fun RandomMatchNav(
@@ -108,6 +110,8 @@ internal fun RandomMatchNav(
         NAV_RANDOM_MATCH_INTRO -> -1
         NAV_RANDOM_MATCH_DUPLICATE -> -1
         NAV_RANDOM_LOCATION -> 1
+        NAV_RANDOM_TOPIC -> 2
+        NAV_RANDOM_TMI -> 3
         else -> -1
     }
     Scaffold(
@@ -128,7 +132,7 @@ internal fun RandomMatchNav(
                     TopAppBarWithProgress(
                         title = stringResource(R.string.top_app_bar_random_match),
                         currentPage = pageInfo,
-                        totalPage = 4,
+                        totalPage = 3,
                         onBackClick = {
                             if (!navController.popBackStack()) onBack()
                         }
@@ -151,6 +155,7 @@ internal fun RandomMatchNav(
                             NAV_RANDOM_MATCH_INTRO -> true
                             NAV_RANDOM_LOCATION -> uiState.location != Location.NONE
                             NAV_RANDOM_TMI -> uiState.tmi.trim().isNotEmpty()
+                            NAV_RANDOM_TOPIC -> uiState.topic.trim().isNotEmpty()
                             else -> false
                         },
                         buttonText = when (currentRoute) {
@@ -162,10 +167,20 @@ internal fun RandomMatchNav(
                                 NAV_RANDOM_MATCH_INTRO -> {
                                     viewModel.duplicateCheck()
                                 }
-                                NAV_RANDOM_LOCATION ->{
+
+                                NAV_RANDOM_LOCATION -> {
+                                    navController.navigate(NAV_RANDOM_TOPIC) {
+                                        popUpTo(NAV_RANDOM_TOPIC) { inclusive = true }
+                                    }
+                                }
+
+                                NAV_RANDOM_TOPIC -> {
                                     navController.navigate(NAV_RANDOM_TMI) {
                                         popUpTo(NAV_RANDOM_TMI) { inclusive = true }
                                     }
+                                }
+                                NAV_RANDOM_TMI ->{
+
                                 }
                             }
                         }
@@ -249,6 +264,25 @@ internal fun RandomMatchNav(
                     )
                 }) {
                 RandomLocation(
+                    viewModel = viewModel,
+                )
+            }
+
+            composable(
+                NAV_RANDOM_TOPIC,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                RandomTopic(
                     viewModel = viewModel,
                 )
             }
