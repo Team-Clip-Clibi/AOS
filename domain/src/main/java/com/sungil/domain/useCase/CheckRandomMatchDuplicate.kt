@@ -5,6 +5,9 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 class CheckRandomMatchDuplicate @Inject constructor(
@@ -27,10 +30,12 @@ class CheckRandomMatchDuplicate @Inject constructor(
                     return Result.Fail("network Error")
                 }
                 if (isDuplicate) {
-                    return Result.Fail(apiResult.second!!)
+                    val date = getDate(apiResult.second!!)
+                    return Result.Fail(date)
                 }
                 return Result.Success("No Duplicate")
             }
+
             401 -> {
                 val refreshToken = tokenManger.requestUpdateToken(token.second)
                 if (!refreshToken) return Result.Fail("reLogin")
@@ -43,16 +48,25 @@ class CheckRandomMatchDuplicate @Inject constructor(
                     return Result.Fail("network Error")
                 }
                 if (retry.first == 200 && retry.third == true) {
-                    return Result.Fail(retry.second!!)
+                    val date = getDate(retry.second!!)
+                    return Result.Fail(date)
                 }
                 if (retry.first == 200 && retry.third == false) {
                     return Result.Success("No Duplicate")
                 }
                 return Result.Success("network Error")
             }
+
             else -> {
                 return Result.Fail("network Error")
             }
         }
     }
+
+    private fun getDate(isoString: String): String {
+        val zonedDateTime = ZonedDateTime.parse(isoString)
+        val formatter = DateTimeFormatter.ofPattern("MM월 dd일", Locale.KOREAN)
+        return zonedDateTime.format(formatter)
+    }
+
 }
