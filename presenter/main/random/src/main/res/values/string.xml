@@ -7,4 +7,8 @@
     <string name="random_intro_title">금요일 7시,\n랜덤 모임에서 만나요</string>
     <string name="random_intro_subtitle">새로운 사람과 함께 다양한 이야기를 나눠요</string>
     <string name="random_intro_content">질문이 인연이 되는 월요일\n함께할래요?</string>
+    <!--msg-->
+    <string name="msg_network_error">네트워크 에러</string>
+    <string name="msg_re_login">Error Token is Expire</string>
+    <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
 </resources>
