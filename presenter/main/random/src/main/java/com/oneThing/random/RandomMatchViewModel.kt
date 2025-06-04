@@ -47,10 +47,17 @@ class RandomMatchViewModel @Inject constructor(private val checkDuplicate: Check
         }
     }
 
+    fun tmi(tmi : String){
+        _uiState.update { current ->
+            current.copy(tmi = tmi)
+        }
+    }
+
     data class RandomMatchData(
         val success: UiSuccess = UiSuccess.None,
         val error: UiError = UiError.None,
-        val location : Location = Location.NONE
+        val location : Location = Location.NONE,
+        val tmi : String = ""
     )
 }
 

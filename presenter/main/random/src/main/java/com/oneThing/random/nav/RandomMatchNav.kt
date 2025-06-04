@@ -38,11 +38,13 @@ import com.oneThing.random.component.Location
 import com.oneThing.random.component.NAV_RANDOM_LOCATION
 import com.oneThing.random.component.NAV_RANDOM_MATCH_DUPLICATE
 import com.oneThing.random.component.NAV_RANDOM_MATCH_INTRO
+import com.oneThing.random.component.NAV_RANDOM_TMI
 import com.oneThing.random.component.NEXT_DATE_EMPTY
 import com.oneThing.random.component.TopAppBarWithProgress
 import com.oneThing.random.ui.DuplicateMatch
 import com.oneThing.random.ui.RandomLocation
 import com.oneThing.random.ui.RandomMatchIntro
+import com.oneThing.random.ui.RandomTmi
 
 @Composable
 internal fun RandomMatchNav(
@@ -86,7 +88,9 @@ internal fun RandomMatchNav(
             is UiSuccess.DuplicateSuccess -> {
                 when (success.nextDate) {
                     NEXT_DATE_EMPTY -> {
-
+                        navController.navigate(NAV_RANDOM_LOCATION) {
+                            popUpTo(NAV_RANDOM_LOCATION) { inclusive = true }
+                        }
                     }
 
                     else -> {
@@ -143,19 +147,25 @@ internal fun RandomMatchNav(
 
                 else -> {
                     BottomBar(
-                        isEnable = when(currentRoute){
+                        isEnable = when (currentRoute) {
                             NAV_RANDOM_MATCH_INTRO -> true
                             NAV_RANDOM_LOCATION -> uiState.location != Location.NONE
+                            NAV_RANDOM_TMI -> uiState.tmi.trim().isNotEmpty()
                             else -> false
                         },
                         buttonText = when (currentRoute) {
                             NAV_RANDOM_MATCH_INTRO -> stringResource(R.string.random_btn_next)
-                            else -> ""
+                            else -> stringResource(R.string.random_btn_next)
                         },
                         onClick = {
                             when (currentRoute) {
                                 NAV_RANDOM_MATCH_INTRO -> {
                                     viewModel.duplicateCheck()
+                                }
+                                NAV_RANDOM_LOCATION ->{
+                                    navController.navigate(NAV_RANDOM_TMI) {
+                                        popUpTo(NAV_RANDOM_TMI) { inclusive = true }
+                                    }
                                 }
                             }
                         }
@@ -240,6 +250,25 @@ internal fun RandomMatchNav(
                 }) {
                 RandomLocation(
                     viewModel = viewModel,
+                )
+            }
+
+            composable(
+                NAV_RANDOM_TMI,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                RandomTmi(
+                    viewModel = viewModel
                 )
             }
         }

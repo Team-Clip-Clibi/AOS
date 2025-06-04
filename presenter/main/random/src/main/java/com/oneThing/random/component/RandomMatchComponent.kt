@@ -1,8 +1,16 @@
 package com.oneThing.random.component
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,18 +18,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.core.AppTextStyles
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ButtonXXLWhite
 import com.example.core.ColorStyle
 import com.example.core.TopAppBarNumber
 import com.oneThing.random.R
+import kotlinx.coroutines.delay
 
 @Composable
 fun TopAppBarWithProgress(
@@ -123,6 +139,43 @@ fun DuplicateBottomBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun SlidingTextBox(textList: List<String>) {
+    val index = remember { mutableIntStateOf(0) }
+    val currentText = textList.getOrNull(index.intValue) ?: ""
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(2000L)
+            index.intValue = (index.intValue + 1) % textList.size
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(32.dp)
+            .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(size = 4.dp))
+            .padding(start = 12.dp, top = 6.dp, end = 12.dp, bottom = 6.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        AnimatedContent(
+            targetState = currentText,
+            transitionSpec = {
+                slideInVertically { height -> height } + fadeIn() togetherWith
+                        slideOutVertically { height -> -height } + fadeOut()
+            },
+            label = "subject"
+        ) { text ->
+            Text(
+                text = text,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_800
             )
         }
     }
