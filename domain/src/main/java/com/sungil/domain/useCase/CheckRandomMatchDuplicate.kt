@@ -16,8 +16,8 @@ class CheckRandomMatchDuplicate @Inject constructor(
     private val tokenManger: TokenMangerController,
 ) {
     sealed interface Result : UseCase.Result {
-        data class Success(val message: String) : Result
-        data class Fail(val meetTime: String) : Result
+        data class Success(val meetTime: String, val nextMeetTime: String) : Result
+        data class Fail(val errorMessage: String) : Result
     }
 
     suspend fun invoke(): Result {
@@ -31,9 +31,10 @@ class CheckRandomMatchDuplicate @Inject constructor(
                 }
                 if (isDuplicate) {
                     val date = getDate(apiResult.second!!)
-                    return Result.Fail(date)
+                    val nextDate = getNextDay(apiResult.second!!)
+                    return Result.Success(date, nextDate)
                 }
-                return Result.Success("No Duplicate")
+                return Result.Success("No Duplicate", "")
             }
 
             401 -> {
@@ -49,14 +50,14 @@ class CheckRandomMatchDuplicate @Inject constructor(
                 }
                 if (retry.first == 200 && retry.third == true) {
                     val date = getDate(retry.second!!)
-                    return Result.Fail(date)
+                    val nextDate = getNextDay(retry.second!!)
+                    return Result.Success(date, nextDate)
                 }
                 if (retry.first == 200 && retry.third == false) {
-                    return Result.Success("No Duplicate")
+                    return Result.Success("No Duplicate", "")
                 }
-                return Result.Success("network Error")
+                return Result.Fail("network Error")
             }
-
             else -> {
                 return Result.Fail("network Error")
             }
@@ -69,4 +70,10 @@ class CheckRandomMatchDuplicate @Inject constructor(
         return zonedDateTime.format(formatter)
     }
 
+    private fun getNextDay(isoString: String): String {
+        val zonedDateTime = ZonedDateTime.parse(isoString)
+        val tomorrow = zonedDateTime.plusDays(1)
+        val formatter = DateTimeFormatter.ofPattern("MM월 dd일", Locale.KOREAN)
+        return tomorrow.format(formatter)
+    }
 }
