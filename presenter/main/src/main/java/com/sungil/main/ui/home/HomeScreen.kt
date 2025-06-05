@@ -27,6 +27,7 @@ fun HomeScreen(
     oneThingMatchClick: () -> Unit,
     randomMatchClick: () -> Unit,
     firstMatchClick: (String) -> Unit,
+    login : () -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val alarmState by viewModel.userState.collectAsState()
@@ -71,7 +72,7 @@ fun HomeScreen(
             onThingClick = oneThingMatchClick,
             notifyClick = notifyClick,
             randomMatchClick = randomMatchClick,
-            reLogin = {},
+            reLogin = login,
             firstMatchClick = firstMatchClick
         )
     }
