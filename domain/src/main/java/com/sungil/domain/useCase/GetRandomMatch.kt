@@ -5,6 +5,9 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 class GetRandomMatch @Inject constructor(
@@ -25,6 +28,8 @@ class GetRandomMatch @Inject constructor(
             val meetingTime: String,
             val meetingPlace: String,
             val meetingLocation: String,
+            val userName: String,
+            val userId: String,
         ) : Result
 
         data class Error(val error: String) : Result
@@ -32,6 +37,8 @@ class GetRandomMatch @Inject constructor(
 
     override suspend fun invoke(param: Params): Result {
         val token = database.getToken()
+        val userData = database.getUserInfo()
+        val userId = database.getKaKaoId()
         val result = network.requestRandomMatch(
             token = TOKEN_FORM + token.first,
             tmiContent = param.tmi,
@@ -50,9 +57,11 @@ class GetRandomMatch @Inject constructor(
                 return Result.Success(
                     orderId = result.orderId,
                     amount = result.amount,
-                    meetingTime = result.meetingTime,
+                    meetingTime = formatServerTime(result.meetingTime),
                     meetingPlace = result.meetingPlace,
-                    meetingLocation = result.meetingLocation
+                    meetingLocation = result.meetingLocation,
+                    userName = userData.nickName ?: "Error",
+                    userId = userId
                 )
             }
 
@@ -74,9 +83,11 @@ class GetRandomMatch @Inject constructor(
                     return Result.Success(
                         orderId = reRequest.orderId,
                         amount = reRequest.amount,
-                        meetingTime = reRequest.meetingTime,
+                        meetingTime = formatServerTime(result.meetingTime),
                         meetingPlace = reRequest.meetingPlace,
-                        meetingLocation = reRequest.meetingLocation
+                        meetingLocation = reRequest.meetingLocation,
+                        userName = userData.nickName ?: "Error",
+                        userId = userId
                     )
                 }
                 return Result.Error("network Error")
@@ -86,5 +97,12 @@ class GetRandomMatch @Inject constructor(
                 return Result.Error("network Error")
             }
         }
+    }
+
+    private fun formatServerTime(isoTime: String): String {
+        val zonedDateTime = ZonedDateTime.parse(isoTime)
+        val koreaTime = zonedDateTime.withZoneSameInstant(java.time.ZoneId.of("Asia/Seoul"))
+        val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd(E요일), HH:mm", Locale.KOREAN)
+        return koreaTime.format(formatter)
     }
 }
