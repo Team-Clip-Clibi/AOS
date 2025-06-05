@@ -26,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.core.CustomSnackBar
 import com.example.core.TopAppBarWithCloseButton
+import com.oneThing.random.BuildConfig
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
 import com.oneThing.random.UiError
@@ -33,8 +34,10 @@ import com.oneThing.random.UiSuccess
 import com.oneThing.random.component.BottomBar
 import com.oneThing.random.component.DuplicateBottomBar
 import com.oneThing.random.component.ERROR_NETWORK_ERROR
+import com.oneThing.random.component.ERROR_RANDOM_MATCH_FAIL
 import com.oneThing.random.component.ERROR_RE_LOGIN
 import com.oneThing.random.component.Location
+import com.oneThing.random.component.NAV_RANDOM_BEFORE_PAY
 import com.oneThing.random.component.NAV_RANDOM_LOCATION
 import com.oneThing.random.component.NAV_RANDOM_MATCH_DUPLICATE
 import com.oneThing.random.component.NAV_RANDOM_MATCH_INTRO
@@ -43,6 +46,7 @@ import com.oneThing.random.component.NAV_RANDOM_TOPIC
 import com.oneThing.random.component.NEXT_DATE_EMPTY
 import com.oneThing.random.component.TopAppBarWithProgress
 import com.oneThing.random.ui.DuplicateMatch
+import com.oneThing.random.ui.RandomBeforePay
 import com.oneThing.random.ui.RandomLocation
 import com.oneThing.random.ui.RandomMatchIntro
 import com.oneThing.random.ui.RandomTmi
@@ -54,6 +58,7 @@ internal fun RandomMatchNav(
     loginPage: () -> Unit,
     viewModel: RandomMatchViewModel,
     goMeeting: () -> Unit,
+    pay: (String, String, Int, String) -> Unit,
 ) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -76,6 +81,13 @@ internal fun RandomMatchNav(
                         loginPage()
                     }
 
+                    ERROR_RANDOM_MATCH_FAIL -> {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_random_match_failed),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
                     else -> {
                         throw IllegalArgumentException("Unhandled error message: ${error.message}")
                     }
@@ -84,7 +96,9 @@ internal fun RandomMatchNav(
 
             else -> Unit
         }
+        viewModel.initError()
     }
+
     LaunchedEffect(uiState.success) {
         when (val success = uiState.success) {
             is UiSuccess.DuplicateSuccess -> {
@@ -103,8 +117,31 @@ internal fun RandomMatchNav(
                 }
             }
 
+            is UiSuccess.RandomMatchSuccess -> {
+                navController.navigate(NAV_RANDOM_BEFORE_PAY) {
+                    popUpTo(NAV_RANDOM_BEFORE_PAY) { inclusive = true }
+                }
+            }
+
+            is UiSuccess.TossInstallSuccess -> {
+                if (uiState.randomMatch == null) {
+                    snackbarHostState.showSnackbar(
+                        message = context.getString(R.string.msg_random_match_failed),
+                        duration = SnackbarDuration.Short
+                    )
+                    return@LaunchedEffect
+                }
+                pay(
+                    uiState.randomMatch!!.orderId,
+                    uiState.randomMatch!!.userId,
+                    uiState.randomMatch!!.amount,
+                    BuildConfig.MATCH_INFO
+                )
+            }
+
             else -> Unit
         }
+        viewModel.initSuccess()
     }
     val pageInfo = when (currentRoute) {
         NAV_RANDOM_MATCH_INTRO -> -1
@@ -112,6 +149,7 @@ internal fun RandomMatchNav(
         NAV_RANDOM_LOCATION -> 1
         NAV_RANDOM_TOPIC -> 2
         NAV_RANDOM_TMI -> 3
+        NAV_RANDOM_BEFORE_PAY -> -1
         else -> -1
     }
     Scaffold(
@@ -156,10 +194,11 @@ internal fun RandomMatchNav(
                             NAV_RANDOM_LOCATION -> uiState.location != Location.NONE
                             NAV_RANDOM_TMI -> uiState.tmi.trim().isNotEmpty()
                             NAV_RANDOM_TOPIC -> uiState.topic.trim().isNotEmpty()
+                            NAV_RANDOM_BEFORE_PAY -> true
                             else -> false
                         },
                         buttonText = when (currentRoute) {
-                            NAV_RANDOM_MATCH_INTRO -> stringResource(R.string.random_btn_next)
+                            NAV_RANDOM_BEFORE_PAY -> stringResource(R.string.random_btn_accept_finish)
                             else -> stringResource(R.string.random_btn_next)
                         },
                         onClick = {
@@ -179,9 +218,16 @@ internal fun RandomMatchNav(
                                         popUpTo(NAV_RANDOM_TMI) { inclusive = true }
                                     }
                                 }
-                                NAV_RANDOM_TMI ->{
 
+                                NAV_RANDOM_TMI -> {
+                                    viewModel.randomMatch()
                                 }
+
+                                NAV_RANDOM_BEFORE_PAY -> {
+                                    viewModel.checkTossInstall()
+                                }
+
+                                else -> Unit
                             }
                         }
                     )
@@ -201,7 +247,7 @@ internal fun RandomMatchNav(
                         end = 16.dp,
                         bottom = WindowInsets.navigationBars
                             .asPaddingValues()
-                            .calculateBottomPadding() + 32.dp
+                            .calculateBottomPadding()
                     )
             )
         },
@@ -302,6 +348,24 @@ internal fun RandomMatchNav(
                     )
                 }) {
                 RandomTmi(
+                    viewModel = viewModel
+                )
+            }
+            composable(
+                NAV_RANDOM_BEFORE_PAY,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                RandomBeforePay(
                     viewModel = viewModel
                 )
             }
