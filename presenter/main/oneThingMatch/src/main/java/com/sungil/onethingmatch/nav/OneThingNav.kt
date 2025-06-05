@@ -37,7 +37,6 @@ import com.sungil.onethingmatch.Budget
 import com.sungil.onethingmatch.BuildConfig
 import com.sungil.onethingmatch.CATEGORY
 import com.sungil.onethingmatch.ERROR_NETWORK_ERROR
-import com.sungil.onethingmatch.ERROR_ORDER_TIME_LATE
 import com.sungil.onethingmatch.ERROR_RE_LOGIN
 import com.sungil.onethingmatch.ERROR_USER_ID_NULL
 import com.sungil.onethingmatch.Location
