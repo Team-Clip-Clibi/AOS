@@ -59,14 +59,14 @@ class RandomMatchViewModel @Inject constructor(
                 )
             )) {
                 is GetRandomMatch.Result.Error -> {
-                    _uiState.update { current ->
-                        current.copy(error = UiError.Error(result.error))
+                    _uiState.update { state ->
+                        state.copy(error = UiError.Error(result.error))
                     }
                 }
 
                 is GetRandomMatch.Result.Success -> {
-                    _uiState.update { current ->
-                        current.copy(
+                    _uiState.update { state ->
+                        state.copy(
                             success = UiSuccess.RandomMatchSuccess(
                                 RandomMatch(
                                     orderId = result.orderId,
