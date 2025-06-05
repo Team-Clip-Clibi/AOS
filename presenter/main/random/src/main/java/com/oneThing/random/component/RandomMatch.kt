@@ -6,4 +6,6 @@ data class RandomMatch(
     val meetingTime: String,
     val meetingPlace: String,
     val meetingLocation: String,
+    val nickName: String,
+    val userId: String
 )
