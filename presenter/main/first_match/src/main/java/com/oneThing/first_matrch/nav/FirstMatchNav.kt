@@ -98,29 +98,33 @@ internal fun FirstMatchNav(
                 }
                 viewModel.initSuccessError()
             }
+
             UiError.None -> Unit
         }
     }
     LaunchedEffect(uiState.success) {
         when (uiState.success) {
             is UiSuccess.Success -> {
-                when(currentRoute){
+                when (currentRoute) {
                     NAV_JOB -> {
                         navController.navigate(NAV_DIET) {
                             popUpTo(NAV_DIET) { inclusive = true }
                         }
                     }
+
                     NAV_DIET -> {
                         navController.navigate(NAV_LANGUAGE) {
                             popUpTo(NAV_LANGUAGE) { inclusive = true }
                         }
                     }
-                    NAV_LANGUAGE ->{
+
+                    NAV_LANGUAGE -> {
                         goMatchPage()
                     }
                 }
                 viewModel.initSuccessError()
             }
+
             UiSuccess.None -> Unit
         }
     }
@@ -165,19 +169,22 @@ internal fun FirstMatchNav(
                             }
 
                             NAV_DIET -> {
-                               if(uiState.dataChange) viewModel.updateDiet()
+                                if (uiState.dataChange) viewModel.updateDiet()
                                 else navController.navigate(NAV_LANGUAGE) {
                                     popUpTo(NAV_LANGUAGE) { inclusive = true }
                                 }
                             }
 
                             NAV_LANGUAGE -> {
-                                if(uiState.dataChange) viewModel.updateLanguage()
+                                if (uiState.dataChange) viewModel.updateLanguage()
                                 else goMatchPage()
                             }
                         }
                     },
-                    buttonText = stringResource(R.string.btn_next),
+                    buttonText = when (currentRoute) {
+                        NAV_LANGUAGE -> stringResource(R.string.btn_finish)
+                        else -> stringResource(R.string.btn_next)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 17.dp),
