@@ -23,6 +23,17 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        val userIdKey: String = properties.getProperty("userIdKey", "")
+        val orderKey: String = properties.getProperty("orderKey", "")
+        val amountKey: String = properties.getProperty("amountKey", "")
+        val random: String = properties.getProperty("random", "")
+        val matchKey: String = properties.getProperty("matchKey", "")
+
+        buildConfigField("String", "KEY_ORDER", orderKey)
+        buildConfigField("String", "KEY_USER", userIdKey)
+        buildConfigField("String", "KEY_AMOUNT", amountKey)
+        buildConfigField("String", "MATCH_INFO", random)
+        buildConfigField("String", "KEY_MATCH", matchKey)
     }
 
     buildTypes {
