@@ -30,7 +30,9 @@ class MainActivity : ComponentActivity() {
                         putString(BuildConfig.KEY_MATCH, destination)
                     }
                     router.navigation(NAV_FIRST_MATCH, bundle)
-                }
+                },
+                randomMatchClick = { router.navigation(NAV_RANDOM_MATCH) },
+                login = { router.navigation(NAV_LOGIN) }
             )
         }
     }

@@ -21,6 +21,8 @@ fun MainScreenView(
     alarmClick: () -> Unit,
     oneThingClick: () -> Unit,
     firstMatchClick: (String) -> Unit,
+    randomMatchClick : () -> Unit,
+    login : () -> Unit
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -36,7 +38,9 @@ fun MainScreenView(
                 lowClick = lowClick,
                 alarmClick = alarmClick,
                 oneThingClick = oneThingClick,
-                firstMatchClick = firstMatchClick
+                firstMatchClick = firstMatchClick,
+                randomMatchClick = randomMatchClick,
+                login = login
             )
         }
     }
