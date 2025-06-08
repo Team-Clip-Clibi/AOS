@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -130,23 +129,21 @@ fun DuplicateBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
-                .padding(bottom = 8.dp),
+                .padding(start = 17.dp , end = 16.dp,bottom = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             ButtonXXLWhite(
                 onClick = goMeeting,
                 buttonText = stringResource(R.string.random_duplicate_button_meet),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 17.dp)
+                    .weight(1f)
             )
 
             ButtonXXLPurple400(
                 onClick = goHome,
                 buttonText = stringResource(R.string.random_duplicate_button_home),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp)
+                    .weight(1f)
             )
         }
     }
@@ -196,7 +193,7 @@ fun EventView(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .height(68.dp)
             .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 12.dp))
             .padding(start = 16.dp, end = 16.dp),
@@ -226,7 +223,7 @@ fun EventView(
 }
 
 @Composable
-fun RandomMatchDataView(
+fun  RandomMatchDataView(
     nickName: String,
     time: String,
     location: String,
@@ -273,6 +270,12 @@ fun RandomMatchDataView(
                 color = ColorStyle.GRAY_800
             )
         }
+        Spacer(modifier = Modifier.height(10.dp))
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = ColorStyle.GRAY_200
+        )
+        Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -289,7 +292,7 @@ fun RandomMatchDataView(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = stringResource(R.string.random_before_pay_time),
+                    text = stringResource(R.string.random_before_pay_location),
                     style = AppTextStyles.SUBTITLE_16_24_SEMI,
                     color = ColorStyle.GRAY_800
                 )
@@ -303,7 +306,7 @@ fun RandomMatchDataView(
                 Text(
                     text = address,
                     style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                    color = ColorStyle.GRAY_800
+                    color = ColorStyle.GRAY_800,
                 )
             }
         }
