@@ -40,7 +40,9 @@ class RandomMatchViewModel @Inject constructor(
                             success = UiSuccess.DuplicateSuccess(
                                 result.meetTime,
                                 result.nextMeetTime
-                            )
+                            ),
+                            meetTime = result.meetTime,
+                            nextDate = result.nextMeetTime,
                         )
                     }
                 }
@@ -117,7 +119,8 @@ class RandomMatchViewModel @Inject constructor(
             current.copy(error = UiError.None)
         }
     }
-    fun initSuccess(){
+
+    fun initSuccess() {
         _uiState.update { current ->
             current.copy(success = UiSuccess.None)
         }
@@ -147,6 +150,8 @@ class RandomMatchViewModel @Inject constructor(
         val location: Location = Location.NONE,
         val tmi: String = "",
         val topic: String = "",
+        val meetTime: String = "",
+        val nextDate: String = "",
         val randomMatch: RandomMatch? = null,
     )
 }
