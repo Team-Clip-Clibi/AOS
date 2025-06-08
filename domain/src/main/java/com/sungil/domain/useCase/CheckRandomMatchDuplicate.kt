@@ -5,6 +5,8 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -65,15 +67,16 @@ class CheckRandomMatchDuplicate @Inject constructor(
     }
 
     private fun getDate(isoString: String): String {
-        val zonedDateTime = ZonedDateTime.parse(isoString)
+        val localDateTime = LocalDateTime.parse(isoString)
+        val koreaTime = localDateTime.atZone(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("MM월 dd일", Locale.KOREAN)
-        return zonedDateTime.format(formatter)
+        return koreaTime.format(formatter)
     }
 
     private fun getNextDay(isoString: String): String {
-        val zonedDateTime = ZonedDateTime.parse(isoString)
-        val tomorrow = zonedDateTime.plusDays(1)
+        val localDateTime = LocalDateTime.parse(isoString)
+        val koreaTime = localDateTime.atZone(ZoneId.of("Asia/Seoul")).plusDays(1)
         val formatter = DateTimeFormatter.ofPattern("MM월 dd일", Locale.KOREAN)
-        return tomorrow.format(formatter)
+        return koreaTime.format(formatter)
     }
 }

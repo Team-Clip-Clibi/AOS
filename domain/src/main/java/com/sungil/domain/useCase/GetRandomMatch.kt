@@ -5,6 +5,8 @@ import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -100,8 +102,8 @@ class GetRandomMatch @Inject constructor(
     }
 
     private fun formatServerTime(isoTime: String): String {
-        val zonedDateTime = ZonedDateTime.parse(isoTime)
-        val koreaTime = zonedDateTime.withZoneSameInstant(java.time.ZoneId.of("Asia/Seoul"))
+        val localDateTime = LocalDateTime.parse(isoTime)
+        val koreaTime = localDateTime.atZone(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd(E요일), HH:mm", Locale.KOREAN)
         return koreaTime.format(formatter)
     }
