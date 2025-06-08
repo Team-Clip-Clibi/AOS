@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="top_app_bar_random_match">랜덤 모임 신청</string>
+    <string name="random_btn_next">다음</string>
+    <string name="random_btn_finish">완료</string>
+    <string name="random_btn_accept_finish">신청 완료</string>
+    <string name="btn_okay">확인</string>
+    <!--Intro-->
+    <string name="random_intro_title">금요일 7시,\n랜덤 모임에서 만나요</string>
+    <string name="random_intro_subtitle">새로운 사람과 함께 다양한 이야기를 나눠요</string>
+    <string name="random_intro_content">질문이 인연이 되는 월요일\n함께할래요?</string>
+    <!--Duplicate-->
+    <string name="random_duplicate_title">%1$s에 이미 신청한\n랜덤모임이 있어요!</string>
+    <string name="random_duplicate_subtitle">다음 랜덤 모임은 %1$s부터 신청할 수 있어요</string>
+    <string name="random_duplicate_button_meet">모임 내역 보기</string>
+    <string name="random_duplicate_button_home">홈으로 돌아가기</string>
+    <!--Location-->
+    <string name="random_location_title">만나고 싶은 지역을 선택해주세요</string>
+    <!--Topic-->
+    <string name="random_topic_title">모임에서 나누고 싶은\n대화 주제를 입력해주세요</string>
+    <!--TMI-->
+    <string name="random_tmi_title">모임에서 나눌 나의 TMI를\n입력해주세요</string>
+    <string name="random_hint">최소 8자, 최대 50자까지 입력할 수 있어요</string>
+    <!--Before Pay-->
+    <string name="random_before_pay_title">당신을 위한 모임이 준비되었어요</string>
+    <string name="random_before_pay_subtitle">아래 내용을 확인하고, 결제하시면 신청이 완료됩니다</string>
+    <string name="random_before_pay_content_title">%1$s님을 위한 모임</string>
+    <string name="random_before_pay_time">일시</string>
+    <string name="random_before_pay_location">장소</string>
+    <!--msg-->
+    <string name="msg_network_error">네트워크 에러</string>
+    <string name="msg_re_login">Error Token is Expire</string>
+    <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
+    <string name="msg_random_match_failed">랜덤 모임 신청에 실패했습니다</string>
+    <string name="txt_toss_dialog_title">원띵은 토스페이 결제만 가능해요</string>
+    <string name="txt_toss_dialog_sub_title">토스 앱이 설치되어 있지 않다면, 설치 후 결제를\n진행해주세요.</string>
+</resources>

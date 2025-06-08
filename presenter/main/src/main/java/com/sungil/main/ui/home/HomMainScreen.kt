@@ -127,7 +127,7 @@ internal fun HomMainScreen(
                         onThingClick()
                     }
                     BuildConfig.RANDOM ->{
-
+                        randomMatchClick()
                     }
                 }
             }

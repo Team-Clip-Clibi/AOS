@@ -24,6 +24,7 @@ import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.PhoneNumberCheckResult
+import com.sungil.domain.model.RandomInfo
 import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
@@ -42,6 +43,7 @@ import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.Payment
 import com.sungil.network.model.PreferredDate
+import com.sungil.network.model.RandomOrder
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
 import com.sungil.network.model.RequestUserInfo
@@ -55,7 +57,7 @@ class NetworkRepositoryImpl @Inject constructor(
     private val firebase: FirebaseSMSRepo,
     private val api: HttpApi,
     private val fcmRepo: FirebaseFCM,
-    private val tokenManger : TokenManager
+    private val tokenManger: TokenManager,
 ) :
     NetworkRepository {
     override suspend fun requestSMS(phoneNumber: String, activity: Activity): Boolean {
@@ -436,7 +438,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 oneThingCategory = oneThingCategory
             )
         )
-        return Triple(result.code() , result.body()?.orderId , result.body()?.amount)
+        return Triple(result.code(), result.body()?.orderId, result.body()?.amount)
     }
 
     override suspend fun requestPayConfirm(
@@ -453,6 +455,42 @@ class NetworkRepositoryImpl @Inject constructor(
                 orderType = orderType
             )
         ).code()
+    }
+
+    override suspend fun requestRandomMatchDuplicate(token: String): Triple<Int, String?, Boolean?> {
+        return api.requestCheckRandomDuplicate(
+            token
+        ).let { response ->
+            Triple(
+                response.code(),
+                response.body()?.meetingTime,
+                response.body()?.isDuplicated
+            )
+        }
+    }
+
+    override suspend fun requestRandomMatch(
+        token: String,
+        topic: String,
+        tmiContent: String,
+        district: String,
+    ): RandomInfo {
+        return api.requestRandomOrder(
+            token, RandomOrder(
+                topic = topic,
+                tmiContent = tmiContent,
+                district = district
+            )
+        ).let { response ->
+            RandomInfo(
+                responseCode = response.code(),
+                orderId = response.body()?.orderId ?: "",
+                amount = response.body()?.amount ?: 0,
+                meetingPlace = response.body()?.meetingPlace ?: "",
+                meetingTime = response.body()?.meetingTime ?: "",
+                meetingLocation = response.body()?.meetingLocation ?: ""
+            )
+        }
     }
 
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {

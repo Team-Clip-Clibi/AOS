@@ -11,6 +11,7 @@ import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
+import com.sungil.domain.model.RandomInfo
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import kotlinx.coroutines.flow.Flow
@@ -49,7 +50,7 @@ interface NetworkRepository {
         osVersion: String,
         firebaseToken: String,
         isAllowNotify: Boolean,
-    ): Triple<Int,String?, String?>
+    ): Triple<Int, String?, String?>
 
     suspend fun requestUserData(accessToken: String): UserInfo?
 
@@ -109,9 +110,20 @@ interface NetworkRepository {
     ): Triple<Int, String?, Int?>
 
     suspend fun requestPayConfirm(
-        token : String,
+        token: String,
         paymentKey: String,
         orderId: String,
         orderType: String,
     ): Int
+
+    suspend fun requestRandomMatchDuplicate(
+        token: String,
+    ): Triple<Int, String?, Boolean?>
+
+    suspend fun requestRandomMatch(
+        token: String,
+        topic: String,
+        tmiContent: String,
+        district: String,
+    ): RandomInfo
 }

@@ -15,6 +15,9 @@ import com.sungil.network.model.OneThingNotificationDTO
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.OneThingOrderResponse
 import com.sungil.network.model.Payment
+import com.sungil.network.model.RandomDuplicate
+import com.sungil.network.model.RandomOrder
+import com.sungil.network.model.RandomOrderResponse
 import com.sungil.network.model.RefreshToken
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
@@ -32,7 +35,6 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface HttpApi {
-
     /**
      * 이미 가입된 번호인지 확인하는 URL
      */
@@ -298,4 +300,21 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Body payment: Payment,
     ): Response<Unit>
+
+    /**
+     * 랜덤 매칭 신청 중복 검사
+     */
+    @GET(BuildConfig.RANDOM_DUPLICATE_URL)
+    suspend fun requestCheckRandomDuplicate(
+        @Header("Authorization") bearerToken: String,
+    ): Response<RandomDuplicate>
+
+    /**
+     * 랜덤 매칭 신청
+     */
+    @POST(BuildConfig.RANDOM_ORDER_URL)
+    suspend fun requestRandomOrder(
+        @Header("Authorization") bearerToken: String,
+        @Body order: RandomOrder,
+    ): Response<RandomOrderResponse>
 }
