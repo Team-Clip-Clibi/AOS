@@ -81,10 +81,13 @@ fun ButtonXXLWhite(
                 width = 1.dp,
                 color = ColorStyle.PURPLE_400,
                 shape = RoundedCornerShape(size = 12.dp)
-            )
-            .background(color = ColorStyle.WHITE_100),
+            ),
         onClick = onClick,
         shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = ColorStyle.WHITE_100,
+            contentColor = ColorStyle.PURPLE_400
+        )
     ) {
         Text(
             text = buttonText,
