@@ -31,7 +31,6 @@ import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
-import com.oneThing.random.UiSuccess
 import kotlin.math.absoluteValue
 
 @Composable
@@ -39,7 +38,6 @@ internal fun DuplicateMatch(
     viewModel: RandomMatchViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val success = uiState.success
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,22 +45,18 @@ internal fun DuplicateMatch(
             .padding(top = 16.dp, start = 17.dp, end = 16.dp)
     ) {
         val pageState = rememberPagerState(pageCount = { 1 })
-        if (success is UiSuccess.DuplicateSuccess) {
-            val meetDate = success.date
-            val nextDate = success.nextDate
-            Text(
-                text = stringResource(R.string.random_duplicate_title, meetDate),
-                style = AppTextStyles.HEAD_28_40_BOLD,
-                color = ColorStyle.GRAY_800,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
-                text = stringResource(R.string.random_duplicate_subtitle, nextDate),
-                style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                color = ColorStyle.GRAY_600,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        Text(
+            text = stringResource(R.string.random_duplicate_title, uiState.meetTime),
+            style = AppTextStyles.HEAD_28_40_BOLD,
+            color = ColorStyle.GRAY_800,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = stringResource(R.string.random_duplicate_subtitle, uiState.nextDate),
+            style = AppTextStyles.SUBTITLE_16_24_SEMI,
+            color = ColorStyle.GRAY_600,
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(16.dp))
         HorizontalPager(
             state = pageState,
@@ -98,7 +92,7 @@ internal fun DuplicateMatch(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.ic_random_match_intro),
+                            painter = painterResource(R.drawable.ic_random_duplicate),
                             contentDescription = "intro image",
                             modifier = Modifier
                                 .width(267.dp)
