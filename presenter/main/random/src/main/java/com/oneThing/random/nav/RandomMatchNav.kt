@@ -124,6 +124,7 @@ internal fun RandomMatchNav(
             }
 
             is UiSuccess.TossInstallSuccess -> {
+                viewModel.initSuccess()
                 if (uiState.randomMatch == null) {
                     snackbarHostState.showSnackbar(
                         message = context.getString(R.string.msg_random_match_failed),
