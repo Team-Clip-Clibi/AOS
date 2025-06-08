@@ -20,7 +20,6 @@ import com.example.core.CustomDialogOneButton
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
 import com.oneThing.random.UiError
-import com.oneThing.random.UiSuccess
 import com.oneThing.random.component.EventView
 import com.oneThing.random.component.RandomMatchDataView
 
@@ -29,7 +28,6 @@ internal fun RandomBeforePay(
     viewModel: RandomMatchViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val success = uiState.success
     val error = uiState.error
     Column(
         modifier = Modifier
@@ -56,14 +54,12 @@ internal fun RandomBeforePay(
             content = "지금, 매칭비용은 단 2,900원이에요"
         )
         Spacer(modifier = Modifier.height(12.dp))
-        if (success is UiSuccess.RandomMatchSuccess) {
-            RandomMatchDataView(
-                nickName = success.data.nickName,
-                time = success.data.meetingTime,
-                location = success.data.meetingLocation,
-                address = success.data.meetingPlace
-            )
-        }
+        RandomMatchDataView(
+            nickName = uiState.randomMatch?.nickName ?: "error",
+            time = uiState.randomMatch?.meetingTime ?: "error",
+            location = uiState.randomMatch?.meetingLocation ?: "error",
+            address = uiState.randomMatch?.meetingPlace ?: "error",
+        )
         if (error is UiError.TossNotInstalled) {
             CustomDialogOneButton(
                 onDismiss = {
