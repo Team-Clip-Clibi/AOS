@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Banner(
-    val imagePresignedUrl: String,
-    val headText: String,
-    val subText: String,
+    val imagePresignedUrl: String?,
+    val headText: String?,
+    val subText: String?,
 )
