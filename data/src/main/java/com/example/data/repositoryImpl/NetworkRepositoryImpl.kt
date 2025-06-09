@@ -9,7 +9,6 @@ import com.example.data.paging.NotificationReadPagingSource
 import com.example.fcm.FirebaseFCM
 import com.sungil.database.token.TokenManager
 import com.sungil.domain.CATEGORY
-import com.sungil.domain.model.BannerResponse
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietData
 import com.sungil.domain.model.DietResponse
@@ -31,7 +30,6 @@ import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
-import com.sungil.network.model.Banner
 import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
@@ -318,20 +316,21 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun requestBanner(
         accessToken: String,
         bannerType: String,
-    ): BannerResponse {
+    ): Pair<Int, List<BannerData>> {
         val result = api.requestBanner(accessToken, bannerType)
-        when (result.code()) {
-            200 -> {
-                return BannerResponse(
-                    responseCode = result.code(),
-                    bannerResponse = result.body()!!.map { it.toDomain() }
+        val bannerList = mutableListOf<BannerData>()
+        result.body()?.let { bannerItems ->
+            for (banner in bannerItems) {
+                bannerList.add(
+                    BannerData(
+                        image = banner.imagePresignedUrl ?: "",
+                        headText = banner.headText ?: "",
+                        subText = banner.subText ?: ""
+                    )
                 )
             }
-
-            else -> {
-                return BannerResponse(result.code(), emptyList())
-            }
         }
+        return Pair(result.code(), bannerList)
     }
 
 
@@ -531,14 +530,6 @@ class NetworkRepositoryImpl @Inject constructor(
             noticeType = this.noticeType,
             content = this.content,
             link = this.link
-        )
-    }
-
-    private fun Banner.toDomain(): BannerData {
-        return BannerData(
-            image = this.imagePresignedUrl,
-            headText = this.headText,
-            subText = this.subText
         )
     }
 }
