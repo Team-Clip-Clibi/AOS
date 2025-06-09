@@ -1,11 +1,11 @@
 package com.sungil.login
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sungil.domain.model.BannerData
 import com.sungil.domain.useCase.CheckAlreadySignUp
+import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFcmToken
 import com.sungil.domain.useCase.GetKakaoId
 import com.sungil.domain.useCase.RequestLogin
@@ -29,12 +29,35 @@ class LoginViewModel @Inject constructor(
     private val updateAndSaveToken: UpdateAndSaveToken,
     private val notifyState: SetNotifyState,
     private val login: RequestLogin,
+    private val banner: GetBanner,
 ) : ViewModel() {
     private val _actionFlow = MutableSharedFlow<Action>()
     val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
 
     private val _isFcmReady = MutableStateFlow(false)
-    val isFcmReady :StateFlow<Boolean> = _isFcmReady
+    val isFcmReady: StateFlow<Boolean> = _isFcmReady
+
+    private val _bannerData = MutableStateFlow<List<BannerData>>(emptyList())
+    val bannerData : StateFlow<List<BannerData>> = _bannerData
+
+    init {
+        banner()
+    }
+
+    private fun banner() {
+        viewModelScope.launch {
+            when (val result = banner.invoke(GetBanner.Param(BANNER))) {
+                is GetBanner.Result.Success -> {
+                    _bannerData.value = result.data
+                }
+
+                is GetBanner.Result.Fail -> {
+                    _actionFlow.emit(Action.Error(result.message))
+
+                }
+            }
+        }
+    }
 
     fun getKAKAOId() {
         viewModelScope.launch {
@@ -99,6 +122,7 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
 
     fun requestLogin() {
         viewModelScope.launch(Dispatchers.IO) {
