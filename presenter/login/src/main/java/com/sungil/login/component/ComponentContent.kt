@@ -86,14 +86,14 @@ fun LoginPager(
                     Text(
                         text = data[page].headText ?: "",
                         style = AppTextStyles.HEAD_24_34_BOLD,
-                        color = Color(0xFF171717),
+                        color = ColorStyle.GRAY_800,
                         textAlign = TextAlign.Center,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = data[page].subText ?: "",
                         style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                        color = Color(0xFF383838),
+                        color = ColorStyle.GRAY_800,
                         textAlign = TextAlign.Center
                     )
                 }
