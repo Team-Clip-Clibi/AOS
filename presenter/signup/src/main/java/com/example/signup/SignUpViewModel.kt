@@ -202,7 +202,6 @@ enum class SignUpStep {
 }
 
 sealed class SignUpStepState {
-    data object Idle : SignUpStepState()
     data object Loading : SignUpStepState()
     data class Success(val message: String = "") : SignUpStepState()
     data class Error(val message: String) : SignUpStepState()

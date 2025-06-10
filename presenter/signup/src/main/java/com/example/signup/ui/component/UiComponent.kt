@@ -247,7 +247,7 @@ fun BottomSheetSelector(
             CustomBottomSheet(
                 kind = ISCity,
                 onSelect = { selectedName ->
-                    selectedCity = City.values().find { it.displayName == selectedName }
+                    selectedCity = City.entries.find { it.displayName == selectedName }
                     onSelect(selectedName)
                 },
                 onDismiss = onDismiss
@@ -292,7 +292,7 @@ fun CustomBottomSheet(
         ISMonth -> (1..12).map { "${it}월" }
         ISDay -> (1..31).map { "${it}일" }
 
-        ISCity -> City.values().map { it.displayName }
+        ISCity -> City.entries.map { it.displayName }
 
         ISArea -> {
             selectedCity?.let { city ->

@@ -38,7 +38,6 @@ import com.example.signup.ui.component.CustomSpinnerBox
 @Composable
 internal fun DetailView(
     viewModel: SignUpViewModel,
-    snackBarHostState: SnackbarHostState,
 ) {
     var yearBottomSheet by remember { mutableStateOf(false) }
     var dayBottomSheet by remember { mutableStateOf(false) }

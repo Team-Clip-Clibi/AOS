@@ -21,7 +21,7 @@ class GetUserInfo @Inject constructor(
     suspend fun invoke(): Result {
         val userData = database.getUserInfo()
         userData.phoneNumber = userData.phoneNumber.reMakePhoneNumber()
-        var updateData = userData.copy(phoneNumber = userData.phoneNumber)
+        val updateData = userData.copy(phoneNumber = userData.phoneNumber)
         var token = database.getToken()
         val job = requestJob(updateData, token) { newToken -> token = newToken }
         if (job.first == "Fail") return Result.Fail(job.second)
