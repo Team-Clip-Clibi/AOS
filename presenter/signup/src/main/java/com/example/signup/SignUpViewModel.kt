@@ -195,9 +195,6 @@ class SignUpViewModel @Inject constructor(
         _userInfoState.update { it.copy(area = value) }
     }
     fun inputGender(data: String) = _userInfoState.update { it.copy(gender = data) }
-    fun initSuccess(target: SignUpStep) {
-        updateStepState(target, SignUpStepState.Idle)
-    }
 }
 
 enum class SignUpStep {
