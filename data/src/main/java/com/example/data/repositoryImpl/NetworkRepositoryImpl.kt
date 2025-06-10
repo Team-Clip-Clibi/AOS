@@ -496,9 +496,9 @@ class NetworkRepositoryImpl @Inject constructor(
         return UserInfo(
             responseCode = responseCode,
             data = UserData(
-                userName = username,
+                userName = username ?: "",
                 nickName = nickname,
-                phoneNumber = phoneNumber,
+                phoneNumber = phoneNumber ?: "",
                 job = "NONE",
                 loveState = Pair("NONE", false),
                 diet = "NONE",
