@@ -3,10 +3,10 @@ package com.sungil.editprofile.ui.signout
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -63,7 +63,7 @@ internal fun SignOutView(
             )
         },
         bottomBar = {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp).navigationBarsPadding()) {
                 HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
                 ButtonXXLPurple400(
                     onClick = {
