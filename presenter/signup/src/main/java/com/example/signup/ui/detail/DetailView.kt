@@ -50,23 +50,6 @@ internal fun DetailView(
     var cityBottomSheet by remember { mutableStateOf(false) }
     var areaBottomSheet by remember { mutableStateOf(false) }
     val userInfo by viewModel.userInfoState.collectAsState()
-    val context = LocalContext.current
-    LaunchedEffect(userInfo.detailState) {
-        when (val data = userInfo.detailState) {
-            is SignUpViewModel.CheckState.ValueNotOkay -> {
-                when (data.errorMessage) {
-                    ERROR_DATA_NOT_INPUT -> {
-                        snackBarHostState.showSnackbar(
-                            message = context.getString(R.string.msg_input_birth),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
-                }
-            }
-
-            else -> Unit
-        }
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()
