@@ -44,11 +44,11 @@ import kotlin.math.absoluteValue
 fun LoginPager(
     state: PagerState,
     data: List<BannerData>,
+    modifier: Modifier
 ) {
     HorizontalPager(
         state = state,
-        modifier = Modifier.fillMaxWidth()
-            .height(400.dp)
+        modifier = modifier
     ) { page ->
         Card(
             modifier = Modifier

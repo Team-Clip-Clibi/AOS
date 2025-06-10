@@ -102,7 +102,7 @@ internal fun LoginScreen(
                     top = paddingValues.calculateTopPadding() + 40.dp,
                     start = 17.dp,
                     end = 16.dp,
-                    bottom = paddingValues.calculateBottomPadding()
+                    bottom = paddingValues.calculateBottomPadding() + 52.dp
                 )
         ) {
             Text(
@@ -120,9 +120,12 @@ internal fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
             LoginPager(
                 state = pageState,
-                data = bannerData
+                data = bannerData,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             PageIndicator(
                 numberOfPages = pageState.pageCount,
                 selectedPage = pageState.currentPage,
