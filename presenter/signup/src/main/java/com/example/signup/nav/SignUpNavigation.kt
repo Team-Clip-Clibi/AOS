@@ -375,7 +375,7 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
                         animationSpec = tween(700)
                     )
                 }) {
-                DetailView(viewModel = viewModel, snackBarHostState = snackbarHostState)
+                DetailView(viewModel = viewModel)
             }
             composable(NAV_ALREADY_SIGN_UP, enterTransition = {
                 slideIntoContainer(
