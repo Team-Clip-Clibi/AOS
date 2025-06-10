@@ -22,7 +22,7 @@ class SignOut @Inject constructor(
         val requestSignOut = network.requestSignOut(
             TOKEN_FORM + token.second
         )
-        if (requestSignOut != 204) {
+        if (requestSignOut != 200) {
             return Result.Fail("network error")
         }
         val deleteToken = database.removeToken()
