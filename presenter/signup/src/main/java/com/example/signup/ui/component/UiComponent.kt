@@ -82,7 +82,6 @@ fun CustomCheckBox(
         modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
-            .padding(start = 17.dp, end = 16.dp)
             .clickable { onCheckChange(!checked) },
         verticalAlignment = Alignment.CenterVertically
     ) {
