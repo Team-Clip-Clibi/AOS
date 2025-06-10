@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.signup.model.TermItem
 import com.sungil.domain.useCase.CheckAlreadySignUpNumber
+import com.sungil.domain.useCase.CheckInPutNickName
 import com.sungil.domain.useCase.CheckNameOkay
 import com.sungil.domain.useCase.CheckNickName
 import com.sungil.domain.useCase.GetFirebaseSMSState
@@ -31,6 +32,7 @@ class SignUpViewModel @Inject constructor(
     private val timer: GetSMSTime,
     private val checkNumber: CheckAlreadySignUpNumber,
     private val checkNickName: CheckNickName,
+    private val checkInPutNickName : CheckInPutNickName,
     private val checkName: CheckNameOkay,
     private val sendTermData: SendTermData,
     private val detail: SendUserDetail,
@@ -66,9 +68,9 @@ class SignUpViewModel @Inject constructor(
     /**
      * 닉네임 중복 확인 및 입력
      */
-    fun checkNickName(data: String) {
+    fun checkNickName() {
         viewModelScope.launch {
-            when (val result = checkNickName.invoke(CheckNickName.Param(data))) {
+            when (val result = checkNickName.invoke(CheckNickName.Param(_userInfoState.value.nickName))) {
                 is CheckNickName.Result.Success -> {
                     _userInfoState.update { it.copy(nickCheckStanBy = CheckState.ValueOkay(result.message)) }
                 }
@@ -80,12 +82,27 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    fun inputNickName(data: String) {
+        _userInfoState.update { it.copy(nickName = data) }
+        viewModelScope.launch {
+            when(val result = checkInPutNickName.invoke(CheckInPutNickName.Param(_userInfoState.value.nickName))){
+                is CheckInPutNickName.Result.Fail -> {
+                    _userInfoState.update { it.copy(nickCheckStanBy = CheckState.ValueOkay(result.errorMessage)) }
+                }
+                is CheckInPutNickName.Result.Success -> {
+                    _userInfoState.update { it.copy(nickCheckStanBy = CheckState.ValueNotOkay(result.message)) }
+                }
+            }
+        }
+    }
+
+
     /**
      * 이름 양식 확인 및입력
      */
-    fun checkName(data: String) {
+    fun checkName() {
         viewModelScope.launch {
-            when (val result = checkName.invoke(CheckNameOkay.Param(data))) {
+            when (val result = checkName.invoke(CheckNameOkay.Param(_userInfoState.value.name))) {
                 is CheckNameOkay.Result.Success -> {
                     _userInfoState.update { it.copy(nameCheck = CheckState.ValueOkay(result.message)) }
                 }
@@ -249,9 +266,6 @@ class SignUpViewModel @Inject constructor(
         _userInfoState.update { it.copy(name = data) }
     }
 
-    fun inputNickName(data: String) {
-        _userInfoState.update { it.copy(nickName = data) }
-    }
 
     fun inputGender(data: String) {
         _userInfoState.update { it.copy(gender = data) }

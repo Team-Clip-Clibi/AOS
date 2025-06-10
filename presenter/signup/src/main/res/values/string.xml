@@ -12,7 +12,7 @@
     <string name="btn_start_oneThing">원띵 시작하기</string>
 
     <!--  phone number   -->
-    <string name="txt_sign_up_title">원띵와 함께할 회원님의</string>
+    <string name="txt_phone_title">원띵와 함께할 회원님의</string>
     <string name="txt_phone_title_sub">핸드폰 번호를 알려주세요</string>
     <string name="hint_input_phone_number">휴대폰 번호</string>
     <string name="btn_send_message">인증 번호 발송</string>
@@ -24,19 +24,19 @@
     <!--  common  -->
     <string name="btn_next">다음</string>
     <string name="btn_finish">완료</string>
-
+    <string name="btn_accept">동의하고 가입하기</string>
     <!-- InputName   -->
     <string name="txt_name_title">원띵에 오신 당신, 환영해요!</string>
-    <string name="txt_name_content">실명을 입력해주세요</string>
+    <string name="txt_name_sub_title">실명을 입력해주세요</string>
     <string name="txt_name_safe">실명은 서비스 내에서 공개되지 않으니,\n안심하고 입력해주세요</string>
     <string name="txt_name_korean_english">*국문과 영문 외의 문자를 사용할 수 없습니다.</string>
-    <string name="hint_name">ex) 홍길동</string>
+    <string name="hint_name">이름 (성 + 이름)</string>
 
     <!-- InputNickName   -->
-    <string name="txt_nick_title">원띵에서 뭐라고 부를까요?</string>
-    <string name="txt_nick_content">닉네임을 입력해주세요</string>
-    <string name="hint_nick">닉네임</string>
-    <string name="txt_nick_length">최소 2자~8자(엉어,국문 가능)</string>
+    <string name="txt_nick_title">원띵에서 사용할 회원님의</string>
+    <string name="txt_nick_sub_title">닉네임을 입력해주세요</string>
+    <string name="hint_nick">닉네임(2 ~ 8자)</string>
+    <string name="txt_nick_under_text">국문과 영문만 입력 가능합니다.</string>
     <string name="btn_nick_check">중복 확인</string>
     <string name="txt_nick_length_over">*최대 8자까지 가능해요.</string>
     <string name="txt_nick_length_low">*2자 이상 입력해주세요</string>
@@ -47,10 +47,11 @@
 
     <!-- InputDetailInfo   -->
     <string name="txt_info_title">가입 후에도 언제든지 변경할 수 있어요</string>
-    <string name="txt_info_content">당신에 대해 조금더\n알려주세요!</string>
+    <string name="txt_info_sub_title">당신에 대해 조금더\n알려주세요!</string>
     <string name="txt_info_gender">성별</string>
     <string name="txt_info_male">남성</string>
     <string name="txt_info_female">여성</string>
+    <string name="txt_info_non_sex">논바이너리</string>
     <string name="txt_info_birth">생년월일</string>
     <string name="txt_info_year">YYYY</string>
     <string name="txt_info_month">MM</string>
@@ -61,7 +62,7 @@
 
     <!-- Already Sign Up   -->
     <string name="txt_signUp_title">해당 계정이 본인 것인지 확인해 주세요.</string>
-    <string name="txt_signUp_content">이미 가입된 계정이 있어요</string>
+    <string name="txt_signUp_sub_title">이미 가입된 계정이 있어요</string>
     <string name="txt_signUp_id">계정 정보</string>
     <string name="txt_signUp_name">이름</string>
     <string name="txt_signUp_account">연동계정</string>

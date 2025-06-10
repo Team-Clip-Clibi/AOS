@@ -66,11 +66,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.window.Dialog
 import com.example.core.AppTextStyles
+import com.example.core.ButtonXXLPurple400
+import com.example.core.ColorStyle
 import com.example.signup.City
 import com.example.signup.ISArea
 import com.example.signup.ISCity
@@ -127,13 +130,16 @@ fun TopBar(
 fun CustomCheckBox(
     text: String,
     checked: Boolean,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     onCheckChange: (Boolean) -> Unit,
     isIconShow: Boolean = true,
 ) {
-//    0xFF666666
     Row(
-        modifier = modifier.clickable { onCheckChange(!checked) },
+        modifier = modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .padding(start = 17.dp, end = 16.dp)
+            .clickable { onCheckChange(!checked) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(16.dp))
@@ -147,10 +153,9 @@ fun CustomCheckBox(
             modifier = Modifier.weight(1f),
             text = text,
             style = AppTextStyles.SUBTITLE_16_24_SEMI,
-            color =  if (checked) Color(0xFF171717) else Color(0xFF666666)
+            color =  if (checked) ColorStyle.GRAY_800 else ColorStyle.GRAY_400
         )
         if (isIconShow) {
-
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow),
                 contentDescription = "자세히 보기",
@@ -158,7 +163,6 @@ fun CustomCheckBox(
                 tint = Color.Gray
             )
         }
-
         Spacer(modifier = Modifier.width(8.dp))
     }
 }
@@ -689,13 +693,12 @@ fun ElementValue(
 @Composable
 fun UnderLineText(
     text: String,
-    color: Long,
     modifier: Modifier,
 ) {
     Text(
         text = text,
         style = AppTextStyles.BODY_14_20_MEDIUM,
-        color = Color(color),
+        color = ColorStyle.GRAY_600,
         textDecoration = TextDecoration.Underline,
         modifier = modifier
     )
@@ -724,6 +727,63 @@ fun CustomSnackBar(data: SnackbarData) {
             text = data.visuals.message,
             style = AppTextStyles.CAPTION_12_18_SEMI,
             color = Color(0xFFFFFFFF)
+        )
+    }
+}
+
+@Composable
+fun BottomBar(
+    isEnable: Boolean,
+    buttonText: String,
+    onClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(bottom = 8.dp)
+    ) {
+        HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
+        Spacer(modifier = Modifier.height(8.dp))
+        ButtonXXLPurple400(
+            onClick = onClick,
+            buttonText = buttonText,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 17.dp),
+            isEnable = isEnable
+        )
+    }
+}
+
+@Composable
+fun AlreadySignUpBottomBar(
+    onClick: () -> Unit,
+    isNotMyAccount: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(bottom = 8.dp)
+    ) {
+        HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
+        Spacer(modifier = Modifier.height(8.dp))
+        ButtonXXLPurple400(
+            onClick = onClick,
+            buttonText = stringResource(R.string.btn_signUp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 17.dp),
+        )
+        Spacer(modifier = Modifier.height(18.dp))
+        UnderLineText(
+            text = stringResource(R.string.btn_signUp_not_mine),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .clickable {
+                    isNotMyAccount()
+                }
         )
     }
 }
