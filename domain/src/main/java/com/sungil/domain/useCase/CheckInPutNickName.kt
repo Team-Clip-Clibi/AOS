@@ -24,7 +24,7 @@ class CheckInPutNickName @Inject constructor(
         if (param.name.length > 8) {
             return Result.Fail("to long")
         }
-        if (param.name.matches(Regex("^[a-zA-Z가-힣0-9]+$"))) {
+        if (!param.name.matches(Regex("^[a-zA-Z가-힣0-9]+$"))) {
             deviceRepo.requestVibrate()
             return Result.Fail("no special")
         }
