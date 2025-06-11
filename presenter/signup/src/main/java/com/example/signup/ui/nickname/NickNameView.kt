@@ -46,19 +46,22 @@ internal fun NickNameView(
     var nicknameValidationMessage by remember { mutableIntStateOf(R.string.txt_nick_under_text) }
     val nickName by viewModel.userInfoState.collectAsState()
     var nickNameCheckButton by remember { mutableStateOf(true) }
-    /**
-     * 입력시 에레 처러 안함 고쳐 ㅅㄱ
-     */
-    LaunchedEffect(nickName.stepStates) {
-        when (nickName.stepStates[SignUpStep.NICKNAME]) {
+
+    LaunchedEffect(nickName.stepStates[SignUpStep.NICKNAME]) {
+        when (val state = nickName.stepStates[SignUpStep.NICKNAME]) {
             is SignUpStepState.Success -> {
-                if((nickName.stepStates[SignUpStep.NICKNAME] as? SignUpStepState.Success)?.message == NAME_OKAY){
+                if (state.message == NAME_OKAY) {
+                    nicknameValidationMessage = R.string.txt_nick_name_okay
                     nickNameCheckButton = false
+                } else {
+                    nicknameValidationMessage = R.string.txt_nick_under_text
+                    nickNameCheckButton = true
                 }
             }
 
             is SignUpStepState.Error -> {
-                nicknameValidationMessage =  when ((nickName.stepStates[SignUpStep.NICKNAME] as? SignUpStepState.Error)?.message) {
+                nicknameValidationMessage =
+                    when ((nickName.stepStates[SignUpStep.NICKNAME] as? SignUpStepState.Error)?.message) {
                         NAME_LONG -> {
                             R.string.txt_nick_length_over
                         }
@@ -77,6 +80,7 @@ internal fun NickNameView(
 
                         else -> R.string.txt_nick_length_over
                     }
+                nickNameCheckButton = false
             }
 
             else -> Unit
