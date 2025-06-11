@@ -91,7 +91,6 @@ fun CustomCheckBox(
             onCheckedChange = onCheckChange
         )
         Spacer(modifier = Modifier.width(10.dp))
-
         Text(
             modifier = Modifier.weight(1f),
             text = text,
@@ -119,27 +118,18 @@ fun CircularCheckBox(
         modifier = Modifier
             .size(32.dp)
             .background(
-                color = if (checked) Color(0xFF6700CE) else Color(0xFFCACACA),
+                color = if (checked) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400,
                 shape = CircleShape
             )
             .clickable { onCheckedChange(!checked) },
         contentAlignment = Alignment.Center
     ) {
-        if (checked) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "동의항목",
-                tint = Color.White,
-                modifier = Modifier.size(32.dp)
-            )
-        } else {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "비동의항목",
-                tint = Color.White,
-                modifier = Modifier.size(32.dp)
-            )
-        }
+        Icon(
+            imageVector = Icons.Default.Check,
+            contentDescription = if (checked) "동의항목" else "비동의항목",
+            tint = Color.White,
+            modifier = Modifier.size(32.dp)
+        )
     }
 }
 
@@ -150,13 +140,12 @@ fun CustomTextField(
     onValueChange: (String) -> Unit,
     inputType: KeyboardType,
     hint: String,
-    timeCount: String = "",
 ) {
     TextField(
         value = text,
         onValueChange = onValueChange,
         modifier = modifier.background(
-            color = Color(0xFFF7F7F7),
+            color = ColorStyle.GRAY_100,
             shape = RoundedCornerShape(12.dp)
         ),
         keyboardOptions = KeyboardOptions(keyboardType = inputType),
@@ -165,29 +154,15 @@ fun CustomTextField(
             Text(
                 hint,
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                color = Color(0xFF666666),
+                color = ColorStyle.GRAY_600,
                 modifier = Modifier.padding(end = 16.dp)
             )
         },
-        textStyle = AppTextStyles.SUBTITLE_16_24_SEMI,
-        trailingIcon = {
-            Text(
-                text = timeCount,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    lineHeight = 24.sp,
-                    fontFamily = FontFamily(Font(R.font.medium)),
-                    fontWeight = FontWeight(600),
-                    color = colorResource(R.color.gray_text),
-                    textAlign = TextAlign.Right
-                ),
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
-            )
-        },
+        textStyle = AppTextStyles.SUBTITLE_16_24_SEMI.copy(color = ColorStyle.GRAY_800),
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color(0xFFF7F7F7),
-            unfocusedContainerColor = Color(0xFFF7F7F7),
-            disabledContainerColor = Color(0xFFF7F7F7),
+            focusedContainerColor = ColorStyle.GRAY_100,
+            unfocusedContainerColor = ColorStyle.GRAY_100,
+            disabledContainerColor = ColorStyle.GRAY_100,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
@@ -201,7 +176,7 @@ fun RowScope.CustomSpinnerBox(text: String, onclick: () -> Unit) {
         modifier = Modifier
             .weight(1f)
             .height(60.dp)
-            .background(Color(0xFFF7F7F7), shape = RoundedCornerShape(size = 12.dp))
+            .background(color = ColorStyle.GRAY_100, shape = RoundedCornerShape(size = 12.dp))
             .padding(start = 17.dp, end = 16.dp)
             .clickable(
                 indication = null,
@@ -353,7 +328,7 @@ fun CustomBottomSheet(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(8.dp))
-                            .background(Color(0xFFF7F7F7))
+                            .background(ColorStyle.GRAY_100)
                             .clickable {
                                 coroutineScope.launch {
                                     onSelect(item)
@@ -368,7 +343,7 @@ fun CustomBottomSheet(
                         Text(
                             text = item,
                             style = AppTextStyles.BODY_14_20_MEDIUM,
-                            color = Color(0xFF171717),
+                            color = ColorStyle.GRAY_800,
                             textAlign = TextAlign.Center,
                         )
                     }
