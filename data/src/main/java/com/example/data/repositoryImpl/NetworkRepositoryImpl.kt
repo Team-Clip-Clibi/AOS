@@ -237,15 +237,9 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestJob(accessToken: String): JobList {
         val result = api.requestJob(accessToken)
-        if (result.code() != 200) {
-            return JobList(
-                result.code(),
-                ""
-            )
-        }
         return JobList(
             result.code(),
-            result.body()!!.job
+            result.body()?.job ?: ""
         )
     }
 
