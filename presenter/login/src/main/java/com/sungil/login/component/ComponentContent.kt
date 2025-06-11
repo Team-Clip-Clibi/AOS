@@ -85,7 +85,7 @@ fun LoginPager(
                 ) {
                     Text(
                         text = data[page].headText ?: "",
-                        style = AppTextStyles.HEAD_24_34_BOLD,
+                        style = AppTextStyles.TITLE_20_28_SEMI,
                         color = ColorStyle.GRAY_800,
                         textAlign = TextAlign.Center,
                     )
