@@ -28,7 +28,7 @@ import com.example.core.ButtonLeftLarge
 import com.example.core.ColorStyle
 import com.example.signup.FEMALE
 import com.example.signup.MALE
-import com.example.signup.NON_SEX
+import com.example.signup.NON_BINARY
 import com.example.signup.R
 import com.example.signup.SignUpViewModel
 import com.example.signup.ui.component.BottomSheetSelector
@@ -90,9 +90,9 @@ internal fun DetailView(
         Spacer(modifier = Modifier.height(10.dp))
         ButtonLeftLarge(
             text = stringResource(R.string.txt_info_non_sex),
-            isSelected = userInfo.gender == NON_SEX,
+            isSelected = userInfo.gender == NON_BINARY,
             onClick = {
-                viewModel.inputGender(NON_SEX)
+                viewModel.inputGender(NON_BINARY)
             }
         )
         Spacer(modifier = Modifier.height(24.dp))
