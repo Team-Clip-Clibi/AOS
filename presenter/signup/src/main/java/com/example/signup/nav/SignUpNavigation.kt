@@ -212,27 +212,27 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
     }
     Scaffold(
         topBar = {
-            TopAppBarNumber(
-                title = stringResource(R.string.txt_topBar_title),
-                currentPage = when (currentRoute) {
-                    NAV_TERM -> 0
-                    NAV_PHONE -> 1
-                    NAV_NAME -> 2
-                    NAV_NICK -> 3
-                    NAV_INFO -> 4
-                    NAV_ALREADY_SIGN_UP -> 0
-                    else -> 0
-                },
-                totalPage = 4,
-                onBackClick = {
-                    if (!navController.popBackStack()) loginPage()
-                },
-                isPageTextShow = when (currentRoute) {
-                    NAV_TERM -> false
-                    NAV_ALREADY_SIGN_UP -> false
-                    else -> true
-                }
-            )
+            if(currentRoute != NAV_SIGN_UP_FINISH){
+                TopAppBarNumber(
+                    title = stringResource(R.string.txt_topBar_title),
+                    currentPage = when (currentRoute) {
+                        NAV_PHONE -> 1
+                        NAV_NAME -> 2
+                        NAV_NICK -> 3
+                        NAV_INFO -> 4
+                        else -> 0
+                    },
+                    totalPage = 4,
+                    onBackClick = {
+                        if (!navController.popBackStack()) loginPage()
+                    },
+                    isPageTextShow = when (currentRoute) {
+                        NAV_TERM -> false
+                        NAV_ALREADY_SIGN_UP -> false
+                        else -> true
+                    }
+                )
+            }
         },
         bottomBar = {
             when (currentRoute) {
