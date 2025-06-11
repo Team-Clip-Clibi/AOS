@@ -45,6 +45,10 @@ class CheckAlreadySignUp @Inject constructor(
                 }
                 val requestUserInfo = network.requestUserData(TOKEN_FORM + requestLogin.second!!)
                     ?: return Result.Fail("Network Error")
+                if(requestUserInfo.data.nickName == null || requestUserInfo.data.userName == "" || requestUserInfo.data.phoneNumber == ""){
+                    database.saveSingUpKey(false)
+                    return Result.Fail("Not SignUp")
+                }
                 val saveUserInfo = database.saveUserInfo(
                     name = requestUserInfo.data.userName,
                     nickName = requestUserInfo.data.nickName ?: "ERROR",

@@ -52,7 +52,8 @@ fun TopAppBarNumber(
             Text(
                 text = if (!isPageTextShow) "" else "$currentPage/$totalPage",
                 style = AppTextStyles.CAPTION_12_18_SEMI,
-                color = ColorStyle.PURPLE_400
+                color = ColorStyle.PURPLE_400,
+                modifier = Modifier.padding(end = 16.dp)
             )
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

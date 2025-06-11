@@ -308,7 +308,8 @@ class ProfileEditViewModel @Inject constructor(
     fun changeSignOut(data: SignOutData) {
         _uiState.update { current ->
             current.copy(
-                signOut = data.name
+                signOut = data.name,
+                buttonRun = true
             )
         }
     }
@@ -316,7 +317,8 @@ class ProfileEditViewModel @Inject constructor(
     fun changeSignOutContent(data: String) {
         _uiState.update { current ->
             current.copy(
-                signOutContent = data
+                signOutContent = data,
+                buttonRun = true
             )
         }
     }

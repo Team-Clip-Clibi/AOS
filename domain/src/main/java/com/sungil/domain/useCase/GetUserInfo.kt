@@ -21,7 +21,7 @@ class GetUserInfo @Inject constructor(
     suspend fun invoke(): Result {
         val userData = database.getUserInfo()
         userData.phoneNumber = userData.phoneNumber.reMakePhoneNumber()
-        var updateData = userData.copy(phoneNumber = userData.phoneNumber)
+        val updateData = userData.copy(phoneNumber = userData.phoneNumber)
         var token = database.getToken()
         val job = requestJob(updateData, token) { newToken -> token = newToken }
         if (job.first == "Fail") return Result.Fail(job.second)
@@ -80,7 +80,9 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", retry.job)
             }
-
+            204 ->{
+                return Pair("Success", "NONE")
+            }
             500 -> {
                 return Pair("Success", "NONE")
             }
@@ -108,7 +110,9 @@ class GetUserInfo @Inject constructor(
                 }
                 return Pair("Success", result)
             }
-
+            204 ->{
+                return Pair("Success", "NONE")
+            }
             401 -> {
                 val refreshToken = tokenManger.requestUpdateToken(token.second)
                 if (!refreshToken) {
@@ -153,7 +157,9 @@ class GetUserInfo @Inject constructor(
                     requestLoveState.data.isSameRelationShip
                 )
             }
-
+            204 ->{
+                return Triple("Success", "SINGLE", false)
+            }
             401 -> {
                 val refreshToken = tokenManger.requestUpdateToken(token.second)
                 if (!refreshToken) {

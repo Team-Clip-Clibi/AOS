@@ -21,7 +21,7 @@ class SignUpActivity : ComponentActivity() {
         setContent {
             SignUpNavigation(
                 viewModel = viewModel,
-                clear = {
+                loginPage = {
                     router.navigation(NAV_LOGIN)
                 },
                 main = {

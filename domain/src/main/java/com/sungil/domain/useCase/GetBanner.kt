@@ -23,11 +23,12 @@ class GetBanner @Inject constructor(
     data class Param(val bannerHost: String) : UseCase.Param
 
     override suspend fun invoke(param: Param): Result {
-        val token = database.getToken()
         val banner = network.requestBanner(
             accessToken = when (param.bannerHost) {
                 BANNER_LOGIN -> ""
-                else -> TOKEN_FORM + token.first
+                else -> {
+                    val token = database.getToken()
+                    TOKEN_FORM + token.first}
             },
             bannerType = param.bannerHost
         )
@@ -40,6 +41,10 @@ class GetBanner @Inject constructor(
             }
 
             401 -> {
+                if(param.bannerHost == BANNER_LOGIN){
+                    return Result.Fail("network error")
+                }
+                val token = database.getToken()
                 val refreshToken = tokenManger.requestUpdateToken(token.second)
                 if (!refreshToken) return Result.Fail("reLogin")
                 val newToken = database.getToken()

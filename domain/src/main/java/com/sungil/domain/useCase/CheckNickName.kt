@@ -8,6 +8,9 @@ import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
 import javax.inject.Inject
 
+/**
+ * 닉네임 중복 검사만 실행
+ */
 class CheckNickName @Inject constructor(
     private val deviceRepo: DeviceRepository,
     private val networkRepo: NetworkRepository,
