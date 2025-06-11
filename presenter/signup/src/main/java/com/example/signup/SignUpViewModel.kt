@@ -63,8 +63,15 @@ class SignUpViewModel @Inject constructor(
         _userInfoState.update { it.copy(nickName = data) }
         viewModelScope.launch {
             when (val result = checkInPutNickName.invoke(CheckInPutNickName.Param(data))) {
-                is CheckInPutNickName.Result.Fail -> updateStepState(SignUpStep.NICKNAME, SignUpStepState.Success(result.errorMessage))
-                is CheckInPutNickName.Result.Success -> updateStepState(SignUpStep.NICKNAME, SignUpStepState.Error(result.message))
+                is CheckInPutNickName.Result.Fail -> updateStepState(
+                    SignUpStep.NICKNAME,
+                    SignUpStepState.Error(result.errorMessage)
+                )
+
+                is CheckInPutNickName.Result.Success -> updateStepState(
+                    SignUpStep.NICKNAME,
+                    SignUpStepState.Success(result.message)
+                )
             }
         }
     }
