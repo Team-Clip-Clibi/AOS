@@ -37,6 +37,7 @@ import com.example.signup.NAV_INFO
 import com.example.signup.NAV_NAME
 import com.example.signup.NAV_NICK
 import com.example.signup.NAV_PHONE
+import com.example.signup.NAV_SIGN_UP_FINISH
 import com.example.signup.NAV_TERM
 import com.example.signup.NICKNAME_UPDATE_SUCCESS
 import com.example.signup.R
@@ -51,6 +52,7 @@ import com.example.signup.ui.detail.DetailView
 import com.example.signup.ui.name.InputNameView
 import com.example.signup.ui.nickname.NickNameView
 import com.example.signup.ui.phone.PhoneNumberView
+import com.example.signup.ui.signUpFinish.SignUpFinishView
 import com.example.signup.ui.term.TermView
 
 @Composable
@@ -164,7 +166,9 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
     LaunchedEffect(uiState.stepStates[SignUpStep.INFO]) {
         when (uiState.stepStates[SignUpStep.INFO]) {
             is SignUpStepState.Success -> {
-                main()
+                navController.navigate(NAV_SIGN_UP_FINISH) {
+                    popUpTo(NAV_SIGN_UP_FINISH) { inclusive = true }
+                }
             }
 
             is SignUpStepState.Error -> {
@@ -202,6 +206,7 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
                     }
                 }
             }
+
             else -> Unit
         }
     }
@@ -256,7 +261,7 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
                                     uiState.city.isNotEmpty() &&
                                     uiState.area.isNotEmpty() &&
                                     uiState.gender.isNotEmpty()
-
+                            NAV_SIGN_UP_FINISH -> true
                             else -> false
                         },
                         onClick = {
@@ -280,10 +285,14 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
                                 NAV_INFO -> {
                                     viewModel.sendDetail()
                                 }
+                                NAV_SIGN_UP_FINISH ->{
+                                    main()
+                                }
                             }
                         },
                         buttonText = when (currentRoute) {
                             NAV_TERM -> stringResource(R.string.btn_accept)
+                            NAV_SIGN_UP_FINISH -> stringResource(R.string.btn_confirm)
                             else -> stringResource(R.string.btn_next)
                         },
                     )
@@ -390,6 +399,21 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
                     )
                 }) {
                 AlreadySignUpScreenView(viewModel = viewModel)
+            }
+
+            composable(NAV_SIGN_UP_FINISH, enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(700)
+                    )
+                }) {
+                SignUpFinishView()
             }
         }
     }
