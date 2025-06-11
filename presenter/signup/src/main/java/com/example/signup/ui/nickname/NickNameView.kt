@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ButtonSmall
@@ -119,7 +120,7 @@ internal fun NickNameView(
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
@@ -129,8 +130,13 @@ internal fun NickNameView(
                     R.string.txt_nick_under_text -> ColorStyle.GRAY_600
                     R.string.txt_nick_name_okay -> ColorStyle.GRAY_800
                     else -> ColorStyle.RED_100
-                }
+                },
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 2.dp)
             )
+
             ButtonSmall(
                 text = stringResource(R.string.btn_check_nick_name),
                 isEnable = nickName.name.trim().isNotEmpty() && nickNameCheckButton,
