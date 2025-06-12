@@ -52,8 +52,9 @@ android {
         val readAlarm: String = properties.getProperty("readNotificaiton", "")
         val oneThingOrder: String = properties.getProperty("oneThingOreder", "")
         val payment: String = properties.getProperty("paymentUrl", "")
-        val randomDuplicate : String = properties.getProperty("randomMatchDuPlicate", "")
-        val randomOrder : String = properties.getProperty("randomOrder", "")
+        val randomDuplicate: String = properties.getProperty("randomMatchDuPlicate", "")
+        val randomOrder: String = properties.getProperty("randomOrder", "")
+        val matchOverView: String = properties.getProperty("matchOverView", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -84,6 +85,7 @@ android {
         buildConfigField("String", "PAYMENT_URL", payment)
         buildConfigField("String", "RANDOM_DUPLICATE_URL", randomDuplicate)
         buildConfigField("String", "RANDOM_ORDER_URL", randomOrder)
+        buildConfigField("String", "MATCH_OVERVIEW_URL", matchOverView)
     }
 
     buildTypes {
