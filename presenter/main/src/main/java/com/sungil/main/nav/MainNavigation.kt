@@ -36,7 +36,7 @@ fun MainNavigation(
             )
         }
         composable(Screen.Calendar.screenRoute) {
-            MyMatchView(viewModel = viewModel)
+            MyMatchView(viewModel = viewModel , login = login)
         }
         composable(Screen.MyPage.screenRoute) {
             MyPageScreen(viewModel, profileButtonClick, reportClick, lowClick)
