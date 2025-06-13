@@ -25,6 +25,13 @@ class GetLatestMatch @Inject constructor(
         val token = database.getToken()
         when (val request = network.requestMatchOverView(TOKEN_FORM + token.first)) {
             is NetworkResult.Success -> {
+                if(request.data.date == null){
+                    return Result.Success(
+                        time = "",
+                        applyTime = request.data.applyMatch,
+                        confirmTime = request.data.confirmMatch
+                    )
+                }
                 return Result.Success(
                     time = request.data.date.toDateTime(),
                     applyTime = request.data.applyMatch,
@@ -47,6 +54,13 @@ class GetLatestMatch @Inject constructor(
                             }
 
                             is NetworkResult.Success -> {
+                                if(reRequest.data.date == null){
+                                    return Result.Success(
+                                        time = "",
+                                        applyTime = reRequest.data.applyMatch,
+                                        confirmTime = reRequest.data.confirmMatch
+                                    )
+                                }
                                 Result.Success(
                                     time = reRequest.data.date.toDateTime(),
                                     applyTime = reRequest.data.applyMatch,
