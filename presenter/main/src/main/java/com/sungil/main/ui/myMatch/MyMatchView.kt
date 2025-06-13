@@ -103,7 +103,7 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                 when (latestDay) {
                     is MainViewModel.UiState.Error -> {
                         Text(
-                            text = stringResource(R.string.my_match_title_not_approve),
+                            text = stringResource(R.string.my_match_title_not_approve , userName ?: "error"),
                             style = AppTextStyles.TITLE_20_28_SEMI,
                             color = ColorStyle.GRAY_800
                         )
@@ -142,7 +142,6 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
-
                     else -> Unit
                 }
             }
