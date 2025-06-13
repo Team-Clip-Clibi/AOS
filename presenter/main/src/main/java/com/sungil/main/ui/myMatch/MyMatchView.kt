@@ -1,5 +1,7 @@
 package com.sungil.main.ui.myMatch
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,6 +44,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
@@ -53,6 +57,8 @@ import com.sungil.main.MainViewModel
 import com.sungil.main.MyMatchDestination
 import com.sungil.main.R
 import com.sungil.main.component.CustomMainPageTopBar
+import com.sungil.main.ui.myMatch.matchHistory.MatchHistoryView
+import com.sungil.main.ui.myMatch.matchNotice.MatchNoticeView
 import com.sungil.onethingmatch.ERROR_RE_LOGIN
 
 @Composable
@@ -63,7 +69,6 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
     val context = LocalContext.current
     val navController = rememberNavController()
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
-    val tab = MyMatchDestination.entries
     val userName = when (state.userDataState) {
         is MainViewModel.UiState.Success -> (state.userDataState as MainViewModel.UiState.Success<UserData>).data.nickName
         is MainViewModel.UiState.Loading -> ""
@@ -129,38 +134,56 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                 MyMatchTitleView(latestDay = latestDay, userName = userName)
                 Spacer(modifier = Modifier.height(32.dp))
             }
-            Column(modifier = Modifier.fillMaxWidth().background(color = ColorStyle.WHITE_100)) {
-                ScrollableTabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    edgePadding = 0.dp,
-                    indicator = { tabPositions ->
-                        SecondaryIndicator(
-                            modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                            height = 3.dp,
-                            color = ColorStyle.GRAY_800
-                        )
-                    },
-                    containerColor = ColorStyle.WHITE_100
-                ) {
-                    tab.forEachIndexed { index, tab ->
-                        Tab(
-                            selected = selectedTabIndex == index,
-                            onClick = {
-                                selectedTabIndex = index
-                                //TODO NAV 미 구현
-                            },
-                            text = {
-                                Text(
-                                    text = tab.label,
-                                    style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                                    color = when (selectedTabIndex) {
-                                        index -> ColorStyle.GRAY_800
-                                        else -> ColorStyle.GRAY_600
-                                    }
-                                )
-                            }
-                        )
+            //tab layout
+            MyMatchTabLayout(
+                selectedTabIndex = selectedTabIndex,
+                onTabSelected = { index ->
+                    selectedTabIndex = index
+                    val route = MyMatchDestination.entries[index].route
+                    navController.navigate(route) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
                     }
+                }
+            )
+            NavHost(
+                navController = navController,
+                startDestination = MyMatchDestination.MATCH_HISTORY.route,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .background(color = ColorStyle.GRAY_200)
+            ) {
+                composable(MyMatchDestination.MATCH_HISTORY.route, enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    }) {
+                    MatchHistoryView()
+                }
+                composable(MyMatchDestination.MATCH_NOTICE.route, enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    }) {
+                    MatchNoticeView()
                 }
             }
         }
@@ -297,4 +320,61 @@ fun MyMatchViewMatchInfo(applyInfo: Int, confirmInfo: Int) {
         }
     }
 }
+
+@Composable
+fun MyMatchTabLayout(
+    selectedTabIndex: Int,
+    onTabSelected: (Int) -> Unit
+) {
+    val tabs = MyMatchDestination.entries
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = ColorStyle.WHITE_100)
+    ) {
+        ScrollableTabRow(
+            selectedTabIndex = selectedTabIndex,
+            edgePadding = 0.dp,
+            containerColor = ColorStyle.WHITE_100,
+            divider = {},
+            indicator = { tabPositions ->
+                SecondaryIndicator(
+                    modifier = Modifier
+                        .tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                    height = 3.dp,
+                    color = ColorStyle.GRAY_800
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 17.dp)
+        ) {
+            tabs.forEachIndexed { index, tab ->
+                Tab(
+                    selected = selectedTabIndex == index,
+                    onClick = { onTabSelected(index) },
+                    text = {
+                        Text(
+                            text = tab.label,
+                            style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                            color = if (selectedTabIndex == index)
+                                ColorStyle.GRAY_800
+                            else
+                                ColorStyle.GRAY_600
+                        )
+                    }
+                )
+            }
+        }
+
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = ColorStyle.GRAY_300
+        )
+    }
+}
+
+
 
