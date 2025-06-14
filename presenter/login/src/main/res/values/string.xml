@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name"></string>
     <string name="txt_login_title">오늘 대화 주제 딱 하나!</string>
     <string name="txt_login_content">대화하고 싶은 주제에 맞는 분들끼리 만나요.</string>
     <string name="btn_kako">Kakao로 로그인하기</string>
