@@ -14,10 +14,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.core.CustomSnackBar
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import com.sungil.main.component.CustomHomeTopBar
-import com.sungil.main.component.CustomSnackBar
 
 @Composable
 fun HomeScreen(
@@ -60,7 +60,7 @@ fun HomeScreen(
                         end = 16.dp,
                         bottom = WindowInsets.navigationBars
                             .asPaddingValues()
-                            .calculateTopPadding() + 16.dp
+                            .calculateTopPadding()
                     )
             )
         }

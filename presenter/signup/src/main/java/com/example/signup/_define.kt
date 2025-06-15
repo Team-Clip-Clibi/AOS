@@ -8,27 +8,31 @@ const val NAV_INFO = "info"
 const val NAV_LOGIN = "Login"
 const val NAV_MAIN = "Main"
 const val NAV_ALREADY_SIGN_UP = "alreadySignUp"
+const val NAV_SIGN_UP_FINISH = "signUpFinish"
 const val ERROR_ALREADY_SIGN_UP = "Already SignUp"
-const val ERROR_TIME_OUT = "Time out"
-const val ERROR_FAIL_SMS = "Fail to request SMS"
 const val ERROR_NETWORK_ERROR = "network error"
 const val ERROR_DATA_NOT_INPUT ="Data is Not input"
 const val ERROR_SAVE_DATA_FAIL = "Save Fail"
 const val ERROR_SAVE_SIGNUP_HISTORY_FAIL ="Save SignUp Result"
 const val MALE = "MALE"
 const val FEMALE = "FEMALE"
+const val NON_BINARY = "NON_BINARY"
 const val ISYear = "isYear"
 const val ISDay = "isDay"
 const val ISMonth = "Month"
 const val ISCity = "city"
 const val ISArea = "area"
-const val STANDBY = "wait"
 const val NAME_OKAY = "name okay"
 const val NAME_LONG = "to long"
 const val NAME_SHORT = "to short"
 const val NAME_SPECIAL = "no special"
 const val NICKNAME_ALREADY_USE = "Already use"
 const val RE_LOGIN = "reLogin"
+const val NICKNAME_UPDATE_SUCCESS = "nick name update Success"
+
+const val TERM_SERVICE_PERMISSION =1
+const val TERM_PRIVATE_PERMISSION = 2
+const val TERM_MARKET_PERMISSION = 3
 enum class City(val displayName: String) {
     SEOUL("서울"),
     BUSAN("부산"),
@@ -37,7 +41,6 @@ enum class City(val displayName: String) {
     GWANGJU("광주"),
     DAEJEON("대전"),
     ULSAN("울산"),
-//    SEJONG("세종"),
     GYEONGGI("경기도"),
     GANGWONDO("강원도"),
     CHUNGSHEONGBUKDO("충청북도"),
@@ -127,9 +130,6 @@ enum class County(val displayName: String) {
 
     // 울산광역시
     ULJU("울주군"),
-
-    // 세종특별자치시
-//    SEJONG("세종시"),
 
     // 경기도
     SUWON("수원시"),
@@ -397,9 +397,6 @@ val cityToCountyMap: Map<City, List<County>> = mapOf(
         County.EUMSEONG,
         County.DANYANG
     ),
-//    City.SEJONG to listOf(
-//        County.SEJONG
-//    ),
     City.GYEONGGI to listOf(
         County.SUWON,
         County.SEONGNAM,

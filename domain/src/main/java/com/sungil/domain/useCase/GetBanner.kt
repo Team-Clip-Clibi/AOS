@@ -1,5 +1,6 @@
 package com.sungil.domain.useCase
 
+import com.sungil.domain.BANNER_LOGIN
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.model.BannerData
@@ -22,20 +23,28 @@ class GetBanner @Inject constructor(
     data class Param(val bannerHost: String) : UseCase.Param
 
     override suspend fun invoke(param: Param): Result {
-        val token = database.getToken()
         val banner = network.requestBanner(
-            accessToken = TOKEN_FORM + token.first,
+            accessToken = when (param.bannerHost) {
+                BANNER_LOGIN -> ""
+                else -> {
+                    val token = database.getToken()
+                    TOKEN_FORM + token.first}
+            },
             bannerType = param.bannerHost
         )
-        when (banner.responseCode) {
+        when (banner.first) {
             200 -> {
-                if (banner.bannerResponse.isEmpty()) {
-                    return Result.Fail("banner is null")
+                if (banner.second.isEmpty()) {
+                    return Result.Fail("no banner")
                 }
-                return Result.Success(banner.bannerResponse)
+                return Result.Success(banner.second)
             }
 
             401 -> {
+                if(param.bannerHost == BANNER_LOGIN){
+                    return Result.Fail("network error")
+                }
+                val token = database.getToken()
                 val refreshToken = tokenManger.requestUpdateToken(token.second)
                 if (!refreshToken) return Result.Fail("reLogin")
                 val newToken = database.getToken()
@@ -43,11 +52,11 @@ class GetBanner @Inject constructor(
                     accessToken = TOKEN_FORM + newToken.first,
                     bannerType = param.bannerHost
                 )
-                if (retry.responseCode == 200) {
-                    return Result.Success(banner.bannerResponse)
+                if (banner.second.isEmpty()) {
+                    return Result.Fail("no banner")
                 }
-                if (retry.bannerResponse.isEmpty()) {
-                    return Result.Fail("banner is null")
+                if (retry.first == 200) {
+                    return Result.Success(banner.second)
                 }
                 return Result.Fail("network error")
             }

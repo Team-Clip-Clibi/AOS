@@ -2,16 +2,18 @@ package com.sungil.domain.repository
 
 import android.app.Activity
 import androidx.paging.PagingData
-import com.sungil.domain.model.BannerResponse
+import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchOverView
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.RandomInfo
+import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import kotlinx.coroutines.flow.Flow
@@ -81,7 +83,7 @@ interface NetworkRepository {
     suspend fun requestBanner(
         accessToken: String,
         bannerType: String,
-    ): BannerResponse
+    ): Pair<Int , List<BannerData>>
 
     suspend fun requestMatchingData(
         accessToken: String,
@@ -126,4 +128,8 @@ interface NetworkRepository {
         tmiContent: String,
         district: String,
     ): RandomInfo
+
+    suspend fun requestMatchOverView(
+        token : String
+    ) : NetworkResult<MatchOverView>
 }

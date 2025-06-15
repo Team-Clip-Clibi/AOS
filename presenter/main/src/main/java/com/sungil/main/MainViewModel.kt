@@ -10,6 +10,7 @@ import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.UserData
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFirstMatchInput
+import com.sungil.domain.useCase.GetLatestMatch
 import com.sungil.domain.useCase.GetMatch
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
@@ -30,6 +31,7 @@ class MainViewModel @Inject constructor(
     private val match: GetMatch,
     private val banner: GetBanner,
     private val firstMatch: GetFirstMatchInput,
+    private val latestDay: GetLatestMatch,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -41,6 +43,7 @@ class MainViewModel @Inject constructor(
         serviceNotify()
         requestMatch()
         getBanner()
+        getLatestMatch()
     }
 
     private fun requestUserInfo() {
@@ -116,6 +119,32 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun getLatestMatch() {
+        viewModelScope.launch {
+            when (val result = latestDay.invoke()) {
+                is GetLatestMatch.Result.Fail -> {
+                    _userState.update { current ->
+                        current.copy(latestDay = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is GetLatestMatch.Result.Success -> {
+                    _userState.update { current ->
+                        current.copy(
+                            latestDay = UiState.Success(
+                                LatestDayInfo(
+                                    time = result.time,
+                                    applyTime = result.applyTime,
+                                    confirmTime = result.confirmTime
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private fun getBanner() {
         viewModelScope.launch {
             when (val result = banner.invoke(GetBanner.Param("HOME"))) {
@@ -169,6 +198,12 @@ class MainViewModel @Inject constructor(
         val banner: UiState<List<BannerData>> = UiState.Loading,
         val matchState: UiState<MatchData> = UiState.Loading,
         val firstMatch: UiState<String> = UiState.Loading,
+        val latestDay: UiState<LatestDayInfo> = UiState.Loading,
     )
+
 }
+
+data class LatestDayInfo(
+    val time: String, val applyTime: Int, val confirmTime: Int,
+)
 

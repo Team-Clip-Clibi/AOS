@@ -1,8 +1,7 @@
 package com.sungil.login.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,184 +9,126 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.lerp
 import com.example.core.AppTextStyles
+import com.example.core.ColorStyle
 import com.sungil.login.LoginViewModel
 import com.sungil.login.R
-import com.sungil.login.component.CustomButton
-import com.sungil.login.component.CustomText
+import com.sungil.login.component.LoginPager
 import com.sungil.login.component.PageIndicator
-import kotlin.math.absoluteValue
 
 @Composable
 internal fun LoginScreen(
     kakaoLogin: () -> Unit,
     viewModel: LoginViewModel,
 ) {
-    val test = listOf(
-        "한 가지 주제로 깊이 있게",
-        "고민 없이 딱 맞는 모임 추천",
-        "긿 잃을 필요 없이, 바로 연결",
-    )
-    val test2 = listOf(
-        "원하는 대화, 원하는 사람과 함께해요.",
-        "원띵에서 추천해드려요",
-        "나와 맞는 모임을 찾아드려요."
-    )
-    val pageState = rememberPagerState(pageCount = {
-        3
-    })
     val isFcmReady by viewModel.isFcmReady.collectAsState()
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(bottom = 8.dp)
-            .navigationBarsPadding()
-    ) {
+    val bannerData by viewModel.bannerData.collectAsState()
+    val pageState = rememberPagerState(pageCount = {
+        bannerData.size
+    })
+    Scaffold(
+        bottomBar = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = ColorStyle.WHITE_100)
+                    .padding(start = 17.dp, end = 16.dp)
+                    .navigationBarsPadding()
+            ) {
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    onClick = kakaoLogin,
+                    enabled = isFcmReady,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ColorStyle.YELLOW_100,
+                        disabledContainerColor = ColorStyle.YELLOW_100.copy(alpha = 0.3f)
+                    )
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_kako),
+                        contentDescription = "kakao login",
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Text(
+                        text = stringResource(R.string.btn_kako),
+                        style = AppTextStyles.BODY_14_20_MEDIUM,
+                        color = ColorStyle.GRAY_10_10
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    onClick = { /* TODO: Implement One Thing Preview */ },
+                    enabled = true,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ColorStyle.COLOR_TRANSPARENT,
+                        disabledContainerColor = ColorStyle.COLOR_TRANSPARENT
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(0.dp) // 그림자 제거
+                ) {
+                    Text(
+                        text = stringResource(R.string.btn_one_thing_preview),
+                        style = AppTextStyles.BODY_14_20_MEDIUM,
+                        color = ColorStyle.GRAY_700
+                    )
+                }
+            }
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 17.dp, end = 16.dp, top = 20.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.Start
+                .background(color = ColorStyle.WHITE_100)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + 40.dp,
+                    start = 17.dp,
+                    end = 16.dp,
+                    bottom = paddingValues.calculateBottomPadding() + 52.dp
+                )
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Spacer(modifier = Modifier.height(40.dp))
-
-                // 제목
-                CustomText(
-                    text = stringResource(R.string.txt_login_title),
-                    style = AppTextStyles.HEAD_28_40_BOLD,
-                    textColor = Color(0xFF171717),
-                    maxLine = 1
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-
-                CustomText(
-                    text = stringResource(R.string.txt_login_content),
-                    style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                    textColor = Color(0xFF666666),
-                    maxLine = 1
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-                HorizontalPager(
-                    state = pageState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-
-                ) { page ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .graphicsLayer {
-                                val pageOffset = (
-                                        (pageState.currentPage - page) + pageState.currentPageOffsetFraction
-                                        ).absoluteValue
-                                alpha = lerp(
-                                    start = 0.5f,
-                                    stop = 1f,
-                                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                                )
-                            },
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(color = Color(0xFFF7F7F7))
-                                .padding(bottom = 44.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = test[page],
-                                    style = AppTextStyles.HEAD_24_34_BOLD,
-                                    color = Color(0xFF171717),
-                                    textAlign = TextAlign.Center,
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = test2[page],
-                                    style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                                    color = Color(0xFF383838),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // 인디케이터 추가
-                PageIndicator(
-                    numberOfPages = pageState.pageCount,
-                    selectedPage = pageState.currentPage,
-                    selectedColor = Color(0xFF9254DE),
-                    defaultColor = Color(0xFFDCDCDC),
-                    defaultRadius = 10.dp,
-                    selectedLength = 16.dp,
-                    space = 8.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                )
-
-                Spacer(modifier = Modifier.height(22.dp))
-            }
-
-            CustomButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(size = 8.dp),
-                buttonColor = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.yellow)),
-                textColor = colorResource(R.color.black),
-                text = stringResource(R.string.btn_kako),
-                onclick = kakaoLogin,
-                imageId = R.drawable.ic_kako,
-                imageDescription = "snsLogin",
-                isEnable = isFcmReady
+            Text(
+                text = stringResource(R.string.txt_login_title),
+                style = AppTextStyles.HEAD_28_40_BOLD,
+                color = ColorStyle.GRAY_800,
+                modifier = Modifier.fillMaxWidth()
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            CustomButton(
+            Text(
+                text = stringResource(R.string.txt_login_content),
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.GRAY_600,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            LoginPager(
+                state = pageState,
+                data = bannerData,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(size = 8.dp),
-                buttonColor = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.transparent)),
-                textColor = colorResource(R.color.dark_gray),
-                text = stringResource(R.string.btn_one_thing_preview),
-                onclick = {},
+                    .weight(1f)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            PageIndicator(
+                numberOfPages = pageState.pageCount,
+                selectedPage = pageState.currentPage,
             )
         }
     }

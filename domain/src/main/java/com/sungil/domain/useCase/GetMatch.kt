@@ -1,11 +1,8 @@
 package com.sungil.domain.useCase
 
-import com.sungil.domain.CATEGORY
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
-import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
-import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
@@ -32,36 +29,14 @@ class GetMatch @Inject constructor(
                 val newToken = database.getToken()
                 val reRequest = network.requestMatchingData(TOKEN_FORM + newToken.first)
                 if (reRequest.responseCode == 200) {
-                    /**
-                     * TODO -> 배포시 서버 데이터로만 출력
-                     */
-                    val serverMatch = MatchData(
-                        oneThingMatch = listOf(
-                            MatchInfo(CATEGORY.CONTENT_ONE_THING, 1, 3, "강남역"),
-                            MatchInfo(CATEGORY.CONTENT_ONE_THING, 2, 4, "홍대입구")
-                        ),
-                        randomMatch = listOf(
-                            MatchInfo(CATEGORY.CONTENT_RANDOM, 3, 5, "잠실")
-                        )
-                    )
+                    val serverMatch = reRequest.data
                     return Result.Success(serverMatch)
                 }
                 return Result.Fail("network error")
             }
 
             200 -> {
-                /**
-                 * TODO -> 배포시 서버 데이터로만 출력
-                 */
-                val serverMatch = MatchData(
-                    oneThingMatch = listOf(
-                        MatchInfo(CATEGORY.CONTENT_ONE_THING, 1, 3, "강남역"),
-                        MatchInfo(CATEGORY.CONTENT_ONE_THING, 2, 4, "홍대입구")
-                    ),
-                    randomMatch = listOf(
-                        MatchInfo(CATEGORY.CONTENT_RANDOM, 3, 5, "잠실")
-                    )
-                )
+                val serverMatch = data.data
                 return Result.Success(serverMatch)
             }
 

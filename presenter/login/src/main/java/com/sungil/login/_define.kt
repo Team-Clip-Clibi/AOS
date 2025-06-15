@@ -7,3 +7,9 @@ const val MAIN_VIEW = "Main"
 const val ERROR_NOTIFICATION ="error permission"
 const val ERROR_FCM_TOKEN = "Error to Fail Fcm"
 const val ERROR_NOTIFY_NOT_SAVE = "Error save Notify"
+
+const val BANNER ="LOGIN"
+
+//NAV
+const val NAV_SPLASH = "splash"
+const val NAV_LOGIN = "Login"

@@ -30,7 +30,15 @@
     <string name="btn_home_light_content">오늘 만날 수 있어요</string>
     <string name="card_one_thing_title">원띵 모임</string>
     <string name="card_random_title">랜덤 모임</string>
-
+    <!--MyMatch-->
+    <string name="my_match_top_bar">내 모임</string>
+    <string name="my_match_title">%1$s님의</string>
+    <string name="my_match_content">다음 모임은 %1$s</string>
+    <string name="my_match_title_not_apply">첫 모임을 신청해 볼까요?</string>
+    <string name="my_match_title_no_match">참여한 원띵을 잘 간직하고 있어요\n다음 원띵을 찾아볼까요?</string>
+    <string name="my_match_title_not_approve"> %1$s을 위한 모임을 찾고 있어요\n확정까지 조금만 기다려 주세요</string>
+    <string name="my_match_content_apply">신청완료</string>
+    <string name="my_match_content_confirm">모임확정</string>
     <!-- Error message   -->
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <string name="msg_network_error">네트워크 에러</string>

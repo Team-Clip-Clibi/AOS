@@ -11,3 +11,5 @@ enum class MATCHTIME{
     DINNER,
     LUNCH
 }
+
+const val BANNER_LOGIN = "LOGIN"

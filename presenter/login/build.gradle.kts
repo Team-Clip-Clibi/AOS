@@ -63,4 +63,8 @@ dependencies {
     implementation(project(":core"))
     //firebase
     implementation(libs.firebase.crash)
+    //image
+    implementation(libs.glide.compose)
+    //nav
+    implementation(libs.compose.nav)
 }

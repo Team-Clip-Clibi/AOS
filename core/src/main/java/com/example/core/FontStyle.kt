@@ -1,18 +1,15 @@
 package com.example.core
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 object AppTextStyles {
 
-    val HEAD_30_20_BOLD = TextStyle(
+    val HEAD_30_42_BOLD = TextStyle(
         fontSize = 30.sp,
         lineHeight = 42.sp,
         fontFamily = FontFamily(Font(R.font.bold)),

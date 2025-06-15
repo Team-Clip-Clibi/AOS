@@ -9,7 +9,6 @@ import com.example.data.paging.NotificationReadPagingSource
 import com.example.fcm.FirebaseFCM
 import com.sungil.database.token.TokenManager
 import com.sungil.domain.CATEGORY
-import com.sungil.domain.model.BannerResponse
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietData
 import com.sungil.domain.model.DietResponse
@@ -19,6 +18,8 @@ import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchInfo
+import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
@@ -31,7 +32,6 @@ import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
-import com.sungil.network.model.Banner
 import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
@@ -239,15 +239,9 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestJob(accessToken: String): JobList {
         val result = api.requestJob(accessToken)
-        if (result.code() != 200) {
-            return JobList(
-                result.code(),
-                ""
-            )
-        }
         return JobList(
             result.code(),
-            result.body()!!.job
+            result.body()?.job ?: ""
         )
     }
 
@@ -318,20 +312,21 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun requestBanner(
         accessToken: String,
         bannerType: String,
-    ): BannerResponse {
+    ): Pair<Int, List<BannerData>> {
         val result = api.requestBanner(accessToken, bannerType)
-        when (result.code()) {
-            200 -> {
-                return BannerResponse(
-                    responseCode = result.code(),
-                    bannerResponse = result.body()!!.map { it.toDomain() }
+        val bannerList = mutableListOf<BannerData>()
+        result.body()?.let { bannerItems ->
+            for (banner in bannerItems) {
+                bannerList.add(
+                    BannerData(
+                        image = banner.imagePresignedUrl ?: "",
+                        headText = banner.headText ?: "",
+                        subText = banner.subText ?: ""
+                    )
                 )
             }
-
-            else -> {
-                return BannerResponse(result.code(), emptyList())
-            }
         }
+        return Pair(result.code(), bannerList)
     }
 
 
@@ -493,13 +488,34 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun requestMatchOverView(token: String): NetworkResult<MatchOverView> {
+        return try {
+            val response = api.requestMatchOverView(token)
+            if (!response.isSuccessful) {
+                return NetworkResult.Error(code = response.code())
+            }
+            val body = response.body() ?: return NetworkResult.Error(code = response.code())
+            return NetworkResult.Success(
+                MatchOverView(
+                    responseCode = response.code(),
+                    date = body.nextMatchingDate,
+                    applyMatch = body.appliedMatchingCount,
+                    confirmMatch = body.confirmedMatchingCount,
+                    isAllNoticeRead = body.isAllNoticeRead
+                )
+            )
+        } catch (e: Exception) {
+            NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {
         return UserInfo(
             responseCode = responseCode,
             data = UserData(
-                userName = username,
+                userName = username ?: "",
                 nickName = nickname,
-                phoneNumber = phoneNumber,
+                phoneNumber = phoneNumber ?: "",
                 job = "NONE",
                 loveState = Pair("NONE", false),
                 diet = "NONE",
@@ -531,14 +547,6 @@ class NetworkRepositoryImpl @Inject constructor(
             noticeType = this.noticeType,
             content = this.content,
             link = this.link
-        )
-    }
-
-    private fun Banner.toDomain(): BannerData {
-        return BannerData(
-            image = this.imagePresignedUrl,
-            headText = this.headText,
-            subText = this.subText
         )
     }
 }
