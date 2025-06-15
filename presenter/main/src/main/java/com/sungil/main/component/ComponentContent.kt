@@ -1,19 +1,11 @@
 package com.sungil.main.component
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.with
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,12 +21,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -62,6 +51,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.core.AppTextStyles
+import com.example.core.ColorStyle
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
@@ -170,10 +160,10 @@ fun Modifier.noVisualFeedbackClickable(onClick: () -> Unit): Modifier = composed
 }
 
 @Composable
-fun CustomMyPageAppBar(text: String) {
+fun CustomMainPageTopBar(text: String) {
     Box(
         modifier = Modifier
-            .background(Color(0xFFF7F7F7))
+            .background(color = ColorStyle.WHITE_100)
             .fillMaxWidth()
             .height(48.dp)
             .padding(start = 17.dp, end = 12.dp),
@@ -291,32 +281,6 @@ fun CustomHomeTopBar(
 }
 
 @Composable
-fun CustomSnackBar(data: SnackbarData) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(color = Color(0xFF383838), shape = RoundedCornerShape(size = 8.dp))
-            .padding(start = 16.dp, end = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = com.sungil.editprofile.R.drawable.ic_message),
-            contentDescription = "message",
-            contentScale = ContentScale.None,
-            modifier = Modifier
-                .width(24.dp)
-                .height(24.dp)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = data.visuals.message,
-            style = AppTextStyles.CAPTION_12_18_SEMI,
-            color = Color(0xFFFFFFFF)
-        )
-    }
-}
-@Composable
 fun NotificationBarListStable(
     notifications: List<NotificationData>,
     notifyClick: (String) -> Unit,
@@ -363,6 +327,7 @@ fun NotificationBarListStable(
         )
     }
 }
+
 @Composable
 fun CustomNotifyBar(
     notifications: List<NotificationData>,

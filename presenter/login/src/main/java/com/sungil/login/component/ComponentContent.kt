@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -53,7 +54,7 @@ fun LoginPager(
         Card(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Transparent)
+                .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(24.dp))
                 .graphicsLayer {
                     val pageOffset = (
                             (state.currentPage - page) + state.currentPageOffsetFraction
@@ -64,26 +65,32 @@ fun LoginPager(
                         fraction = 1f - pageOffset.coerceIn(0f, 1f)
                     )
                 },
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(24.dp),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = ColorStyle.PURPLE_100)
+                    .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(24.dp))
             ) {
-                GlideImage(
-                    model = data[page].image,
-                    contentDescription = data[page].headText,
-                    contentScale = ContentScale.Inside,
-                    modifier = Modifier.fillMaxSize()
-                )
                 Column(
-                modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 24.dp, start = 16.dp, end = 16.dp)
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .background(
+                            color = ColorStyle.PURPLE_100,
+                            shape = RoundedCornerShape(24.dp)
+                        )
+                        .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    GlideImage(
+                        model = data[page].image,
+                        contentDescription = data[page].headText,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(230.dp)
+
+                    )
+                    Spacer(modifier = Modifier.height(40.dp))
                     Text(
                         text = data[page].headText ?: "",
                         style = AppTextStyles.TITLE_20_28_SEMI,
@@ -93,7 +100,7 @@ fun LoginPager(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = data[page].subText ?: "",
-                        style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                        style = AppTextStyles.TITLE_20_28_SEMI,
                         color = ColorStyle.GRAY_800,
                         textAlign = TextAlign.Center
                     )
@@ -111,7 +118,9 @@ fun PageIndicator(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -143,7 +152,7 @@ fun Indicator(
 ) {
     val width by animateDpAsState(
         targetValue = if (isSelected) selectedLength else defaultRadius,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy), label = ""
     )
     Box(
         modifier = modifier

@@ -10,9 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.material3.SnackbarHostState
 import com.sungil.domain.model.Router
-import com.sungil.login.ui.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,17 +24,19 @@ class LoginActivity : ComponentActivity() {
     @Inject
     lateinit var router: Router
 
-    private val snackbarHostState = SnackbarHostState()
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LoginScreen(
-                kakaoLogin = {
-                    viewModel.getKAKAOId()
-                },
-                viewModel = viewModel
-            )
+//            LoginScreen(
+//                kakaoLogin = {
+//                    viewModel.getKAKAOId()
+//                },
+//                viewModel = viewModel
+//            )
+            LoginNav(viewModel = viewModel, kakao = {
+                viewModel.getKAKAOId()
+            })
         }
         setupNotificationPermission()
         requestNotification()
@@ -81,12 +81,16 @@ class LoginActivity : ComponentActivity() {
                                 finish()
                             }
 
-                            ERROR_NOTIFY_NOT_SAVE ->{
+                            ERROR_NOTIFY_NOT_SAVE -> {
                                 finish()
                             }
 
                             else -> {
-                                Toast.makeText(this@LoginActivity , result.errorMessage , Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    result.errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }

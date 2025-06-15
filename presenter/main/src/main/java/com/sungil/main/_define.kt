@@ -7,6 +7,16 @@ sealed class Screen(val title: Int, val icon: Int, val screenRoute: String) {
     data object MyPage : Screen(R.string.nav_my, R.drawable.ic_my, NAV_MY)
 }
 
+enum class MyMatchDestination(val route: String, val label: String) {
+    MATCH_HISTORY("matchHistory", "모임 내역"),
+    MATCH_NOTICE("matchNotice", "안내문");
+
+    companion object {
+        fun fromRoute(route: String?): MyMatchDestination =
+            entries.find { it.route == route } ?: MATCH_HISTORY
+    }
+}
+
 val bottomNavItems = listOf(
     Screen.Home,
     Screen.Calendar,

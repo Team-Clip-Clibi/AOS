@@ -18,6 +18,8 @@ import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchInfo
+import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
@@ -483,6 +485,27 @@ class NetworkRepositoryImpl @Inject constructor(
                 meetingTime = response.body()?.meetingTime ?: "",
                 meetingLocation = response.body()?.meetingLocation ?: ""
             )
+        }
+    }
+
+    override suspend fun requestMatchOverView(token: String): NetworkResult<MatchOverView> {
+        return try {
+            val response = api.requestMatchOverView(token)
+            if (!response.isSuccessful) {
+                return NetworkResult.Error(code = response.code())
+            }
+            val body = response.body() ?: return NetworkResult.Error(code = response.code())
+            return NetworkResult.Success(
+                MatchOverView(
+                    responseCode = response.code(),
+                    date = body.nextMatchingDate,
+                    applyMatch = body.appliedMatchingCount,
+                    confirmMatch = body.confirmedMatchingCount,
+                    isAllNoticeRead = body.isAllNoticeRead
+                )
+            )
+        } catch (e: Exception) {
+            NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }
     }
 

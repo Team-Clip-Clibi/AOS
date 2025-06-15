@@ -1,11 +1,11 @@
 package com.sungil.main.ui.myapge
 
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
-import com.sungil.main.component.CustomMyPageAppBar
+import com.sungil.main.component.CustomMainPageTopBar
 
 @Composable
 internal fun MyPageScreen(
@@ -16,7 +16,7 @@ internal fun MyPageScreen(
 ) {
     Scaffold(
         topBar = {
-            CustomMyPageAppBar(
+            CustomMainPageTopBar(
                 text = stringResource(R.string.nav_my)
             )
         }

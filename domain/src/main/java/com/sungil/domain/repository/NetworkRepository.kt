@@ -7,11 +7,13 @@ import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchOverView
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.RandomInfo
+import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import kotlinx.coroutines.flow.Flow
@@ -126,4 +128,8 @@ interface NetworkRepository {
         tmiContent: String,
         district: String,
     ): RandomInfo
+
+    suspend fun requestMatchOverView(
+        token : String
+    ) : NetworkResult<MatchOverView>
 }

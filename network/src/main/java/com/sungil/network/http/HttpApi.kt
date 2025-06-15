@@ -7,6 +7,7 @@ import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
+import com.sungil.network.model.MatchOverView
 import com.sungil.network.model.MatchingResponse
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
@@ -317,4 +318,12 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Body order: RandomOrder,
     ): Response<RandomOrderResponse>
+
+    /**
+     * 모임 현황 조회
+     */
+    @GET(BuildConfig.MATCH_OVERVIEW_URL)
+    suspend fun requestMatchOverView(
+        @Header("Authorization") bearerToken: String,
+    ): Response<MatchOverView>
 }
