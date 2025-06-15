@@ -31,12 +31,15 @@ class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LoginScreen(
-                kakaoLogin = {
-                    viewModel.getKAKAOId()
-                },
-                viewModel = viewModel
-            )
+//            LoginScreen(
+//                kakaoLogin = {
+//                    viewModel.getKAKAOId()
+//                },
+//                viewModel = viewModel
+//            )
+            LoginNav(viewModel = viewModel, kakao = {
+                viewModel.getKAKAOId()
+            })
         }
         setupNotificationPermission()
         requestNotification()
@@ -81,12 +84,16 @@ class LoginActivity : ComponentActivity() {
                                 finish()
                             }
 
-                            ERROR_NOTIFY_NOT_SAVE ->{
+                            ERROR_NOTIFY_NOT_SAVE -> {
                                 finish()
                             }
 
                             else -> {
-                                Toast.makeText(this@LoginActivity , result.errorMessage , Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    result.errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
