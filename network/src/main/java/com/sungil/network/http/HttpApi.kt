@@ -120,6 +120,7 @@ interface HttpApi {
     @PATCH(BuildConfig.UPDATE_FCM_TOKEN)
     suspend fun requestUpdateFcmToken(
         @Header("Authorization") bearerToken: String,
+        @Body body: Map<String, String>
     ): Response<Unit>
 
     /**
@@ -336,12 +337,4 @@ interface HttpApi {
         @Body body: Map<String, Boolean>,
     ): Response<Unit>
 
-    /**
-     * FCM Update 함수
-     */
-    @PATCH(BuildConfig.FCM_UPDATE_URL)
-    suspend fun requestUpdateFcm(
-        @Header("Authorization") bearerToken: String,
-        @Body body: Map<String, String>,
-    ): Response<Unit>
 }

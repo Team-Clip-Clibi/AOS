@@ -184,9 +184,9 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.body()?.toDomain(result.code())
     }
 
-    override suspend fun requestUpdateFcmToken(accessToken: String): Int {
-        val result = api.requestUpdateFcmToken(accessToken)
-        return result.code()
+    override suspend fun requestUpdateFcmToken(accessToken: String, fcmToken: String): Int {
+        return api.requestUpdateFcmToken(bearerToken = accessToken, body = mapOf("fcmToken" to fcmToken))
+            .code()
     }
 
     override suspend fun requestUpdateJob(accessToken: String, data: String): Int {
@@ -514,15 +514,6 @@ class NetworkRepositoryImpl @Inject constructor(
                 bearerToken = token,
                 body = mapOf("isAllowNotify" to isAllowNotify)
             ).code()
-        } catch (e: Exception) {
-            500
-        }
-    }
-
-    override suspend fun requestUpdateFcm(token: String, fcmToken: String): Int {
-        return try {
-            return api.requestUpdateFcm(bearerToken = token, body = mapOf("fcmToken" to fcmToken))
-                .code()
         } catch (e: Exception) {
             500
         }

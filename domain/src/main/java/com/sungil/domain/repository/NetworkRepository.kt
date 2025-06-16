@@ -56,7 +56,7 @@ interface NetworkRepository {
 
     suspend fun requestUserData(accessToken: String): UserInfo?
 
-    suspend fun requestUpdateFcmToken(accessToken: String): Int
+    suspend fun requestUpdateFcmToken(accessToken: String ,fcmToken : String): Int
 
     suspend fun requestUpdateJob(accessToken: String, data: String): Int
 
@@ -138,8 +138,4 @@ interface NetworkRepository {
         isAllowNotify: Boolean,
     ): Int
 
-    suspend fun requestUpdateFcm(
-        token: String,
-        fcmToken: String,
-    ): Int
 }
