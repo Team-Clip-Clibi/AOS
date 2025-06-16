@@ -16,6 +16,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -34,11 +35,10 @@ internal fun LoginScreen(
     kakaoLogin: () -> Unit,
     viewModel: LoginViewModel,
 ) {
-    val isFcmReady by viewModel.isFcmReady.collectAsState()
-    val bannerData by viewModel.bannerData.collectAsState()
-    val pageState = rememberPagerState(pageCount = {
-        bannerData.size
-    })
+    val uiState by viewModel.actionFlow.collectAsState()
+    val banners = (uiState.banner as? LoginViewModel.UiState.Success)?.data.orEmpty()
+    val pageState = rememberPagerState { banners.size }
+
     Scaffold(
         bottomBar = {
             Column(
@@ -53,7 +53,7 @@ internal fun LoginScreen(
                         .fillMaxWidth()
                         .height(48.dp),
                     onClick = kakaoLogin,
-                    enabled = isFcmReady,
+                    enabled = uiState.banner is LoginViewModel.UiState.Success,
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = ColorStyle.YELLOW_100,
@@ -120,7 +120,7 @@ internal fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
             LoginPager(
                 state = pageState,
-                data = bannerData,
+                data = banners,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)

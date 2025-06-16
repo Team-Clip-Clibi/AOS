@@ -1,15 +1,12 @@
 package com.sungil.kakao.com.kakao.sdk.auth
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.useCase.CheckAlreadySignUp
-import com.sungil.domain.useCase.RequestLogin
 import com.sungil.domain.useCase.SaveKaKaoId
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,21 +14,20 @@ import javax.inject.Inject
 class SMSViewModel @Inject constructor(
     private val saveToken: SaveKaKaoId,
     private val signUp: CheckAlreadySignUp,
-    private val login: RequestLogin,
 ) : ViewModel() {
 
-    private val _actionFlow = MutableSharedFlow<Action>()
-    val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
+    private val _uiState = MutableLiveData<Action>()
+    val uiState: LiveData<Action> = _uiState
 
     fun saveKaKaoId(kakaoId: String) {
         viewModelScope.launch {
             when (val result = saveToken.invoke(SaveKaKaoId.Param(token = kakaoId))) {
                 is SaveKaKaoId.Result.Fail -> {
-                    throw IllegalArgumentException(result.errorMessage)
+                    _uiState.postValue(Action.Error(result.errorMessage))
                 }
 
                 is SaveKaKaoId.Result.Success -> {
-                    _actionFlow.emit(Action.SaveSuccess(result.token))
+                    _uiState.postValue(Action.SaveSuccess(result.token))
                 }
             }
         }
@@ -41,16 +37,15 @@ class SMSViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = signUp.invoke(CheckAlreadySignUp.Param(socialId))) {
                 is CheckAlreadySignUp.Result.Success -> {
-                    _actionFlow.emit(Action.AlreadySignUp(result.message))
+                    _uiState.postValue(Action.AlreadySignUp(result.message))
                 }
 
                 is CheckAlreadySignUp.Result.Fail -> {
-                    _actionFlow.emit(Action.NotSignUp(result.errorMessage))
+                    _uiState.postValue(Action.NotSignUp(result.errorMessage))
                 }
             }
         }
     }
-
 
     sealed interface Action {
         data class SaveSuccess(val kakaoId: String) : Action

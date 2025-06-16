@@ -3,8 +3,6 @@ package com.sungil.login
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
@@ -12,9 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,75 +22,20 @@ class LoginActivity : ComponentActivity() {
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-//            LoginScreen(
-//                kakaoLogin = {
-//                    viewModel.getKAKAOId()
-//                },
-//                viewModel = viewModel
-//            )
-            LoginNav(viewModel = viewModel, kakao = {
-                viewModel.getKAKAOId()
-            })
-        }
         setupNotificationPermission()
-        requestNotification()
-        addListener()
-    }
+        setContent {
+            LoginNav(
+                viewModel = viewModel,
+                kakao = {
+                    router.navigation(NAV_KAKAO)
+                },
+                notification = {
+                    requestNotification()
+                },
+                home = {
+                    router.navigation(NAV_MAIN)
+                })
 
-    private fun addListener() {
-        CoroutineScope(Dispatchers.Main).launch {
-            viewModel.actionFlow.collect { result ->
-                when (result) {
-                    is LoginViewModel.Action.GetSuccess -> {
-                        viewModel.checkSignUp(result.kakaoId)
-                    }
-
-                    is LoginViewModel.Action.NotSignUp -> {
-                        router.navigation(SIGNUP_VIEW)
-                    }
-
-                    is LoginViewModel.Action.SignUp -> {
-                        router.navigation(MAIN_VIEW)
-                    }
-
-                    is LoginViewModel.Action.FCMToken -> {
-                        Log.d(javaClass.name.toString(), result.message)
-                    }
-
-                    is LoginViewModel.Action.Login -> {
-                        router.navigation(MAIN_VIEW)
-                    }
-
-                    is LoginViewModel.Action.Error -> {
-                        when (result.errorMessage) {
-                            ERROR_KAKAO_ID_NULL -> {
-                                router.navigation(KAKAO_VIEW)
-                            }
-
-                            ERROR_NOTIFICATION -> {
-                                finish()
-                            }
-
-                            ERROR_FCM_TOKEN -> {
-                                finish()
-                            }
-
-                            ERROR_NOTIFY_NOT_SAVE -> {
-                                finish()
-                            }
-
-                            else -> {
-                                Toast.makeText(
-                                    this@LoginActivity,
-                                    result.errorMessage,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -108,10 +48,14 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun requestNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            viewModel.setNotification(true)
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+
+            else -> {
+                viewModel.setNotification(true)
+            }
         }
     }
 }

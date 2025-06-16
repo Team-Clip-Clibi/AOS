@@ -1,14 +1,11 @@
 package com.sungil.domain.useCase
 
-import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
-import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
 
 class UpdateAndSaveToken @Inject constructor(
     private val repo: DatabaseRepository,
-    private val api: NetworkRepository,
 ) :
     UseCase<UpdateAndSaveToken.Param, UpdateAndSaveToken.Result> {
 
