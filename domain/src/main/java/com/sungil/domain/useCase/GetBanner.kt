@@ -28,7 +28,8 @@ class GetBanner @Inject constructor(
                 BANNER_LOGIN -> ""
                 else -> {
                     val token = database.getToken()
-                    TOKEN_FORM + token.first}
+                    TOKEN_FORM + token.first
+                }
             },
             bannerType = param.bannerHost
         )
@@ -37,11 +38,12 @@ class GetBanner @Inject constructor(
                 if (banner.second.isEmpty()) {
                     return Result.Fail("no banner")
                 }
-                return Result.Success(banner.second)
+                val data = reMakeHeadText(banner.second)
+                return Result.Success(data)
             }
 
             401 -> {
-                if(param.bannerHost == BANNER_LOGIN){
+                if (param.bannerHost == BANNER_LOGIN) {
                     return Result.Fail("network error")
                 }
                 val token = database.getToken()
@@ -56,12 +58,19 @@ class GetBanner @Inject constructor(
                     return Result.Fail("no banner")
                 }
                 if (retry.first == 200) {
-                    return Result.Success(banner.second)
+                    val data = reMakeHeadText(banner.second)
+                    return Result.Success(data)
                 }
                 return Result.Fail("network error")
             }
 
             else -> return Result.Fail("network error")
+        }
+    }
+
+    private fun reMakeHeadText(data: List<BannerData>): List<BannerData> {
+        return data.map {
+            it.copy(headText = it.headText?.replace("\\n", "\n") ?: "")
         }
     }
 }
