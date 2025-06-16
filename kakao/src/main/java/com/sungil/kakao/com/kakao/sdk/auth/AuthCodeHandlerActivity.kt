@@ -8,9 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.user.UserApiClient
 import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -34,9 +31,9 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
                 return@loginWithKakaoTalk
             }
             Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")
-            UserApiClient.instance.me { user, error ->
+            UserApiClient.instance.me { user, errorMessage ->
                 if (user == null) {
-                    Log.e(javaClass.name.toString(), "the user data is null $error")
+                    Log.e(javaClass.name.toString(), "the user data is null $errorMessage")
                     return@me
                 }
                 Log.d(javaClass.name.toString(), "userId : ${user.id}")
