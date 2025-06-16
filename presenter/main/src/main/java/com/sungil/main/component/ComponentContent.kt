@@ -658,8 +658,7 @@ fun AutoSlidingBanner(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(126.dp),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -667,16 +666,14 @@ fun AutoSlidingBanner(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(110.dp)
         ) { page ->
             GlideImage(
                 model = image[page].image,
                 contentDescription = "banner",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(width = 393.dp , height = 109.dp)
             )
         }
-
         PageIndicator(
             numberOfPages = image.size,
             selectedPage = pagerState.currentPage,
