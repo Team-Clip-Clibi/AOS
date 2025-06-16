@@ -519,6 +519,15 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun requestUpdateFcm(token: String, fcmToken: String): Int {
+        return try {
+            return api.requestUpdateFcm(bearerToken = token, body = mapOf("fcmToken" to fcmToken))
+                .code()
+        } catch (e: Exception) {
+            500
+        }
+    }
+
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {
         return UserInfo(
             responseCode = responseCode,

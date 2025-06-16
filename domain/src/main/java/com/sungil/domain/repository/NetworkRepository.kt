@@ -137,4 +137,9 @@ interface NetworkRepository {
         token: String,
         isAllowNotify: Boolean,
     ): Int
+
+    suspend fun requestUpdateFcm(
+        token: String,
+        fcmToken: String,
+    ): Int
 }

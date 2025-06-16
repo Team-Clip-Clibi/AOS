@@ -333,6 +333,15 @@ interface HttpApi {
     @PATCH(BuildConfig.NOTIFY_UPDATE_URL)
     suspend fun requestUpdateNotify(
         @Header("Authorization") bearerToken: String,
-        @Body body: Map<String, Boolean>
-    ) : Response<Unit>
+        @Body body: Map<String, Boolean>,
+    ): Response<Unit>
+
+    /**
+     * FCM Update 함수
+     */
+    @PATCH(BuildConfig.FCM_UPDATE_URL)
+    suspend fun requestUpdateFcm(
+        @Header("Authorization") bearerToken: String,
+        @Body body: Map<String, String>,
+    ): Response<Unit>
 }
