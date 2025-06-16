@@ -2,14 +2,12 @@ package com.sungil.kakao.com.kakao.sdk.auth
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.user.UserApiClient
 import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -33,9 +31,9 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
                 return@loginWithKakaoTalk
             }
             Log.i(javaClass.name.toString(), "로그인 성공 ${token.accessToken}")
-            UserApiClient.instance.me { user, error ->
+            UserApiClient.instance.me { user, errorMessage ->
                 if (user == null) {
-                    Log.e(javaClass.name.toString(), "the user data is null $error")
+                    Log.e(javaClass.name.toString(), "the user data is null $errorMessage")
                     return@me
                 }
                 Log.d(javaClass.name.toString(), "userId : ${user.id}")
@@ -45,24 +43,26 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
     }
 
     private fun addListener() {
-        CoroutineScope(Dispatchers.Main).launch {
-            viewModel.actionFlow.collect { result ->
-                when (result) {
-                    is SMSViewModel.Action.SaveSuccess -> {
-                        viewModel.checkAlreadySignUp(result.kakaoId)
-                    }
+        viewModel.uiState.observe(this) { result ->
+            when (result) {
+                is SMSViewModel.Action.AlreadySignUp -> {
+                    router.navigation(NAV_MAIN)
+                }
 
-                    is SMSViewModel.Action.AlreadySignUp -> {
-                        router.navigation("Main")
-                    }
+                is SMSViewModel.Action.SaveSuccess -> {
+                    viewModel.checkAlreadySignUp(result.kakaoId)
+                }
 
-                    is SMSViewModel.Action.NotSignUp -> {
-                        router.navigation("SignUp")
-                    }
+                is SMSViewModel.Action.NotSignUp -> {
+                    router.navigation(NAV_SIGN_UP)
+                }
 
-                    is SMSViewModel.Action.Error -> {
-                        Log.e(javaClass.name.toString(), result.errorMessage)
-                    }
+                is SMSViewModel.Action.Error -> {
+                    Toast.makeText(
+                        this@AuthCodeHandlerActivity,
+                        result.errorMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
