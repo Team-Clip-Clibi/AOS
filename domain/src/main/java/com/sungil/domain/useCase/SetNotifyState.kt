@@ -53,6 +53,9 @@ class SetNotifyState @Inject constructor(
                 if (reRequest == 204) {
                     return Result.Success("Success save Notify")
                 }
+                if (reRequest == 401) {
+                    return Result.Fail("reLogin")
+                }
                 return Result.Fail("network error")
             }
 
