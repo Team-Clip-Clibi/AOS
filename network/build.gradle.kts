@@ -55,6 +55,7 @@ android {
         val randomDuplicate: String = properties.getProperty("randomMatchDuPlicate", "")
         val randomOrder: String = properties.getProperty("randomOrder", "")
         val matchOverView: String = properties.getProperty("matchOverView", "")
+        val notifyUpdate: String = properties.getProperty("notifyUpdate", "")
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -86,6 +87,7 @@ android {
         buildConfigField("String", "RANDOM_DUPLICATE_URL", randomDuplicate)
         buildConfigField("String", "RANDOM_ORDER_URL", randomOrder)
         buildConfigField("String", "MATCH_OVERVIEW_URL", matchOverView)
+        buildConfigField("String", "NOTIFY_UPDATE_URL", notifyUpdate)
     }
 
     buildTypes {

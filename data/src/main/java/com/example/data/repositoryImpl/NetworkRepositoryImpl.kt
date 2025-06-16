@@ -508,6 +508,17 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun requestUpdateNotify(token: String, isAllowNotify: Boolean): Int {
+        return try {
+            api.requestUpdateNotify(
+                bearerToken = token,
+                body = mapOf("isAllowNotify" to isAllowNotify)
+            ).code()
+        } catch (e: Exception) {
+            500
+        }
+    }
+
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {
         return UserInfo(
             responseCode = responseCode,

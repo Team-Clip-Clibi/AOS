@@ -2,7 +2,9 @@ package com.sungil.login
 
 //ERROR CODE
 const val ERROR_FCM_TOKEN = "Error to Fail Fcm"
-
+const val ERROR_NOTIFY_SAVE = "Error save Notify"
+const val ERROR_RE_LOGIN = "reLogin"
+const val ERROR_NETWORK = "network error"
 //Banner
 const val BANNER = "LOGIN"
 

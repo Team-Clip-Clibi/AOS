@@ -140,6 +140,10 @@ class DatabaseRepositoryImpl @Inject constructor(
         return userInfo.isUserDataIsNull()
     }
 
+    override suspend fun getTokenDataStatus(): Boolean {
+        return tokenManger.isTokenNull()
+    }
+
     private fun UserInfo.toDomain(): com.sungil.domain.model.UserData {
         return com.sungil.domain.model.UserData(
             userName = name,

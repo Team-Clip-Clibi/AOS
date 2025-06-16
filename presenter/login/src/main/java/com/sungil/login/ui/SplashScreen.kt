@@ -28,6 +28,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
+import com.sungil.login.ERROR_NETWORK
+import com.sungil.login.ERROR_NOTIFY_SAVE
+import com.sungil.login.ERROR_RE_LOGIN
 import com.sungil.login.LoginViewModel
 import com.sungil.login.R
 
@@ -45,12 +48,27 @@ internal fun SplashScreen(
         notification()
     }
     LaunchedEffect(uiState.notification) {
-        when (uiState.notification) {
+        when (val state = uiState.notification) {
             is LoginViewModel.UiState.Error -> {
-                snackBarHostState.showSnackbar(
-                    message = context.getString(R.string.msg_app_error_notification),
-                    duration = SnackbarDuration.Short
-                )
+                when (state.error) {
+                    ERROR_NOTIFY_SAVE -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_app_error_notification),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    ERROR_RE_LOGIN -> {
+                        viewModel.getToken()
+                    }
+
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_app_error_network),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
             }
 
             is LoginViewModel.UiState.Success -> {

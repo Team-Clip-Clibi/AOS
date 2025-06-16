@@ -326,4 +326,13 @@ interface HttpApi {
     suspend fun requestMatchOverView(
         @Header("Authorization") bearerToken: String,
     ): Response<MatchOverView>
+
+    /**
+     * 알람 상태 업데이트 API
+     */
+    @PATCH(BuildConfig.NOTIFY_UPDATE_URL)
+    suspend fun requestUpdateNotify(
+        @Header("Authorization") bearerToken: String,
+        @Body body: Map<String, Boolean>
+    ) : Response<Unit>
 }

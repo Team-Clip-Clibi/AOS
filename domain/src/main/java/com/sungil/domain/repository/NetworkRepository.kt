@@ -83,7 +83,7 @@ interface NetworkRepository {
     suspend fun requestBanner(
         accessToken: String,
         bannerType: String,
-    ): Pair<Int , List<BannerData>>
+    ): Pair<Int, List<BannerData>>
 
     suspend fun requestMatchingData(
         accessToken: String,
@@ -130,6 +130,11 @@ interface NetworkRepository {
     ): RandomInfo
 
     suspend fun requestMatchOverView(
-        token : String
-    ) : NetworkResult<MatchOverView>
+        token: String,
+    ): NetworkResult<MatchOverView>
+
+    suspend fun requestUpdateNotify(
+        token: String,
+        isAllowNotify: Boolean,
+    ): Int
 }
