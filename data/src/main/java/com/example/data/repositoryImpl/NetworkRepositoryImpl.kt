@@ -320,8 +320,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 bannerList.add(
                     BannerData(
                         image = banner.imagePresignedUrl ?: "",
-                        headText = banner.headText ?: "",
-                        subText = banner.subText ?: ""
+                        headText = banner.text ?: "",
                     )
                 )
             }

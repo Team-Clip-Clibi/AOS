@@ -97,13 +97,6 @@ fun LoginPager(
                         color = ColorStyle.GRAY_800,
                         textAlign = TextAlign.Center,
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = data[page].subText ?: "",
-                        style = AppTextStyles.TITLE_20_28_SEMI,
-                        color = ColorStyle.GRAY_800,
-                        textAlign = TextAlign.Center
-                    )
                 }
             }
         }
