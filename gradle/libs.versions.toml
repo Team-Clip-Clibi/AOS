@@ -17,7 +17,6 @@ composeMaterial3 = "1.0.0-alpha33"
 gson = "2.8.8"
 lifecycle = "2.8.7"
 gms-service = "4.4.2"
-firebase-bom = "33.10.0"
 nav = "2.8.9"
 okhttp3 = "4.12.0"
 retrotit2 = "2.11.0"
@@ -25,8 +24,6 @@ serialization = "1.6.0"
 firebase-analytics = "21.5.0"
 firebase-messaging = "23.4.1"
 room-database = "2.6.1"
-ksp = "1.9.0-1.0.11"
-compose-material = "1.7.8"
 glide-version= "1.0.0-beta01"
 paging-version = "3.3.2"
 firebase-crash = "19.4.2"
@@ -58,7 +55,6 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", v
 kakao-common = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao-sdk" }
 google-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 lifecycle-viewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 compose-nav = { group = "androidx.navigation", name = "navigation-compose", version.ref = "nav" }
 jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 squareup-okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
@@ -84,5 +80,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 hilt-project = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-service-gms = { id = "com.google.gms.google-services", version.ref = "gms-service" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-devtool-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 firebase-crash-plugin = {id = "com.google.firebase.crashlytics" , version.ref = "firebase-crash-plugin"}
