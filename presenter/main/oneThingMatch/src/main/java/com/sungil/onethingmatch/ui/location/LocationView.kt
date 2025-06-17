@@ -15,14 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material3.Text
 import com.example.core.AppTextStyles
 import com.example.core.ButtonCheckBoxLeftL
 import com.example.core.ColorStyle
 import com.sungil.onethingmatch.Location
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
-
+import androidx.compose.material3.Text
 @Composable
 internal fun LocationView(
     viewModel: OneThingViewModel,

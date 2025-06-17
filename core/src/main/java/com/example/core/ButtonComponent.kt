@@ -15,11 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,7 +23,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-
+//import androidx.wear.compose.material3.Button
+//import androidx.wear.compose.material3.ButtonDefaults
+//import androidx.wear.compose.material3.Icon
+//import androidx.wear.compose.material3.OutlinedButton
+//import androidx.wear.compose.material3.Text
+import androidx.compose.material3.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 @Composable
 fun ButtonXXLPurple400(
     onClick: () -> Unit,
@@ -194,7 +198,7 @@ fun ButtonCenterLarge(
 ) {
     OutlinedButton(
         onClick = onClick,
-        colors = ButtonDefaults.outlinedButtonColors(
+        colors = ButtonDefaults.buttonColors(
             containerColor = if (checked) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
             contentColor = Color.Black
         ),

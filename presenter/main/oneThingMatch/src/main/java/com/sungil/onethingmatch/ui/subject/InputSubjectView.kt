@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material3.Text
+import androidx.compose.material3.Text
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.example.core.TextFieldComponent

@@ -16,9 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -35,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.wear.compose.material3.Text
 import com.example.core.AppTextStyles
 import com.sungil.alarm.AlarmViewModel
 import com.sungil.alarm.R
@@ -44,7 +41,7 @@ import com.sungil.alarm.component.ERROR_RE_LOGIN
 import com.sungil.alarm.component.ERROR_SAVE
 import com.sungil.alarm.component.ERROR_SERVER
 import com.sungil.domain.model.Notification
-
+import androidx.compose.material3.Text
 @Composable
 internal fun AlarmMainView(
     viewModel: AlarmViewModel,
