@@ -110,7 +110,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         return saveData.map { it.toDomain() }
     }
 
-    override suspend fun deleteSaveMatch(matchId : Int): Boolean {
+    override suspend fun deleteSaveMatch(matchId: Int): Boolean {
         return meetingManger.delete(matchId)
     }
 
@@ -118,7 +118,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         matchId: Int,
         time: String,
         category: String,
-        location: String
+        location: String,
     ): Boolean {
         return meetingManger.inset(
             matchId = matchId,
@@ -142,6 +142,14 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun getTokenDataStatus(): Boolean {
         return tokenManger.isTokenNull()
+    }
+
+    override suspend fun getPermissionCheck(key: String): Boolean {
+        return database.getPermissionShowCheck(key = key)
+    }
+
+    override suspend fun setPermissionCheck(key: String, data: Boolean): Boolean {
+        return database.setPermissionShowCheck(key = key, data = data)
     }
 
     private fun UserInfo.toDomain(): com.sungil.domain.model.UserData {

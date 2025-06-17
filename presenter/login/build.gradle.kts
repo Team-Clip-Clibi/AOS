@@ -1,10 +1,18 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
-
+val properties = Properties()
+val localPropertiesFile = project.rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { inputStream ->
+        properties.load(inputStream)
+    }
+}
 android {
     namespace = "com.sungil.login"
     compileSdk = 35
@@ -14,6 +22,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        val notifyPermission: String = properties.getProperty("notifyPermssion", "")
+        buildConfigField("String", "NOTIFY_PERMISSION_KEY", notifyPermission)
     }
 
     buildTypes {
@@ -37,6 +47,9 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 kapt {

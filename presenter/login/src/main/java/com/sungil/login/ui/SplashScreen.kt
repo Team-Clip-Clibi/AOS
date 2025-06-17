@@ -44,8 +44,20 @@ internal fun SplashScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.actionFlow.collectAsState()
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        notification()
+    LaunchedEffect(uiState.permissionShow) {
+        when(val result = uiState.permissionShow){
+            is LoginViewModel.UiState.Success -> {
+                when(result.data){
+                    true ->{
+                        notification()
+                    }
+                    false -> {
+                        viewModel.getToken()
+                    }
+                }
+            }
+            else -> Unit
+        }
     }
     LaunchedEffect(uiState.notification) {
         when (val state = uiState.notification) {

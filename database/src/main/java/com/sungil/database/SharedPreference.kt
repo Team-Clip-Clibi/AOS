@@ -10,8 +10,10 @@ interface SharedPreference {
     suspend fun saveFcmToken(data: String): Boolean
     suspend fun getFcmToken(): String
     suspend fun updateFcmToken(data: String): Boolean
-    suspend fun setNotificationState(data : Boolean) : Boolean
-    suspend fun getNotificationState() : Boolean
-    suspend fun saveFirstMatchInput() : Boolean
-    suspend fun getFirstMatchInput() : Boolean
+    suspend fun setNotificationState(data: Boolean): Boolean
+    suspend fun getNotificationState(): Boolean
+    suspend fun saveFirstMatchInput(): Boolean
+    suspend fun getFirstMatchInput(): Boolean
+    suspend fun getPermissionShowCheck(key: String): Boolean
+    suspend fun setPermissionShowCheck(key :String , data :Boolean): Boolean
 }

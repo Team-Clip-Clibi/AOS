@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.useCase.CheckAlreadySignUp
+import com.sungil.domain.useCase.CheckPermissionShow
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFcmToken
 import com.sungil.domain.useCase.GetKakaoId
 import com.sungil.domain.useCase.SetNotifyState
+import com.sungil.domain.useCase.SetPermissionCheck
 import com.sungil.domain.useCase.UpdateAndSaveToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,10 +27,14 @@ class LoginViewModel @Inject constructor(
     private val updateAndSaveToken: UpdateAndSaveToken,
     private val notifyState: SetNotifyState,
     private val banner: GetBanner,
+    private val permissionCheck : CheckPermissionShow,
+    private val setPermission : SetPermissionCheck
 ) : ViewModel() {
     private val _actionFlow = MutableStateFlow(LoginViewState())
     val actionFlow: StateFlow<LoginViewState> = _actionFlow.asStateFlow()
-
+    init {
+        checkPermissionShow()
+    }
     fun banner() {
         viewModelScope.launch {
             when (val result = banner.invoke(GetBanner.Param(BANNER))) {
@@ -88,14 +94,45 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = notifyState.invoke(SetNotifyState.Param(data))) {
                 is SetNotifyState.Result.Success -> {
-                    _actionFlow.update { current ->
-                        current.copy(notification = UiState.Success(result.message))
-                    }
+                    setPermissionCheck()
                 }
 
                 is SetNotifyState.Result.Fail -> {
                     _actionFlow.update { current ->
                         current.copy(notification = UiState.Error(result.errorMessage))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkPermissionShow(){
+        viewModelScope.launch {
+            when(permissionCheck.invoke(BuildConfig.NOTIFY_PERMISSION_KEY)){
+                true -> {
+                    _actionFlow.update { current ->
+                        current.copy(permissionShow = UiState.Success(true))
+                    }
+                }
+                false -> {
+                    _actionFlow.update { current ->
+                        current.copy(permissionShow = UiState.Success(false))
+                    }
+                }
+            }
+        }
+    }
+    private fun setPermissionCheck(){
+        viewModelScope.launch {
+            when(val message = setPermission.invoke(SetPermissionCheck.Param(key = BuildConfig.NOTIFY_PERMISSION_KEY , data = false))){
+                is SetPermissionCheck.Result.Success -> {
+                    _actionFlow.update { current ->
+                        current.copy(notification = UiState.Success(message.message))
+                    }
+                }
+                is SetPermissionCheck.Result.Fail -> {
+                    _actionFlow.update { current ->
+                        current.copy(notification = UiState.Error(message.errorMessage))
                     }
                 }
             }
@@ -140,6 +177,8 @@ class LoginViewModel @Inject constructor(
         val fcmToken: UiState<String> = UiState.Loading,
         val notification: UiState<String> = UiState.Loading,
         val banner: UiState<List<BannerData>> = UiState.Loading,
+        val permissionShow : UiState<Boolean> = UiState.Loading,
+        val permissionSet : UiState<Boolean> = UiState.Loading
     )
 
 }

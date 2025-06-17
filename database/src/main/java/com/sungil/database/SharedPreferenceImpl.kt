@@ -142,4 +142,23 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
         }
     }
 
+    override suspend fun getPermissionShowCheck(key: String): Boolean {
+        return try {
+            return preference.getBoolean(key, true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun setPermissionShowCheck(key: String, data: Boolean): Boolean {
+        return try {
+            preference.edit().putBoolean(key, data).apply()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }
