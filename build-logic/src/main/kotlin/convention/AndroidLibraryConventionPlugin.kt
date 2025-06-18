@@ -18,7 +18,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
         extensions.getByType<LibraryExtension>().apply {
             compileSdk = 35
             defaultConfig {
-                minSdk = 24
+                minSdk = 31
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 consumerProguardFiles("consumer-rules.pro")
             }
@@ -26,13 +26,13 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             buildFeatures.compose = true
             composeOptions.kotlinCompilerExtensionVersion = "1.5.13"
             compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_1_8
-                targetCompatibility = JavaVersion.VERSION_1_8
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
             }
         }
 
         extensions.getByType<KotlinAndroidProjectExtension>().apply {
-            jvmToolchain(8)
+            jvmToolchain(17)
         }
 
         dependencies {
