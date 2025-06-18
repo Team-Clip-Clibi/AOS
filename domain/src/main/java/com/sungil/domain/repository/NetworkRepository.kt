@@ -78,7 +78,7 @@ interface NetworkRepository {
 
     suspend fun requestReport(accessToken: String, content: String, reportCategory: String): Int
 
-    suspend fun requestNotification(accessToken: String): NotificationResponse
+    suspend fun requestNotification(accessToken: String): NetworkResult<NotificationResponse>
 
     suspend fun requestBanner(
         accessToken: String,

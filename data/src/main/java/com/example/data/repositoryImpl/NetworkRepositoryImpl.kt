@@ -283,30 +283,26 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.code()
     }
 
-    override suspend fun requestNotification(accessToken: String): NotificationResponse {
-        val result = api.requestNotification(accessToken)
-        if (result.body()?.size == 0) {
-            return NotificationResponse(
-                responseCode = 204,
-                notificationDataList = emptyList()
-            )
-        }
-        if (result.code() != 200) {
-            return NotificationResponse(
-                responseCode = result.code(),
-                notificationDataList = emptyList()
-            )
-        }
-        if (result.body() == null) {
-            return NotificationResponse(
-                responseCode = 204,
-                notificationDataList = emptyList()
-            )
-        }
-        return NotificationResponse(
-            responseCode = result.code(),
-            notificationDataList = result.body()!!.map { it.toDomain() }
-        )
+    override suspend fun requestNotification(accessToken: String): NetworkResult<NotificationResponse> {
+       return try{
+           val response = api.requestNotification(accessToken)
+           if(!response.isSuccessful) return NetworkResult.Error(code = response.code())
+           val body = response.body() ?: return NetworkResult.Error(code = response.code())
+           return NetworkResult.Success(
+               NotificationResponse(
+                   responseCode = response.code(),
+                   notificationDataList = body.map { data ->
+                       NotificationData(
+                           noticeType = data.noticeType,
+                           content = data.content,
+                           link = data.link ?: ""
+                       )
+                   }
+               )
+           )
+       }catch (e : Exception){
+           NetworkResult.Error(code = 500 , message = e.localizedMessage , throwable = e)
+       }
     }
 
     override suspend fun requestBanner(
@@ -552,11 +548,4 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun Notification.toDomain(): NotificationData {
-        return NotificationData(
-            noticeType = this.noticeType,
-            content = this.content,
-            link = this.link
-        )
-    }
 }
