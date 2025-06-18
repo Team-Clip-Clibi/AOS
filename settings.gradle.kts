@@ -7,10 +7,13 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        includeBuild("build-logic")
         mavenCentral()
         gradlePluginPortal()
     }
 }
+
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
