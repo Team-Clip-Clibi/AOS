@@ -20,6 +20,22 @@ gradlePlugin {
             id = "one.thing.hilt.library"
             implementationClass = "convention.HiltLibraryConventionPlugin"
         }
+        create("databaseConvention"){
+            id = "one.thing.database.library"
+            implementationClass = "convention.DatabaseConventionPlugin"
+        }
+        create("designSystemConvention"){
+            id = "one.thing.design.library"
+            implementationClass = "convention.DesignSystemLibraryPlugin"
+        }
+        create("networkConvention"){
+            id = "one.thing.network.library"
+            implementationClass = "convention.NetworkLibraryPlugin"
+        }
+        create("applicationConvention"){
+            id ="one.thing.android.application"
+            implementationClass = "convention.ApplicationConventionPlugin"
+        }
     }
 }
 
