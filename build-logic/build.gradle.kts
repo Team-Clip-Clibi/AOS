@@ -12,6 +12,14 @@ gradlePlugin {
             id = "one.thing.android.library"
             implementationClass = "convention.AndroidLibraryConventionPlugin"
         }
+        create("androidXmlConvention"){
+            id = "one.thing.android.xml.library"
+            implementationClass = "convention.AndroidXmlLibraryConventionPlugin"
+        }
+        create("hiltConvention"){
+            id = "one.thing.hilt.library"
+            implementationClass = "convention.HiltLibraryConventionPlugin"
+        }
     }
 }
 

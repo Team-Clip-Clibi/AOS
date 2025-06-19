@@ -22,12 +22,11 @@ android {
 }
 
 dependencies {
-    // 필요한 경우 추가 개별 의존성만 작성
     implementation(project(":domain"))
     implementation(project(":core"))
     implementation(libs.glide.compose)
-    implementation("io.coil-kt.coil3:coil-compose:3.2.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.2.0")
+    implementation(libs.coil.compose)
+    implementation(libs.coil.okhttps)
     implementation(libs.firebase.crash)
     implementation(libs.compose.nav)
 }
