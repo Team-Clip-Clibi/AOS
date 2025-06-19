@@ -3,13 +3,12 @@ package com.sungil.kakao.com.kakao.sdk.auth
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.sdk.user.UserApiClient
 import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
+import androidx.activity.viewModels
 
 @AndroidEntryPoint
 class AuthCodeHandlerActivity : AppCompatActivity() {
