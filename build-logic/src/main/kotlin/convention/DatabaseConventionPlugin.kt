@@ -17,6 +17,7 @@ class DatabaseConventionPlugin : Plugin<Project> {
         pluginManager.apply("org.jetbrains.kotlin.android")
         pluginManager.apply("com.google.dagger.hilt.android")
         pluginManager.apply("org.jetbrains.kotlin.kapt")
+        pluginManager.apply("com.google.devtools.ksp")
         extensions.getByType<LibraryExtension>().apply {
             namespace = "com.sungil.database"
             compileSdk = 35
@@ -61,7 +62,7 @@ class DatabaseConventionPlugin : Plugin<Project> {
             "implementation"(libs.findLibrary("androidx-espresso-core").get())
             "implementation"(libs.findLibrary("room-database-runtime").get())
             "implementation"(libs.findLibrary("room-database-ktx").get())
-            "kapt"(libs.findLibrary("room-database-compiler").get())
+            "ksp"(libs.findLibrary("room-database-compiler").get())
             "implementation"(libs.findLibrary("google-gson").get())
             "implementation"(libs.findLibrary("firebase-crash").get())
         }

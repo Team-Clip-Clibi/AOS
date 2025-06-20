@@ -22,7 +22,7 @@ class ApplicationConventionPlugin : Plugin<Project> {
         pluginManager.apply("com.google.gms.google-services")
         pluginManager.apply("com.google.firebase.crashlytics")
         pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
-
+        pluginManager.apply("com.google.devtools.ksp")
 
         extensions.getByType<BaseAppModuleExtension>().apply {
             namespace = "com.sungil.onething"
@@ -110,7 +110,7 @@ class ApplicationConventionPlugin : Plugin<Project> {
             // room
             "implementation"(libs.findLibrary("room-database-runtime").get())
             "implementation"(libs.findLibrary("room-database-ktx").get())
-            "kapt"(libs.findLibrary("room-database-compiler").get())
+            "ksp"(libs.findLibrary("room-database-compiler").get())
 
             // pay
             "implementation"(libs.findLibrary("pay-api").get())

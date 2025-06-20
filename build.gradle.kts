@@ -7,4 +7,5 @@ plugins {
     alias(libs.plugins.google.service.gms) apply false
     alias(libs.plugins.firebase.crash.plugin) apply false
     alias(libs.plugins.androidx.compose.compiler) apply false
+    alias(libs.plugins.devtools.ksp) apply false
 }

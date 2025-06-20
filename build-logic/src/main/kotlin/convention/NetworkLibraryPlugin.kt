@@ -62,6 +62,7 @@ class NetworkLibraryPlugin : Plugin<Project> {
                 val randomOrder: String = properties.getProperty("randomOrder", "")
                 val matchOverView: String = properties.getProperty("matchOverView", "")
                 val notifyUpdate: String = properties.getProperty("notifyUpdate", "")
+                val matchList: String = properties.getProperty("matchings", "")
 
                 buildConfigField("String", "BASE_URL", baseUrl)
                 buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -94,6 +95,7 @@ class NetworkLibraryPlugin : Plugin<Project> {
                 buildConfigField("String", "RANDOM_ORDER_URL", randomOrder)
                 buildConfigField("String", "MATCH_OVERVIEW_URL", matchOverView)
                 buildConfigField("String", "NOTIFY_UPDATE_URL", notifyUpdate)
+                buildConfigField("String", "MATCH_ING_URL", matchList)
             }
             buildFeatures.buildConfig = true
             compileOptions {
