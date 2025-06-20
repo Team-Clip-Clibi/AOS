@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +28,9 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -114,7 +119,7 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
             )
         }
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
@@ -122,67 +127,80 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            //Top View
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = ColorStyle.WHITE_100)
-                    .padding(top = 16.dp, start = 17.dp, end = 16.dp)
+                    .align(Alignment.TopStart)
+                    .fillMaxSize()
             ) {
-                MyMatchTitleView(latestDay = latestDay, userName = userName)
-                Spacer(modifier = Modifier.height(32.dp))
-            }
-            //tab layout
-            MyMatchTabLayout(
-                selectedTabIndex = selectedTabIndex,
-                onTabSelected = { index ->
-                    selectedTabIndex = index
-                    val route = MyMatchDestination.entries[index].route
-                    navController.navigate(route) {
-                        launchSingleTop = true
-                        restoreState = true
-                        popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
+                //Top View
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = ColorStyle.WHITE_100)
+                        .padding(start = 17.dp, end = 16.dp)
+                ) {
+                    MyMatchTitleView(latestDay = latestDay, userName = userName)
+                    Spacer(modifier = Modifier.height(32.dp))
+                }
+                //tab layout
+                MyMatchTabLayout(
+                    selectedTabIndex = selectedTabIndex,
+                    onTabSelected = { index ->
+                        selectedTabIndex = index
+                        val route = MyMatchDestination.entries[index].route
+                        navController.navigate(route) {
+                            launchSingleTop = true
+                            restoreState = true
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
                         }
                     }
+                )
+                NavHost(
+                    navController = navController,
+                    startDestination = MyMatchDestination.MATCH_HISTORY.route,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .background(color = ColorStyle.GRAY_200)
+                ) {
+                    composable(
+                        MyMatchDestination.MATCH_HISTORY.route, enterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                animationSpec = tween(700)
+                            )
+                        },
+                        popEnterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                animationSpec = tween(700)
+                            )
+                        }) {
+                        MatchHistoryView()
+                    }
+                    composable(
+                        MyMatchDestination.MATCH_NOTICE.route, enterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                animationSpec = tween(700)
+                            )
+                        },
+                        popEnterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                animationSpec = tween(700)
+                            )
+                        }) {
+                        MatchNoticeView()
+                    }
                 }
-            )
-            NavHost(
-                navController = navController,
-                startDestination = MyMatchDestination.MATCH_HISTORY.route,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .background(color = ColorStyle.GRAY_200)
-            ) {
-                composable(MyMatchDestination.MATCH_HISTORY.route, enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(700)
-                    )
-                },
-                    popEnterTransition = {
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    }) {
-                    MatchHistoryView()
-                }
-                composable(MyMatchDestination.MATCH_NOTICE.route, enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(700)
-                    )
-                },
-                    popEnterTransition = {
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    }) {
-                    MatchNoticeView()
-                }
+            }
+            Column(modifier = Modifier.align(Alignment.BottomEnd).padding(bottom = 12.dp , end = 10.dp)) {
+                OneThingGuide(
+                    onClick = {}
+                )
             }
         }
     }
@@ -374,5 +392,40 @@ fun MyMatchTabLayout(
     }
 }
 
+@Composable
+fun OneThingGuide(
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .width(160.dp)
+            .height(61.dp),
+        shape = RoundedCornerShape(size = 40.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = ColorStyle.GRAY_700,
+            contentColor = ColorStyle.GRAY_700
+        ),
+        onClick = onClick,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_pin),
+                contentDescription = "oneThing guide",
+                modifier = Modifier.width(18.dp).height(18.dp),
+                tint = ColorStyle.WHITE_100
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = stringResource(R.string.btn_meet_guide),
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.WHITE_100
+            )
+        }
+    }
+}
 
 

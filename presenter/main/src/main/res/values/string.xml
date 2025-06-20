@@ -15,7 +15,7 @@
     <string name="txt_myPage_police">신고하기</string>
     <string name="txt_myPage_term">약관 및 정책</string>
     <string name="txt_myPage_guide">원띵 이용가이드</string>
-
+    <string name="btn_meet_guide">모임 가이드</string>
     <!-- Home -->
     <string name="notify_notice">공지</string>
     <string name="notify_article">기사</string>
