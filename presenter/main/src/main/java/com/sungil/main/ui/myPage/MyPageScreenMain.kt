@@ -1,4 +1,4 @@
-package com.sungil.main.ui.myapge
+package com.sungil.main.ui.myPage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

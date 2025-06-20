@@ -8,7 +8,7 @@ import com.sungil.main.MainViewModel
 import com.sungil.main.Screen
 import com.sungil.main.ui.myMatch.MyMatchView
 import com.sungil.main.ui.home.HomeScreen
-import com.sungil.main.ui.myapge.MyPageScreen
+import com.sungil.main.ui.myPage.MyPageScreen
 
 @Composable
 fun MainNavigation(
