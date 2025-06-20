@@ -8,6 +8,8 @@ import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchOverView
+import com.sungil.network.model.Matching
+import com.sungil.network.model.MatchingOrder
 import com.sungil.network.model.MatchingResponse
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
@@ -337,4 +339,12 @@ interface HttpApi {
         @Body body: Map<String, Boolean>,
     ): Response<Unit>
 
+    /**
+     * 내모임 매칭 정보 조회
+     */
+    @GET(BuildConfig.MATCH_ING_URL)
+    suspend fun requestMatchingData(
+        @Header("Authorization") bearerToken: String,
+        @Body matchingOrder : MatchingOrder
+    ) : Response<List<Matching>>
 }

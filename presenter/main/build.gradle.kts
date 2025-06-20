@@ -32,6 +32,8 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(libs.glide.compose)
     implementation(libs.jetbrains.kotlinx.serialization.json)
+    implementation(libs.paging.compose)
+    implementation(libs.paging.runtime)
     implementation(project(":domain"))
     implementation(project(":core"))
     implementation(project(":presenter:main:editProfile"))

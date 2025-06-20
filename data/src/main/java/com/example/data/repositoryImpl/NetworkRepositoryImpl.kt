@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.data.paging.MatchPagingSource
 import com.example.data.paging.NotificationPagingSource
 import com.example.data.paging.NotificationReadPagingSource
 import com.example.fcm.FirebaseFCM
@@ -19,6 +20,7 @@ import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
@@ -38,7 +40,6 @@ import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
-import com.sungil.network.model.Notification
 import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.Payment
@@ -185,7 +186,10 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun requestUpdateFcmToken(accessToken: String, fcmToken: String): Int {
-        return api.requestUpdateFcmToken(bearerToken = accessToken, body = mapOf("fcmToken" to fcmToken))
+        return api.requestUpdateFcmToken(
+            bearerToken = accessToken,
+            body = mapOf("fcmToken" to fcmToken)
+        )
             .code()
     }
 
@@ -284,25 +288,25 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun requestNotification(accessToken: String): NetworkResult<NotificationResponse> {
-       return try{
-           val response = api.requestNotification(accessToken)
-           if(!response.isSuccessful) return NetworkResult.Error(code = response.code())
-           val body = response.body() ?: return NetworkResult.Error(code = response.code())
-           return NetworkResult.Success(
-               NotificationResponse(
-                   responseCode = response.code(),
-                   notificationDataList = body.map { data ->
-                       NotificationData(
-                           noticeType = data.noticeType,
-                           content = data.content,
-                           link = data.link ?: ""
-                       )
-                   }
-               )
-           )
-       }catch (e : Exception){
-           NetworkResult.Error(code = 500 , message = e.localizedMessage , throwable = e)
-       }
+        return try {
+            val response = api.requestNotification(accessToken)
+            if (!response.isSuccessful) return NetworkResult.Error(code = response.code())
+            val body = response.body() ?: return NetworkResult.Error(code = response.code())
+            return NetworkResult.Success(
+                NotificationResponse(
+                    responseCode = response.code(),
+                    notificationDataList = body.map { data ->
+                        NotificationData(
+                            noticeType = data.noticeType,
+                            content = data.content,
+                            link = data.link ?: ""
+                        )
+                    }
+                )
+            )
+        } catch (e: Exception) {
+            NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
     }
 
     override suspend fun requestBanner(
@@ -356,6 +360,23 @@ class NetworkRepositoryImpl @Inject constructor(
                 randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_RANDOM) }
             ),
         )
+    }
+
+    override fun requestMatchingData(
+        matchStatus: String,
+        lastTime: String,
+    ): Flow<PagingData<MatchingData>> {
+        return Pager(
+            config = PagingConfig(pageSize = 50),
+            pagingSourceFactory = {
+                MatchPagingSource(
+                    api = api,
+                    token = tokenManger,
+                    matchingStatus = matchStatus,
+                    lastMeetingTime = lastTime
+                )
+            }
+        ).flow
     }
 
     override suspend fun requestUpdateToken(refreshToken: String): Triple<Int, String?, String?> {

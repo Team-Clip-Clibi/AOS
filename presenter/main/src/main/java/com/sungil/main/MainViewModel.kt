@@ -3,6 +3,7 @@ package com.sungil.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.NotificationData
@@ -12,6 +13,7 @@ import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFirstMatchInput
 import com.sungil.domain.useCase.GetLatestMatch
 import com.sungil.domain.useCase.GetMatch
+import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
 import com.sungil.domain.useCase.GetUserInfo
@@ -32,10 +34,14 @@ class MainViewModel @Inject constructor(
     private val banner: GetBanner,
     private val firstMatch: GetFirstMatchInput,
     private val latestDay: GetLatestMatch,
+    private val matching: GetMatchingData,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
     val userState: StateFlow<MainViewState> = _userState.asStateFlow()
+
+    val matchAllData = matching.invoke(matchingStatus = "", lastMeetingTime = "")
+        .cachedIn(viewModelScope)
 
     init {
         requestUserInfo()
