@@ -18,6 +18,9 @@ import com.sungil.onethingmatch.OneThinMatchActivity
 import com.sungil.pay_finish.PayFinishActivity
 import com.sungil.report.ReportMainActivity
 
+/**
+ * TODO ENUM 값으로 변경해라
+ */
 class Router(private val context: Context) : Router {
     override fun navigation(target: String, args: Bundle) {
         when (target) {
