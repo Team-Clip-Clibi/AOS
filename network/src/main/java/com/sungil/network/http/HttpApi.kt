@@ -249,7 +249,7 @@ interface HttpApi {
      */
     @POST(BuildConfig.REFRESH_URL)
     suspend fun requestRefreshToken(
-        bearerToken: String,
+        @Body body: Map<String, String>
     ): Response<RefreshToken>
 
     /**
