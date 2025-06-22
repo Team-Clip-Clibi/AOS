@@ -39,7 +39,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,8 +48,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.sungil.domain.CATEGORY
@@ -631,7 +632,6 @@ fun CustomHomeButton(
 }
 
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun AutoSlidingBanner(
     image: List<BannerData>,
@@ -667,11 +667,14 @@ fun AutoSlidingBanner(
             modifier = Modifier
                 .fillMaxWidth()
         ) { page ->
-            GlideImage(
-                model = image[page].image,
+            val context = LocalContext.current
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(image[page].image)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = "banner",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(width = 393.dp , height = 109.dp)
+                modifier = Modifier.fillMaxWidth()
             )
         }
         PageIndicator(
