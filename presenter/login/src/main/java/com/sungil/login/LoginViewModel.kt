@@ -158,7 +158,7 @@ class LoginViewModel @Inject constructor(
 
                 is UpdateAndSaveToken.Result.Fail -> {
                     _actionFlow.update { current ->
-                        current.copy(fcmToken = UiState.Error(ERROR_FCM_TOKEN))
+                        current.copy(fcmToken = UiState.Error(saveFcm.errorMessage))
                     }
                 }
             }
