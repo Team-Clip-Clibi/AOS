@@ -25,6 +25,9 @@ class UpdateAndSaveToken @Inject constructor(
 
     override suspend fun invoke(param: Param): Result {
         val beforeToken = database.getFcmToken()
+        if(beforeToken.isEmpty()){
+            return Result.Fail("reLogin")
+        }
         return when {
             beforeToken.isEmpty() || beforeToken != param.fcmToken -> {
                 val result = database.saveFcmToken(param.fcmToken)
