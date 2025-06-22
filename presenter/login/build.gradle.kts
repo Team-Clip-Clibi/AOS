@@ -24,9 +24,9 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":core"))
-    implementation(libs.glide.compose)
     implementation(libs.coil.compose)
     implementation(libs.coil.okhttps)
     implementation(libs.firebase.crash)
+    implementation(libs.coil.svg)
     implementation(libs.compose.nav)
 }
