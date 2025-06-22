@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -197,7 +198,9 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                     }
                 }
             }
-            Column(modifier = Modifier.align(Alignment.BottomEnd).padding(bottom = 12.dp , end = 10.dp)) {
+            Column(modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 12.dp, end = 10.dp)) {
                 OneThingGuide(
                     onClick = {}
                 )
@@ -398,30 +401,33 @@ fun OneThingGuide(
 ) {
     Button(
         modifier = Modifier
-            .width(160.dp)
-            .height(61.dp),
+            .width(134.dp)
+            .height(48.dp),
         shape = RoundedCornerShape(size = 40.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = ColorStyle.GRAY_700,
             contentColor = ColorStyle.GRAY_700
         ),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
         onClick = onClick,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Start,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_pin),
                 contentDescription = "oneThing guide",
-                modifier = Modifier.width(18.dp).height(18.dp),
+                modifier = Modifier
+                    .width(18.dp)
+                    .height(18.dp),
                 tint = ColorStyle.WHITE_100
             )
-            Spacer(modifier = Modifier.width(6.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = stringResource(R.string.btn_meet_guide),
-                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
                 color = ColorStyle.WHITE_100
             )
         }
