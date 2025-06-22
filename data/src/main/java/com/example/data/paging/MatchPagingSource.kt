@@ -44,7 +44,7 @@ class MatchPagingSource @Inject constructor(
             )
 
             401 -> {
-                val requestRefreshToken = api.requestRefreshToken(refreshToken)
+                val requestRefreshToken = api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
                 if(!requestRefreshToken.isSuccessful){
                     return LoadResult.Error(UnauthorizedException("network error"))
                 }
