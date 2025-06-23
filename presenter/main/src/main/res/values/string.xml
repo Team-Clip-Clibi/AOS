@@ -16,6 +16,8 @@
     <string name="txt_myPage_term">약관 및 정책</string>
     <string name="txt_myPage_guide">원띵 이용가이드</string>
     <string name="btn_meet_guide">모임 가이드</string>
+    <string name="txt_no_match_data">아직 신청한 모임이 없어요</string>
+    <string name="btn_write_review">후기 작성하기</string>
     <!-- Home -->
     <string name="notify_notice">공지</string>
     <string name="notify_article">기사</string>

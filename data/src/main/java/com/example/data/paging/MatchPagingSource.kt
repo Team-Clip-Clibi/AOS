@@ -8,7 +8,6 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.exception.UnauthorizedException
 import com.sungil.domain.model.MatchingData
 import com.sungil.network.http.HttpApi
-import com.sungil.network.model.MatchingOrder
 import javax.inject.Inject
 
 class MatchPagingSource @Inject constructor(
@@ -27,10 +26,8 @@ class MatchPagingSource @Inject constructor(
         val (accessToken, refreshToken) = token.getToken()
         val response = api.requestMatchingData(
             bearerToken = TOKEN_FORM + accessToken,
-            matchingOrder = MatchingOrder(
-                matchingStatus = matchingStatus,
-                lastMeetingTime = lastTime
-            )
+            matchingStatus = matchingStatus,
+            lastMeetingTime = lastTime
         )
         if (!response.isSuccessful) {
             return LoadResult.Error(UnauthorizedException("network error"))
@@ -44,22 +41,22 @@ class MatchPagingSource @Inject constructor(
             )
 
             401 -> {
-                val requestRefreshToken = api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
-                if(!requestRefreshToken.isSuccessful){
+                val requestRefreshToken =
+                    api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
+                if (!requestRefreshToken.isSuccessful) {
                     return LoadResult.Error(UnauthorizedException("network error"))
                 }
-                if(requestRefreshToken.body() == null){
+                if (requestRefreshToken.body() == null) {
                     return LoadResult.Error(UnauthorizedException("network error"))
                 }
-                val updateToken = token.updateToken(requestRefreshToken.body()!!.accessToken , refreshToken)
+                val updateToken =
+                    token.updateToken(requestRefreshToken.body()!!.accessToken, refreshToken)
                 if (!updateToken) return LoadResult.Error(UnauthorizedException("reLogin"))
                 val newToken = token.getToken()
                 val reRequest = api.requestMatchingData(
                     bearerToken = TOKEN_FORM + newToken.first,
-                    matchingOrder = MatchingOrder(
-                        matchingStatus = matchingStatus,
-                        lastMeetingTime = lastTime
-                    )
+                    matchingStatus = matchingStatus,
+                    lastMeetingTime = lastTime
                 )
                 if (!reRequest.isSuccessful) return LoadResult.Error(UnauthorizedException("network error"))
                 if (reRequest.code() == 200) {

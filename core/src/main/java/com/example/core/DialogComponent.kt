@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -23,7 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Text
-
+import androidx.compose.ui.res.stringResource
+import androidx.compose.material3.Icon
 @Composable
 fun CustomDialogOneButton(
     onDismiss: () -> Unit,
@@ -104,5 +106,96 @@ fun CustomSnackBar(
             style = AppTextStyles.CAPTION_12_18_SEMI,
             color = ColorStyle.WHITE_100
         )
+    }
+}
+
+@Composable
+fun CustomDialogOneButton(
+    time: String,
+    meetState: String,
+    meetKind: String,
+    title: String,
+    reviewWrite: Boolean,
+    buttonText: String,
+    onClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(193.dp)
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 12.dp))
+            .padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 18.dp)
+    ) {
+        //top view
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = time,
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = ColorStyle.GRAY_800
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = stringResource(R.string.txt_detail),
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = ColorStyle.GRAY_700
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Icon(
+                painter = painterResource(R.drawable.ic_arrow_right),
+                contentDescription = stringResource(R.string.txt_detail),
+            )
+        }
+        //content View
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = meetState,
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = when(meetState){
+                    "취소" -> ColorStyle.RED_100
+                    else -> ColorStyle.PURPLE_400
+                }
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Icon(
+                painter = painterResource(R.drawable.ic_point),
+                contentDescription = meetState,
+                modifier = Modifier
+                    .padding(1.dp)
+                    .width(2.dp)
+                    .height(2.dp)
+                    .alignByBaseline()
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = meetKind,
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = ColorStyle.GRAY_800
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(color = ColorStyle.GRAY_400)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = title,
+            style = AppTextStyles.SUBTITLE_18_26_SEMI,
+            color = ColorStyle.GRAY_800,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(14.dp))
+        if(meetState != "취소"){
+            ButtonL(
+                text = buttonText,
+                isEnable = !reviewWrite,
+                onClick = onClick,
+            )
+        }
     }
 }

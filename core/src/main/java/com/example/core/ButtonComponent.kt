@@ -287,3 +287,36 @@ fun ButtonSmall(
         )
     }
 }
+
+@Composable
+fun ButtonL(
+    text: String,
+    isEnable: Boolean = true,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            when (isEnable) {
+                true -> ColorStyle.PURPLE_400
+                false -> ColorStyle.GRAY_300
+            }
+        ),
+        onClick = onClick,
+        enabled = isEnable
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = when (isEnable) {
+                true -> ColorStyle.WHITE_100
+                false -> ColorStyle.GRAY_800
+            }
+        )
+    }
+}

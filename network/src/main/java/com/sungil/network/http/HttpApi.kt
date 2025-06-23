@@ -36,6 +36,7 @@ import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface HttpApi {
     /**
@@ -345,6 +346,7 @@ interface HttpApi {
     @GET(BuildConfig.MATCH_ING_URL)
     suspend fun requestMatchingData(
         @Header("Authorization") bearerToken: String,
-        @Body matchingOrder : MatchingOrder
-    ) : Response<List<Matching>>
+        @Query("matchingStatus") matchingStatus: String,
+        @Query("lastMeetingTime") lastMeetingTime: String,
+    ): Response<List<Matching>>
 }

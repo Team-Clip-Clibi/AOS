@@ -179,7 +179,7 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                                 animationSpec = tween(700)
                             )
                         }) {
-                        MatchHistoryView()
+                        MatchHistoryView(viewModel = viewModel)
                     }
                     composable(
                         MyMatchDestination.MATCH_NOTICE.route, enterTransition = {
