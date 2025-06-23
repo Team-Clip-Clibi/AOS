@@ -9,7 +9,6 @@ import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchOverView
 import com.sungil.network.model.Matching
-import com.sungil.network.model.MatchingOrder
 import com.sungil.network.model.MatchingResponse
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
