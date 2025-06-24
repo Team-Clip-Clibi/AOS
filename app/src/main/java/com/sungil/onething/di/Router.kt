@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.signup.SignUpActivity
 import com.oneThing.first_matrch.FirstMatchActivity
+import com.oneThing.guide.GuideActivity
 import com.oneThing.random.RandomMatchActivity
 import com.sungil.alarm.AlarmMainActivity
 import com.sungil.billing.BillingActivity
@@ -118,7 +119,12 @@ class Router(private val context: Context) : Router {
                 }
                 context.startActivity(intent)
             }
-
+            "guide" -> {
+                val intent = Intent(context, GuideActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+            }
             else -> {
                 throw IllegalArgumentException("Unsupported target: $target")
             }
