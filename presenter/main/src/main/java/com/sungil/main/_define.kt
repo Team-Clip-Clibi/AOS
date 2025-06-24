@@ -41,3 +41,17 @@ const val ERROR_NETWORK_ERROR = "network error"
 
 const val CONTENT_NOTICE = "NOTICE"
 const val CONTENT_ARTICLE = "ARTICLE"
+
+const val MATCH_DATA_EMPTY = 0
+
+const val MATCH_ALL = 0
+const val MATCH_APPLY = 1
+const val MATCH_CONFIRM = 2
+const val MATCH_COMPLETE = 3
+const val MATCH_CANCEL = 4
+
+const val MATCH_KEY_ALL = ""
+const val MATCH_KEY_APPLIED = "APPLIED"
+const val MATCH_KEY_CONFIRMED = "CONFIRMED"
+const val MATCH_KEY_COMPLETED = "COMPLETED"
+const val MATCH_KEY_CANCELLED = "CANCELLED"

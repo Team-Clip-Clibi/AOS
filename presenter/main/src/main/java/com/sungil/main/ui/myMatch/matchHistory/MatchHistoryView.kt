@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,73 +27,123 @@ import com.example.core.CustomDialogOneButton
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.paging.compose.LazyPagingItems
 import com.example.core.AppTextStyles
+import com.sungil.domain.model.MatchingData
+import com.sungil.main.MATCH_ALL
+import com.sungil.main.MATCH_APPLY
+import com.sungil.main.MATCH_CANCEL
+import com.sungil.main.MATCH_COMPLETE
+import com.sungil.main.MATCH_CONFIRM
+import com.sungil.main.MATCH_DATA_EMPTY
+import com.sungil.main.component.SmallButton
 
 
 @Composable
 internal fun MatchHistoryView(viewModel: MainViewModel) {
-    val matchAllData = viewModel.matchAllData.collectAsLazyPagingItems()
+    val selectButton by viewModel.matchButton.collectAsState()
+
+    val matchItems = when (selectButton) {
+        MATCH_ALL -> viewModel.matchAllData.collectAsLazyPagingItems()
+        MATCH_APPLY -> viewModel.matchApplied.collectAsLazyPagingItems()
+        MATCH_CONFIRM -> viewModel.matchConfirmed.collectAsLazyPagingItems()
+        MATCH_COMPLETE -> viewModel.matchComplete.collectAsLazyPagingItems()
+        MATCH_CANCEL -> viewModel.matchCancelled.collectAsLazyPagingItems()
+        else -> viewModel.matchAllData.collectAsLazyPagingItems()
+    }
+
+    val buttonLabels = listOf(
+        stringResource(R.string.btn_match_all),
+        stringResource(R.string.btn_apply),
+        stringResource(R.string.btn_confirm),
+        stringResource(R.string.btn_complete),
+        stringResource(R.string.btn_cancel)
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = ColorStyle.GRAY_200)
-            .padding(top = 18.dp, end = 20.dp, start = 20.dp , bottom = 24.dp)
+            .padding(top = 18.dp, end = 20.dp, start = 20.dp, bottom = 24.dp)
     ) {
-        when (matchAllData.itemCount) {
-            0 -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_no_match_data),
-                            contentDescription = "No Match Data",
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = ColorStyle.GRAY_300,
-                                    shape = RoundedCornerShape(size = 100.dp)
-                                )
-                                .width(60.dp)
-                                .height(60.dp)
-                                .background(
-                                    color = ColorStyle.WHITE_100,
-                                    shape = RoundedCornerShape(size = 100.dp)
-                                )
-                                .padding(12.dp)
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = stringResource(R.string.txt_no_match_data),
-                            style = AppTextStyles.BODY_14_20_MEDIUM,
-                            color = ColorStyle.GRAY_600
-                        )
-                    }
-                }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            buttonLabels.forEachIndexed { index, label ->
+                SmallButton(
+                    text = label,
+                    isClick = selectButton == index,
+                    onClick = { viewModel.setMatchButton(index) }
+                )
             }
+        }
+        if (matchItems.itemCount == MATCH_DATA_EMPTY) {
+            NotMatchView()
+        } else {
+            MatchView(matchItems)
+        }
+    }
+}
 
-            else -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(matchAllData.itemCount) { index ->
-                        matchAllData[index]?.let { matchData ->
-                            CustomDialogOneButton(
-                                time = matchData.formattedTime,
-                                meetState = matchData.matchStatus,
-                                meetKind = matchData.matchType,
-                                title = matchData.myOneThingContent,
-                                reviewWrite = matchData.isReviewWritten,
-                                buttonText = stringResource(R.string.btn_write_review),
-                                onClick = {
+@Composable
+fun NotMatchView() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = ColorStyle.GRAY_200)
+            .padding(top = 18.dp, end = 20.dp, start = 20.dp, bottom = 24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                painter = painterResource(R.drawable.ic_no_match_data),
+                contentDescription = "No Match Data",
+                modifier = Modifier
+                    .border(
+                        width = 1.dp,
+                        color = ColorStyle.GRAY_300,
+                        shape = RoundedCornerShape(size = 100.dp)
+                    )
+                    .width(60.dp)
+                    .height(60.dp)
+                    .background(
+                        color = ColorStyle.WHITE_100,
+                        shape = RoundedCornerShape(size = 100.dp)
+                    )
+                    .padding(12.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.txt_no_match_data),
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_600
+            )
+        }
+    }
+}
 
-                                }
-                            )
-                        }
+@Composable
+fun MatchView(matchAllData: LazyPagingItems<MatchingData>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(matchAllData.itemCount) { index ->
+            matchAllData[index]?.let { matchData ->
+                CustomDialogOneButton(
+                    time = matchData.formattedTime,
+                    meetState = matchData.matchStatus,
+                    meetKind = matchData.matchType,
+                    title = matchData.myOneThingContent,
+                    reviewWrite = matchData.isReviewWritten,
+                    buttonText = stringResource(R.string.btn_write_review),
+                    onClick = {
+
                     }
-                }
+                )
             }
         }
     }

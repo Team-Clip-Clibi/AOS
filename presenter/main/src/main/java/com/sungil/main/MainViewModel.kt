@@ -40,8 +40,19 @@ class MainViewModel @Inject constructor(
     private val _userState = MutableStateFlow(MainViewState())
     val userState: StateFlow<MainViewState> = _userState.asStateFlow()
 
-    val matchAllData = matching.invoke(matchingStatus = "", lastMeetingTime = "")
+    val matchAllData = matching.invoke(matchingStatus = MATCH_KEY_ALL, lastMeetingTime = "")
         .cachedIn(viewModelScope)
+    val matchApplied = matching.invoke(matchingStatus = MATCH_KEY_APPLIED , lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+    val matchConfirmed = matching.invoke(matchingStatus = MATCH_KEY_CONFIRMED , lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+    val matchComplete = matching.invoke(matchingStatus = MATCH_KEY_COMPLETED , lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+    val matchCancelled = matching.invoke(matchingStatus = MATCH_KEY_CANCELLED , lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+
+    private var _matchButton = MutableStateFlow(0)
+    val matchButton: StateFlow<Int> = _matchButton.asStateFlow()
 
     init {
         requestUserInfo()
@@ -189,6 +200,10 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setMatchButton(index: Int) {
+        _matchButton.value = index
     }
 
     sealed interface UiState<out T> {

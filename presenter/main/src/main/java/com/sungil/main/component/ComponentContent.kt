@@ -734,3 +734,27 @@ fun Indicator(
             .background(if (isSelected) selectedColor else defaultColor)
     )
 }
+
+@Composable
+fun SmallButton(
+    text: String,
+    onClick: () -> Unit,
+    isClick: Boolean,
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.height(30.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isClick) ColorStyle.PURPLE_400 else ColorStyle.WHITE_100,
+            contentColor = if (isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_600
+        ),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+    ) {
+        Text(
+            text = text,
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = if (isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_600
+        )
+    }
+}
