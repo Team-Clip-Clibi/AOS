@@ -143,7 +143,7 @@ fun HardCodedTimelineView() {
                     )
                 )
             ),
-            isLast = false
+            isLast = true
         )
     }
 }
@@ -181,22 +181,35 @@ fun TimeLineNodeManual(
                 Box(
                     modifier = Modifier
                         .width(2.dp)
-                        .height(80.dp)
+                        .height(160.dp)
                         .background(color = ColorStyle.GRAY_200)
                 )
             }
         }
-
         Spacer(modifier = Modifier.width(12.dp))
-
         Column {
-            Text(title, fontSize = 16.sp, color = Color.Black)
-            Spacer(modifier = Modifier.height(8.dp))
-            contents.forEach {
-                Row(modifier = Modifier.padding(bottom = 4.dp)) {
+            Text(
+                text = contents.title,
+                style = AppTextStyles.SUBTITLE_18_26_SEMI,
+                color = ColorStyle.GRAY_800
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            contents.content.forEach { data ->
+                Row {
                     Text("• ", fontSize = 14.sp)
-                    Text(it, fontSize = 14.sp)
+                    Text(
+                        text = data.title,
+                        style = AppTextStyles.BODY_14_20_MEDIUM,
+                        color = ColorStyle.GRAY_800
+                    )
                 }
+                Text(
+                    text = data.content,
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = ColorStyle.GRAY_800,
+                    modifier = Modifier.padding(start =12.dp)
+                )
+                Spacer(modifier = Modifier.height(6.dp))
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
