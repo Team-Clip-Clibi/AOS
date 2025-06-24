@@ -66,7 +66,7 @@ import com.sungil.main.ui.myMatch.matchNotice.MatchNoticeView
 import com.sungil.onethingmatch.ERROR_RE_LOGIN
 
 @Composable
-fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
+fun MyMatchView(viewModel: MainViewModel, login: () -> Unit , guide : () -> Unit) {
     val snackBarHostState = remember { SnackbarHostState() }
     val state by viewModel.userState.collectAsState()
     val latestDay = state.latestDay
@@ -202,7 +202,7 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 12.dp, end = 10.dp)) {
                 OneThingGuide(
-                    onClick = {}
+                    onClick = {guide()}
                 )
             }
         }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -317,6 +318,35 @@ fun ButtonL(
                 true -> ColorStyle.WHITE_100
                 false -> ColorStyle.GRAY_800
             }
+        )
+    }
+}
+
+@Composable
+fun ButtonLWhite(
+    text: String,
+    isEnable: Boolean = true,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .border(width = 1.dp, color = Color(0xFFDCDCDC), shape = RoundedCornerShape(size = 8.dp)),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            ColorStyle.WHITE_100
+        ),
+        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
+        onClick = onClick,
+        enabled = isEnable
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color =  ColorStyle.GRAY_800
         )
     }
 }

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sungil.main.MainViewModel
 import com.sungil.main.Screen
+import com.sungil.main.ui.guide.MeetGuideView
 import com.sungil.main.ui.myMatch.MyMatchView
 import com.sungil.main.ui.home.HomeScreen
 import com.sungil.main.ui.myPage.MyPageScreen
@@ -36,10 +37,15 @@ fun MainNavigation(
             )
         }
         composable(Screen.Calendar.screenRoute) {
-            MyMatchView(viewModel = viewModel , login = login)
+            MyMatchView(viewModel = viewModel , login = login , guide = {navController.navigate(Screen.Guide.screenRoute)})
         }
         composable(Screen.MyPage.screenRoute) {
             MyPageScreen(viewModel, profileButtonClick, reportClick, lowClick)
+        }
+        composable(Screen.Guide.screenRoute) {
+            MeetGuideView(
+                onClose = { navController.navigate(Screen.MyPage.screenRoute) },
+            )
         }
     }
 }

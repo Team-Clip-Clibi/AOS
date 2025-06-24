@@ -64,6 +64,13 @@ object AppTextStyles {
         fontWeight = FontWeight(600),
         color = Color(0xFF171717),
     )
+    val BODY_14_20_EXTRA_BOLD = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        fontFamily = FontFamily(Font(R.font.extra_bold)),
+        fontWeight = FontWeight(800),
+        color = Color(0xFF171717),
+    )
 
     val BODY_14_20_MEDIUM = TextStyle(
         fontSize = 14.sp,
