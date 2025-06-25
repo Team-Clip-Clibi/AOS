@@ -6,16 +6,19 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,8 +30,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
+
 @Composable
 fun ButtonXXLPurple400(
     onClick: () -> Unit,
@@ -332,7 +345,11 @@ fun ButtonLWhite(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .border(width = 1.dp, color = Color(0xFFDCDCDC), shape = RoundedCornerShape(size = 8.dp)),
+            .border(
+                width = 1.dp,
+                color = Color(0xFFDCDCDC),
+                shape = RoundedCornerShape(size = 8.dp)
+            ),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             ColorStyle.WHITE_100
@@ -347,6 +364,92 @@ fun ButtonLWhite(
             overflow = TextOverflow.Ellipsis,
             style = AppTextStyles.BODY_14_20_MEDIUM,
             color =  ColorStyle.GRAY_800
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomViewWhite(
+    item: List<String>,
+    buttonText: String,
+    onClick: (String) -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val coroutineScope = rememberCoroutineScope()
+    var selectedItem by remember { mutableStateOf("") }
+    ModalBottomSheet(
+        onDismissRequest = {
+            coroutineScope.launch {
+                sheetState.hide()
+                onClick(selectedItem)
+            }
+        },
+        sheetState = sheetState,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        contentColor = ColorStyle.WHITE_100
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = ColorStyle.WHITE_100)
+                .heightIn(min = 200.dp, max = 400.dp)
+                .padding(top = 20.dp, bottom = 34.dp, start = 24.dp, end = 24.dp)
+        ) {
+            item.forEach { text ->
+                ButtonCenterLarge(
+                    text = text,
+                    checked = selectedItem == text,
+                    onClick = {
+                        selectedItem = text
+                    },
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                ButtonLargePurple400Gray100(
+                    text = buttonText,
+                    isEnable = selectedItem.trim().isNotEmpty(),
+                    onClick = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                            onClick(selectedItem)
+                        }
+                    }
+                )
+            }
+
+        }
+    }
+}
+
+@Composable
+fun ButtonLargePurple400Gray100(
+    text: String,
+    isEnable: Boolean = true,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            when (isEnable) {
+                true -> ColorStyle.PURPLE_400
+                false -> ColorStyle.GRAY_100
+            }
+        ),
+        onClick = onClick,
+        enabled = isEnable
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = when (isEnable) {
+                true -> ColorStyle.WHITE_100
+                false -> ColorStyle.GRAY_800
+            }
         )
     }
 }
