@@ -36,10 +36,8 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.core.AppTextStyles
-import com.example.core.ButtonL
 import com.example.core.ButtonLWhite
 import com.sungil.domain.model.MatchDate
 import com.sungil.editprofile.JOB
