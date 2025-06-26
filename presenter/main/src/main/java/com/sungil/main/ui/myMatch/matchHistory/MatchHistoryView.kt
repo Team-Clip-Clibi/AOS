@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,11 +29,15 @@ import com.example.core.CustomDialogOneButton
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.paging.compose.LazyPagingItems
 import com.example.core.AppTextStyles
 import com.sungil.domain.model.MatchingData
+import com.sungil.main.ERROR_NETWORK_ERROR
+import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.MATCH_ALL
 import com.sungil.main.MATCH_APPLY
 import com.sungil.main.MATCH_CANCEL
@@ -42,8 +48,14 @@ import com.sungil.main.component.SmallButton
 
 
 @Composable
-internal fun MatchHistoryView(viewModel: MainViewModel) {
+internal fun MatchHistoryView(
+    viewModel: MainViewModel,
+    matchDetail: () -> Unit,
+    login: () -> Unit,
+    snackBarHostState: SnackbarHostState,
+) {
     val selectButton by viewModel.matchButton.collectAsState()
+    val state by viewModel.userState.collectAsState()
 
     val matchItems = when (selectButton) {
         MATCH_ALL -> viewModel.matchAllData.collectAsLazyPagingItems()
@@ -61,6 +73,34 @@ internal fun MatchHistoryView(viewModel: MainViewModel) {
         stringResource(R.string.btn_complete),
         stringResource(R.string.btn_cancel)
     )
+    val context = LocalContext.current
+    LaunchedEffect(state.matchDetail) {
+        when (val result = state.matchDetail) {
+            is MainViewModel.UiState.Error -> {
+                when (result.message) {
+                    ERROR_RE_LOGIN -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        login()
+                    }
+                    ERROR_NETWORK_ERROR -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+
+            is MainViewModel.UiState.Success -> {
+                matchDetail()
+            }
+
+            else -> Unit
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -83,7 +123,7 @@ internal fun MatchHistoryView(viewModel: MainViewModel) {
         if (matchItems.itemCount == MATCH_DATA_EMPTY) {
             NotMatchView()
         } else {
-            MatchView(matchItems)
+            MatchView(matchItems, viewModel)
         }
     }
 }
@@ -126,7 +166,7 @@ fun NotMatchView() {
 }
 
 @Composable
-fun MatchView(matchAllData: LazyPagingItems<MatchingData>) {
+fun MatchView(matchAllData: LazyPagingItems<MatchingData>, viewModel: MainViewModel) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -141,7 +181,10 @@ fun MatchView(matchAllData: LazyPagingItems<MatchingData>) {
                     reviewWrite = matchData.isReviewWritten,
                     buttonText = stringResource(R.string.btn_write_review),
                     onClick = {
-
+                        viewModel.matchDetail(
+                            matchId = matchData.id,
+                            matchType = matchData.matchType
+                        )
                     }
                 )
             }

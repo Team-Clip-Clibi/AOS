@@ -18,6 +18,8 @@ import com.sungil.domain.model.Love
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.MatchDate
+import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.MatchOverView
 import com.sungil.domain.model.MatchingData
@@ -533,6 +535,51 @@ class NetworkRepositoryImpl @Inject constructor(
             ).code()
         } catch (e: Exception) {
             500
+        }
+    }
+
+    override suspend fun requestMatchDetail(
+        token: String,
+        matchingId: Int,
+        matchType: String,
+    ): NetworkResult<MatchDetail> {
+        return try {
+            val response = api.requestMatchDetail(
+                bearerToken = token,
+                id = matchingId,
+                matchingType = matchType
+            )
+            if (!response.isSuccessful) {
+                return NetworkResult.Error(code = response.code())
+            }
+            val body = response.body() ?: return NetworkResult.Error(code = response.code())
+            NetworkResult.Success(
+                MatchDetail(
+                    time = body.meetingTime,
+                    matchStatus = body.matchingStatus.matchingStatusName,
+                    matchType = body.matchingType,
+                    matchTime = body.applicationInfo.preferredDates.map { responseData ->
+                        MatchDate(
+                            date = responseData.date,
+                            time = responseData.timeSlot
+                        )
+                    },
+                    matchCategory = body.applicationInfo.oneThingCategory,
+                    matchBudget = body.applicationInfo.oneThingBudgetRange,
+                    matchContent = body.myOneThingContent,
+                    matchPrice = body.paymentInfo.matchingPrice,
+                    paymentPrice = body.paymentInfo.paymentPrice,
+                    requestTime = body.paymentInfo.requestedAt,
+                    approveTime = body.paymentInfo.approvedAt,
+                    district = body.applicationInfo.district,
+                    job = body.myMatchingInfo.job,
+                    loveState = body.myMatchingInfo.relationshipStatus,
+                    diet = body.myMatchingInfo.dietaryOption,
+                    language = body.myMatchingInfo.language
+                )
+            )
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }
     }
 

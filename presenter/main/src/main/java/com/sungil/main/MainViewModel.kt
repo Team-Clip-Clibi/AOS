@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.UserData
@@ -13,6 +14,7 @@ import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFirstMatchInput
 import com.sungil.domain.useCase.GetLatestMatch
 import com.sungil.domain.useCase.GetMatch
+import com.sungil.domain.useCase.GetMatchDetail
 import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
@@ -35,6 +37,7 @@ class MainViewModel @Inject constructor(
     private val firstMatch: GetFirstMatchInput,
     private val latestDay: GetLatestMatch,
     private val matching: GetMatchingData,
+    private val matchDetail: GetMatchDetail,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -42,13 +45,13 @@ class MainViewModel @Inject constructor(
 
     val matchAllData = matching.invoke(matchingStatus = MATCH_KEY_ALL, lastMeetingTime = "")
         .cachedIn(viewModelScope)
-    val matchApplied = matching.invoke(matchingStatus = MATCH_KEY_APPLIED , lastMeetingTime = "")
+    val matchApplied = matching.invoke(matchingStatus = MATCH_KEY_APPLIED, lastMeetingTime = "")
         .cachedIn(viewModelScope)
-    val matchConfirmed = matching.invoke(matchingStatus = MATCH_KEY_CONFIRMED , lastMeetingTime = "")
+    val matchConfirmed = matching.invoke(matchingStatus = MATCH_KEY_CONFIRMED, lastMeetingTime = "")
         .cachedIn(viewModelScope)
-    val matchComplete = matching.invoke(matchingStatus = MATCH_KEY_COMPLETED , lastMeetingTime = "")
+    val matchComplete = matching.invoke(matchingStatus = MATCH_KEY_COMPLETED, lastMeetingTime = "")
         .cachedIn(viewModelScope)
-    val matchCancelled = matching.invoke(matchingStatus = MATCH_KEY_CANCELLED , lastMeetingTime = "")
+    val matchCancelled = matching.invoke(matchingStatus = MATCH_KEY_CANCELLED, lastMeetingTime = "")
         .cachedIn(viewModelScope)
 
     private var _matchButton = MutableStateFlow(0)
@@ -67,14 +70,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = userInfo.invoke()) {
                 is GetUserInfo.Result.Success -> {
-                    _userState.update {
-                        it.copy(userDataState = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(userDataState = UiState.Success(result.data))
                     }
                 }
 
                 is GetUserInfo.Result.Fail -> {
-                    _userState.update {
-                        it.copy(userDataState = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(userDataState = UiState.Error(result.errorMessage))
                     }
                 }
             }
@@ -85,15 +88,15 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = oneThingNotify.invoke()) {
                 is GetNewNotification.Result.Fail -> {
-                    _userState.update {
-                        it.copy(oneThingState = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(oneThingState = UiState.Error(result.errorMessage))
                     }
 
                 }
 
                 is GetNewNotification.Result.Success -> {
-                    _userState.update {
-                        it.copy(oneThingState = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(oneThingState = UiState.Success(result.data))
                     }
                 }
             }
@@ -104,14 +107,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = notify.invoke()) {
                 is GetNotification.Result.Fail -> {
-                    _userState.update {
-                        it.copy(notificationResponseState = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(notificationResponseState = UiState.Error(result.errorMessage))
                     }
                 }
 
                 is GetNotification.Result.Success -> {
-                    _userState.update {
-                        it.copy(notificationResponseState = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(notificationResponseState = UiState.Success(result.data))
                     }
                 }
             }
@@ -122,14 +125,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = match.invoke()) {
                 is GetMatch.Result.Fail -> {
-                    _userState.update {
-                        it.copy(matchState = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(matchState = UiState.Error(result.errorMessage))
                     }
                 }
 
                 is GetMatch.Result.Success -> {
-                    _userState.update {
-                        it.copy(matchState = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(matchState = UiState.Success(result.data))
                     }
                 }
             }
@@ -140,14 +143,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = latestDay.invoke()) {
                 is GetLatestMatch.Result.Fail -> {
-                    _userState.update { current ->
-                        current.copy(latestDay = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(latestDay = UiState.Error(result.errorMessage))
                     }
                 }
 
                 is GetLatestMatch.Result.Success -> {
-                    _userState.update { current ->
-                        current.copy(
+                    _userState.update { state ->
+                        state.copy(
                             latestDay = UiState.Success(
                                 LatestDayInfo(
                                     time = result.time,
@@ -166,14 +169,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = banner.invoke(GetBanner.Param("HOME"))) {
                 is GetBanner.Result.Fail -> {
-                    _userState.update {
-                        it.copy(banner = UiState.Error(result.message))
+                    _userState.update { state ->
+                        state.copy(banner = UiState.Error(result.message))
                     }
                 }
 
                 is GetBanner.Result.Success -> {
-                    _userState.update {
-                        it.copy(banner = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(banner = UiState.Success(result.data))
                     }
                 }
             }
@@ -184,18 +187,41 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (firstMatch.invoke()) {
                 is GetFirstMatchInput.Result.Success -> {
-                    _userState.update {
-                        it.copy(
+                    _userState.update { state ->
+                        state.copy(
                             firstMatch = UiState.Success(orderType)
                         )
                     }
                 }
 
                 is GetFirstMatchInput.Result.Fail -> {
-                    _userState.update {
-                        it.copy(
+                    _userState.update { state ->
+                        state.copy(
                             firstMatch = UiState.Error(orderType)
                         )
+                    }
+                }
+            }
+        }
+    }
+
+    fun matchDetail(matchId: Int, matchType: String) {
+        viewModelScope.launch {
+            when (val result = matchDetail.invoke(
+                GetMatchDetail.Param(
+                    matchId = matchId,
+                    matchType = matchType
+                )
+            )) {
+                is GetMatchDetail.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(matchDetail = UiState.Success(result.matchDetail))
+                    }
+                }
+
+                is GetMatchDetail.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(matchDetail = UiState.Error(result.errorMessage))
                     }
                 }
             }
@@ -220,6 +246,7 @@ class MainViewModel @Inject constructor(
         val matchState: UiState<MatchData> = UiState.Loading,
         val firstMatch: UiState<String> = UiState.Loading,
         val latestDay: UiState<LatestDayInfo> = UiState.Loading,
+        val matchDetail: UiState<MatchDetail> = UiState.Loading,
     )
 
 }

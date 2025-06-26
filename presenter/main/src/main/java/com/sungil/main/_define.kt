@@ -1,5 +1,7 @@
 package com.sungil.main
 
+import com.sungil.main.MatchType.RANDOM
+
 
 sealed class Screen(val title: Int, val icon: Int, val screenRoute: String) {
     data object Home : Screen(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
@@ -19,6 +21,31 @@ enum class MyMatchDestination(val route: String, val label: String) {
 enum class TimeLine {
     FIRST, SECOND, THIRD, LAST
 }
+enum class MatchType(val route: String, val matchType: String) {
+    RANDOM("RANDOM", "랜덤모임"), ONE_THING("ONE_THING", "원띵모임");
+
+    companion object {
+        fun fromRoute(route: String?): MatchType =
+            entries.find { it.route == route } ?: RANDOM
+    }
+}
+
+enum class CATEGORY(val displayName: String) {
+    HEALTH("건강"),
+    MONEY("돈"),
+    LIFE("인생"),
+    RELATIONSHIP("연애"),
+    SELF_IMPROVEMENT("자기계발"),
+    WORK("직장"),
+    HOBBY("취미"),
+    NONE("선택안함");
+
+    companion object {
+        fun fromRoute(route: String?): CATEGORY =
+            CATEGORY.entries.find { it.displayName == route } ?: NONE
+    }
+}
+
 val bottomNavItems = listOf(
     Screen.Home,
     Screen.Calendar,

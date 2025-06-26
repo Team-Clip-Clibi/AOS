@@ -27,6 +27,7 @@ import com.sungil.network.model.RequestUserInfo
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
+import com.sungil.network.model.MatchDetailResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -348,4 +349,11 @@ interface HttpApi {
         @Query("matchingStatus") matchingStatus: String,
         @Query("lastMeetingTime") lastMeetingTime: String,
     ): Response<List<Matching>>
+
+    @GET(BuildConfig.MATCH_ING_URL +"{matchingType}" +"{id}")
+    suspend fun requestMatchDetail(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingType") matchingType: String,
+        @Path("id") id: Int,
+    ) : Response<MatchDetailResponse>
 }

@@ -66,7 +66,12 @@ import com.sungil.main.ui.myMatch.matchNotice.MatchNoticeView
 import com.sungil.onethingmatch.ERROR_RE_LOGIN
 
 @Composable
-fun MyMatchView(viewModel: MainViewModel, login: () -> Unit , guide : () -> Unit) {
+fun MyMatchView(
+    viewModel: MainViewModel,
+    login: () -> Unit,
+    guide: () -> Unit,
+    matchDetail: () -> Unit,
+) {
     val snackBarHostState = remember { SnackbarHostState() }
     val state by viewModel.userState.collectAsState()
     val latestDay = state.latestDay
@@ -179,7 +184,12 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit , guide : () -> Unit
                                 animationSpec = tween(700)
                             )
                         }) {
-                        MatchHistoryView(viewModel = viewModel)
+                        MatchHistoryView(
+                            viewModel = viewModel,
+                            login = login,
+                            matchDetail = matchDetail,
+                            snackBarHostState = snackBarHostState
+                        )
                     }
                     composable(
                         MyMatchDestination.MATCH_NOTICE.route, enterTransition = {
@@ -198,11 +208,13 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit , guide : () -> Unit
                     }
                 }
             }
-            Column(modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 12.dp, end = 10.dp)) {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 12.dp, end = 10.dp)
+            ) {
                 OneThingGuide(
-                    onClick = {guide()}
+                    onClick = { guide() }
                 )
             }
         }
@@ -343,7 +355,7 @@ fun MyMatchViewMatchInfo(applyInfo: Int, confirmInfo: Int) {
 @Composable
 fun MyMatchTabLayout(
     selectedTabIndex: Int,
-    onTabSelected: (Int) -> Unit
+    onTabSelected: (Int) -> Unit,
 ) {
     val tabs = MyMatchDestination.entries
 
