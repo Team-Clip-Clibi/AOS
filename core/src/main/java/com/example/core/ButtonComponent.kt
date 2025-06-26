@@ -346,7 +346,7 @@ fun ButtonLWhite(
             .height(48.dp)
             .border(
                 width = 1.dp,
-                color = Color(0xFFDCDCDC),
+                color = ColorStyle.GRAY_300,
                 shape = RoundedCornerShape(size = 8.dp)
             ),
         shape = RoundedCornerShape(8.dp),

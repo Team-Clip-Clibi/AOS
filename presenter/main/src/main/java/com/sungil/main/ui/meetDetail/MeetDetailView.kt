@@ -36,9 +36,13 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.core.AppTextStyles
+import com.example.core.ButtonL
+import com.example.core.ButtonLWhite
 import com.sungil.domain.model.MatchDate
+import com.sungil.editprofile.JOB
 import com.sungil.main.CATEGORY
 import com.sungil.main.MATCH_KEY_APPLIED
 import com.sungil.main.MATCH_KEY_CANCELLED
@@ -83,7 +87,7 @@ internal fun MeetDetailView(viewModel: MainViewModel, myMatch: () -> Unit) {
                 .background(color = ColorStyle.WHITE_100)
                 .padding(
                     top = paddingValues.calculateTopPadding() + 24.dp,
-                    bottom = paddingValues.calculateBottomPadding()
+                    bottom = paddingValues.calculateBottomPadding() + 32.dp
                 )
                 .verticalScroll(rememberScrollState())
         ) {
@@ -111,6 +115,21 @@ internal fun MeetDetailView(viewModel: MainViewModel, myMatch: () -> Unit) {
                 budget = detail.matchBudget
             )
             Spacer(modifier = Modifier.height(32.dp))
+            MyMatchInfo(
+                diet = detail.diet,
+                job = detail.job,
+                language = detail.language,
+                loveState = detail.loveState
+            )
+            PayInfo(
+                payPrice = detail.paymentPrice.toString()
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            if (detail.cancelButton) {
+                ButtonLWhite(text = stringResource(R.string.match_detail_btn_cancel), onClick = {
+                    //TODO 매칭 취소 로직 추가
+                })
+            }
         }
     }
 }
@@ -293,5 +312,128 @@ private fun MatchItemView(text: String) {
             style = AppTextStyles.BODY_14_20_MEDIUM,
             color = ColorStyle.GRAY_800
         )
+    }
+}
+
+@Composable
+private fun MyMatchInfo(job: String, loveState: String, diet: String, language: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 24.dp, start = 17.dp, end = 16.dp, bottom = 24.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.match_detail_my_info),
+            style = AppTextStyles.SUBTITLE_18_26_SEMI,
+            color = ColorStyle.GRAY_800
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        MyInfoItemView(
+            title = stringResource(R.string.match_detail_job),
+            content = JOB.fromName(job).displayName
+        )
+        MyInfoItemView(
+            title = stringResource(R.string.match_detail_love_state),
+            content = loveState
+        )
+        MyInfoItemView(
+            title = stringResource(R.string.match_detail_diet),
+            content = diet
+        )
+        MyInfoItemView(
+            title = stringResource(R.string.match_detail_language),
+            content = language
+        )
+    }
+}
+
+@Composable
+private fun MyInfoItemView(
+    title: String,
+    content: String
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, bottom = 10.dp)
+        ) {
+            Text(
+                text = title,
+                style = AppTextStyles.BODY_14_20_REGULAR,
+                color = ColorStyle.GRAY_600,
+                modifier = Modifier
+                    .width(80.dp)
+            )
+            Text(
+                text = content,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_800,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = ColorStyle.GRAY_200
+        )
+    }
+}
+
+@Composable
+private fun PayInfo(payPrice: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 17.dp, end = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.match_detail_pay_info),
+                style = AppTextStyles.SUBTITLE_18_26_SEMI,
+                color = ColorStyle.GRAY_800
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.match_detail_pay_detail, payPrice),
+                    style = AppTextStyles.CAPTION_12_18_SEMI,
+                    color = ColorStyle.GRAY_700
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_right),
+                    contentDescription = stringResource(R.string.match_detail_pay_gray, payPrice),
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, bottom = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.match_detail_pay_price_title),
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.RED_100
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.match_detail_pay_price_content, payPrice),
+                    style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                    color = ColorStyle.RED_100
+                )
+            }
+        }
     }
 }

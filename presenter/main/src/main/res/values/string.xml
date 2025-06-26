@@ -39,6 +39,14 @@
     <string name="txt_match_cancelled">취소</string>
     <string name="txt_match_complete">모임종료</string>
     <string name="match_detail_pay_gray"> %1$d원 결제</string>
+    <string name="match_detail_my_info">나의모임정보</string>
+    <string name="match_detail_job">하는일</string>
+    <string name="match_detail_love_state">연애상태</string>
+    <string name="match_detail_diet">식단제한</string>
+    <string name="match_detail_language">사용언어</string>
+    <string name="match_detail_pay_info">결제정보</string>
+    <string name="match_detail_pay_price_title">결제금액</string>
+    <string name="match_detail_pay_price_content">%1$d원</string>
     <!-- Home -->
     <string name="notify_notice">공지</string>
     <string name="notify_article">기사</string>
