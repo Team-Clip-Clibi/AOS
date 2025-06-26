@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import com.example.core.AppTextStyles
 import com.sungil.domain.model.MatchDate
+import com.sungil.main.CATEGORY
 import com.sungil.main.MATCH_KEY_APPLIED
 import com.sungil.main.MATCH_KEY_CANCELLED
 import com.sungil.main.MatchType
@@ -263,7 +264,7 @@ fun MatchInfoView(
                     color = ColorStyle.GRAY_800
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                MatchItemView(text = oneThingCategory)
+                MatchItemView(text = CATEGORY.fromRoute(oneThingCategory).displayName)
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = stringResource(R.string.match_detail_budget),

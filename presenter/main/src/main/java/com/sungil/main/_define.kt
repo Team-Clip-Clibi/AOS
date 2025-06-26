@@ -1,6 +1,5 @@
 package com.sungil.main
 
-import com.sungil.main.MatchType.RANDOM
 
 
 sealed class Screen(val title: Int, val icon: Int, val screenRoute: String) {
@@ -12,15 +11,8 @@ sealed class Screen(val title: Int, val icon: Int, val screenRoute: String) {
 enum class MyMatchDestination(val route: String, val label: String) {
     MATCH_HISTORY("matchHistory", "모임 내역"),
     MATCH_NOTICE("matchNotice", "안내문");
+}
 
-    companion object {
-        fun fromRoute(route: String?): MyMatchDestination =
-            entries.find { it.route == route } ?: MATCH_HISTORY
-    }
-}
-enum class TimeLine {
-    FIRST, SECOND, THIRD, LAST
-}
 enum class MatchType(val route: String, val matchType: String) {
     RANDOM("RANDOM", "랜덤모임"), ONE_THING("ONE_THING", "원띵모임");
 
