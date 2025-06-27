@@ -34,11 +34,39 @@ class MatchPagingSource @Inject constructor(
         }
         when (response.code()) {
             200 -> return response.toLoadResult()
-            204 -> return LoadResult.Page(
-                data = emptyList(),
-                prevKey = null,
-                nextKey = null
-            )
+            204 -> {
+                val sampleMatchingDataList = listOf(
+                    MatchingData(
+                        id = 1234,
+                        meetTime = "2025-06-27T02:52:30.147Z",
+                        matchingStatusName = "APPLIED",
+                        matchingType = "ONETHING",
+                        myOneThingContent = "개발자 커피챗 모임",
+                        isReviewWritten = false
+                    ),
+                    MatchingData(
+                        id = 2345,
+                        meetTime = "2025-06-26T19:10:00.000Z",
+                        matchingStatusName = "CONFIRMED",
+                        matchingType = "RANDOM",
+                        myOneThingContent = "AI 스터디 번개",
+                        isReviewWritten = true
+                    ),
+                    MatchingData(
+                        id = 3456,
+                        meetTime = "2025-06-25T08:00:00.000Z",
+                        matchingStatusName = "COMPLETED",
+                        matchingType = "ONETHING",
+                        myOneThingContent = "프론트엔드 기술 공유",
+                        isReviewWritten = false
+                    )
+                )
+               return LoadResult.Page(
+                    data = sampleMatchingDataList,
+                    prevKey = null,
+                    nextKey = null
+                )
+            }
 
             401 -> {
                 val requestRefreshToken =

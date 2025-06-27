@@ -123,7 +123,7 @@ interface HttpApi {
     @PATCH(BuildConfig.UPDATE_FCM_TOKEN)
     suspend fun requestUpdateFcmToken(
         @Header("Authorization") bearerToken: String,
-        @Body body: Map<String, String>
+        @Body body: Map<String, String>,
     ): Response<Unit>
 
     /**
@@ -250,7 +250,7 @@ interface HttpApi {
      */
     @POST(BuildConfig.REFRESH_URL)
     suspend fun requestRefreshToken(
-        @Body body: Map<String, String>
+        @Body body: Map<String, String>,
     ): Response<RefreshToken>
 
     /**
@@ -350,10 +350,10 @@ interface HttpApi {
         @Query("lastMeetingTime") lastMeetingTime: String,
     ): Response<List<Matching>>
 
-    @GET(BuildConfig.MATCH_ING_URL +"{matchingType}" +"{id}")
+    @GET(BuildConfig.MATCH_ING_URL + "/" + "{matchingType}" + "/" + "{id}")
     suspend fun requestMatchDetail(
         @Header("Authorization") bearerToken: String,
         @Path("matchingType") matchingType: String,
         @Path("id") id: Int,
-    ) : Response<MatchDetailResponse>
+    ): Response<MatchDetailResponse>
 }

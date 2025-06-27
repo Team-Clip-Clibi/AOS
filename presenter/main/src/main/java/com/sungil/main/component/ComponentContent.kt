@@ -59,7 +59,7 @@ import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.NotificationData
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
-import com.sungil.main.Screen
+import com.sungil.main.BottomView
 import com.sungil.main.bottomNavItems
 import kotlinx.coroutines.delay
 
@@ -113,7 +113,7 @@ fun BottomNavigation(navController: NavHostController) {
 
 @Composable
 fun BottomNavItem(
-    item: Screen,
+    item: BottomView,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

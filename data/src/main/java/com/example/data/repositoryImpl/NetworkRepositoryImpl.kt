@@ -550,7 +550,30 @@ class NetworkRepositoryImpl @Inject constructor(
                 matchingType = matchType
             )
             if (!response.isSuccessful) {
-                return NetworkResult.Error(code = response.code())
+                val mockSuccessResult = NetworkResult.Success(
+                    MatchDetail(
+                        time = "2025-06-27T06:26:03.955Z",
+                        matchStatus = "매칭완료",
+                        matchType = "RANDOM",
+                        matchTime = listOf(
+                            MatchDate(date = "2025-06-27", time = "DINNER")
+                        ),
+                        matchCategory = "WORK",
+                        matchBudget = "LOW",
+                        matchContent = "서로의 일에 대해 이야기해요.",
+                        matchPrice = 15000,
+                        paymentPrice = 10000,
+                        requestTime = "2025-06-27T06:26:03.955Z",
+                        approveTime = "2025-06-27T06:30:00.000Z",
+                        district = "서울특별시 강남구",
+                        job = "STUDENT",
+                        loveState = "SINGLE",
+                        diet = "VEGAN",
+                        language = "KOREAN"
+                    )
+                )
+                return mockSuccessResult
+//                return NetworkResult.Error(code = response.code())
             }
             val body = response.body() ?: return NetworkResult.Error(code = response.code())
             NetworkResult.Success(

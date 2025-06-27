@@ -2,12 +2,16 @@ package com.sungil.main
 
 
 
-sealed class Screen(val title: Int, val icon: Int, val screenRoute: String) {
-    data object Home : Screen(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
-    data object Calendar : Screen(R.string.nav_calendar, R.drawable.ic_calendar, NAV_CALENDAR)
-    data object MyPage : Screen(R.string.nav_my, R.drawable.ic_my, NAV_MY)
+sealed class BottomView(val title: Int, val icon: Int = -1, val screenRoute: String) {
+    data object Home : BottomView(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
+    data object Calendar : BottomView(R.string.nav_calendar, R.drawable.ic_calendar, NAV_CALENDAR)
+    data object MyPage : BottomView(R.string.nav_my, R.drawable.ic_my, NAV_MY)
 }
 
+enum class MainView(val route : String){
+    MATCH_DETAIL("MatchDetail"),
+    PAY_DETAIL("PayDetail"),
+}
 enum class MyMatchDestination(val route: String, val label: String) {
     MATCH_HISTORY("matchHistory", "모임 내역"),
     MATCH_NOTICE("matchNotice", "안내문");
@@ -39,14 +43,16 @@ enum class CATEGORY(val displayName: String) {
 }
 
 val bottomNavItems = listOf(
-    Screen.Home,
-    Screen.Calendar,
-    Screen.MyPage
+    BottomView.Home,
+    BottomView.Calendar,
+    BottomView.MyPage
 )
 
 const val NAV_HOME = "home"
 const val NAV_CALENDAR = "calendar"
 const val NAV_MY = "my"
+const val NAV_MATCH_DETAIL = "matchDetail"
+const val NAV_PAY_DETAIL = "payDetail"
 const val NAV_GUIDE = "guide"
 const val NAV_EDIT_PROFILE = "MainEditProfile"
 const val NAV_REPORT = "report"

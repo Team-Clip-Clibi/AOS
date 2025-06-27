@@ -28,6 +28,7 @@ data class MatchDetail(
     val simpleTime = time.toSimpleDate()
     val detailTime = time.toDetailDate()
     val cancelButton = requestTime.cancelButton()
+    val discount = matchPrice - paymentPrice
 
     private fun String.toSimpleDate(): String {
         return try {

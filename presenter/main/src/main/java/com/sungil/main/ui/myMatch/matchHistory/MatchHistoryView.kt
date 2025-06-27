@@ -181,9 +181,11 @@ fun MatchView(matchAllData: LazyPagingItems<MatchingData>, viewModel: MainViewMo
                     reviewWrite = matchData.isReviewWritten,
                     buttonText = stringResource(R.string.btn_write_review),
                     onClick = {
+                    },
+                    onClickDetail = {
                         viewModel.matchDetail(
                             matchId = matchData.id,
-                            matchType = matchData.matchType
+                            matchType = matchData.matchingType
                         )
                     }
                 )

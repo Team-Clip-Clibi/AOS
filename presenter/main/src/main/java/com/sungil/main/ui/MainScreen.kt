@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sungil.main.MainViewModel
-import com.sungil.main.Screen
+import com.sungil.main.BottomView
 import com.sungil.main.component.BottomNavigation
 import com.sungil.main.nav.MainNavigation
 
@@ -29,10 +29,10 @@ fun MainScreenView(
     guide: () -> Unit,
 ) {
     val navController = rememberNavController()
-    val bottomNavScreens = listOf(Screen.Home, Screen.Calendar, Screen.MyPage)
+    val bottomNavBottomViews = listOf(BottomView.Home, BottomView.Calendar, BottomView.MyPage)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val shouldShowBottomBar = bottomNavScreens.any { it.screenRoute == currentRoute }
+    val shouldShowBottomBar = bottomNavBottomViews.any { it.screenRoute == currentRoute }
 
     Scaffold(
         bottomBar = {

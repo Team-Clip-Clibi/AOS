@@ -1,8 +1,10 @@
-package com.sungil.main.ui.meetDetail
+package com.sungil.main.ui.matchDetail
 
 import androidx.compose.material3.Icon
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -28,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
-import com.example.core.TopAppBarWithCloseButton
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import androidx.compose.material3.Text
@@ -39,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import com.example.core.AppTextStyles
 import com.example.core.ButtonLWhite
+import com.example.core.TopAppBarNumber
 import com.sungil.domain.model.MatchDate
 import com.sungil.editprofile.JOB
 import com.sungil.main.CATEGORY
@@ -47,26 +50,27 @@ import com.sungil.main.MATCH_KEY_CANCELLED
 import com.sungil.main.MatchType
 
 @Composable
-internal fun MeetDetailView(viewModel: MainViewModel, myMatch: () -> Unit) {
+internal fun MeetDetailView(viewModel: MainViewModel, onBack: () -> Unit, payDetail: () -> Unit) {
     val snackBarHostState = remember { SnackbarHostState() }
     val viewState by viewModel.userState.collectAsState()
-    val detail = (viewState.matchDetail as MainViewModel.UiState.Success).data
+    val matchDetail = viewState.matchDetail
 
     Scaffold(
         topBar = {
-            TopAppBarWithCloseButton(
+            TopAppBarNumber(
                 title = stringResource(R.string.match_detail_top_bar),
-                onBackClick = myMatch,
-                isNavigationShow = true,
-                isActionShow = false
+                onBackClick = {
+                    viewModel.setMatchDetailInit()
+                    onBack()
+                },
+                currentPage = 0,
+                totalPage = 0
             )
         },
         snackbarHost = {
             SnackbarHost(
                 hostState = snackBarHostState,
-                snackbar = { data ->
-                    CustomSnackBar(data)
-                },
+                snackbar = { data -> CustomSnackBar(data) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -79,56 +83,106 @@ internal fun MeetDetailView(viewModel: MainViewModel, myMatch: () -> Unit) {
             )
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = ColorStyle.WHITE_100)
-                .padding(
-                    top = paddingValues.calculateTopPadding() + 24.dp,
-                    bottom = paddingValues.calculateBottomPadding() + 32.dp
-                )
-                .verticalScroll(rememberScrollState())
-        ) {
-            TopView(
-                simpleTime = detail.simpleTime,
-                approveState = detail.matchStatus,
-                matchType = detail.matchType,
-                content = detail.matchContent,
-                payPrice = detail.paymentPrice.toString(),
-                matchTime = detail.detailTime
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .background(color = ColorStyle.GRAY_200)
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            MatchInfoView(
-                matchType = detail.matchType,
-                applyDate = detail.matchTime,
-                district = detail.district,
-                oneThingCategory = detail.matchCategory,
-                budget = detail.matchBudget
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            MyMatchInfo(
-                diet = detail.diet,
-                job = detail.job,
-                language = detail.language,
-                loveState = detail.loveState
-            )
-            PayInfo(
-                payPrice = detail.paymentPrice.toString()
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            if (detail.cancelButton) {
-                ButtonLWhite(text = stringResource(R.string.match_detail_btn_cancel), onClick = {
-                    //TODO 매칭 취소 로직 추가
-                })
+        when (matchDetail) {
+            is MainViewModel.UiState.Success -> {
+                val detail = matchDetail.data
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = ColorStyle.WHITE_100)
+                        .padding(
+                            top = paddingValues.calculateTopPadding() + 24.dp,
+                            bottom = paddingValues.calculateBottomPadding() + 32.dp
+                        )
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    TopView(
+                        simpleTime = detail.simpleTime,
+                        approveState = detail.matchStatus,
+                        matchType = detail.matchType,
+                        content = detail.matchContent,
+                        payPrice = detail.paymentPrice,
+                        matchTime = detail.detailTime
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp),
+                        thickness = 8.dp,
+                        color = ColorStyle.GRAY_200
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                    MatchInfoView(
+                        matchType = detail.matchType,
+                        applyDate = detail.matchTime,
+                        district = detail.district,
+                        oneThingCategory = detail.matchCategory,
+                        budget = detail.matchBudget
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    MyMatchInfo(
+                        diet = detail.diet,
+                        job = detail.job,
+                        language = detail.language,
+                        loveState = detail.loveState
+                    )
+                    PayInfo(
+                        payPrice = detail.paymentPrice,
+                        payDetail = payDetail
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    if (detail.cancelButton) {
+                        BottomButtonView(onClick = {
+                            // TODO 매칭 취소 개발
+                        })
+                    }
+                }
+            }
+
+            is MainViewModel.UiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = ColorStyle.WHITE_100)
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+
+                }
+            }
+
+            is MainViewModel.UiState.Error -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = ColorStyle.WHITE_100)
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.error_match_detail),
+                        style = AppTextStyles.BODY_14_20_MEDIUM,
+                        color = ColorStyle.RED_100
+                    )
+                }
             }
         }
+    }
+}
+
+
+@Composable
+fun BottomButtonView(onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 17.dp, end = 16.dp)
+    ) {
+        ButtonLWhite(text = stringResource(R.string.match_detail_btn_cancel), onClick = {
+            onClick()
+        })
     }
 }
 
@@ -138,7 +192,7 @@ private fun TopView(
     approveState: String,
     matchType: String,
     content: String,
-    payPrice: String,
+    payPrice: Int,
     matchTime: String,
 ) {
     Column(
@@ -153,7 +207,10 @@ private fun TopView(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Row {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = when (approveState) {
                     MATCH_KEY_APPLIED -> stringResource(R.string.txt_match_applied)
@@ -196,7 +253,7 @@ private fun TopView(
             color = ColorStyle.GRAY_600
         )
         Spacer(modifier = Modifier.height(2.dp))
-        if (MatchType.fromRoute(matchType).route == MatchType.RANDOM.route) {
+        if (MatchType.fromRoute(matchType).route == MatchType.ONE_THING.route) {
             Text(
                 text = matchTime,
                 style = AppTextStyles.CAPTION_10_14_MEDIUM,
@@ -348,7 +405,7 @@ private fun MyMatchInfo(job: String, loveState: String, diet: String, language: 
 @Composable
 private fun MyInfoItemView(
     title: String,
-    content: String
+    content: String,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -379,7 +436,7 @@ private fun MyInfoItemView(
 }
 
 @Composable
-private fun PayInfo(payPrice: String) {
+private fun PayInfo(payPrice: Int, payDetail: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -407,6 +464,8 @@ private fun PayInfo(payPrice: String) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_right),
                     contentDescription = stringResource(R.string.match_detail_pay_gray, payPrice),
+                    modifier = Modifier.clickable { payDetail() },
+                    tint = ColorStyle.GRAY_500
                 )
             }
         }
