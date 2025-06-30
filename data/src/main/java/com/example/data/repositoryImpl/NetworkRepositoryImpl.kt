@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.data.paging.MatchNoticePagingSource
 import com.example.data.paging.MatchPagingSource
 import com.example.data.paging.NotificationPagingSource
 import com.example.data.paging.NotificationReadPagingSource
@@ -21,6 +22,7 @@ import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDate
 import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchInfo
+import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
 import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.NetworkResult
@@ -536,6 +538,19 @@ class NetworkRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             500
         }
+    }
+
+    override fun requestMatchNotice(lastTime: String): Flow<PagingData<MatchNotice>> {
+       return Pager(
+           config = PagingConfig(pageSize = 50),
+           pagingSourceFactory = {
+               MatchNoticePagingSource(
+                   api = api,
+                   token = tokenManger,
+                   lastMeetingTime = lastTime
+               )
+           }
+       ).flow
     }
 
     override suspend fun requestMatchDetail(

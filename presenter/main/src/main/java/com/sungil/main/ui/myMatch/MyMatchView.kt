@@ -204,7 +204,7 @@ fun MyMatchView(
                                 animationSpec = tween(700)
                             )
                         }) {
-                        MatchNoticeView()
+                        MatchNoticeView(viewModel = viewModel)
                     }
                 }
             }

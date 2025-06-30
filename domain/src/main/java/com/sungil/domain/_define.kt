@@ -1,7 +1,7 @@
 package com.sungil.domain
 
 const val TOKEN_FORM ="Bearer "
-
+const val REFRESH_TOKEN = "refreshToken"
 enum class CATEGORY {
     CONTENT_ONE_THING,
     CONTENT_RANDOM

@@ -49,6 +49,10 @@
     <string name="match_detail_pay_price_content">%1$d원</string>
     <string name="error_match_detail">매칭 상세 정보를 불러오는 중 오류가 발생했습니다.</string>
     <string name="match_detail_idle_state">매칭 정보가 준비되지 않았습니다.</string>
+    <string name="match_notice_people">이번 모임의 멤버는 %1$s으로 구성되어 있어요</string>
+    <string name="match_notice_job">%1$s %2$d명</string>
+    <string name="match_notice_cuisine">식사 메뉴는 %1$s으로 준비했어요</string>
+    <string name="match_notice_pay_content">식사 비용은 각자 부담하거나, 멤버들과 상의해 결정해 주세요</string>
     <!--결제정보-->
     <string name="pay_detail_info">결제 정보</string>
     <string name="pay_detail_match_price">매칭비용</string>

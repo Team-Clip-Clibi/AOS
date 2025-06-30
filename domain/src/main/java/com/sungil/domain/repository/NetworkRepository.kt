@@ -8,6 +8,7 @@ import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchDetail
+import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
 import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.Notification
@@ -145,9 +146,14 @@ interface NetworkRepository {
         lastTime : String
     ) : Flow<PagingData<MatchingData>>
 
+    fun requestMatchNotice(
+        lastTime: String,
+    ): Flow<PagingData<MatchNotice>>
+
     suspend fun requestMatchDetail(
         token: String,
         matchingId: Int,
         matchType : String
     ): NetworkResult<MatchDetail>
+
 }
