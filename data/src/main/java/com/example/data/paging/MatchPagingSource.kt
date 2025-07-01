@@ -62,7 +62,7 @@ class MatchPagingSource @Inject constructor(
                     )
                 )
                return LoadResult.Page(
-                    data = sampleMatchingDataList,
+                    data = emptyList(),
                     prevKey = null,
                     nextKey = null
                 )
