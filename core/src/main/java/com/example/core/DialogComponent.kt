@@ -27,15 +27,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Text
 import androidx.compose.ui.res.stringResource
 import androidx.compose.material3.Icon
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import java.math.BigInteger
 
 @Composable
 fun CustomDialogOneButton(
@@ -278,8 +272,8 @@ fun NoticePage(
         NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
         NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail , highlighted = "")
         NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay , highlighted = "" , isLinePrint = buttonShow)
-        Spacer(modifier = Modifier.height(10.dp))
         if(buttonShow){
+            Spacer(modifier = Modifier.height(10.dp))
             ButtonLWhite(
                 text = stringResource(R.string.btn_late),
                 onClick = onClick

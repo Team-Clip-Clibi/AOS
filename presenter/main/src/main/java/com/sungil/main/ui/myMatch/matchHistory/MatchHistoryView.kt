@@ -7,11 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
@@ -168,28 +169,32 @@ fun MatchView(
 
 @Composable
 fun NotMatchView() {
+
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .heightIn(min = 390.dp)
             .background(color = ColorStyle.GRAY_200)
             .padding(top = 18.dp, end = 20.dp, start = 20.dp, bottom = 24.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.wrapContentSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Icon(
                 painter = painterResource(R.drawable.ic_no_match_data),
                 contentDescription = "No Match Data",
                 modifier = Modifier
+                    .size(60.dp)
+                    .background(
+                        color = ColorStyle.WHITE_100,
+                        shape = RoundedCornerShape(100.dp)
+                    )
                     .border(
                         width = 1.dp,
                         color = ColorStyle.GRAY_300,
-                        shape = RoundedCornerShape(size = 100.dp)
-                    )
-                    .width(60.dp)
-                    .height(60.dp)
-                    .background(
-                        color = ColorStyle.WHITE_100,
-                        shape = RoundedCornerShape(size = 100.dp)
+                        shape = RoundedCornerShape(100.dp)
                     )
                     .padding(12.dp)
             )

@@ -123,10 +123,11 @@ fun MyMatchView(
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(modifier = Modifier.fillMaxSize().background(color = ColorStyle.GRAY_200)) {
                 item {
                     Column(modifier = Modifier
                         .fillMaxWidth()
+                        .background(color = ColorStyle.WHITE_100)
                         .padding(start = 17.dp , end = 16.dp)) {
                         MyMatchTitleView(latestDay = latestDay, userName = userName)
                         Spacer(modifier = Modifier.height(32.dp))
@@ -142,12 +143,14 @@ fun MyMatchView(
 
                 item {
                     when (selectedTabIndex) {
-                        0 -> MatchHistoryView(
-                            viewModel = viewModel,
-                            login = login,
-                            matchDetail = matchDetail,
-                            snackBarHostState = snackBarHostState
-                        )
+                        0 -> {
+                            MatchHistoryView(
+                                viewModel = viewModel,
+                                login = login,
+                                matchDetail = matchDetail,
+                                snackBarHostState = snackBarHostState
+                            )
+                        }
                         1 -> MatchNoticeView(viewModel = viewModel)
                     }
                 }
