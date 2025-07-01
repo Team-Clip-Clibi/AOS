@@ -35,7 +35,7 @@ fun TopAppBarNumber(
                 text = title,
                 style = AppTextStyles.TITLE_20_28_SEMI,
                 textAlign = TextAlign.Center,
-                color = Color(0xFF000000)
+                color = ColorStyle.GRAY_800
             )
         },
         navigationIcon = {

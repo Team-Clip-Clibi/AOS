@@ -14,7 +14,7 @@ class GetKakaoId @Inject constructor(private val repo: DatabaseRepository) {
     suspend fun invoke(): Result {
         val data = repo.getKaKaoId()
         if (data =="") {
-            return Result.Fail("The Data is Error")
+            return Result.Fail("The Data is Null")
         }
         return Result.Success(data)
     }

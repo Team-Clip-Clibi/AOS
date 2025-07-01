@@ -8,6 +8,7 @@ import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchOverView
+import com.sungil.network.model.Matching
 import com.sungil.network.model.MatchingResponse
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.Notification
@@ -26,6 +27,8 @@ import com.sungil.network.model.RequestUserInfo
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
+import com.sungil.network.model.MatchDetailResponse
+import com.sungil.network.model.MatchNoticeDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -34,6 +37,7 @@ import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface HttpApi {
     /**
@@ -120,6 +124,7 @@ interface HttpApi {
     @PATCH(BuildConfig.UPDATE_FCM_TOKEN)
     suspend fun requestUpdateFcmToken(
         @Header("Authorization") bearerToken: String,
+        @Body body: Map<String, String>,
     ): Response<Unit>
 
     /**
@@ -246,7 +251,7 @@ interface HttpApi {
      */
     @POST(BuildConfig.REFRESH_URL)
     suspend fun requestRefreshToken(
-        bearerToken: String,
+        @Body body: Map<String, String>,
     ): Response<RefreshToken>
 
     /**
@@ -326,4 +331,39 @@ interface HttpApi {
     suspend fun requestMatchOverView(
         @Header("Authorization") bearerToken: String,
     ): Response<MatchOverView>
+
+    /**
+     * 알람 상태 업데이트 API
+     */
+    @PATCH(BuildConfig.NOTIFY_UPDATE_URL)
+    suspend fun requestUpdateNotify(
+        @Header("Authorization") bearerToken: String,
+        @Body body: Map<String, Boolean>,
+    ): Response<Unit>
+
+    /**
+     * 내모임 매칭 정보 조회
+     */
+    @GET(BuildConfig.MATCH_ING_URL)
+    suspend fun requestMatchingData(
+        @Header("Authorization") bearerToken: String,
+        @Query("matchingStatus") matchingStatus: String,
+        @Query("lastMeetingTime") lastMeetingTime: String,
+    ): Response<List<Matching>>
+
+    @GET(BuildConfig.MATCH_ING_URL + "/" + "{matchingType}" + "/" + "{id}")
+    suspend fun requestMatchDetail(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingType") matchingType: String,
+        @Path("id") id: Int,
+    ): Response<MatchDetailResponse>
+
+    /**
+     * 매치 안내문 조회 API
+     */
+    @GET(BuildConfig.MATCH_NOTICE_URL)
+    suspend fun requestMatchNotice(
+        @Header("Authorization") bearerToken: String,
+        @Query("lastMeetingTime") lastMeetingTime: String,
+    ): Response<List<MatchNoticeDto>>
 }

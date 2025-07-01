@@ -42,4 +42,7 @@ interface DatabaseRepository {
     suspend fun getFirstMatchInput(): Boolean
     suspend fun setFirstMatchInput(): Boolean
     suspend fun getUserDataStatus(): Boolean
+    suspend fun getTokenDataStatus() : Boolean
+    suspend fun getPermissionCheck(key : String) : Boolean
+    suspend fun setPermissionCheck(key : String , data : Boolean) : Boolean
 }

@@ -4,13 +4,26 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/build-logic" name="build-logic">
+                <projects>
+                  <project path="$PROJECT_DIR$/build-logic" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="gradleJvm" value="17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/billing" />
+            <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/database" />
@@ -25,6 +38,7 @@
             <option value="$PROJECT_DIR$/presenter/main/alarm" />
             <option value="$PROJECT_DIR$/presenter/main/editProfile" />
             <option value="$PROJECT_DIR$/presenter/main/first_match" />
+            <option value="$PROJECT_DIR$/presenter/main/guide" />
             <option value="$PROJECT_DIR$/presenter/main/low" />
             <option value="$PROJECT_DIR$/presenter/main/oneThingMatch" />
             <option value="$PROJECT_DIR$/presenter/main/random" />
@@ -33,7 +47,6 @@
             <option value="$PROJECT_DIR$/presenter/signup" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

@@ -91,5 +91,9 @@
         <activity
             android:name="com.oneThing.random.RandomMatchActivity"
             android:exported="true" />
+
+        <activity android:name="com.oneThing.guide.GuideActivity"
+            android:exported="true"/>
+
     </application>
 </manifest>

@@ -4,4 +4,8 @@
     <string name="txt_login_content">대화하고 싶은 주제에 맞는 분들끼리 만나요.</string>
     <string name="btn_kako">Kakao로 로그인하기</string>
     <string name="btn_one_thing_preview">원띵 미리보기</string>
+    <!--MSG-->
+    <string name="msg_app_error_notification">App Error Notification</string>
+    <string name="msg_app_error_fcm">App Error FCM</string>
+    <string name="msg_app_error_network">network error</string>
 </resources>

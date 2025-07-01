@@ -3,7 +3,7 @@
     <string name="nav_home">홈</string>
     <string name="nav_calendar">일정</string>
     <string name="nav_my">마이</string>
-
+    <string name="nav_guide">guide</string>
     <!--  my page  -->
     <string name="txt_mayPage_hi">안녕하세요!</string>
     <string name="txt_myPage_sir">%1$s님</string>
@@ -15,7 +15,52 @@
     <string name="txt_myPage_police">신고하기</string>
     <string name="txt_myPage_term">약관 및 정책</string>
     <string name="txt_myPage_guide">원띵 이용가이드</string>
-
+    <string name="btn_meet_guide">모임 가이드</string>
+    <string name="txt_no_match_data">아직 신청한 모임이 없어요</string>
+    <string name="btn_write_review">후기 작성하기</string>
+    <string name="btn_match_all">전체</string>
+    <string name="btn_apply">신청완료</string>
+    <string name="btn_confirm">모임확정</string>
+    <string name="btn_cancel">취소</string>
+    <string name="btn_complete">모임종료</string>
+    <!-- matchDetail-->
+    <string name="match_detail_top_bar">모임 상세 내역</string>
+    <string name="match_detail_apply_info">신청정보</string>
+    <string name="match_detail_pay_title">결제정보</string>
+    <string name="match_detail_pay_detail">상세보기</string>
+    <string name="match_detail_pay_budget">결제금액</string>
+    <string name="match_detail_btn_cancel">신청 취소하기</string>
+    <string name="match_detail_district">지역</string>
+    <string name="match_detail_time">일시</string>
+    <string name="match_detail_time_content">선택한 시간대 중 하나로 모임이 진행돼요</string>
+    <string name="match_detail_category">원띵 카테고리</string>
+    <string name="match_detail_budget">희망 금액</string>
+    <string name="txt_match_applied">신청완료</string>
+    <string name="txt_match_cancelled">취소</string>
+    <string name="txt_match_complete">모임종료</string>
+    <string name="match_detail_pay_gray"> %1$d원 결제</string>
+    <string name="match_detail_my_info">나의모임정보</string>
+    <string name="match_detail_job">하는일</string>
+    <string name="match_detail_love_state">연애상태</string>
+    <string name="match_detail_diet">식단제한</string>
+    <string name="match_detail_language">사용언어</string>
+    <string name="match_detail_pay_info">결제정보</string>
+    <string name="match_detail_pay_price_title">결제금액</string>
+    <string name="match_detail_pay_price_content">%1$d원</string>
+    <string name="error_match_detail">매칭 상세 정보를 불러오는 중 오류가 발생했습니다.</string>
+    <string name="match_detail_idle_state">매칭 정보가 준비되지 않았습니다.</string>
+    <string name="match_notice_people">이번 모임의 멤버는 %1$s으로 구성되어 있어요</string>
+    <string name="match_notice_job">%1$s %2$d명</string>
+    <string name="match_notice_cuisine">식사 메뉴는 %1$s으로 준비했어요</string>
+    <string name="match_notice_pay_content">식사 비용은 각자 부담하거나, 멤버들과 상의해 결정해 주세요</string>
+    <!--결제정보-->
+    <string name="pay_detail_info">결제 정보</string>
+    <string name="pay_detail_match_price">매칭비용</string>
+    <string name="pay_detail_match_discount_title">할인금액</string>
+    <string name="pay_detail_match_discount_content">-%1$d원</string>
+    <string name="pay_detail_match_pay">결제금액</string>
+    <string name="pay_detail_won">%1$d원</string>
+    <string name="pay_detail_won_gray">%1$d원 결제</string>
     <!-- Home -->
     <string name="notify_notice">공지</string>
     <string name="notify_article">기사</string>
@@ -42,6 +87,7 @@
     <!-- Error message   -->
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <string name="msg_network_error">네트워크 에러</string>
+    <string name="msg_re_login">로그인 기간 만료</string>
     <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
     <string name="msg_not_service">앗! 해당 서비스는 아직 개발중이에요</string>
 </resources>

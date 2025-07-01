@@ -1,10 +1,10 @@
 package com.sungil.main.ui.myMatch
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -27,6 +28,9 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,12 +43,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
@@ -60,38 +62,39 @@ import com.sungil.main.ui.myMatch.matchNotice.MatchNoticeView
 import com.sungil.onethingmatch.ERROR_RE_LOGIN
 
 @Composable
-fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
+fun MyMatchView(
+    viewModel: MainViewModel,
+    login: () -> Unit,
+    guide: () -> Unit,
+    matchDetail: () -> Unit,
+) {
     val snackBarHostState = remember { SnackbarHostState() }
     val state by viewModel.userState.collectAsState()
     val latestDay = state.latestDay
     val context = LocalContext.current
-    val navController = rememberNavController()
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     val userName = when (state.userDataState) {
         is MainViewModel.UiState.Success -> (state.userDataState as MainViewModel.UiState.Success<UserData>).data.nickName
         is MainViewModel.UiState.Loading -> ""
         is MainViewModel.UiState.Error -> "오류 발생"
     }
+
     LaunchedEffect(latestDay) {
         when (latestDay) {
             is MainViewModel.UiState.Error -> {
                 when (latestDay.message) {
-                    ERROR_RE_LOGIN -> {
-                        login()
-                    }
-
-                    ERROR_NETWORK_ERROR -> {
-                        snackBarHostState.showSnackbar(
-                            message = context.getString(R.string.msg_network_error),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
+                    ERROR_RE_LOGIN -> login()
+                    ERROR_NETWORK_ERROR -> snackBarHostState.showSnackbar(
+                        message = context.getString(R.string.msg_network_error),
+                        duration = SnackbarDuration.Short
+                    )
                 }
             }
 
             else -> Unit
         }
     }
+
     Scaffold(
         topBar = {
             CustomMainPageTopBar(text = stringResource(R.string.my_match_top_bar))
@@ -107,14 +110,12 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                     .padding(
                         start = 17.dp,
                         end = 16.dp,
-                        bottom = WindowInsets.navigationBars
-                            .asPaddingValues()
-                            .calculateTopPadding()
+                        bottom = WindowInsets.navigationBars.asPaddingValues().calculateTopPadding()
                     )
             )
         }
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
@@ -122,67 +123,45 @@ fun MyMatchView(viewModel: MainViewModel, login: () -> Unit) {
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            //Top View
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = ColorStyle.WHITE_100)
-                    .padding(top = 16.dp, start = 17.dp, end = 16.dp)
-            ) {
-                MyMatchTitleView(latestDay = latestDay, userName = userName)
-                Spacer(modifier = Modifier.height(32.dp))
-            }
-            //tab layout
-            MyMatchTabLayout(
-                selectedTabIndex = selectedTabIndex,
-                onTabSelected = { index ->
-                    selectedTabIndex = index
-                    val route = MyMatchDestination.entries[index].route
-                    navController.navigate(route) {
-                        launchSingleTop = true
-                        restoreState = true
-                        popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
-                        }
+            LazyColumn(modifier = Modifier.fillMaxSize().background(color = ColorStyle.GRAY_200)) {
+                item {
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = ColorStyle.WHITE_100)
+                        .padding(start = 17.dp , end = 16.dp)) {
+                        MyMatchTitleView(latestDay = latestDay, userName = userName)
+                        Spacer(modifier = Modifier.height(32.dp))
                     }
                 }
-            )
-            NavHost(
-                navController = navController,
-                startDestination = MyMatchDestination.MATCH_HISTORY.route,
+
+                stickyHeader {
+                    MyMatchTabLayout(
+                        selectedTabIndex = selectedTabIndex,
+                        onTabSelected = { selectedTabIndex = it }
+                    )
+                }
+
+                item {
+                    when (selectedTabIndex) {
+                        0 -> {
+                            MatchHistoryView(
+                                viewModel = viewModel,
+                                login = login,
+                                matchDetail = matchDetail,
+                                snackBarHostState = snackBarHostState
+                            )
+                        }
+                        1 -> MatchNoticeView(viewModel = viewModel)
+                    }
+                }
+            }
+
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .background(color = ColorStyle.GRAY_200)
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 12.dp, end = 10.dp)
             ) {
-                composable(MyMatchDestination.MATCH_HISTORY.route, enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(700)
-                    )
-                },
-                    popEnterTransition = {
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    }) {
-                    MatchHistoryView()
-                }
-                composable(MyMatchDestination.MATCH_NOTICE.route, enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(700)
-                    )
-                },
-                    popEnterTransition = {
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
-                    }) {
-                    MatchNoticeView()
-                }
+                OneThingGuide(onClick = guide)
             }
         }
     }
@@ -251,7 +230,6 @@ fun MyMatchTitleView(
                 confirmInfo = confirm
             )
         }
-
         else -> Unit
     }
 }
@@ -322,7 +300,7 @@ fun MyMatchViewMatchInfo(applyInfo: Int, confirmInfo: Int) {
 @Composable
 fun MyMatchTabLayout(
     selectedTabIndex: Int,
-    onTabSelected: (Int) -> Unit
+    onTabSelected: (Int) -> Unit,
 ) {
     val tabs = MyMatchDestination.entries
 
@@ -374,5 +352,43 @@ fun MyMatchTabLayout(
     }
 }
 
+@Composable
+fun OneThingGuide(
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .width(134.dp)
+            .height(48.dp),
+        shape = RoundedCornerShape(size = 40.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = ColorStyle.GRAY_700,
+            contentColor = ColorStyle.GRAY_700
+        ),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+        onClick = onClick,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_pin),
+                contentDescription = "oneThing guide",
+                modifier = Modifier
+                    .width(18.dp)
+                    .height(18.dp),
+                tint = ColorStyle.WHITE_100
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = stringResource(R.string.btn_meet_guide),
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.WHITE_100
+            )
+        }
+    }
+}
 
 

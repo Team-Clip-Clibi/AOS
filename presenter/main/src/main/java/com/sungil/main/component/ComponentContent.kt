@@ -39,7 +39,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,8 +48,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.sungil.domain.CATEGORY
@@ -58,7 +59,7 @@ import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.NotificationData
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
-import com.sungil.main.Screen
+import com.sungil.main.BottomView
 import com.sungil.main.bottomNavItems
 import kotlinx.coroutines.delay
 
@@ -112,7 +113,7 @@ fun BottomNavigation(navController: NavHostController) {
 
 @Composable
 fun BottomNavItem(
-    item: Screen,
+    item: BottomView,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -631,7 +632,6 @@ fun CustomHomeButton(
 }
 
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun AutoSlidingBanner(
     image: List<BannerData>,
@@ -658,8 +658,7 @@ fun AutoSlidingBanner(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(126.dp),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -667,16 +666,17 @@ fun AutoSlidingBanner(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(110.dp)
         ) { page ->
-            GlideImage(
-                model = image[page].image,
+            val context = LocalContext.current
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(image[page].image)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = "banner",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxWidth()
             )
         }
-
         PageIndicator(
             numberOfPages = image.size,
             selectedPage = pagerState.currentPage,
@@ -733,4 +733,28 @@ fun Indicator(
             .clip(CircleShape)
             .background(if (isSelected) selectedColor else defaultColor)
     )
+}
+
+@Composable
+fun SmallButton(
+    text: String,
+    onClick: () -> Unit,
+    isClick: Boolean,
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.height(30.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isClick) ColorStyle.PURPLE_400 else ColorStyle.WHITE_100,
+            contentColor = if (isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_600
+        ),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+    ) {
+        Text(
+            text = text,
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = if (isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_600
+        )
+    }
 }

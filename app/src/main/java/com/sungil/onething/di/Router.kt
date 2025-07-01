@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.signup.SignUpActivity
 import com.oneThing.first_matrch.FirstMatchActivity
+import com.oneThing.guide.GuideActivity
 import com.oneThing.random.RandomMatchActivity
 import com.sungil.alarm.AlarmMainActivity
 import com.sungil.billing.BillingActivity
@@ -18,6 +19,9 @@ import com.sungil.onethingmatch.OneThinMatchActivity
 import com.sungil.pay_finish.PayFinishActivity
 import com.sungil.report.ReportMainActivity
 
+/**
+ * TODO ENUM 값으로 변경해라
+ */
 class Router(private val context: Context) : Router {
     override fun navigation(target: String, args: Bundle) {
         when (target) {
@@ -115,7 +119,12 @@ class Router(private val context: Context) : Router {
                 }
                 context.startActivity(intent)
             }
-
+            "guide" -> {
+                val intent = Intent(context, GuideActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+            }
             else -> {
                 throw IllegalArgumentException("Unsupported target: $target")
             }

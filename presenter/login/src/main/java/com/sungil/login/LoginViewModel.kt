@@ -1,23 +1,21 @@
 package com.sungil.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.useCase.CheckAlreadySignUp
+import com.sungil.domain.useCase.CheckPermissionShow
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFcmToken
 import com.sungil.domain.useCase.GetKakaoId
-import com.sungil.domain.useCase.RequestLogin
 import com.sungil.domain.useCase.SetNotifyState
+import com.sungil.domain.useCase.SetPermissionCheck
 import com.sungil.domain.useCase.UpdateAndSaveToken
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,46 +26,47 @@ class LoginViewModel @Inject constructor(
     private val fcm: GetFcmToken,
     private val updateAndSaveToken: UpdateAndSaveToken,
     private val notifyState: SetNotifyState,
-    private val login: RequestLogin,
     private val banner: GetBanner,
+    private val permissionCheck : CheckPermissionShow,
+    private val setPermission : SetPermissionCheck
 ) : ViewModel() {
-    private val _actionFlow = MutableSharedFlow<Action>()
-    val actionFlow: SharedFlow<Action> = _actionFlow.asSharedFlow()
-
-    private val _isFcmReady = MutableStateFlow(false)
-    val isFcmReady: StateFlow<Boolean> = _isFcmReady
-
-    private val _bannerData = MutableStateFlow<List<BannerData>>(emptyList())
-    val bannerData : StateFlow<List<BannerData>> = _bannerData
-
+    private val _actionFlow = MutableStateFlow(LoginViewState())
+    val actionFlow: StateFlow<LoginViewState> = _actionFlow.asStateFlow()
     init {
-        banner()
+        checkPermissionShow()
     }
-
-    private fun banner() {
+    fun banner() {
         viewModelScope.launch {
             when (val result = banner.invoke(GetBanner.Param(BANNER))) {
                 is GetBanner.Result.Success -> {
-                    _bannerData.value = result.data
+                    _actionFlow.update { current ->
+                        current.copy(banner = UiState.Success(result.data))
+                    }
                 }
 
                 is GetBanner.Result.Fail -> {
-                    _actionFlow.emit(Action.Error(result.message))
+                    _actionFlow.update { current ->
+                        current.copy(banner = UiState.Error(result.message))
+                    }
 
                 }
             }
         }
     }
 
-    fun getKAKAOId() {
+    fun getUserId() {
         viewModelScope.launch {
             when (val result = getKakaoId.invoke()) {
                 is GetKakaoId.Result.Success -> {
-                    _actionFlow.emit(Action.GetSuccess(result.kakaoId))
+                    _actionFlow.update { current ->
+                        current.copy(userId = UiState.Success(result.kakaoId))
+                    }
                 }
 
                 is GetKakaoId.Result.Fail -> {
-                    _actionFlow.emit(Action.Error("The kakao id is null"))
+                    _actionFlow.update { current ->
+                        current.copy(userId = UiState.Error(result.errorMessage))
+                    }
                 }
             }
         }
@@ -77,11 +76,15 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = signUp.invoke(CheckAlreadySignUp.Param(kakaoId))) {
                 is CheckAlreadySignUp.Result.Success -> {
-                    _actionFlow.emit(Action.SignUp(result.message))
+                    _actionFlow.update { current ->
+                        current.copy(signUp = UiState.Success(result.message))
+                    }
                 }
 
                 is CheckAlreadySignUp.Result.Fail -> {
-                    _actionFlow.emit(Action.NotSignUp(result.errorMessage))
+                    _actionFlow.update { current ->
+                        current.copy(signUp = UiState.Error(result.errorMessage))
+                    }
                 }
             }
         }
@@ -91,59 +94,91 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = notifyState.invoke(SetNotifyState.Param(data))) {
                 is SetNotifyState.Result.Success -> {
-                    Log.d(javaClass.name.toString(), "Success ${result.message}")
+                    setPermissionCheck()
                 }
 
                 is SetNotifyState.Result.Fail -> {
-                    _actionFlow.emit(Action.Error(result.errorMessage))
+                    _actionFlow.update { current ->
+                        current.copy(notification = UiState.Error(result.errorMessage))
+                    }
                 }
             }
-            getToken()
         }
     }
 
-    private fun getToken() {
+    private fun checkPermissionShow(){
+        viewModelScope.launch {
+            when(permissionCheck.invoke(BuildConfig.NOTIFY_PERMISSION_KEY)){
+                true -> {
+                    _actionFlow.update { current ->
+                        current.copy(permissionShow = UiState.Success(true))
+                    }
+                }
+                false -> {
+                    _actionFlow.update { current ->
+                        current.copy(permissionShow = UiState.Success(false))
+                    }
+                }
+            }
+        }
+    }
+    private fun setPermissionCheck(){
+        viewModelScope.launch {
+            when(val message = setPermission.invoke(SetPermissionCheck.Param(key = BuildConfig.NOTIFY_PERMISSION_KEY , data = true))){
+                is SetPermissionCheck.Result.Success -> {
+                    _actionFlow.update { current ->
+                        current.copy(notification = UiState.Success(message.message))
+                    }
+                }
+                is SetPermissionCheck.Result.Fail -> {
+                    _actionFlow.update { current ->
+                        current.copy(notification = UiState.Error(message.errorMessage))
+                    }
+                }
+            }
+        }
+    }
+
+    fun getToken() {
         viewModelScope.launch {
             val result = fcm.invoke()
             if (result == ERROR_FCM_TOKEN) {
-                _actionFlow.emit(Action.Error(ERROR_FCM_TOKEN))
+                _actionFlow.update { current ->
+                    current.copy(fcmToken = UiState.Error(ERROR_FCM_TOKEN))
+                }
                 return@launch
             }
-            when (val saveOrUpdateToken =
+            when (val saveFcm =
                 updateAndSaveToken.invoke(UpdateAndSaveToken.Param(result))) {
                 is UpdateAndSaveToken.Result.Success -> {
-                    _actionFlow.emit(Action.FCMToken(saveOrUpdateToken.message))
-                    _isFcmReady.value = true
+                    _actionFlow.update { current ->
+                        current.copy(fcmToken = UiState.Success(saveFcm.message))
+                    }
                 }
 
                 is UpdateAndSaveToken.Result.Fail -> {
-                    _actionFlow.emit(Action.Error(ERROR_FCM_TOKEN))
+                    _actionFlow.update { current ->
+                        current.copy(fcmToken = UiState.Error(saveFcm.errorMessage))
+                    }
                 }
             }
         }
     }
 
-
-    fun requestLogin() {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = login.invoke()) {
-                is RequestLogin.Result.Success -> {
-                    _actionFlow.emit(Action.Login(result.message))
-                }
-
-                is RequestLogin.Result.Fail -> {
-                    _actionFlow.emit(Action.Error(result.errorMessage))
-                }
-            }
-        }
+    sealed interface UiState<out T> {
+        data object Loading : UiState<Nothing>
+        data class Success<T>(val data: T) : UiState<T>
+        data class Error<T>(val error: String) : UiState<T>
     }
 
-    sealed interface Action {
-        data class GetSuccess(val kakaoId: String) : Action
-        data class SignUp(val message: String) : Action
-        data class NotSignUp(val message: String) : Action
-        data class FCMToken(val message: String) : Action
-        data class Login(val message: String) : Action
-        data class Error(val errorMessage: String) : Action
-    }
+    data class LoginViewState(
+        val userId: UiState<String> = UiState.Loading,
+        val signUp: UiState<String> = UiState.Loading,
+        val fcmToken: UiState<String> = UiState.Loading,
+        val notification: UiState<String> = UiState.Loading,
+        val banner: UiState<List<BannerData>> = UiState.Loading,
+        val permissionShow : UiState<Boolean> = UiState.Loading,
+        val permissionSet : UiState<Boolean> = UiState.Loading
+    )
+
 }

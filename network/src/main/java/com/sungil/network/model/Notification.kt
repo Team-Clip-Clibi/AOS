@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class Notification(
     val noticeType: String,
     val content: String,
-    val link: String,
+    val link: String?,
 )
 

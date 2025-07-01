@@ -5,10 +5,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sungil.main.MainViewModel
-import com.sungil.main.Screen
+import com.sungil.main.BottomView
+import com.sungil.main.MainView
 import com.sungil.main.ui.myMatch.MyMatchView
 import com.sungil.main.ui.home.HomeScreen
-import com.sungil.main.ui.myapge.MyPageScreen
+import com.sungil.main.ui.matchDetail.MeetDetailView
+import com.sungil.main.ui.myPage.MyPageScreen
+import com.sungil.main.ui.payDetail.PayDetailView
 
 @Composable
 fun MainNavigation(
@@ -18,13 +21,14 @@ fun MainNavigation(
     reportClick: () -> Unit,
     lowClick: () -> Unit,
     alarmClick: () -> Unit,
-    oneThingClick : () -> Unit,
-    firstMatchClick : (String) -> Unit,
-    randomMatchClick : () -> Unit,
-    login : () -> Unit
+    oneThingClick: () -> Unit,
+    firstMatchClick: (String) -> Unit,
+    randomMatchClick: () -> Unit,
+    login: () -> Unit,
+    guide: () -> Unit,
 ) {
-    NavHost(navController = navController, startDestination = Screen.Home.screenRoute) {
-        composable(Screen.Home.screenRoute) {
+    NavHost(navController = navController, startDestination = BottomView.Home.screenRoute) {
+        composable(BottomView.Home.screenRoute) {
             HomeScreen(
                 viewModel = viewModel,
                 alarmClick = alarmClick,
@@ -35,11 +39,30 @@ fun MainNavigation(
                 login = login
             )
         }
-        composable(Screen.Calendar.screenRoute) {
-            MyMatchView(viewModel = viewModel , login = login)
+        composable(BottomView.Calendar.screenRoute) {
+            MyMatchView(
+                viewModel = viewModel,
+                login = login,
+                guide = guide,
+                matchDetail = { navController.navigate(MainView.MATCH_DETAIL.route) })
         }
-        composable(Screen.MyPage.screenRoute) {
+        composable(BottomView.MyPage.screenRoute) {
             MyPageScreen(viewModel, profileButtonClick, reportClick, lowClick)
+        }
+        composable(MainView.MATCH_DETAIL.route) {
+            MeetDetailView(
+                onBack = { navController.popBackStack() },
+                viewModel = viewModel,
+                payDetail = {
+                    navController.navigate(MainView.PAY_DETAIL.route)
+                }
+            )
+        }
+        composable(MainView.PAY_DETAIL.route) {
+            PayDetailView(
+                onBack = { navController.popBackStack() },
+                viewModel = viewModel
+            )
         }
     }
 }

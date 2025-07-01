@@ -37,4 +37,8 @@ class TokenManagerImpl @Inject constructor(private val tokenDao: TokenDao) : Tok
             throw RuntimeException(e.message)
         }
     }
+
+    override suspend fun isTokenNull(): Boolean {
+        return token == null && tokenDao.getToken() == null
+    }
 }

@@ -10,18 +10,23 @@ import com.sungil.login.ui.LoginScreen
 import com.sungil.login.ui.SplashScreen
 
 @Composable
-internal fun LoginNav(viewModel: LoginViewModel, kakao: () -> Unit) {
+internal fun LoginNav(viewModel: LoginViewModel, kakao: () -> Unit, notification: () -> Unit , home : () -> Unit) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = NAV_SPLASH
     ) {
         composable(NAV_SPLASH) {
-            SplashScreen(viewModel = viewModel, login = {
-                navController.navigate(NAV_LOGIN) {
-                    popUpTo(NAV_LOGIN) { inclusive = true }
-                }
-            })
+            SplashScreen(
+                viewModel = viewModel,
+                login = {
+                    navController.navigate(NAV_LOGIN) {
+                        popUpTo(NAV_LOGIN) { inclusive = true }
+                    }
+                },
+                notification = notification,
+                home = home
+            )
         }
 
         composable(NAV_LOGIN, enterTransition = {

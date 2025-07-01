@@ -1,4 +1,4 @@
-package com.sungil.main.ui.myapge
+package com.sungil.main.ui.myPage
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable

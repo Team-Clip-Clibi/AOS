@@ -2,17 +2,18 @@ package com.sungil.domain.useCase
 
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
+import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.NotificationData
-import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
+import com.sungil.domain.useCase.GetLatestMatch.Result
 import javax.inject.Inject
 
 class GetNotification @Inject constructor(
     private val database: DatabaseRepository,
     private val network: NetworkRepository,
-    private val tokenManger : TokenMangerController
+    private val tokenManger: TokenMangerController,
 ) {
 
     sealed interface Result : UseCase.Result {
@@ -20,75 +21,33 @@ class GetNotification @Inject constructor(
         data class Fail(val errorMessage: String) : Result
     }
 
-    suspend fun invoke(): Result {
+    suspend fun invoke(): Any {
         val token = database.getToken()
-        val notification = network.requestNotification(TOKEN_FORM + token.first)
-        when (notification.responseCode) {
-            401 -> {
-                val refreshToken = tokenManger.requestUpdateToken(token.second)
-                if (!refreshToken) return Result.Fail("reLogin")
-                val newToken = database.getToken()
-                val retry = network.requestNotification(TOKEN_FORM + newToken.first)
-                when (retry.responseCode) {
-                    200 -> {
-                        return Result.Success(retry.notificationDataList)
-                    }
+        return when (val notification = network.requestNotification(TOKEN_FORM + token.first)) {
+            is NetworkResult.Success -> {
+                Result.Success(notification.data.notificationDataList)
+            }
 
-                    204 -> {
-                        /**
-                         * TODO -> 배포시 서버 데이터로만 출력
-                         */
-                        return Result.Success(
-                            listOf(
-                                NotificationData(
-                                    noticeType = "NOTICE",
-                                    content = "테스트에용",
-                                    link = "www.naver.com"
-                                ),
-                                NotificationData(
-                                    noticeType = "ARTICLE",
-                                    content = "테스트에용2",
-                                    link = "www.naver.com"
-                                ),
-                                NotificationData(
-                                    noticeType = "NOTICE",
-                                    content = "테스트에용3",
-                                    link = "www.naver.com"
-                                ),
-                            )
-                        )
+            is NetworkResult.Error -> {
+                when (notification.code) {
+                    401 -> {
+                        val refreshToken = tokenManger.requestUpdateToken(token.second)
+                        if (!refreshToken) return Result.Fail("reLogin")
+                        val newToken = database.getToken()
+                        val reRequest = network.requestNotification(TOKEN_FORM + newToken.first)
+                        when (reRequest) {
+                            is NetworkResult.Success -> {
+                                return Result.Success(reRequest.data.notificationDataList)
+                            }
+
+                            is NetworkResult.Error -> {
+                                return Result.Fail("reLogin")
+                            }
+                        }
                     }
                     else -> return Result.Fail("network error")
                 }
             }
-
-            200 -> {
-                return Result.Success(notification.notificationDataList)
-            }
-
-            204 -> {
-                return Result.Success(
-                    listOf(
-                        NotificationData(
-                            noticeType = "NOTICE",
-                            content = "테스트에용",
-                            link = "www.naver.com"
-                        ),
-                        NotificationData(
-                            noticeType = "ARTICLE",
-                            content = "테스트에용2",
-                            link = "www.naver.com"
-                        ),
-                        NotificationData(
-                            noticeType = "NOTICE",
-                            content = "테스트에용3",
-                            link = "www.naver.com"
-                        ),
-                    )
-                )
-            }
-
-            else -> return Result.Fail("network error")
         }
     }
 }

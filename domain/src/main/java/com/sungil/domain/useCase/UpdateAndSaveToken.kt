@@ -4,11 +4,13 @@ import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.tokenManger.TokenMangerController
 import javax.inject.Inject
 
 class UpdateAndSaveToken @Inject constructor(
-    private val repo: DatabaseRepository,
-    private val api: NetworkRepository,
+    private val database: DatabaseRepository,
+    private val network: NetworkRepository,
+    private val tokenManger: TokenMangerController
 ) :
     UseCase<UpdateAndSaveToken.Param, UpdateAndSaveToken.Result> {
 
@@ -22,14 +24,53 @@ class UpdateAndSaveToken @Inject constructor(
     }
 
     override suspend fun invoke(param: Param): Result {
-        val beforeToken = repo.getFcmToken()
+        val beforeToken = database.getFcmToken()
+        if(beforeToken.isEmpty()){
+            return Result.Fail("reLogin")
+        }
         return when {
             beforeToken.isEmpty() || beforeToken != param.fcmToken -> {
-                val result = repo.saveFcmToken(param.fcmToken)
-                if (result) {
-                    Result.Success("Success to save token (no previous token)")
-                } else {
-                    Result.Fail("Failed to save token")
+                val result = database.saveFcmToken(param.fcmToken)
+                when (result) {
+                    true -> {
+                        val tokenStatus = database.getTokenDataStatus()
+                        if (tokenStatus) {
+                            return Result.Success("Success to save token (no previous token)")
+                        }
+                        val token = database.getToken()
+                        val updateFcm = network.requestUpdateFcmToken(
+                            accessToken = TOKEN_FORM + token.first,
+                            fcmToken = param.fcmToken
+                        )
+                        when (updateFcm) {
+                            204 -> {
+                                return Result.Success("Success to save token (no previous token)")
+                            }
+
+                            401 -> {
+                                val updateToken = tokenManger.requestUpdateToken(token.second)
+                                if (!updateToken) return Result.Fail("reLogin")
+                                val newToken = database.getToken()
+                                val reRequest = network.requestUpdateFcmToken(
+                                    accessToken = TOKEN_FORM + newToken.first,
+                                    fcmToken = param.fcmToken
+                                )
+                                if (reRequest == 204) {
+                                    return Result.Success("Success to save token (no previous token)")
+                                }
+                                if (reRequest == 401) {
+                                    return Result.Fail("reLogin")
+                                }
+                                return Result.Fail("network error")
+                            }
+
+                            else -> return Result.Fail("network error")
+                        }
+                    }
+
+                    false -> {
+                        return Result.Fail("Failed to save token")
+                    }
                 }
             }
 

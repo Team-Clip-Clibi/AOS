@@ -7,7 +7,10 @@ import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchDetail
+import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
@@ -56,7 +59,7 @@ interface NetworkRepository {
 
     suspend fun requestUserData(accessToken: String): UserInfo?
 
-    suspend fun requestUpdateFcmToken(accessToken: String): Int
+    suspend fun requestUpdateFcmToken(accessToken: String ,fcmToken : String): Int
 
     suspend fun requestUpdateJob(accessToken: String, data: String): Int
 
@@ -78,12 +81,12 @@ interface NetworkRepository {
 
     suspend fun requestReport(accessToken: String, content: String, reportCategory: String): Int
 
-    suspend fun requestNotification(accessToken: String): NotificationResponse
+    suspend fun requestNotification(accessToken: String): NetworkResult<NotificationResponse>
 
     suspend fun requestBanner(
         accessToken: String,
         bannerType: String,
-    ): Pair<Int , List<BannerData>>
+    ): Pair<Int, List<BannerData>>
 
     suspend fun requestMatchingData(
         accessToken: String,
@@ -130,6 +133,27 @@ interface NetworkRepository {
     ): RandomInfo
 
     suspend fun requestMatchOverView(
-        token : String
-    ) : NetworkResult<MatchOverView>
+        token: String,
+    ): NetworkResult<MatchOverView>
+
+    suspend fun requestUpdateNotify(
+        token: String,
+        isAllowNotify: Boolean,
+    ): Int
+
+    fun requestMatchingData(
+        matchStatus : String,
+        lastTime : String
+    ) : Flow<PagingData<MatchingData>>
+
+    fun requestMatchNotice(
+        lastTime: String,
+    ): Flow<PagingData<MatchNotice>>
+
+    suspend fun requestMatchDetail(
+        token: String,
+        matchingId: Int,
+        matchType : String
+    ): NetworkResult<MatchDetail>
+
 }

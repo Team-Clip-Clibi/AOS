@@ -4,6 +4,8 @@ import android.app.Activity
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.data.paging.MatchNoticePagingSource
+import com.example.data.paging.MatchPagingSource
 import com.example.data.paging.NotificationPagingSource
 import com.example.data.paging.NotificationReadPagingSource
 import com.example.fcm.FirebaseFCM
@@ -17,8 +19,12 @@ import com.sungil.domain.model.Love
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.MatchDate
+import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchInfo
+import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
@@ -38,7 +44,6 @@ import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
-import com.sungil.network.model.Notification
 import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.Payment
@@ -184,9 +189,12 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.body()?.toDomain(result.code())
     }
 
-    override suspend fun requestUpdateFcmToken(accessToken: String): Int {
-        val result = api.requestUpdateFcmToken(accessToken)
-        return result.code()
+    override suspend fun requestUpdateFcmToken(accessToken: String, fcmToken: String): Int {
+        return api.requestUpdateFcmToken(
+            bearerToken = accessToken,
+            body = mapOf("fcmToken" to fcmToken)
+        )
+            .code()
     }
 
     override suspend fun requestUpdateJob(accessToken: String, data: String): Int {
@@ -283,30 +291,26 @@ class NetworkRepositoryImpl @Inject constructor(
         return result.code()
     }
 
-    override suspend fun requestNotification(accessToken: String): NotificationResponse {
-        val result = api.requestNotification(accessToken)
-        if (result.body()?.size == 0) {
-            return NotificationResponse(
-                responseCode = 204,
-                notificationDataList = emptyList()
+    override suspend fun requestNotification(accessToken: String): NetworkResult<NotificationResponse> {
+        return try {
+            val response = api.requestNotification(accessToken)
+            if (!response.isSuccessful) return NetworkResult.Error(code = response.code())
+            val body = response.body() ?: return NetworkResult.Error(code = response.code())
+            return NetworkResult.Success(
+                NotificationResponse(
+                    responseCode = response.code(),
+                    notificationDataList = body.map { data ->
+                        NotificationData(
+                            noticeType = data.noticeType,
+                            content = data.content,
+                            link = data.link ?: ""
+                        )
+                    }
+                )
             )
+        } catch (e: Exception) {
+            NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }
-        if (result.code() != 200) {
-            return NotificationResponse(
-                responseCode = result.code(),
-                notificationDataList = emptyList()
-            )
-        }
-        if (result.body() == null) {
-            return NotificationResponse(
-                responseCode = 204,
-                notificationDataList = emptyList()
-            )
-        }
-        return NotificationResponse(
-            responseCode = result.code(),
-            notificationDataList = result.body()!!.map { it.toDomain() }
-        )
     }
 
     override suspend fun requestBanner(
@@ -320,8 +324,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 bannerList.add(
                     BannerData(
                         image = banner.imagePresignedUrl ?: "",
-                        headText = banner.headText ?: "",
-                        subText = banner.subText ?: ""
+                        headText = banner.text ?: "",
                     )
                 )
             }
@@ -363,8 +366,25 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
+    override fun requestMatchingData(
+        matchStatus: String,
+        lastTime: String,
+    ): Flow<PagingData<MatchingData>> {
+        return Pager(
+            config = PagingConfig(pageSize = 50),
+            pagingSourceFactory = {
+                MatchPagingSource(
+                    api = api,
+                    token = tokenManger,
+                    matchingStatus = matchStatus,
+                    lastMeetingTime = lastTime
+                )
+            }
+        ).flow
+    }
+
     override suspend fun requestUpdateToken(refreshToken: String): Triple<Int, String?, String?> {
-        val result = api.requestRefreshToken(refreshToken)
+        val result = api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
         if (result.code() != 204) {
             return Triple(result.code(), "", "")
         }
@@ -509,6 +529,98 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun requestUpdateNotify(token: String, isAllowNotify: Boolean): Int {
+        return try {
+            api.requestUpdateNotify(
+                bearerToken = token,
+                body = mapOf("isAllowNotify" to isAllowNotify)
+            ).code()
+        } catch (e: Exception) {
+            500
+        }
+    }
+
+    override fun requestMatchNotice(lastTime: String): Flow<PagingData<MatchNotice>> {
+       return Pager(
+           config = PagingConfig(pageSize = 50),
+           pagingSourceFactory = {
+               MatchNoticePagingSource(
+                   api = api,
+                   token = tokenManger,
+                   lastMeetingTime = lastTime
+               )
+           }
+       ).flow
+    }
+
+    override suspend fun requestMatchDetail(
+        token: String,
+        matchingId: Int,
+        matchType: String,
+    ): NetworkResult<MatchDetail> {
+        return try {
+            val response = api.requestMatchDetail(
+                bearerToken = token,
+                id = matchingId,
+                matchingType = matchType
+            )
+            if (!response.isSuccessful) {
+                val mockSuccessResult = NetworkResult.Success(
+                    MatchDetail(
+                        time = "2025-06-27T06:26:03.955Z",
+                        matchStatus = "매칭완료",
+                        matchType = "RANDOM",
+                        matchTime = listOf(
+                            MatchDate(date = "2025-06-27", time = "DINNER")
+                        ),
+                        matchCategory = "WORK",
+                        matchBudget = "LOW",
+                        matchContent = "서로의 일에 대해 이야기해요.",
+                        matchPrice = 15000,
+                        paymentPrice = 10000,
+                        requestTime = "2025-06-27T06:26:03.955Z",
+                        approveTime = "2025-06-27T06:30:00.000Z",
+                        district = "서울특별시 강남구",
+                        job = "STUDENT",
+                        loveState = "SINGLE",
+                        diet = "VEGAN",
+                        language = "KOREAN"
+                    )
+                )
+                return mockSuccessResult
+//                return NetworkResult.Error(code = response.code())
+            }
+            val body = response.body() ?: return NetworkResult.Error(code = response.code())
+            NetworkResult.Success(
+                MatchDetail(
+                    time = body.meetingTime,
+                    matchStatus = body.matchingStatus.matchingStatusName,
+                    matchType = body.matchingType,
+                    matchTime = body.applicationInfo.preferredDates.map { responseData ->
+                        MatchDate(
+                            date = responseData.date,
+                            time = responseData.timeSlot
+                        )
+                    },
+                    matchCategory = body.applicationInfo.oneThingCategory,
+                    matchBudget = body.applicationInfo.oneThingBudgetRange,
+                    matchContent = body.myOneThingContent,
+                    matchPrice = body.paymentInfo.matchingPrice,
+                    paymentPrice = body.paymentInfo.paymentPrice,
+                    requestTime = body.paymentInfo.requestedAt,
+                    approveTime = body.paymentInfo.approvedAt,
+                    district = body.applicationInfo.district,
+                    job = body.myMatchingInfo.job,
+                    loveState = body.myMatchingInfo.relationshipStatus,
+                    diet = body.myMatchingInfo.dietaryOption,
+                    language = body.myMatchingInfo.language
+                )
+            )
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
     private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {
         return UserInfo(
             responseCode = responseCode,
@@ -542,11 +654,4 @@ class NetworkRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun Notification.toDomain(): NotificationData {
-        return NotificationData(
-            noticeType = this.noticeType,
-            content = this.content,
-            link = this.link
-        )
-    }
 }
