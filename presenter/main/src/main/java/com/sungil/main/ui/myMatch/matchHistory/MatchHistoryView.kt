@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -73,6 +75,7 @@ internal fun MatchHistoryView(
         stringResource(R.string.btn_complete),
         stringResource(R.string.btn_cancel)
     )
+
     val context = LocalContext.current
     LaunchedEffect(state.matchDetail) {
         when (val result = state.matchDetail) {
@@ -85,6 +88,7 @@ internal fun MatchHistoryView(
                         )
                         login()
                     }
+
                     ERROR_NETWORK_ERROR -> {
                         snackBarHostState.showSnackbar(
                             message = context.getString(R.string.msg_network_error),
@@ -104,7 +108,7 @@ internal fun MatchHistoryView(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(color = ColorStyle.GRAY_200)
             .padding(top = 18.dp, end = 20.dp, start = 20.dp, bottom = 24.dp)
     ) {
@@ -120,13 +124,50 @@ internal fun MatchHistoryView(
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         if (matchItems.itemCount == MATCH_DATA_EMPTY) {
             NotMatchView()
         } else {
-            MatchView(matchItems, viewModel)
+            MatchView(matchAllData = matchItems, viewModel = viewModel)
         }
     }
 }
+
+@Composable
+fun MatchView(
+    matchAllData: LazyPagingItems<MatchingData>,
+    viewModel: MainViewModel
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        repeat(matchAllData.itemCount) { index ->
+            matchAllData[index]?.let { matchData ->
+                CustomDialogOneButton(
+                    time = matchData.formattedTime,
+                    meetState = matchData.matchStatus,
+                    meetKind = matchData.matchType,
+                    title = matchData.myOneThingContent,
+                    reviewWrite = matchData.isReviewWritten,
+                    buttonText = stringResource(R.string.btn_write_review),
+                    onClick = {
+                        // 리뷰 버튼 클릭
+                    },
+                    onClickDetail = {
+                        viewModel.matchDetail(
+                            matchId = matchData.id,
+                            matchType = matchData.matchingType
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 fun NotMatchView() {
@@ -161,35 +202,6 @@ fun NotMatchView() {
                 style = AppTextStyles.BODY_14_20_MEDIUM,
                 color = ColorStyle.GRAY_600
             )
-        }
-    }
-}
-
-@Composable
-fun MatchView(matchAllData: LazyPagingItems<MatchingData>, viewModel: MainViewModel) {
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(matchAllData.itemCount) { index ->
-            matchAllData[index]?.let { matchData ->
-                CustomDialogOneButton(
-                    time = matchData.formattedTime,
-                    meetState = matchData.matchStatus,
-                    meetKind = matchData.matchType,
-                    title = matchData.myOneThingContent,
-                    reviewWrite = matchData.isReviewWritten,
-                    buttonText = stringResource(R.string.btn_write_review),
-                    onClick = {
-                    },
-                    onClickDetail = {
-                        viewModel.matchDetail(
-                            matchId = matchData.id,
-                            matchType = matchData.matchingType
-                        )
-                    }
-                )
-            }
         }
     }
 }

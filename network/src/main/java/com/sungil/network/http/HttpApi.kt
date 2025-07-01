@@ -28,6 +28,7 @@ import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
 import com.sungil.network.model.MatchDetailResponse
+import com.sungil.network.model.MatchNoticeDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -356,4 +357,13 @@ interface HttpApi {
         @Path("matchingType") matchingType: String,
         @Path("id") id: Int,
     ): Response<MatchDetailResponse>
+
+    /**
+     * 매치 안내문 조회 API
+     */
+    @GET(BuildConfig.MATCH_NOTICE_URL)
+    suspend fun requestMatchNotice(
+        @Header("Authorization") bearerToken: String,
+        @Query("lastMeetingTime") lastMeetingTime: String,
+    ): Response<List<MatchNoticeDto>>
 }

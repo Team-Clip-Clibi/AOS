@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.data.mapper.toLoadResult
 import com.sungil.database.token.TokenManager
+import com.sungil.domain.REFRESH_TOKEN
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.exception.UnauthorizedException
 import com.sungil.domain.model.MatchingData
@@ -70,7 +71,7 @@ class MatchPagingSource @Inject constructor(
 
             401 -> {
                 val requestRefreshToken =
-                    api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
+                    api.requestRefreshToken(mapOf(REFRESH_TOKEN to refreshToken))
                 if (!requestRefreshToken.isSuccessful) {
                     return LoadResult.Error(UnauthorizedException("network error"))
                 }

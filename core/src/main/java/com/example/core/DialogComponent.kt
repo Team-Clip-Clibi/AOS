@@ -27,8 +27,15 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Text
 import androidx.compose.ui.res.stringResource
 import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import java.math.BigInteger
 
 @Composable
 fun CustomDialogOneButton(
@@ -212,13 +219,16 @@ fun NoticePage(
     meetKind: String,
     title: String,
     dateDetail: String,
+    restaurant : String,
     location: String,
-    people: String,
-    language: String,
+    people : String,
+    job : String,
     cuisine: String,
+    cuisineHighLight: String,
     detail: String,
     pay: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    buttonShow : Boolean
 ) {
     Column(
         modifier = Modifier
@@ -246,7 +256,7 @@ fun NoticePage(
                     .padding(1.dp)
                     .width(2.dp)
                     .height(2.dp)
-                    .alignByBaseline()
+                    .align(Alignment.CenterVertically)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
@@ -262,14 +272,14 @@ fun NoticePage(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
-        NoticeItemView(image = painterResource(R.drawable.ic_calendar), text = dateDetail)
-        NoticeItemView(image = painterResource(R.drawable.ic_location), text = location)
-        NoticeItemView(image = painterResource(R.drawable.ic_people), text = people)
-        NoticeItemView(image = painterResource(R.drawable.ic_language), text = language)
-        NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine)
-        NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail)
-        NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay)
-        if(meetState == "모임확정"){
+        NoticeItemView(image = painterResource(R.drawable.ic_calendar), text = dateDetail , highlighted = dateDetail)
+        NoticeItemView(image = painterResource(R.drawable.ic_location), text = "$restaurant($location)", highlighted = restaurant)
+        NoticeItemView(image = painterResource(R.drawable.ic_people), text = people , highlighted = job)
+        NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
+        NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail , highlighted = "")
+        NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay , highlighted = "" , isLinePrint = buttonShow)
+        Spacer(modifier = Modifier.height(10.dp))
+        if(buttonShow){
             ButtonLWhite(
                 text = stringResource(R.string.btn_late),
                 onClick = onClick
@@ -279,7 +289,7 @@ fun NoticePage(
 }
 
 @Composable
-fun NoticeItemView(image: Painter, text: String) {
+fun NoticeItemView(image: Painter, text: String , highlighted : String , isLinePrint : Boolean = true) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -292,35 +302,35 @@ fun NoticeItemView(image: Painter, text: String) {
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = text,
-                style = AppTextStyles.BODY_14_20_EXTRA_BOLD,
-                color = ColorStyle.GRAY_800
+                text = buildAnnotatedString {
+                    val start = text.indexOf(highlighted)
+                    if (start != -1) {
+                        val end = start + highlighted.length
+                        withStyle(style = AppTextStyles.BODY_14_20_REGULAR.toSpanStyle()) {
+                            append(text.substring(0, start))
+                        }
+                        withStyle(style = AppTextStyles.BODY_14_20_EXTRA_BOLD.toSpanStyle()) {
+                            append(text.substring(start, end))
+                        }
+                        withStyle(style = AppTextStyles.BODY_14_20_REGULAR.toSpanStyle()) {
+                            append(text.substring(end))
+                        }
+                    } else {
+                        withStyle(style = AppTextStyles.BODY_14_20_REGULAR.toSpanStyle()) {
+                            append(text)
+                        }
+                    }
+                },
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(color = ColorStyle.GRAY_200)
-        )
+        if(isLinePrint){
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(color = ColorStyle.GRAY_200)
+            )
+        }
     }
-}
-@Preview(showBackground = true)
-@Composable
-fun NoticePagePreview() {
-    NoticePage(
-        date = "2025.03.09",
-        meetState = "모임확정",
-        meetKind = "원띵모임",
-        title = "면접 준비는 어떻게 하고 계시나요? 주제 입력 최대 50자 까지라, 세 줄 까지 나올 수 있을 듯요",
-        dateDetail = "2025.03.05(금), 오후 7시",
-        location = "한옥마루 강남점(서울 강남구 강남대로106길 25)",
-        people = "이번 모임의 멤버는 학생 1명, 의료업 2명, 예술계 2명으로 구성되어 있어요",
-        language = "이번 모임은 영어로 진행해요",
-        cuisine = "식사 메뉴는 양식(파스타 및 피자)으로 준비했어요",
-        detail = "모임에는 비건멤버가 1명이 있으니, 메뉴 선택 시 참고 해 주세요",
-        pay = "식사 비용은 각자 부담하거나, 멤버들과 상의해 결정해 주세요",
-        onClick = {}
-    )
 }

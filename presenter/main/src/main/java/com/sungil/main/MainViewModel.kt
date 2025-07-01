@@ -15,6 +15,7 @@ import com.sungil.domain.useCase.GetFirstMatchInput
 import com.sungil.domain.useCase.GetLatestMatch
 import com.sungil.domain.useCase.GetMatch
 import com.sungil.domain.useCase.GetMatchDetail
+import com.sungil.domain.useCase.GetMatchNotice
 import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
@@ -38,6 +39,7 @@ class MainViewModel @Inject constructor(
     private val latestDay: GetLatestMatch,
     private val matching: GetMatchingData,
     private val matchDetail: GetMatchDetail,
+    private val matchNotice : GetMatchNotice
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -52,6 +54,9 @@ class MainViewModel @Inject constructor(
     val matchComplete = matching.invoke(matchingStatus = MATCH_KEY_COMPLETED, lastMeetingTime = "")
         .cachedIn(viewModelScope)
     val matchCancelled = matching.invoke(matchingStatus = MATCH_KEY_CANCELLED, lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+
+    val notice = matchNotice.invoke(lastTime = "")
         .cachedIn(viewModelScope)
 
     private var _matchButton = MutableStateFlow(0)
