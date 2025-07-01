@@ -35,6 +35,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import java.math.BigInteger
 
 @Composable
 fun CustomDialogOneButton(
@@ -226,7 +227,8 @@ fun NoticePage(
     cuisineHighLight: String,
     detail: String,
     pay: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    buttonShow : Boolean
 ) {
     Column(
         modifier = Modifier
@@ -254,7 +256,7 @@ fun NoticePage(
                     .padding(1.dp)
                     .width(2.dp)
                     .height(2.dp)
-                    .alignByBaseline()
+                    .align(Alignment.CenterVertically)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
@@ -275,8 +277,9 @@ fun NoticePage(
         NoticeItemView(image = painterResource(R.drawable.ic_people), text = people , highlighted = job)
         NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
         NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail , highlighted = "")
-        NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay , highlighted = "")
-        if(meetState == "모임확정"){
+        NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay , highlighted = "" , isLinePrint = buttonShow)
+        Spacer(modifier = Modifier.height(10.dp))
+        if(buttonShow){
             ButtonLWhite(
                 text = stringResource(R.string.btn_late),
                 onClick = onClick
@@ -286,7 +289,7 @@ fun NoticePage(
 }
 
 @Composable
-fun NoticeItemView(image: Painter, text: String , highlighted : String) {
+fun NoticeItemView(image: Painter, text: String , highlighted : String , isLinePrint : Boolean = true) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -321,38 +324,13 @@ fun NoticeItemView(image: Painter, text: String , highlighted : String) {
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(color = ColorStyle.GRAY_200)
-        )
+        if(isLinePrint){
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(color = ColorStyle.GRAY_200)
+            )
+        }
     }
 }
-fun TextStyle.toSpanStyle(): SpanStyle = SpanStyle(
-    color = this.color,
-    fontSize = this.fontSize,
-    fontWeight = this.fontWeight,
-    fontStyle = this.fontStyle,
-    letterSpacing = this.letterSpacing,
-    fontFamily = this.fontFamily,
-    textDecoration = this.textDecoration
-)
-
-//@Preview(showBackground = true)
-//@Composable
-//fun NoticePagePreview() {
-//    NoticePage(
-//        date = "2025.03.09",
-//        meetState = "모임확정",
-//        meetKind = "원띵모임",
-//        title = "면접 준비는 어떻게 하고 계시나요? 주제 입력 최대 50자 까지라, 세 줄 까지 나올 수 있을 듯요",
-//        dateDetail = "2025.03.05(금), 오후 7시",
-//        location = "한옥마루 강남점(서울 강남구 강남대로106길 25)",
-//        people = "이번 모임의 멤버는 학생 1명, 의료업 2명, 예술계 2명으로 구성되어 있어요",
-//        cuisine = "식사 메뉴는 양식(파스타 및 피자)으로 준비했어요",
-//        detail = "모임에는 비건멤버가 1명이 있으니, 메뉴 선택 시 참고 해 주세요",
-//        pay = "식사 비용은 각자 부담하거나, 멤버들과 상의해 결정해 주세요",
-//        onClick = {}
-//    )
-//}

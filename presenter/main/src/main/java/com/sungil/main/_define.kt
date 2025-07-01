@@ -17,6 +17,17 @@ enum class MyMatchDestination(val route: String, val label: String) {
     MATCH_NOTICE("matchNotice", "안내문");
 }
 
+enum class MatchStatus(val route: String, val label: String) {
+    MATCH_CANCEL("CANCELLED", "모임취소"),
+    MATCH_COMPLETED("COMPLETED", "신청완료"),
+    MATCH_CONFIRMED("CONFIRMED", "모임확정");
+
+    companion object {
+        fun fromRoute(route: String): MatchStatus =
+            entries.find { it.route == route } ?: MATCH_CANCEL
+    }
+}
+
 enum class MatchType(val route: String, val matchType: String) {
     RANDOM("RANDOM", "랜덤모임"), ONE_THING("ONE_THING", "원띵모임");
 

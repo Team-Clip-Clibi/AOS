@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -76,33 +78,29 @@ fun MyMatchView(
     val state by viewModel.userState.collectAsState()
     val latestDay = state.latestDay
     val context = LocalContext.current
-    val navController = rememberNavController()
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     val userName = when (state.userDataState) {
         is MainViewModel.UiState.Success -> (state.userDataState as MainViewModel.UiState.Success<UserData>).data.nickName
         is MainViewModel.UiState.Loading -> ""
         is MainViewModel.UiState.Error -> "오류 발생"
     }
+
     LaunchedEffect(latestDay) {
         when (latestDay) {
             is MainViewModel.UiState.Error -> {
                 when (latestDay.message) {
-                    ERROR_RE_LOGIN -> {
-                        login()
-                    }
-
-                    ERROR_NETWORK_ERROR -> {
-                        snackBarHostState.showSnackbar(
-                            message = context.getString(R.string.msg_network_error),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
+                    ERROR_RE_LOGIN -> login()
+                    ERROR_NETWORK_ERROR -> snackBarHostState.showSnackbar(
+                        message = context.getString(R.string.msg_network_error),
+                        duration = SnackbarDuration.Short
+                    )
                 }
             }
 
             else -> Unit
         }
     }
+
     Scaffold(
         topBar = {
             CustomMainPageTopBar(text = stringResource(R.string.my_match_top_bar))
@@ -118,9 +116,7 @@ fun MyMatchView(
                     .padding(
                         start = 17.dp,
                         end = 16.dp,
-                        bottom = WindowInsets.navigationBars
-                            .asPaddingValues()
-                            .calculateTopPadding()
+                        bottom = WindowInsets.navigationBars.asPaddingValues().calculateTopPadding()
                     )
             )
         }
@@ -133,89 +129,42 @@ fun MyMatchView(
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .fillMaxSize()
-            ) {
-                //Top View
-                Column(
-                    modifier = Modifier
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                item {
+                    Column(modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = ColorStyle.WHITE_100)
-                        .padding(start = 17.dp, end = 16.dp)
-                ) {
-                    MyMatchTitleView(latestDay = latestDay, userName = userName)
-                    Spacer(modifier = Modifier.height(32.dp))
-                }
-                //tab layout
-                MyMatchTabLayout(
-                    selectedTabIndex = selectedTabIndex,
-                    onTabSelected = { index ->
-                        selectedTabIndex = index
-                        val route = MyMatchDestination.entries[index].route
-                        navController.navigate(route) {
-                            launchSingleTop = true
-                            restoreState = true
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                        }
+                        .padding(start = 17.dp , end = 16.dp)) {
+                        MyMatchTitleView(latestDay = latestDay, userName = userName)
+                        Spacer(modifier = Modifier.height(32.dp))
                     }
-                )
-                NavHost(
-                    navController = navController,
-                    startDestination = MyMatchDestination.MATCH_HISTORY.route,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .background(color = ColorStyle.GRAY_200)
-                ) {
-                    composable(
-                        MyMatchDestination.MATCH_HISTORY.route, enterTransition = {
-                            slideIntoContainer(
-                                AnimatedContentTransitionScope.SlideDirection.Left,
-                                animationSpec = tween(700)
-                            )
-                        },
-                        popEnterTransition = {
-                            slideIntoContainer(
-                                AnimatedContentTransitionScope.SlideDirection.Right,
-                                animationSpec = tween(700)
-                            )
-                        }) {
-                        MatchHistoryView(
+                }
+
+                stickyHeader {
+                    MyMatchTabLayout(
+                        selectedTabIndex = selectedTabIndex,
+                        onTabSelected = { selectedTabIndex = it }
+                    )
+                }
+
+                item {
+                    when (selectedTabIndex) {
+                        0 -> MatchHistoryView(
                             viewModel = viewModel,
                             login = login,
                             matchDetail = matchDetail,
                             snackBarHostState = snackBarHostState
                         )
-                    }
-                    composable(
-                        MyMatchDestination.MATCH_NOTICE.route, enterTransition = {
-                            slideIntoContainer(
-                                AnimatedContentTransitionScope.SlideDirection.Left,
-                                animationSpec = tween(700)
-                            )
-                        },
-                        popEnterTransition = {
-                            slideIntoContainer(
-                                AnimatedContentTransitionScope.SlideDirection.Right,
-                                animationSpec = tween(700)
-                            )
-                        }) {
-                        MatchNoticeView(viewModel = viewModel)
+                        1 -> MatchNoticeView(viewModel = viewModel)
                     }
                 }
             }
+
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 12.dp, end = 10.dp)
             ) {
-                OneThingGuide(
-                    onClick = { guide() }
-                )
+                OneThingGuide(onClick = guide)
             }
         }
     }
@@ -284,7 +233,6 @@ fun MyMatchTitleView(
                 confirmInfo = confirm
             )
         }
-
         else -> Unit
     }
 }
