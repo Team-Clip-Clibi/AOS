@@ -5,14 +5,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
@@ -27,15 +33,17 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Text
 import androidx.compose.ui.res.stringResource
 import androidx.compose.material3.Icon
-import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import java.math.BigInteger
+import kotlinx.coroutines.launch
 
 @Composable
 fun CustomDialogOneButton(
@@ -140,7 +148,9 @@ fun CustomDialogOneButton(
     ) {
         //top view
         Row(
-            modifier = Modifier.fillMaxWidth().clickable { onClickDetail() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClickDetail() },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -228,7 +238,8 @@ fun NoticePage(
     detail: String,
     pay: String,
     onClick: () -> Unit,
-    buttonShow : Boolean
+    buttonShow : Boolean,
+    buttonText : String
 ) {
     Column(
         modifier = Modifier
@@ -281,7 +292,7 @@ fun NoticePage(
         Spacer(modifier = Modifier.height(10.dp))
         if(buttonShow){
             ButtonLWhite(
-                text = stringResource(R.string.btn_late),
+                text = buttonText,
                 onClick = onClick
             )
         }
@@ -332,5 +343,130 @@ fun NoticeItemView(image: Painter, text: String , highlighted : String , isLineP
                     .background(color = ColorStyle.GRAY_200)
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleBottomSheet(
+    item: List<String>,
+    click: (String , Int) -> Unit,
+    buttonText : String,
+    title: String,
+    content: String,
+    noticeId : Int
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val coroutineScope = rememberCoroutineScope()
+    var selectedItem by remember { mutableStateOf("") }
+    ModalBottomSheet(
+        onDismissRequest = {
+            coroutineScope.launch {
+                sheetState.hide()
+            }
+        },
+        sheetState = sheetState,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        contentColor = ColorStyle.WHITE_100
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = ColorStyle.WHITE_100)
+                .heightIn(min = 200.dp, max = 400.dp)
+                .padding(top = 20.dp, bottom = 34.dp, start = 20.dp, end = 24.dp)
+        ) {
+            Text(
+                text = title,
+                style = AppTextStyles.HEAD_24_34_BOLD,
+                color = ColorStyle.GRAY_800
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = content,
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.GRAY_600
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            item.forEachIndexed { index, label ->
+                SimpleSheetItem(
+                    text = label,
+                    onClick = {
+                        selectedItem = label
+                    },
+                    isClick = selectedItem == label
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+            SimpleSheetOkay(
+                text = buttonText,
+                isEnable = selectedItem != "",
+                onClick = {
+                    click(selectedItem ,noticeId)
+                    coroutineScope.launch {
+                        sheetState.hide()
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun SimpleSheetItem(
+    text: String,
+    isClick: Boolean,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .border(
+                width = 1.dp,
+                color = if (isClick) ColorStyle.PURPLE_200 else ColorStyle.GRAY_300,
+                shape = RoundedCornerShape(size = 8.dp)
+            ),
+        shape = RoundedCornerShape(size = 8.dp),
+        colors = ButtonDefaults.buttonColors(
+            if (isClick) ColorStyle.WHITE_100 else ColorStyle.PURPLE_100
+        ),
+        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
+        onClick = onClick
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = if(isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_800
+        )
+    }
+}
+
+@Composable
+fun SimpleSheetOkay(
+    text: String,
+    isEnable: Boolean,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(size = 8.dp),
+        colors = ButtonDefaults.buttonColors(
+            if (isEnable) ColorStyle.PURPLE_400 else ColorStyle.GRAY_100
+        ),
+        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
+        onClick = {
+            if (isEnable) onClick()
+        }
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = if (isEnable) ColorStyle.WHITE_100 else ColorStyle.GRAY_800
+        )
     }
 }

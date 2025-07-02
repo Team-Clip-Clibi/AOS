@@ -366,4 +366,15 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Query("lastMeetingTime") lastMeetingTime: String,
     ): Response<List<MatchNoticeDto>>
+
+    /**
+     * 지각 URL
+     */
+    @POST(BuildConfig.MATCH_ING_URL+"/"+"{matchingType}"+"/"+"{id}")
+    suspend fun sendLateMatch(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingType") matchingType: String,
+        @Path("id") id: Int,
+        @Body body: Map<String, Int>,
+    ): Response<Unit>
 }

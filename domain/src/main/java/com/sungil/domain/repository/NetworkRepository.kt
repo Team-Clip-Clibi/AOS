@@ -156,4 +156,11 @@ interface NetworkRepository {
         matchType : String
     ): NetworkResult<MatchDetail>
 
+    suspend fun sendLateMatch(
+        token: String,
+        matchId: Int,
+        matchType: String,
+        lateTime : Int
+    ): NetworkResult<Int>
+
 }

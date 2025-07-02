@@ -3,23 +3,20 @@ package com.sungil.main.ui.myMatch.matchNotice
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +28,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.example.core.NoticePage
+import com.example.core.SimpleBottomSheet
 import com.sungil.domain.model.Job
 import com.sungil.domain.model.MatchNotice
 import com.sungil.main.MainViewModel
@@ -82,7 +80,15 @@ private fun EmptyNotice() {
 }
 
 @Composable
-private fun NoticeView(notice: LazyPagingItems<MatchNotice>) {
+private fun NoticeView(notice: LazyPagingItems<MatchNotice> , buttonText : String = stringResource(R.string.btn_late)) {
+    val item = listOf(
+        stringResource(R.string.match_notice_late_10),
+        stringResource(R.string.match_notice_late_20),
+        stringResource(R.string.match_notice_late_30),
+    )
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var noticeId by remember { mutableStateOf(0) }
+    var matchType by remember { mutableStateOf(MatchType.RANDOM) }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,22 +108,39 @@ private fun NoticeView(notice: LazyPagingItems<MatchNotice>) {
                     restaurant = data.restaurantName,
                     location = data.restaurantAddress,
                     people = stringResource(
-                        R.string.match_notice_people, data.jonInfos.toViewString(LocalContext.current)
+                        R.string.match_notice_people,
+                        data.jonInfos.toViewString(LocalContext.current)
                     ),
                     job = data.jonInfos.toViewString(LocalContext.current),
                     cuisine = stringResource(R.string.match_notice_cuisine, data.menuCategory),
                     cuisineHighLight = data.menuCategory,
                     dateDetail = "${data.detailTime}(${data.week})",
                     pay = stringResource(R.string.match_notice_pay_content),
-                    onClick = {},
-                    buttonShow = MatchStatus.fromRoute(data.matchStatus) == MatchStatus.MATCH_CONFIRMED
+                    onClick = {
+                        noticeId = data.matchId
+                        matchType = MatchType.fromRoute(data.matchType)
+                        showBottomSheet = true
+                    },
+                    buttonShow = MatchStatus.fromRoute(data.matchStatus) == MatchStatus.MATCH_CONFIRMED,
+                    buttonText = buttonText
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
+        if (showBottomSheet) {
+            SimpleBottomSheet(
+                item = item,
+                buttonText = stringResource(R.string.match_notice_late_okay),
+                click = { text  , id->
+
+                },
+                content = stringResource(R.string.match_late_content),
+                title = stringResource(R.string.match_late_title),
+                noticeId = noticeId
+            )
+        }
     }
 }
-
 
 private fun List<Job>.toViewString(context: Context): String {
     return this.joinToString(", ") { job ->

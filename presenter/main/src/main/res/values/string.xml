@@ -53,6 +53,13 @@
     <string name="match_notice_job">%1$s %2$d명</string>
     <string name="match_notice_cuisine">식사 메뉴는 %1$s으로 준비했어요</string>
     <string name="match_notice_pay_content">식사 비용은 각자 부담하거나, 멤버들과 상의해 결정해 주세요</string>
+    <string name="match_notice_late_10">10분</string>
+    <string name="match_notice_late_20">20분</string>
+    <string name="match_notice_late_30">30분 이상</string>
+    <string name="match_notice_late_okay">확인</string>
+    <string name="match_late_title">얼마나 늦을 예정인가요?</string>
+    <string name="match_late_content">다른 멤버들이 참고할 수 있도록 도착 예상 시간을 알려주세요</string>
+    <string name="btn_late">늦을 것 같아요</string>
     <!--결제정보-->
     <string name="pay_detail_info">결제 정보</string>
     <string name="pay_detail_match_price">매칭비용</string>

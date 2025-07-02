@@ -36,6 +36,7 @@ import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.NetworkRepository
+import com.sungil.domain.useCase.SendReport
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
 import com.sungil.network.model.Diet
@@ -616,6 +617,28 @@ class NetworkRepositoryImpl @Inject constructor(
                     language = body.myMatchingInfo.language
                 )
             )
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun sendLateMatch(
+        token: String,
+        matchId: Int,
+        matchType: String,
+        lateTime : Int
+    ): NetworkResult<Int> {
+        try {
+            val sendLateMatch = api.sendLateMatch(
+                bearerToken = token,
+                matchingType = matchType,
+                id = matchId,
+                body = mapOf("lateMinutes" to lateTime)
+            )
+            if (!sendLateMatch.isSuccessful) {
+                return NetworkResult.Error(code = sendLateMatch.code())
+            }
+            return NetworkResult.Success(sendLateMatch.code())
         } catch (e: Exception) {
             return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }
