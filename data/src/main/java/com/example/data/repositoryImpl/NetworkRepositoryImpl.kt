@@ -36,7 +36,6 @@ import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.NetworkRepository
-import com.sungil.domain.useCase.SendReport
 import com.sungil.network.FirebaseSMSRepo
 import com.sungil.network.http.HttpApi
 import com.sungil.network.model.Diet
