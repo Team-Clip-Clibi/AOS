@@ -289,8 +289,8 @@ fun NoticePage(
         NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
         NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail , highlighted = "")
         NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay , highlighted = "" , isLinePrint = buttonShow)
-        Spacer(modifier = Modifier.height(10.dp))
         if(buttonShow){
+            Spacer(modifier = Modifier.height(10.dp))
             ButtonLWhite(
                 text = buttonText,
                 onClick = onClick

@@ -1,12 +1,9 @@
 package com.sungil.main.ui.myMatch
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -50,9 +47,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
@@ -129,10 +123,11 @@ fun MyMatchView(
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(modifier = Modifier.fillMaxSize().background(color = ColorStyle.GRAY_200)) {
                 item {
                     Column(modifier = Modifier
                         .fillMaxWidth()
+                        .background(color = ColorStyle.WHITE_100)
                         .padding(start = 17.dp , end = 16.dp)) {
                         MyMatchTitleView(latestDay = latestDay, userName = userName)
                         Spacer(modifier = Modifier.height(32.dp))
@@ -148,12 +143,14 @@ fun MyMatchView(
 
                 item {
                     when (selectedTabIndex) {
-                        0 -> MatchHistoryView(
-                            viewModel = viewModel,
-                            login = login,
-                            matchDetail = matchDetail,
-                            snackBarHostState = snackBarHostState
-                        )
+                        0 -> {
+                            MatchHistoryView(
+                                viewModel = viewModel,
+                                login = login,
+                                matchDetail = matchDetail,
+                                snackBarHostState = snackBarHostState
+                            )
+                        }
                         1 -> MatchNoticeView(viewModel = viewModel)
                     }
                 }
