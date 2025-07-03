@@ -30,6 +30,7 @@ import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.OneThineNotify
+import com.sungil.domain.model.Participants
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.RandomInfo
 import com.sungil.domain.model.UserData
@@ -651,6 +652,34 @@ class NetworkRepositoryImpl @Inject constructor(
                 return NetworkResult.Error(code = response.code(), message = response.message())
             }
             return NetworkResult.Success(response.code())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun requestParticipants(
+        token: String,
+        matchId: Int,
+        matchType: String,
+    ): NetworkResult<List<Participants>> {
+        try {
+            val response = api.requestParticipants(
+                bearerToken = token,
+                id = matchId,
+                matchingType = matchType
+            )
+            if (!response.isSuccessful || response.body() == null) {
+                return NetworkResult.Error(code = response.code(), message = response.message())
+            }
+            val participants = response.body()!!.map { data ->
+                Participants(
+                    id = data.id,
+                    nickName = data.nickname
+                )
+            }
+            return NetworkResult.Success(
+                participants
+            )
         } catch (e: Exception) {
             return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }
