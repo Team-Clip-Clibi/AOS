@@ -29,6 +29,7 @@ import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
 import com.sungil.network.model.MatchDetailResponse
 import com.sungil.network.model.MatchNoticeDto
+import com.sungil.network.model.MatchReviewDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -370,11 +371,19 @@ interface HttpApi {
     /**
      * 지각 URL
      */
-    @POST(BuildConfig.MATCH_ING_URL+"/"+"{matchingType}"+"/"+"{id}")
+    @POST(BuildConfig.MATCH_ING_URL + "/" + "{matchingType}" + "/" + "{id}")
     suspend fun sendLateMatch(
         @Header("Authorization") bearerToken: String,
         @Path("matchingType") matchingType: String,
         @Path("id") id: Int,
         @Body body: Map<String, Int>,
     ): Response<Unit>
+
+    @POST(BuildConfig.MATCH_REVIEW_URL + "/" + "{matchingId}" + "/" + "{matchingType}")
+    suspend fun sendReview(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingId") id: Int,
+        @Path("matchingType") matchingType: String,
+        @Body review: MatchReviewDTO
+    ) : Response<Unit>
 }

@@ -163,4 +163,15 @@ interface NetworkRepository {
         lateTime : Int
     ): NetworkResult<Int>
 
+    suspend fun sendReviewData(
+        token : String,
+        mood: String,
+        positivePoints : String,
+        negativePoints : String,
+        reviewContent : String,
+        noShowMembers : String,
+        allAttend : Boolean,
+        matchId : Int,
+        matchType: String
+    ) : NetworkResult<Int>
 }
