@@ -4,10 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.res.stringResource
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -239,7 +242,10 @@ fun NoticePage(
     pay: String,
     onClick: () -> Unit,
     buttonShow : Boolean,
-    buttonText : String
+    buttonText : String,
+    latButtonShow : Boolean = false ,
+    lateButtonText : String = "",
+    lateButtonTime : String = ""
 ) {
     Column(
         modifier = Modifier
@@ -289,11 +295,18 @@ fun NoticePage(
         NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
         NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail , highlighted = "")
         NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay , highlighted = "" , isLinePrint = buttonShow)
-        if(buttonShow){
+        if(buttonShow && !latButtonShow){
             Spacer(modifier = Modifier.height(10.dp))
             ButtonLWhite(
                 text = buttonText,
                 onClick = onClick
+            )
+        }
+        if(buttonShow && latButtonShow){
+            LateButton(
+                lateTime = lateButtonTime,
+                onClick = onClick,
+                text = lateButtonText
             )
         }
     }
@@ -354,7 +367,8 @@ fun SimpleBottomSheet(
     buttonText : String,
     title: String,
     content: String,
-    noticeId : Int
+    noticeId : Int,
+    onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -363,9 +377,11 @@ fun SimpleBottomSheet(
         onDismissRequest = {
             coroutineScope.launch {
                 sheetState.hide()
+                onDismiss()
             }
         },
         sheetState = sheetState,
+        containerColor = ColorStyle.WHITE_100,
         dragHandle = { BottomSheetDefaults.DragHandle() },
         contentColor = ColorStyle.WHITE_100
     ) {
@@ -405,6 +421,7 @@ fun SimpleBottomSheet(
                     click(selectedItem ,noticeId)
                     coroutineScope.launch {
                         sheetState.hide()
+                        onDismiss()
                     }
                 }
             )
@@ -429,7 +446,7 @@ fun SimpleSheetItem(
             ),
         shape = RoundedCornerShape(size = 8.dp),
         colors = ButtonDefaults.buttonColors(
-            if (isClick) ColorStyle.WHITE_100 else ColorStyle.PURPLE_100
+            if (isClick) ColorStyle.PURPLE_100 else ColorStyle.WHITE_100
         ),
         contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
         onClick = onClick
@@ -438,7 +455,7 @@ fun SimpleSheetItem(
             text = text,
             maxLines = 1,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = if(isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_800
+            color = ColorStyle.GRAY_800
         )
     }
 }
@@ -468,5 +485,49 @@ fun SimpleSheetOkay(
             style = AppTextStyles.BODY_14_20_MEDIUM,
             color = if (isEnable) ColorStyle.WHITE_100 else ColorStyle.GRAY_800
         )
+    }
+}
+
+@Composable
+fun LateButton(
+    text: String,
+    lateTime: String,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(size = 8.dp),
+        colors = ButtonDefaults.buttonColors(
+            ColorStyle.GRAY_100
+        ),
+        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
+        onClick = {
+            onClick()
+        }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = text,
+                maxLines = 1,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_800
+            )
+            VerticalDivider(
+                modifier = Modifier
+                    .width(1.dp)
+                    .fillMaxHeight()
+                    .background(color = ColorStyle.PURPLE_200)
+            )
+            Text(
+                text = lateTime,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_800
+            )
+        }
     }
 }

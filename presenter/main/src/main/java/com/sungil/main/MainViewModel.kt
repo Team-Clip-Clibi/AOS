@@ -20,7 +20,9 @@ import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
 import com.sungil.domain.useCase.GetUserInfo
+import com.sungil.domain.useCase.SendLateMatch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,7 +41,8 @@ class MainViewModel @Inject constructor(
     private val latestDay: GetLatestMatch,
     private val matching: GetMatchingData,
     private val matchDetail: GetMatchDetail,
-    private val matchNotice : GetMatchNotice
+    private val matchNotice: GetMatchNotice,
+    private val sendLate: SendLateMatch,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -233,14 +236,47 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun sendLate(matchType: String, lateTime: Int, matchId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = sendLate.invoke(
+                SendLateMatch.Param(
+                    id = matchId,
+                    lateTime = lateTime,
+                    matchType = matchType
+                )
+            )) {
+                is SendLateMatch.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(matchLate = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is SendLateMatch.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(
+                            matchLate = UiState.Success(
+                                MatchLate(
+                                    matchId = result.id,
+                                    time = result.lateTime
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     fun setMatchButton(index: Int) {
         _matchButton.value = index
     }
-    fun setMatchDetailInit(){
+
+    fun setMatchDetailInit() {
         _userState.update { state ->
             state.copy(matchDetail = UiState.Loading)
         }
     }
+
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
@@ -256,6 +292,7 @@ class MainViewModel @Inject constructor(
         val firstMatch: UiState<String> = UiState.Loading,
         val latestDay: UiState<LatestDayInfo> = UiState.Loading,
         val matchDetail: UiState<MatchDetail> = UiState.Loading,
+        val matchLate: UiState<MatchLate> = UiState.Loading,
     )
 
 }
@@ -264,3 +301,7 @@ data class LatestDayInfo(
     val time: String, val applyTime: Int, val confirmTime: Int,
 )
 
+data class MatchLate(
+    val time: Int,
+    val matchId: Int,
+)

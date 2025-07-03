@@ -37,6 +37,22 @@ enum class MatchType(val route: String, val matchType: String) {
     }
 }
 
+enum class LateType(val label: String, val minutes: Int) {
+    LATE_10("10분", 10),
+    LATE_20("20분", 20),
+    LATE_30("30분 이상", 30);
+
+    companion object {
+        private fun fromLabel(label: String): LateType? {
+            return entries.firstOrNull { it.label == label }
+        }
+
+        fun extractMinutes(label: String): Int? {
+            return fromLabel(label)?.minutes
+        }
+    }
+}
+
 enum class CATEGORY(val displayName: String) {
     HEALTH("건강"),
     MONEY("돈"),

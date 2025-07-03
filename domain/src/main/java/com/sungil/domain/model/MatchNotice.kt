@@ -1,6 +1,5 @@
 package com.sungil.domain.model
 
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -20,7 +19,7 @@ data class MatchNotice(
 ) {
     val simpleTime = matchTime.toSimpleTime()
     val detailTime = matchTime.toDetailDate()
-    val week = matchType.getWeek()
+    val week = matchTime.getWeek()
 
     private fun String.toSimpleTime(): String {
         return try {
@@ -41,7 +40,8 @@ data class MatchNotice(
     }
     private fun String.getWeek(): String {
         return try {
-            val date = LocalDate.parse(this)
+            val dateTime = LocalDateTime.parse(this)
+            val date = dateTime.toLocalDate()
             val dayOfWeek = date.dayOfWeek
             dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
         } catch (e: Exception) {
