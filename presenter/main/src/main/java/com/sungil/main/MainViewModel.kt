@@ -21,6 +21,7 @@ import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
 import com.sungil.domain.useCase.GetUserInfo
 import com.sungil.domain.useCase.SendLateMatch
+import com.sungil.domain.useCase.SendMatchReview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,6 +44,7 @@ class MainViewModel @Inject constructor(
     private val matchDetail: GetMatchDetail,
     private val matchNotice: GetMatchNotice,
     private val sendLate: SendLateMatch,
+    private val sendReview : SendMatchReview
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
