@@ -78,8 +78,6 @@ val bottomNavItems = listOf(
 const val NAV_HOME = "home"
 const val NAV_CALENDAR = "calendar"
 const val NAV_MY = "my"
-const val NAV_MATCH_DETAIL = "matchDetail"
-const val NAV_PAY_DETAIL = "payDetail"
 const val NAV_GUIDE = "guide"
 const val NAV_EDIT_PROFILE = "MainEditProfile"
 const val NAV_REPORT = "report"
@@ -95,7 +93,6 @@ const val ERROR_SAVE_ERROR = "save error"
 const val ERROR_NETWORK_ERROR = "network error"
 
 const val CONTENT_NOTICE = "NOTICE"
-const val CONTENT_ARTICLE = "ARTICLE"
 
 const val MATCH_DATA_EMPTY = 0
 
