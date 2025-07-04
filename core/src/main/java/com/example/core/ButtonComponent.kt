@@ -136,6 +136,7 @@ fun ButtonCheckBoxLeftL(
     content: String,
     isChecked: Boolean,
     onCheckChange: (Boolean) -> Unit,
+    checkImageShow : Boolean = true
 ) {
     val shape = RoundedCornerShape(8.dp)
     val borderColor = if (isChecked) ColorStyle.PURPLE_200 else Color.Transparent
@@ -158,11 +159,13 @@ fun ButtonCheckBoxLeftL(
             .clickable { onCheckChange(!isChecked) },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CircularCheckBoxLarge(
-            checked = isChecked,
-            onCheckChange = onCheckChange
-        )
-        Spacer(modifier = Modifier.width(14.dp))
+        if(checkImageShow){
+            CircularCheckBoxLarge(
+                checked = isChecked,
+                onCheckChange = onCheckChange
+            )
+            Spacer(modifier = Modifier.width(14.dp))
+        }
         Text(
             text = content,
             style = AppTextStyles.BODY_14_20_MEDIUM,

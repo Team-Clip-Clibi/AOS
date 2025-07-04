@@ -152,7 +152,10 @@ fun MatchView(
                     reviewWrite = matchData.isReviewWritten,
                     buttonText = stringResource(R.string.btn_write_review),
                     onClick = {
-                        // 리뷰 버튼 클릭
+                        viewModel.getParticipants(
+                            matchId = matchData.id,
+                            matchType = matchData.matchingType
+                        )
                     },
                     onClickDetail = {
                         viewModel.matchDetail(
@@ -169,7 +172,6 @@ fun MatchView(
 
 @Composable
 fun NotMatchView() {
-
     Box(
         modifier = Modifier
             .fillMaxWidth()

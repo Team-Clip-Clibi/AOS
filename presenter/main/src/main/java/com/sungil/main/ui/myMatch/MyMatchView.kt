@@ -72,6 +72,7 @@ fun MyMatchView(
     login: () -> Unit,
     guide: () -> Unit,
     matchDetail: () -> Unit,
+    review:() -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val state by viewModel.userState.collectAsState()
@@ -176,6 +177,35 @@ fun MyMatchView(
                 }
                 return@LaunchedEffect
             }
+        }
+    }
+
+    LaunchedEffect(state.participants) {
+        when (val result = state.participants) {
+            is MainViewModel.UiState.Error -> {
+                when (result.message) {
+                    ERROR_RE_LOGIN -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        login()
+                    }
+
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+
+            is MainViewModel.UiState.Success -> {
+                review()
+            }
+
+            else -> Unit
         }
     }
 
