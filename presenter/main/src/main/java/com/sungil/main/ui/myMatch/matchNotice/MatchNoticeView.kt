@@ -13,6 +13,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,8 +29,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.example.core.NoticePage
+import com.example.core.SimpleBottomSheet
 import com.sungil.domain.model.Job
 import com.sungil.domain.model.MatchNotice
+import com.sungil.main.LateType
 import com.sungil.main.MainViewModel
 import com.sungil.main.MatchStatus
 import com.sungil.main.MatchType
@@ -38,7 +45,7 @@ internal fun MatchNoticeView(viewModel: MainViewModel) {
     if (notice.itemCount == 0) {
         EmptyNotice()
     } else {
-        NoticeView(notice)
+        NoticeView(notice, viewModel = viewModel)
     }
 }
 
@@ -75,7 +82,28 @@ private fun EmptyNotice() {
 }
 
 @Composable
-private fun NoticeView(notice: LazyPagingItems<MatchNotice>) {
+private fun NoticeView(
+    notice: LazyPagingItems<MatchNotice>,
+    viewModel: MainViewModel,
+) {
+    val item = listOf(
+        stringResource(R.string.match_notice_late_10),
+        stringResource(R.string.match_notice_late_20),
+        stringResource(R.string.match_notice_late_30),
+    )
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var noticeId by remember { mutableStateOf(0) }
+    var matchType by remember { mutableStateOf(MatchType.RANDOM) }
+    val state by viewModel.userState.collectAsState()
+    val matchLateState = state.matchLate
+    val (lateMatchId, lateTime) = when (matchLateState) {
+        is MainViewModel.UiState.Success -> {
+            val late = (matchLateState).data
+            late.matchId to late.time
+        }
+        else -> -1 to 0
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,22 +123,51 @@ private fun NoticeView(notice: LazyPagingItems<MatchNotice>) {
                     restaurant = data.restaurantName,
                     location = data.restaurantAddress,
                     people = stringResource(
-                        R.string.match_notice_people, data.jonInfos.toViewString(LocalContext.current)
+                        R.string.match_notice_people,
+                        data.jonInfos.toViewString(LocalContext.current)
                     ),
                     job = data.jonInfos.toViewString(LocalContext.current),
                     cuisine = stringResource(R.string.match_notice_cuisine, data.menuCategory),
                     cuisineHighLight = data.menuCategory,
                     dateDetail = "${data.detailTime}(${data.week})",
                     pay = stringResource(R.string.match_notice_pay_content),
-                    onClick = {},
-                    buttonShow = MatchStatus.fromRoute(data.matchStatus) == MatchStatus.MATCH_CONFIRMED
+                    onClick = {
+                        noticeId = data.matchId
+                        matchType = MatchType.fromRoute(data.matchType)
+                        showBottomSheet = true
+                    },
+                    buttonShow = MatchStatus.fromRoute(data.matchStatus) == MatchStatus.MATCH_CONFIRMED,
+                    buttonText = stringResource(R.string.btn_late),
+                    latButtonShow = lateMatchId == data.matchId && MatchStatus.fromRoute(
+                        data.matchStatus
+                    ) == MatchStatus.MATCH_CONFIRMED,
+                    lateButtonText = stringResource(R.string.btn_late),
+                    lateButtonTime = stringResource(R.string.match_notice_late_item, lateTime)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
+        if (showBottomSheet) {
+            SimpleBottomSheet(
+                item = item,
+                buttonText = stringResource(R.string.match_notice_late_okay),
+                click = { text, id ->
+                    viewModel.sendLate(
+                        matchType = matchType.route,
+                        lateTime = LateType.extractMinutes(text) ?: 10,
+                        matchId = id
+                    )
+                },
+                content = stringResource(R.string.match_late_content),
+                title = stringResource(R.string.match_late_title),
+                noticeId = noticeId,
+                onDismiss = {
+                    showBottomSheet = false
+                }
+            )
+        }
     }
 }
-
 
 private fun List<Job>.toViewString(context: Context): String {
     return this.joinToString(", ") { job ->

@@ -136,6 +136,7 @@ fun ButtonCheckBoxLeftL(
     content: String,
     isChecked: Boolean,
     onCheckChange: (Boolean) -> Unit,
+    checkImageShow : Boolean = true
 ) {
     val shape = RoundedCornerShape(8.dp)
     val borderColor = if (isChecked) ColorStyle.PURPLE_200 else Color.Transparent
@@ -158,11 +159,13 @@ fun ButtonCheckBoxLeftL(
             .clickable { onCheckChange(!isChecked) },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CircularCheckBoxLarge(
-            checked = isChecked,
-            onCheckChange = onCheckChange
-        )
-        Spacer(modifier = Modifier.width(14.dp))
+        if(checkImageShow){
+            CircularCheckBoxLarge(
+                checked = isChecked,
+                onCheckChange = onCheckChange
+            )
+            Spacer(modifier = Modifier.width(14.dp))
+        }
         Text(
             text = content,
             style = AppTextStyles.BODY_14_20_MEDIUM,
@@ -367,58 +370,6 @@ fun ButtonLWhite(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomViewWhite(
-    item: List<String>,
-    buttonText: String,
-    onClick: (String) -> Unit,
-) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val coroutineScope = rememberCoroutineScope()
-    var selectedItem by remember { mutableStateOf("") }
-    ModalBottomSheet(
-        onDismissRequest = {
-            coroutineScope.launch {
-                sheetState.hide()
-                onClick(selectedItem)
-            }
-        },
-        sheetState = sheetState,
-        dragHandle = { BottomSheetDefaults.DragHandle() },
-        contentColor = ColorStyle.WHITE_100
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = ColorStyle.WHITE_100)
-                .heightIn(min = 200.dp, max = 400.dp)
-                .padding(top = 20.dp, bottom = 34.dp, start = 24.dp, end = 24.dp)
-        ) {
-            item.forEach { text ->
-                ButtonCenterLarge(
-                    text = text,
-                    checked = selectedItem == text,
-                    onClick = {
-                        selectedItem = text
-                    },
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                ButtonLargePurple400Gray100(
-                    text = buttonText,
-                    isEnable = selectedItem.trim().isNotEmpty(),
-                    onClick = {
-                        coroutineScope.launch {
-                            sheetState.hide()
-                            onClick(selectedItem)
-                        }
-                    }
-                )
-            }
-
-        }
-    }
-}
 
 @Composable
 fun ButtonLargePurple400Gray100(

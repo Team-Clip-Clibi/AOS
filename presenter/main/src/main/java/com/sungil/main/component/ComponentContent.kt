@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -757,4 +758,98 @@ fun SmallButton(
             color = if (isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_600
         )
     }
+}
+
+@Composable
+fun ReviewImageView(
+    image: Int,
+    content: String,
+    isSelect: Boolean,
+    isClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .width(60.dp)
+            .height(86.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            painter = painterResource(image),
+            contentDescription = content,
+            modifier = Modifier
+                .size(40.dp)
+                .background(
+                    color = ColorStyle.GRAY_200,
+                    shape = RoundedCornerShape(size = 12.dp)
+                )
+                .padding(start = 9.5.dp, top = 10.dp, end = 10.5.dp, bottom = 10.dp)
+                .clickable { isClick() },
+            tint = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = content,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_600
+        )
+    }
+}
+
+
+@Composable
+fun ReviewItemContent(
+    isClick: () -> Unit,
+    isSelect: Boolean,
+    content: String,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Icon(
+            painter = painterResource(com.example.core.R.drawable.ic_check),
+            contentDescription = content,
+            modifier = Modifier
+                .size(16.dp)
+                .background(
+                    color = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400,
+                    shape = RoundedCornerShape(size = 4.dp)
+                )
+                .padding(start = 2.dp, top = 2.dp, end = 2.dp, bottom = 2.dp)
+                .clickable { isClick() }
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(
+            text = content,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = ColorStyle.GRAY_700
+        )
+    }
+}
+
+@Composable
+fun ReviewTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    TextField(
+        value = value,
+        onValueChange = { newText ->
+            onValueChange(newText)
+        },
+        modifier = Modifier.fillMaxWidth()
+            .height(152.dp)
+            .background(color = ColorStyle.WHITE_100 , shape = RoundedCornerShape(12.dp))
+            .border(width = 1.dp, color = ColorStyle.GRAY_300, shape = RoundedCornerShape(size = 12.dp))
+            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
+        singleLine = false,
+        placeholder = {
+            Text(
+                text = stringResource(R.string.review_detail_hint),
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_500
+            )
+        }
+    )
 }

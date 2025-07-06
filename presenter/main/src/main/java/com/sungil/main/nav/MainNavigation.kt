@@ -12,6 +12,7 @@ import com.sungil.main.ui.home.HomeScreen
 import com.sungil.main.ui.matchDetail.MeetDetailView
 import com.sungil.main.ui.myPage.MyPageScreen
 import com.sungil.main.ui.payDetail.PayDetailView
+import com.sungil.main.ui.review.ReviewView
 
 @Composable
 fun MainNavigation(
@@ -44,7 +45,10 @@ fun MainNavigation(
                 viewModel = viewModel,
                 login = login,
                 guide = guide,
-                matchDetail = { navController.navigate(MainView.MATCH_DETAIL.route) })
+                matchDetail = { navController.navigate(MainView.MATCH_DETAIL.route) },
+                review = {
+                    navController.navigate(MainView.REVIEW.route)
+                })
         }
         composable(BottomView.MyPage.screenRoute) {
             MyPageScreen(viewModel, profileButtonClick, reportClick, lowClick)
@@ -61,6 +65,12 @@ fun MainNavigation(
         composable(MainView.PAY_DETAIL.route) {
             PayDetailView(
                 onBack = { navController.popBackStack() },
+                viewModel = viewModel
+            )
+        }
+        composable(MainView.REVIEW.route){
+            ReviewView(
+                onClose = {navController.popBackStack()},
                 viewModel = viewModel
             )
         }

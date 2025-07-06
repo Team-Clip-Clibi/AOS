@@ -47,10 +47,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
+import com.sungil.domain.exception.UnauthorizedException
 import com.sungil.domain.model.UserData
+import com.sungil.editprofile.ERROR_NETWORK
+import com.sungil.editprofile.ERROR_TOKEN_EXPIRE
 import com.sungil.main.ERROR_NETWORK_ERROR
 import com.sungil.main.LatestDayInfo
 import com.sungil.main.MainViewModel
@@ -67,12 +72,38 @@ fun MyMatchView(
     login: () -> Unit,
     guide: () -> Unit,
     matchDetail: () -> Unit,
+    review:() -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val state by viewModel.userState.collectAsState()
     val latestDay = state.latestDay
     val context = LocalContext.current
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
+    LaunchedEffect(state.matchLate) {
+        when (val result = state.matchLate) {
+            is MainViewModel.UiState.Error -> {
+                when (result.message) {
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    ERROR_TOKEN_EXPIRE -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        login()
+                    }
+                }
+            }
+
+            else -> Unit
+        }
+    }
+
     val userName = when (state.userDataState) {
         is MainViewModel.UiState.Success -> (state.userDataState as MainViewModel.UiState.Success<UserData>).data.nickName
         is MainViewModel.UiState.Loading -> ""
@@ -89,6 +120,89 @@ fun MyMatchView(
                         duration = SnackbarDuration.Short
                     )
                 }
+            }
+
+            else -> Unit
+        }
+    }
+
+    val all = viewModel.matchAllData.collectAsLazyPagingItems()
+    val applied = viewModel.matchApplied.collectAsLazyPagingItems()
+    val confirmed = viewModel.matchConfirmed.collectAsLazyPagingItems()
+    val complete = viewModel.matchComplete.collectAsLazyPagingItems()
+    val cancelled = viewModel.matchCancelled.collectAsLazyPagingItems()
+    val refreshStates = listOf(
+        all.loadState.refresh,
+        applied.loadState.refresh,
+        confirmed.loadState.refresh,
+        complete.loadState.refresh,
+        cancelled.loadState.refresh
+    )
+    LaunchedEffect(refreshStates) {
+        refreshStates.forEach { state ->
+            if (state is LoadState.Error) {
+                when (val e = state.error) {
+                    is UnauthorizedException -> {
+                        when (e.message) {
+                            ERROR_NETWORK -> {
+                                snackBarHostState.showSnackbar(
+                                    message = context.getString(R.string.msg_network_error),
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+
+                            ERROR_TOKEN_EXPIRE -> {
+                                snackBarHostState.showSnackbar(
+                                    message = context.getString(R.string.msg_re_login),
+                                    duration = SnackbarDuration.Short
+                                )
+                                login()
+                            }
+
+                            else -> {
+                                snackBarHostState.showSnackbar(
+                                    message = context.getString(R.string.msg_network_error),
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                        }
+                    }
+
+                    else -> {
+                        snackBarHostState.showSnackbar(
+                            message = e.message ?: "ERROR",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+                return@LaunchedEffect
+            }
+        }
+    }
+
+    LaunchedEffect(state.participants) {
+        when (val result = state.participants) {
+            is MainViewModel.UiState.Error -> {
+                when (result.message) {
+                    ERROR_RE_LOGIN -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        login()
+                    }
+
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+
+            is MainViewModel.UiState.Success -> {
+                review()
             }
 
             else -> Unit
@@ -123,12 +237,18 @@ fun MyMatchView(
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize().background(color = ColorStyle.GRAY_200)) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = ColorStyle.GRAY_200)
+            ) {
                 item {
-                    Column(modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = ColorStyle.WHITE_100)
-                        .padding(start = 17.dp , end = 16.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = ColorStyle.WHITE_100)
+                            .padding(start = 17.dp, end = 16.dp)
+                    ) {
                         MyMatchTitleView(latestDay = latestDay, userName = userName)
                         Spacer(modifier = Modifier.height(32.dp))
                     }
@@ -151,6 +271,7 @@ fun MyMatchView(
                                 snackBarHostState = snackBarHostState
                             )
                         }
+
                         1 -> MatchNoticeView(viewModel = viewModel)
                     }
                 }
@@ -230,6 +351,7 @@ fun MyMatchTitleView(
                 confirmInfo = confirm
             )
         }
+
         else -> Unit
     }
 }

@@ -30,6 +30,7 @@ import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.OneThineNotify
+import com.sungil.domain.model.Participants
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.RandomInfo
 import com.sungil.domain.model.UserData
@@ -42,6 +43,7 @@ import com.sungil.network.model.Diet
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
+import com.sungil.network.model.MatchReviewDTO
 import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.OneThinNotify
@@ -565,30 +567,7 @@ class NetworkRepositoryImpl @Inject constructor(
                 matchingType = matchType
             )
             if (!response.isSuccessful) {
-                val mockSuccessResult = NetworkResult.Success(
-                    MatchDetail(
-                        time = "2025-06-27T06:26:03.955Z",
-                        matchStatus = "매칭완료",
-                        matchType = "RANDOM",
-                        matchTime = listOf(
-                            MatchDate(date = "2025-06-27", time = "DINNER")
-                        ),
-                        matchCategory = "WORK",
-                        matchBudget = "LOW",
-                        matchContent = "서로의 일에 대해 이야기해요.",
-                        matchPrice = 15000,
-                        paymentPrice = 10000,
-                        requestTime = "2025-06-27T06:26:03.955Z",
-                        approveTime = "2025-06-27T06:30:00.000Z",
-                        district = "서울특별시 강남구",
-                        job = "STUDENT",
-                        loveState = "SINGLE",
-                        diet = "VEGAN",
-                        language = "KOREAN"
-                    )
-                )
-                return mockSuccessResult
-//                return NetworkResult.Error(code = response.code())
+                return NetworkResult.Error(code = response.code(), message = response.message())
             }
             val body = response.body() ?: return NetworkResult.Error(code = response.code())
             NetworkResult.Success(
@@ -615,6 +594,91 @@ class NetworkRepositoryImpl @Inject constructor(
                     diet = body.myMatchingInfo.dietaryOption,
                     language = body.myMatchingInfo.language
                 )
+            )
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun sendLateMatch(
+        token: String,
+        matchId: Int,
+        matchType: String,
+        lateTime : Int
+    ): NetworkResult<Int> {
+        try {
+            val sendLateMatch = api.sendLateMatch(
+                bearerToken = token,
+                matchingType = matchType,
+                id = matchId,
+                body = mapOf("lateMinutes" to lateTime)
+            )
+            if (!sendLateMatch.isSuccessful) {
+                return NetworkResult.Error(code = sendLateMatch.code())
+            }
+            return NetworkResult.Success(sendLateMatch.code())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun sendReviewData(
+        token: String,
+        mood: String,
+        positivePoints: String,
+        negativePoints: String,
+        reviewContent: String,
+        noShowMembers: String,
+        allAttend: Boolean,
+        matchId: Int,
+        matchType: String,
+    ): NetworkResult<Int> {
+        try {
+            val body = MatchReviewDTO(
+                mood = mood,
+                negativePoints = negativePoints,
+                noShowMembers = noShowMembers,
+                positivePoints = positivePoints,
+                reviewContent = reviewContent,
+                is_member_all_attended = allAttend
+            )
+            val response = api.sendReview(
+                bearerToken = token,
+                matchingType = matchType,
+                id = matchId,
+                review = body
+            )
+            if (!response.isSuccessful) {
+                return NetworkResult.Error(code = response.code(), message = response.message())
+            }
+            return NetworkResult.Success(response.code())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun requestParticipants(
+        token: String,
+        matchId: Int,
+        matchType: String,
+    ): NetworkResult<List<Participants>> {
+        try {
+            val response = api.requestParticipants(
+                bearerToken = token,
+                id = matchId,
+                matchingType = matchType
+            )
+            if (!response.isSuccessful || response.body() == null) {
+                return NetworkResult.Error(code = response.code(), message = response.message())
+            }
+            val participants = response.body()!!.map { data ->
+                Participants(
+                    id = data.id,
+                    nickName = data.nickname
+                )
+            }
+            return NetworkResult.Success(
+                participants
             )
         } catch (e: Exception) {
             return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)

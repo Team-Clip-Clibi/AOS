@@ -29,6 +29,8 @@ import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
 import com.sungil.network.model.MatchDetailResponse
 import com.sungil.network.model.MatchNoticeDto
+import com.sungil.network.model.MatchReviewDTO
+import com.sungil.network.model.ParticipantsDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -366,4 +368,37 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Query("lastMeetingTime") lastMeetingTime: String,
     ): Response<List<MatchNoticeDto>>
+
+    /**
+     * 지각 URL
+     */
+    @POST(BuildConfig.MATCH_ING_URL + "/" + "{matchingType}" + "/" + "{id}")
+    suspend fun sendLateMatch(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingType") matchingType: String,
+        @Path("id") id: Int,
+        @Body body: Map<String, Int>,
+    ): Response<Unit>
+
+    /**
+     * 매치 리뷰 api
+     */
+    @POST(BuildConfig.MATCH_REVIEW_URL + "/" + "{matchingId}" + "/" + "{matchingType}")
+    suspend fun sendReview(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingId") id: Int,
+        @Path("matchingType") matchingType: String,
+        @Body review: MatchReviewDTO
+    ) : Response<Unit>
+
+    /**
+     * 참여자 조회 API
+     */
+    @GET(BuildConfig.MATCH_REVIEW_URL + "/" +"{matchingId}"+"/"+"{matchingType}"+"/participants")
+    suspend fun requestParticipants(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingId") id: Int,
+        @Path("matchingType") matchingType: String,
+    ) : Response<List<ParticipantsDTO>>
+
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--common-->
     <string name="nav_home">홈</string>
     <string name="nav_calendar">일정</string>
     <string name="nav_my">마이</string>
     <string name="nav_guide">guide</string>
+    <string name="btn_finish">완료</string>
     <!--  my page  -->
     <string name="txt_mayPage_hi">안녕하세요!</string>
     <string name="txt_myPage_sir">%1$s님</string>
@@ -53,6 +55,14 @@
     <string name="match_notice_job">%1$s %2$d명</string>
     <string name="match_notice_cuisine">식사 메뉴는 %1$s으로 준비했어요</string>
     <string name="match_notice_pay_content">식사 비용은 각자 부담하거나, 멤버들과 상의해 결정해 주세요</string>
+    <string name="match_notice_late_10">10분</string>
+    <string name="match_notice_late_20">20분</string>
+    <string name="match_notice_late_30">30분 이상</string>
+    <string name="match_notice_late_item">%1$d 분</string>
+    <string name="match_notice_late_okay">확인</string>
+    <string name="match_late_title">얼마나 늦을 예정인가요?</string>
+    <string name="match_late_content">다른 멤버들이 참고할 수 있도록 도착 예상 시간을 알려주세요</string>
+    <string name="btn_late">늦을 것 같아요</string>
     <!--결제정보-->
     <string name="pay_detail_info">결제 정보</string>
     <string name="pay_detail_match_price">매칭비용</string>
@@ -84,6 +94,35 @@
     <string name="my_match_title_not_approve"> %1$s을 위한 모임을 찾고 있어요\n확정까지 조금만 기다려 주세요</string>
     <string name="my_match_content_apply">신청완료</string>
     <string name="my_match_content_confirm">모임확정</string>
+    <!--모임 후기 작성-->
+    <string name="review_app_bar">모임 후기</string>
+    <string name="review_title">모임은 어떠셨나요?</string>
+    <string name="review_sub_title">솔직한 후기를 남겨 주시면 큰 도움이 되어요\n작성하신 후기는 원띵과 본인만 확인할 수 있어요</string>
+    <string name="review_item_disappointed">실망이에요</string>
+    <string name="review_item_shame">아쉬워요</string>
+    <string name="review_item_normal">보통이에요</string>
+    <string name="review_item_good">좋아요</string>
+    <string name="review_item_best">최고에요</string>
+    <string name="review_bad_title">어떤 점이 아쉬웠나요?</string>
+    <string name="review_bad_good_case_title">아쉬운 점이 있다면 알려주세요</string>
+    <string name="review_bad_item_boring">대화가 지루했어요</string>
+    <string name="review_bad_item_negative">멤버들이 소극적이었어요</string>
+    <string name="review_bad_item_hard">진행이 이해하기 어려웠어요</string>
+    <string name="review_bad_item_inconvenience">분위기가 어색하거나 불편했어요</string>
+    <string name="review_bad_item_unlike">시간과 장소가 마음에 안들어요</string>
+    <string name="review_bad_item_late">약속 시간을 지키지 않은 멤버가 많았어요</string>
+    <string name="review_good_bad_case_title">좋았던 점도 있다면 알려주세요</string>
+    <string name="review_good_title">어떤 점이 좋았나요?</string>
+    <string name="review_good_item_funny">대화가 흥미로웠어요</string>
+    <string name="review_good_item_actively">멤버들이 적극적으로 참여했어요</string>
+    <string name="review_good_item_smooth">진행이 매끄러웠어요</string>
+    <string name="review_good_item_comfortable">분위기가 편안하고 즐거웠어요</string>
+    <string name="review_good_item_appropriate">시간과 장소가 적절했어요</string>
+    <string name="review_detail_title">아쉬운 점이 있다면 알려주세요</string>
+    <string name="review_detail_hint">소중한 의견을 남겨주세요 (선택사항)</string>
+    <string name="review_not_attend_title">오늘 참석하지 않은 멤버가 있나요?</string>
+    <string name="review_not_attend_item_all_come">모두 참석했어요</string>
+    <string name="review_not_attend_item_not_all_come">참석하지 않은 멤버가 있어요</string>
     <!-- Error message   -->
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <string name="msg_network_error">네트워크 에러</string>

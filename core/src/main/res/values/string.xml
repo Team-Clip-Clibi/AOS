@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="txt_detail">자세히보기</string>
-    <string name="btn_late">늦을 것 같아요</string>
 </resources>

@@ -17,6 +17,7 @@ import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.RandomInfo
 import com.sungil.domain.model.NetworkResult
+import com.sungil.domain.model.Participants
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import kotlinx.coroutines.flow.Flow
@@ -156,4 +157,28 @@ interface NetworkRepository {
         matchType : String
     ): NetworkResult<MatchDetail>
 
+    suspend fun sendLateMatch(
+        token: String,
+        matchId: Int,
+        matchType: String,
+        lateTime : Int
+    ): NetworkResult<Int>
+
+    suspend fun sendReviewData(
+        token : String,
+        mood: String,
+        positivePoints : String,
+        negativePoints : String,
+        reviewContent : String,
+        noShowMembers : String,
+        allAttend : Boolean,
+        matchId : Int,
+        matchType: String
+    ) : NetworkResult<Int>
+
+    suspend fun requestParticipants(
+        token: String,
+        matchId: Int,
+        matchType: String,
+    ) : NetworkResult<List<Participants>>
 }
