@@ -10,6 +10,7 @@ sealed class BottomView(val title: Int, val icon: Int = -1, val screenRoute: Str
 enum class MainView(val route: String) {
     MATCH_DETAIL("MatchDetail"),
     PAY_DETAIL("PayDetail"),
+    REVIEW("review");
 }
 
 enum class MyMatchDestination(val route: String, val label: String) {

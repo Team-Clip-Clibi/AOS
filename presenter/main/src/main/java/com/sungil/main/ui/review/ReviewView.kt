@@ -27,6 +27,7 @@ import com.sungil.main.R
 import com.sungil.main.ReviewIcon
 import com.sungil.main.component.ReviewImageView
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import com.example.core.AppTextStyles
 import com.sungil.main.AllAttend
 import com.sungil.main.REVIEW_DISAPPOINTED_BTN
@@ -51,13 +52,23 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
     val goodItem = uiState.goodReviewItem
     val detail = uiState.reviewDetail
     val allAttend = uiState.allAttend
-    val person = (uiState.participants as MainViewModel.UiState.Success).data
+    val participantsState = uiState.participants
     val selectPerson = uiState.unAttendMember
+    LaunchedEffect(participantsState) {
+        if (participantsState is MainViewModel.UiState.Loading) {
+            onClose()
+        }
+    }
+    if (participantsState !is MainViewModel.UiState.Success) return
+    val person = participantsState.data
     Scaffold(
         topBar = {
             TopAppBarWithCloseButton(
                 title = stringResource(R.string.review_app_bar),
-                onBackClick = { onClose() },
+                onBackClick = {
+                    viewModel.initParticipants()
+                    onClose()
+                },
                 isNavigationShow = false
             )
         }

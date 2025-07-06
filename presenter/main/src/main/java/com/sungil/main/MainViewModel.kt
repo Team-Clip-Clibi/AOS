@@ -299,6 +299,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun initParticipants(){
+        _userState.update { state ->
+            state.copy(participants = UiState.Loading)
+        }
+    }
+
     fun setReviewItem(buttonNumber: Int) {
         _userState.update { state ->
             state.copy(reviewButton = buttonNumber)
