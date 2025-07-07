@@ -773,29 +773,38 @@ fun ReviewImageView(
             .width(60.dp)
             .height(86.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            painter = painterResource(image),
-            contentDescription = content,
+        Box(
             modifier = Modifier
                 .size(40.dp)
                 .background(
                     color = ColorStyle.GRAY_200,
                     shape = RoundedCornerShape(size = 12.dp)
                 )
-                .padding(start = 9.5.dp, top = 10.dp, end = 10.5.dp, bottom = 10.dp)
                 .clickable { isClick() },
-            tint = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(image),
+                contentDescription = content,
+                tint = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(6.dp))
+
         Text(
             text = content,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_600
+            color = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_600,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
+
 
 
 @Composable

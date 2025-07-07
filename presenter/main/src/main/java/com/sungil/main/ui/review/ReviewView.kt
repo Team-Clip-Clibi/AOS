@@ -115,7 +115,7 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
                     viewModel.initParticipants()
                     onClose()
                 },
-                isNavigationShow = false
+                isNavigationShow = false,
             )
         },
         snackbarHost = {
@@ -251,7 +251,7 @@ private fun TopView(viewModel: MainViewModel, review: Int) {
         Spacer(modifier = Modifier.height(32.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
+            horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally)
         ) {
             ReviewIcon.entries.forEach { data ->
                 ReviewImageView(
