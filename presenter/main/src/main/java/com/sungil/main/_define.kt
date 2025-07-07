@@ -82,9 +82,12 @@ const val REVIEW_GOOD_VALUE = "GOOD"
 const val REVIEW_BEST_VALUE = "EXCELLENT"
 
 enum class MatchStatus(val route: String, val label: String) {
-    MATCH_CANCEL("CANCELLED", "모임취소"),
-    MATCH_COMPLETED("COMPLETED", "신청완료"),
-    MATCH_CONFIRMED("CONFIRMED", "모임확정");
+    MATCH_CANCEL("CANCELLED", "취소"),
+    MATCH_COMPLETED("COMPLETED", "모임종료"),
+    MATCH_CONFIRMED("CONFIRMED", "매칭확정"),
+    MATCH_APPLIED("APPLIED" , "신청완료"),
+    MATCH_NO_SHOW("NO_SHOW" ,"노쇼"),
+    MATCH_WAIT_PAY("WAIT_FOR_PAY" , "결제대기");
 
     companion object {
         fun fromRoute(route: String): MatchStatus =
@@ -170,4 +173,4 @@ const val MATCH_KEY_ALL = ""
 const val MATCH_KEY_APPLIED = "APPLIED"
 const val MATCH_KEY_CONFIRMED = "CONFIRMED"
 const val MATCH_KEY_COMPLETED = "COMPLETED"
-const val MATCH_KEY_CANCELLED = "CANCELLED"
+const val MATCH_KEY_CANCELLED = "CANCELED"

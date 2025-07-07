@@ -197,6 +197,7 @@ fun MyMatchView(
                             message = context.getString(R.string.msg_network_error),
                             duration = SnackbarDuration.Short
                         )
+                        viewModel.initParticipants()
                     }
                 }
             }

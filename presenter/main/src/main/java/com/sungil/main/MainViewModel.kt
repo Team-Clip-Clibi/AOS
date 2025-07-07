@@ -368,7 +368,7 @@ class MainViewModel @Inject constructor(
             list.add(data)
         }
         _userState.update { state ->
-            state.copy(goodReviewItem = ArrayList(list))
+            state.copy(unAttendMember = ArrayList(list))
         }
     }
 

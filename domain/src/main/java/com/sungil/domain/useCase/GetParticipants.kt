@@ -48,7 +48,26 @@ class GetParticipants @Inject constructor(
                         }
                         return Result.Fail("network error")
                     }
-
+                    400 ->{
+                        /**
+                         * TODO 가데이터 적용 배포 시 삭제
+                         */
+                        val sampleData = listOf(
+                            Participants(
+                                id = 1,
+                                nickName = "Assist"
+                            ),
+                            Participants(
+                                id = 2,
+                                nickName = "Assist2"
+                            ),
+                            Participants(
+                                id = 3,
+                                nickName = "Assist3"
+                            )
+                        )
+                        return Result.Success(sampleData)
+                    }
                     else -> return Result.Fail("network error")
                 }
             }

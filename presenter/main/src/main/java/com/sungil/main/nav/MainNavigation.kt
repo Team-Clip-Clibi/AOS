@@ -68,9 +68,9 @@ fun MainNavigation(
                 viewModel = viewModel
             )
         }
-        composable(MainView.REVIEW.route){
+        composable(MainView.REVIEW.route) {
             ReviewView(
-                onClose = {navController.popBackStack()},
+                onClose = { navController.popBackStack() },
                 viewModel = viewModel
             )
         }
