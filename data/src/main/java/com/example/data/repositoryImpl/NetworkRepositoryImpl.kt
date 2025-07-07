@@ -387,10 +387,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestUpdateToken(refreshToken: String): Triple<Int, String?, String?> {
         val result = api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
-        if (result.code() != 204) {
-            return Triple(result.code(), "", "")
-        }
-        return Triple(result.code(), result.body()?.accessToken, refreshToken)
+        return Triple(result.code() , result.body()?.accessToken ?: "", refreshToken)
     }
 
     override suspend fun requestOneThineNotification(accessToken: String): OneThineNotification {

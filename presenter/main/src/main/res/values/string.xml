@@ -129,4 +129,5 @@
     <string name="msg_re_login">로그인 기간 만료</string>
     <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
     <string name="msg_not_service">앗! 해당 서비스는 아직 개발중이에요</string>
+    <string name="msg_thank_you_message">소중한 의견 감사합니다.</string>
 </resources>

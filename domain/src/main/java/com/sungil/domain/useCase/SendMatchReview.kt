@@ -37,7 +37,7 @@ class SendMatchReview @Inject constructor(
             matchType = param.matchType,
             mood = param.mood,
             negativePoints = param.negativePoints,
-            noShowMembers = param.noShowMembers,
+            noShowMembers = if (param.allAttend) "" else param.noShowMembers,
             positivePoints = param.positivePoints,
             reviewContent = param.reviewContent
         )
@@ -55,7 +55,7 @@ class SendMatchReview @Inject constructor(
                             matchType = param.matchType,
                             mood = param.mood,
                             negativePoints = param.negativePoints,
-                            noShowMembers = param.noShowMembers,
+                            noShowMembers = if (param.allAttend) "" else param.noShowMembers,
                             positivePoints = param.positivePoints,
                             reviewContent = param.reviewContent
                         )
