@@ -1,5 +1,6 @@
 package com.sungil.domain.useCase
 
+import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.repository.DatabaseRepository
@@ -31,7 +32,7 @@ class SendMatchReview @Inject constructor(
     override suspend fun invoke(param: Param): Result {
         val token = database.getToken()
         val result = network.sendReviewData(
-            token = token.first,
+            token = TOKEN_FORM + token.first,
             allAttend = param.allAttend,
             matchId = param.matchId,
             matchType = param.matchType,
@@ -49,7 +50,7 @@ class SendMatchReview @Inject constructor(
                         if (!refreshToken) return Result.Fail("reLogin")
                         val newToken = database.getToken()
                         val reRequest = network.sendReviewData(
-                            token = newToken.first,
+                            token = TOKEN_FORM + newToken.first,
                             allAttend = param.allAttend,
                             matchId = param.matchId,
                             matchType = param.matchType,
