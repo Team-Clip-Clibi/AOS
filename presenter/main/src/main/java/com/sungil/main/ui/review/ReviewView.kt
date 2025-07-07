@@ -5,14 +5,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +34,8 @@ import com.sungil.main.ReviewIcon
 import com.sungil.main.component.ReviewImageView
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import com.example.core.AppTextStyles
 import com.sungil.main.AllAttend
 import com.sungil.main.REVIEW_DISAPPOINTED_BTN
@@ -38,7 +46,10 @@ import com.sungil.main.component.ReviewItemContent
 import com.sungil.main.component.ReviewTextField
 import com.example.core.ButtonCheckBoxLeftL
 import com.example.core.ButtonXXLPurple400
+import com.example.core.CustomSnackBar
 import com.sungil.domain.model.Participants
+import com.sungil.editprofile.ERROR_NETWORK
+import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.REVIEW_BEST_BTN
 import com.sungil.main.REVIEW_GOOD_BTN
 import com.sungil.main.REVIEW_NORMAL_BTN
@@ -54,9 +65,44 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
     val allAttend = uiState.allAttend
     val participantsState = uiState.participants
     val selectPerson = uiState.unAttendMember
+    val writeReview = uiState.writeReview
+    val snackBarHostState = remember { SnackbarHostState() }
     LaunchedEffect(participantsState) {
         if (participantsState is MainViewModel.UiState.Loading) {
             onClose()
+        }
+    }
+    val context = LocalContext.current
+    LaunchedEffect(writeReview) {
+        when (val result = writeReview) {
+            is MainViewModel.UiState.Error -> {
+                when (result.message) {
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    ERROR_RE_LOGIN -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        viewModel.initParticipants()
+                    }
+                }
+            }
+
+            is MainViewModel.UiState.Success -> {
+                snackBarHostState.showSnackbar(
+                    message = context.getString(R.string.msg_thank_you_message),
+                    duration = SnackbarDuration.Short
+                )
+                viewModel.initParticipants()
+            }
+
+            else -> Unit
         }
     }
     if (participantsState !is MainViewModel.UiState.Success) return
@@ -69,7 +115,22 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
                     viewModel.initParticipants()
                     onClose()
                 },
-                isNavigationShow = false
+                isNavigationShow = false,
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState,
+                snackbar = { data ->
+                    CustomSnackBar(data)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 17.dp,
+                        end = 16.dp,
+                        bottom = WindowInsets.navigationBars.asPaddingValues().calculateTopPadding() + 8.dp
+                    )
             )
         }
     ) { paddingValues ->
@@ -81,20 +142,20 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
                     top = paddingValues.calculateTopPadding() + 16.dp,
                     start = 17.dp,
                     end = 16.dp,
-                    bottom = paddingValues.calculateBottomPadding()
+                    bottom = paddingValues.calculateBottomPadding() + 8.dp
                 )
                 .verticalScroll(rememberScrollState())
         ) {
             TopView(viewModel = viewModel, review = review)
-            Spacer(modifier = Modifier.height(24.dp))
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = ColorStyle.GRAY_200
-            )
-            Spacer(modifier = Modifier.height(24.dp))
             when (review) {
                 REVIEW_DISAPPOINTED_BTN, REVIEW_SHAME_BTN -> {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        thickness = 1.dp,
+                        color = ColorStyle.GRAY_200
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
                     BadReviewView(
                         selectReviewButton = review,
                         selectItem = badItem,
@@ -109,6 +170,13 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
                 }
 
                 REVIEW_GOOD_BTN, REVIEW_NORMAL_BTN, REVIEW_BEST_BTN -> {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        thickness = 1.dp,
+                        color = ColorStyle.GRAY_200
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
                     GoodReview(
                         selectReviewButton = review,
                         selectItem = goodItem,
@@ -122,7 +190,7 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
                     )
                 }
             }
-            if (review != REVIEW_NORMAL_BTN) {
+            if (review != REVIEW_SELECT_NOTHING) {
                 Spacer(modifier = Modifier.height(20.dp))
                 WriteReview(
                     input = detail,
@@ -151,19 +219,18 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
                         Spacer(modifier = Modifier.height(22.dp))
                     }
                 }
+                ButtonXXLPurple400(
+                    buttonText = stringResource(R.string.btn_finish),
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        viewModel.sendReview(
+                            matchId = person.matchId,
+                            matchType = person.matchType
+                        )
+                    },
+                )
             }
         }
-        ButtonXXLPurple400(
-            buttonText = stringResource(R.string.btn_finish),
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                viewModel.sendReview(
-                    matchId = person.matchId,
-                    matchType = person.matchType
-                )
-            },
-            isEnable = review != REVIEW_SELECT_NOTHING
-        )
     }
 }
 
@@ -184,7 +251,7 @@ private fun TopView(viewModel: MainViewModel, review: Int) {
         Spacer(modifier = Modifier.height(32.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
+            horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally)
         ) {
             ReviewIcon.entries.forEach { data ->
                 ReviewImageView(
@@ -285,17 +352,24 @@ private fun AllMemberAttendView(viewModel: MainViewModel, selectItem: Boolean) {
             color = ColorStyle.GRAY_800
         )
         Spacer(modifier = Modifier.height(16.dp))
-        AllAttend.entries.forEach { data ->
-            ButtonCheckBoxLeftL(
-                content = stringResource(data.content),
-                isChecked = selectItem == data.value,
-                onCheckChange = { check ->
-                    viewModel.setAllAttend(check)
-                },
-                checkImageShow = false
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-        }
+        ButtonCheckBoxLeftL(
+            content = stringResource(AllAttend.ALL_ATTEND.content),
+            isChecked = selectItem == AllAttend.ALL_ATTEND.value,
+            onCheckChange = {
+                viewModel.setAllAttend(AllAttend.ALL_ATTEND.value)
+            },
+            checkImageShow = false
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        ButtonCheckBoxLeftL(
+            content = stringResource(AllAttend.NOT_ATTEND.content),
+            isChecked = selectItem == AllAttend.NOT_ATTEND.value,
+            onCheckChange = {
+                viewModel.setAllAttend(AllAttend.NOT_ATTEND.value)
+            },
+            checkImageShow = false
+        )
+        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 

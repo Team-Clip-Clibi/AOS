@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sungil.main.MainViewModel
@@ -17,6 +18,7 @@ import com.sungil.main.nav.MainNavigation
 
 @Composable
 fun MainScreenView(
+    navController : NavHostController,
     viewModel: MainViewModel,
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
@@ -28,7 +30,6 @@ fun MainScreenView(
     login: () -> Unit,
     guide: () -> Unit,
 ) {
-    val navController = rememberNavController()
     val bottomNavBottomViews = listOf(BottomView.Home, BottomView.Calendar, BottomView.MyPage)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route

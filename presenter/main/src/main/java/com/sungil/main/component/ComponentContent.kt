@@ -23,6 +23,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -772,29 +773,38 @@ fun ReviewImageView(
             .width(60.dp)
             .height(86.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            painter = painterResource(image),
-            contentDescription = content,
+        Box(
             modifier = Modifier
                 .size(40.dp)
                 .background(
                     color = ColorStyle.GRAY_200,
                     shape = RoundedCornerShape(size = 12.dp)
                 )
-                .padding(start = 9.5.dp, top = 10.dp, end = 10.5.dp, bottom = 10.dp)
                 .clickable { isClick() },
-            tint = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(image),
+                contentDescription = content,
+                tint = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(6.dp))
+
         Text(
             text = content,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_600
+            color = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_600,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
+
 
 
 @Composable
@@ -810,6 +820,7 @@ fun ReviewItemContent(
         Icon(
             painter = painterResource(com.example.core.R.drawable.ic_check),
             contentDescription = content,
+            tint = ColorStyle.WHITE_100,
             modifier = Modifier
                 .size(16.dp)
                 .background(
@@ -841,8 +852,7 @@ fun ReviewTextField(
         modifier = Modifier.fillMaxWidth()
             .height(152.dp)
             .background(color = ColorStyle.WHITE_100 , shape = RoundedCornerShape(12.dp))
-            .border(width = 1.dp, color = ColorStyle.GRAY_300, shape = RoundedCornerShape(size = 12.dp))
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
+            .border(width = 1.dp, color = ColorStyle.GRAY_300, shape = RoundedCornerShape(size = 12.dp)),
         singleLine = false,
         placeholder = {
             Text(
@@ -850,6 +860,19 @@ fun ReviewTextField(
                 style = AppTextStyles.BODY_14_20_MEDIUM,
                 color = ColorStyle.GRAY_500
             )
-        }
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = ColorStyle.WHITE_100,
+            unfocusedContainerColor = ColorStyle.WHITE_100,
+            disabledContainerColor = ColorStyle.WHITE_100,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = ColorStyle.GRAY_500,
+            cursorColor =ColorStyle.GRAY_800,
+            focusedPlaceholderColor = ColorStyle.GRAY_500,
+            unfocusedPlaceholderColor = ColorStyle.GRAY_500,
+            focusedTextColor = ColorStyle.GRAY_800,
+            unfocusedTextColor = ColorStyle.GRAY_800
+        )
     )
 }

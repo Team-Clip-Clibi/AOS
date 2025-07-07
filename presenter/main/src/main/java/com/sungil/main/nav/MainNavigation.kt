@@ -29,6 +29,7 @@ fun MainNavigation(
     guide: () -> Unit,
 ) {
     NavHost(navController = navController, startDestination = BottomView.Home.screenRoute) {
+
         composable(BottomView.Home.screenRoute) {
             HomeScreen(
                 viewModel = viewModel,
@@ -40,6 +41,7 @@ fun MainNavigation(
                 login = login
             )
         }
+
         composable(BottomView.Calendar.screenRoute) {
             MyMatchView(
                 viewModel = viewModel,
@@ -47,12 +49,16 @@ fun MainNavigation(
                 guide = guide,
                 matchDetail = { navController.navigate(MainView.MATCH_DETAIL.route) },
                 review = {
-                    navController.navigate(MainView.REVIEW.route)
+                    navController.navigate(MainView.REVIEW.route) {
+                        launchSingleTop = true
+                    }
                 })
         }
+
         composable(BottomView.MyPage.screenRoute) {
             MyPageScreen(viewModel, profileButtonClick, reportClick, lowClick)
         }
+
         composable(MainView.MATCH_DETAIL.route) {
             MeetDetailView(
                 onBack = { navController.popBackStack() },
@@ -62,17 +68,20 @@ fun MainNavigation(
                 }
             )
         }
+
         composable(MainView.PAY_DETAIL.route) {
             PayDetailView(
                 onBack = { navController.popBackStack() },
                 viewModel = viewModel
             )
         }
-        composable(MainView.REVIEW.route){
+
+        composable(MainView.REVIEW.route) {
             ReviewView(
-                onClose = {navController.popBackStack()},
+                onClose = { navController.popBackStack() },
                 viewModel = viewModel
             )
         }
+
     }
 }

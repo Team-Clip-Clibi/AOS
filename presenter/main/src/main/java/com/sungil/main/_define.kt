@@ -3,7 +3,7 @@ package com.sungil.main
 
 sealed class BottomView(val title: Int, val icon: Int = -1, val screenRoute: String) {
     data object Home : BottomView(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
-    data object Calendar : BottomView(R.string.nav_calendar, R.drawable.ic_calendar, NAV_CALENDAR)
+    data object Calendar : BottomView(R.string.nav_calendar, R.drawable.ic_calendar, MATCH)
     data object MyPage : BottomView(R.string.nav_my, R.drawable.ic_my, NAV_MY)
 }
 
@@ -82,9 +82,12 @@ const val REVIEW_GOOD_VALUE = "GOOD"
 const val REVIEW_BEST_VALUE = "EXCELLENT"
 
 enum class MatchStatus(val route: String, val label: String) {
-    MATCH_CANCEL("CANCELLED", "모임취소"),
-    MATCH_COMPLETED("COMPLETED", "신청완료"),
-    MATCH_CONFIRMED("CONFIRMED", "모임확정");
+    MATCH_CANCEL("CANCELLED", "취소"),
+    MATCH_COMPLETED("COMPLETED", "모임종료"),
+    MATCH_CONFIRMED("CONFIRMED", "매칭확정"),
+    MATCH_APPLIED("APPLIED" , "신청완료"),
+    MATCH_NO_SHOW("NO_SHOW" ,"노쇼"),
+    MATCH_WAIT_PAY("WAIT_FOR_PAY" , "결제대기");
 
     companion object {
         fun fromRoute(route: String): MatchStatus =
@@ -140,7 +143,7 @@ val bottomNavItems = listOf(
 )
 
 const val NAV_HOME = "home"
-const val NAV_CALENDAR = "calendar"
+const val MATCH = "match"
 const val NAV_MY = "my"
 const val NAV_GUIDE = "guide"
 const val NAV_EDIT_PROFILE = "MainEditProfile"
