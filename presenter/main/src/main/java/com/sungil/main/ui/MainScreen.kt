@@ -27,7 +27,6 @@ import com.sungil.main.BottomView
 import com.sungil.main.MainView
 import com.sungil.main.R
 import com.sungil.main.component.BottomNavigation
-import com.sungil.main.component.CustomHomeTopBar
 import com.sungil.main.component.HomeViewTopBar
 import com.sungil.main.nav.MainNavigation
 
