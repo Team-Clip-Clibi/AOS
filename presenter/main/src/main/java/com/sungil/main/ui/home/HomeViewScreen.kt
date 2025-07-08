@@ -52,7 +52,6 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun HomeViewScreen(
     viewModel: MainViewModel,
-    paddingValues: PaddingValues,
     snackBarHostState: SnackbarHostState,
     oneThingClick: () -> Unit,
     firstMatchClick: (String) -> Unit,

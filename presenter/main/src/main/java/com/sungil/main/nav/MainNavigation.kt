@@ -46,20 +46,10 @@ fun MainNavigation(
                     //TODO 출시 직전 구현 완료
                 },
                 oneThingClick = oneThingClick,
-                paddingValues = paddingValues,
                 randomMatchClick = randomMatchClick,
                 reLogin = login,
                 snackBarHostState = snackBarHostState
             )
-//            HomeViewScreen(
-//                viewModel = viewModel,
-//                alarmClick = alarmClick,
-//                notifyClick = {},
-//                oneThingMatchClick = oneThingClick,
-//                randomMatchClick = randomMatchClick,
-//                firstMatchClick = firstMatchClick,
-//                login = login
-//            )
         }
 
         composable(BottomView.Calendar.screenRoute) {
