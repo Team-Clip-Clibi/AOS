@@ -78,11 +78,11 @@
     <string name="txt_home_not_meeting">"아직 확정된 모임이 없어요.\n모임을 신청해 보세요!"</string>
     <string name="txt_home_sub_title">모임 신청</string>
     <string name="btn_home_oneThing">원띵 모임</string>
-    <string name="btn_home_oneThing_content">대화하고 싶은 단 하나의 주제가 있다면</string>
+    <string name="btn_home_oneThing_content">대화하고 싶은 나만의 주제를 나눠요</string>
     <string name="btn_home_random">랜덤 모임</string>
-    <string name="btn_home_random_content">주제없이 만나요</string>
+    <string name="btn_home_random_content">매주 월요일 7시</string>
     <string name="btn_home_light">번개 모임</string>
-    <string name="btn_home_light_content">오늘 만날 수 있어요</string>
+    <string name="btn_home_light_content">오픈 예정이에요</string>
     <string name="card_one_thing_title">원띵 모임</string>
     <string name="card_random_title">랜덤 모임</string>
     <!--MyMatch-->

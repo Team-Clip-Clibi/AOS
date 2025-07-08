@@ -68,7 +68,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun BottomNavigation(navController: NavHostController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,6 +81,7 @@ fun BottomNavigation(navController: NavHostController) {
                     strokeWidth = strokeWidth
                 )
             }
+            .navigationBarsPadding()
             .background(Color.White),
         contentAlignment = Alignment.TopCenter
     ) {
@@ -240,46 +240,36 @@ fun MyPageItem(text: String, icon: Int, click: () -> Unit) {
 }
 
 @Composable
-fun CustomHomeTopBar(
-    text: String,
-    bellImage: Int,
+fun HomeViewTopBar(
     click: () -> Unit,
+    image: Int,
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .height(48.dp)
-            .background(Color(0xFFF7F7F7))
-            .padding(horizontal = 17.dp),
-        contentAlignment = Alignment.CenterStart
+            .background(color = ColorStyle.GRAY_100)
+            .padding(start = 17.dp, end = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_logo_str),
-                contentDescription = "logo",
-                modifier = Modifier.size(
-                    width = 100.dp,
-                    height = 24.dp
-                )
+        Image(
+            painter = painterResource(id = R.drawable.ic_logo_str),
+            contentDescription = "logo",
+            modifier = Modifier.size(
+                width = 100.dp,
+                height = 24.dp
             )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = text,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color.Black
-            )
-            Spacer(Modifier.weight(1f))
-            Icon(
-                painter = painterResource(id = bellImage),
-                contentDescription = "알람",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable { click() }
-            )
-        }
+        )
+
+        Image(
+            painter = painterResource(id = image),
+            contentDescription = "알람",
+            modifier = Modifier
+                .size(24.dp)
+                .clickable { click() }
+        )
     }
 }
 
@@ -371,37 +361,6 @@ fun CustomNotifyBar(
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
-
-
-@Composable
-fun HomeTitleText(
-    text: String,
-    size: String = "",
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start,
-        modifier = Modifier
-            .padding(start = 17.dp, end = 16.dp)
-            .height(28.dp)
-    ) {
-        Text(
-            text = text,
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            color = Color(0xFF383838)
-        )
-
-        if (size.isNotEmpty()) {
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(
-                text = size,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF6700CE)
             )
         }
     }
@@ -594,11 +553,11 @@ fun CustomHomeButton(
     Button(
         modifier = modifier
             .height(84.dp)
-            .border(1.dp, Color(0xFFF7F7F7), shape = RoundedCornerShape(14.dp)),
+            .border(1.dp, ColorStyle.GRAY_100, shape = RoundedCornerShape(14.dp)),
         onClick = onClick,
         contentPadding = PaddingValues(horizontal = 0.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFFFFFF)
+            containerColor = ColorStyle.WHITE_100
         ),
         shape = RoundedCornerShape(14.dp)
     ) {
@@ -621,12 +580,12 @@ fun CustomHomeButton(
                 Text(
                     text = titleText,
                     style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                    color = Color(0xFF171717)
+                    color = ColorStyle.GRAY_800
                 )
                 Text(
                     text = contentText,
                     style = AppTextStyles.CAPTION_12_18_SEMI,
-                    color = Color(0xFF666666)
+                    color = ColorStyle.GRAY_600
                 )
             }
         }
@@ -849,10 +808,15 @@ fun ReviewTextField(
         onValueChange = { newText ->
             onValueChange(newText)
         },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .height(152.dp)
-            .background(color = ColorStyle.WHITE_100 , shape = RoundedCornerShape(12.dp))
-            .border(width = 1.dp, color = ColorStyle.GRAY_300, shape = RoundedCornerShape(size = 12.dp)),
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = ColorStyle.GRAY_300,
+                shape = RoundedCornerShape(size = 12.dp)
+            ),
         singleLine = false,
         placeholder = {
             Text(
