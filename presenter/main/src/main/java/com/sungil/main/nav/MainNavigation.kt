@@ -14,7 +14,7 @@ import com.sungil.main.MainView
 import com.sungil.main.ui.myMatch.MyMatchView
 import com.sungil.main.ui.home.HomeViewScreen
 import com.sungil.main.ui.matchDetail.MeetDetailView
-import com.sungil.main.ui.myPage.MyPageScreen
+import com.sungil.main.ui.myPage.MyPageViewScreen
 import com.sungil.main.ui.payDetail.PayDetailView
 import com.sungil.main.ui.review.ReviewView
 
@@ -66,7 +66,12 @@ fun MainNavigation(
         }
 
         composable(BottomView.MyPage.screenRoute) {
-            MyPageScreen(viewModel, profileButtonClick, reportClick, lowClick)
+            MyPageViewScreen(
+                viewModel = viewModel,
+                profileEdit = profileButtonClick,
+                reportClick = reportClick,
+                lowGuide = lowClick
+            )
         }
 
         composable(MainView.MATCH_DETAIL.route) {

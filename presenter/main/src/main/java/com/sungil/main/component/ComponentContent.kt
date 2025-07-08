@@ -168,6 +168,7 @@ fun CustomMainPageTopBar(text: String) {
         modifier = Modifier
             .background(color = ColorStyle.WHITE_100)
             .fillMaxWidth()
+            .statusBarsPadding()
             .height(48.dp)
             .padding(start = 17.dp, end = 12.dp),
         contentAlignment = Alignment.CenterStart
@@ -176,7 +177,7 @@ fun CustomMainPageTopBar(text: String) {
             text = text,
             modifier = Modifier.fillMaxWidth(),
             style = AppTextStyles.TITLE_20_28_SEMI,
-            color = Color(0xFF000000)
+            color = ColorStyle.GRAY_800
         )
     }
 }

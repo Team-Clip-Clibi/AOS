@@ -27,6 +27,7 @@ import com.sungil.main.BottomView
 import com.sungil.main.MainView
 import com.sungil.main.R
 import com.sungil.main.component.BottomNavigation
+import com.sungil.main.component.CustomMainPageTopBar
 import com.sungil.main.component.HomeViewTopBar
 import com.sungil.main.nav.MainNavigation
 
@@ -82,6 +83,9 @@ fun MainScreenView(
                             alarmClick()
                         }
                     )
+                }
+                BottomView.MyPage.screenRoute ->{
+                    CustomMainPageTopBar(text = stringResource(R.string.nav_my))
                 }
             }
         },
