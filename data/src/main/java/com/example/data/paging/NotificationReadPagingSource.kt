@@ -32,7 +32,7 @@ class NotificationReadPagingSource @Inject constructor(
             when (response.code()) {
                 200 -> response.toLoadResult()
                 401 -> {
-                    val refreshResponse = api.requestRefreshToken(refreshToken)
+                    val refreshResponse = api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
 
                     when {
                         !refreshResponse.isSuccessful -> {

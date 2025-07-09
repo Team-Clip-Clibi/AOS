@@ -63,6 +63,8 @@ class NetworkLibraryPlugin : Plugin<Project> {
                 val matchOverView: String = properties.getProperty("matchOverView", "")
                 val notifyUpdate: String = properties.getProperty("notifyUpdate", "")
                 val matchList: String = properties.getProperty("matchings", "")
+                val matchNotice : String = properties.getProperty("matchNotice", "")
+                val review : String = properties.getProperty("review","")
 
                 buildConfigField("String", "BASE_URL", baseUrl)
                 buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -96,6 +98,8 @@ class NetworkLibraryPlugin : Plugin<Project> {
                 buildConfigField("String", "MATCH_OVERVIEW_URL", matchOverView)
                 buildConfigField("String", "NOTIFY_UPDATE_URL", notifyUpdate)
                 buildConfigField("String", "MATCH_ING_URL", matchList)
+                buildConfigField("String", "MATCH_NOTICE_URL", matchNotice)
+                buildConfigField("String" , "MATCH_REVIEW_URL" ,review)
             }
             buildFeatures.buildConfig = true
             compileOptions {

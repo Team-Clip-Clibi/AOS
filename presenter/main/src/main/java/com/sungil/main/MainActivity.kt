@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.navigation.compose.rememberNavController
 import com.sungil.domain.model.Router
 import com.sungil.main.ui.MainScreenView
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,7 +19,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             MainScreenView(
+                navController = navController,
                 viewModel = viewModel,
                 profileButtonClick = { router.navigation(NAV_EDIT_PROFILE) },
                 reportClick = { router.navigation(NAV_REPORT) },
@@ -32,7 +35,8 @@ class MainActivity : ComponentActivity() {
                     router.navigation(NAV_FIRST_MATCH, bundle)
                 },
                 randomMatchClick = { router.navigation(NAV_RANDOM_MATCH) },
-                login = { router.navigation(NAV_LOGIN) }
+                login = { router.navigation(NAV_LOGIN) },
+                guide = { router.navigation(NAV_GUIDE) }
             )
         }
     }

@@ -3,19 +3,29 @@ package com.sungil.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.OneThineNotify
+import com.sungil.domain.model.Participants
 import com.sungil.domain.model.UserData
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFirstMatchInput
 import com.sungil.domain.useCase.GetLatestMatch
 import com.sungil.domain.useCase.GetMatch
+import com.sungil.domain.useCase.GetMatchDetail
+import com.sungil.domain.useCase.GetMatchNotice
+import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
+import com.sungil.domain.useCase.GetParticipants
 import com.sungil.domain.useCase.GetUserInfo
+import com.sungil.domain.useCase.SendLateMatch
+import com.sungil.domain.useCase.SendMatchReview
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,10 +42,33 @@ class MainViewModel @Inject constructor(
     private val banner: GetBanner,
     private val firstMatch: GetFirstMatchInput,
     private val latestDay: GetLatestMatch,
+    private val matching: GetMatchingData,
+    private val matchDetail: GetMatchDetail,
+    private val matchNotice: GetMatchNotice,
+    private val sendLate: SendLateMatch,
+    private val sendReview: SendMatchReview,
+    private val participants: GetParticipants,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
     val userState: StateFlow<MainViewState> = _userState.asStateFlow()
+
+    val matchAllData = matching.invoke(matchingStatus = MATCH_KEY_ALL, lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+    val matchApplied = matching.invoke(matchingStatus = MATCH_KEY_APPLIED, lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+    val matchConfirmed = matching.invoke(matchingStatus = MATCH_KEY_CONFIRMED, lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+    val matchComplete = matching.invoke(matchingStatus = MATCH_KEY_COMPLETED, lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+    val matchCancelled = matching.invoke(matchingStatus = MATCH_KEY_CANCELLED, lastMeetingTime = "")
+        .cachedIn(viewModelScope)
+
+    val notice = matchNotice.invoke(lastTime = "")
+        .cachedIn(viewModelScope)
+
+    private var _matchButton = MutableStateFlow(0)
+    val matchButton: StateFlow<Int> = _matchButton.asStateFlow()
 
     init {
         requestUserInfo()
@@ -50,14 +83,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = userInfo.invoke()) {
                 is GetUserInfo.Result.Success -> {
-                    _userState.update {
-                        it.copy(userDataState = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(userDataState = UiState.Success(result.data))
                     }
                 }
 
                 is GetUserInfo.Result.Fail -> {
-                    _userState.update {
-                        it.copy(userDataState = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(userDataState = UiState.Error(result.errorMessage))
                     }
                 }
             }
@@ -68,15 +101,15 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = oneThingNotify.invoke()) {
                 is GetNewNotification.Result.Fail -> {
-                    _userState.update {
-                        it.copy(oneThingState = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(oneThingState = UiState.Error(result.errorMessage))
                     }
 
                 }
 
                 is GetNewNotification.Result.Success -> {
-                    _userState.update {
-                        it.copy(oneThingState = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(oneThingState = UiState.Success(result.data))
                     }
                 }
             }
@@ -87,14 +120,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = notify.invoke()) {
                 is GetNotification.Result.Fail -> {
-                    _userState.update {
-                        it.copy(notificationResponseState = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(notificationResponseState = UiState.Error(result.errorMessage))
                     }
                 }
 
                 is GetNotification.Result.Success -> {
-                    _userState.update {
-                        it.copy(notificationResponseState = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(notificationResponseState = UiState.Success(result.data))
                     }
                 }
             }
@@ -105,14 +138,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = match.invoke()) {
                 is GetMatch.Result.Fail -> {
-                    _userState.update {
-                        it.copy(matchState = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(matchState = UiState.Error(result.errorMessage))
                     }
                 }
 
                 is GetMatch.Result.Success -> {
-                    _userState.update {
-                        it.copy(matchState = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(matchState = UiState.Success(result.data))
                     }
                 }
             }
@@ -123,14 +156,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = latestDay.invoke()) {
                 is GetLatestMatch.Result.Fail -> {
-                    _userState.update { current ->
-                        current.copy(latestDay = UiState.Error(result.errorMessage))
+                    _userState.update { state ->
+                        state.copy(latestDay = UiState.Error(result.errorMessage))
                     }
                 }
 
                 is GetLatestMatch.Result.Success -> {
-                    _userState.update { current ->
-                        current.copy(
+                    _userState.update { state ->
+                        state.copy(
                             latestDay = UiState.Success(
                                 LatestDayInfo(
                                     time = result.time,
@@ -149,14 +182,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = banner.invoke(GetBanner.Param("HOME"))) {
                 is GetBanner.Result.Fail -> {
-                    _userState.update {
-                        it.copy(banner = UiState.Error(result.message))
+                    _userState.update { state ->
+                        state.copy(banner = UiState.Error(result.message))
                     }
                 }
 
                 is GetBanner.Result.Success -> {
-                    _userState.update {
-                        it.copy(banner = UiState.Success(result.data))
+                    _userState.update { state ->
+                        state.copy(banner = UiState.Success(result.data))
                     }
                 }
             }
@@ -167,18 +200,205 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (firstMatch.invoke()) {
                 is GetFirstMatchInput.Result.Success -> {
-                    _userState.update {
-                        it.copy(
+                    _userState.update { state ->
+                        state.copy(
                             firstMatch = UiState.Success(orderType)
                         )
                     }
                 }
 
                 is GetFirstMatchInput.Result.Fail -> {
-                    _userState.update {
-                        it.copy(
+                    _userState.update { state ->
+                        state.copy(
                             firstMatch = UiState.Error(orderType)
                         )
+                    }
+                }
+            }
+        }
+    }
+
+    fun matchDetail(matchId: Int, matchType: String) {
+        viewModelScope.launch {
+            when (val result = matchDetail.invoke(
+                GetMatchDetail.Param(
+                    matchId = matchId,
+                    matchType = matchType
+                )
+            )) {
+                is GetMatchDetail.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(matchDetail = UiState.Success(result.matchDetail))
+                    }
+                }
+
+                is GetMatchDetail.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(matchDetail = UiState.Error(result.errorMessage))
+                    }
+                }
+            }
+        }
+    }
+
+    fun sendLate(matchType: String, lateTime: Int, matchId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = sendLate.invoke(
+                SendLateMatch.Param(
+                    id = matchId,
+                    lateTime = lateTime,
+                    matchType = matchType
+                )
+            )) {
+                is SendLateMatch.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(matchLate = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is SendLateMatch.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(
+                            matchLate = UiState.Success(
+                                MatchLate(
+                                    matchId = result.id,
+                                    time = result.lateTime
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun getParticipants(matchId: Int, matchType: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = participants.invoke(
+                GetParticipants.Param(
+                    matchId = matchId,
+                    matchType = matchType
+                )
+            )) {
+                is GetParticipants.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(participants = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is GetParticipants.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(participants = UiState.Success(Participant(
+                            person = result.person,
+                            matchId = matchId,
+                            matchType = matchType
+                        )))
+                    }
+                }
+            }
+        }
+    }
+
+    fun initParticipants(){
+        _userState.update { state ->
+            state.copy(participants = UiState.Loading)
+        }
+    }
+
+    fun setReviewItem(buttonNumber: Int) {
+        _userState.update { state ->
+            state.copy(reviewButton = buttonNumber)
+        }
+    }
+
+    fun setBadItem(data: String) {
+        val currentItem = _userState.value
+        val currentList = currentItem.badReviewItem.toMutableList()
+        if (currentList.contains(data)) {
+            currentList.remove(data)
+        } else {
+            currentList.add(data)
+        }
+        _userState.update { state ->
+            state.copy(badReviewItem = ArrayList(currentList))
+        }
+    }
+
+    fun setGoodItem(data: String) {
+        val currentItem = _userState.value
+        val list = currentItem.goodReviewItem.toMutableList()
+        if (list.contains(data)) {
+            list.remove(data)
+        } else {
+            list.add(data)
+        }
+        _userState.update { state ->
+            state.copy(goodReviewItem = ArrayList(list))
+        }
+    }
+
+    fun reviewDetail(data: String) {
+        _userState.update { state ->
+            state.copy(reviewDetail = data)
+        }
+    }
+
+    fun setAllAttend(data: Boolean) {
+        _userState.update { state ->
+            state.copy(allAttend = data)
+        }
+    }
+
+    fun setMatchButton(index: Int) {
+        _matchButton.value = index
+    }
+
+    fun setMatchDetailInit() {
+        _userState.update { state ->
+            state.copy(matchDetail = UiState.Loading)
+        }
+    }
+
+    fun setUnAttendMember(data : String){
+        val currentItem = _userState.value
+        val list = currentItem.unAttendMember.toMutableList()
+        if (list.contains(data)) {
+            list.remove(data)
+        } else {
+            list.add(data)
+        }
+        _userState.update { state ->
+            state.copy(unAttendMember = ArrayList(list))
+        }
+    }
+
+    fun sendReview(matchId: Int, matchType: String) {
+        val state = _userState.value
+        val reviewButton = ReviewIcon.fromButtonInt(state.reviewButton)
+        val badReviewItem = state.badReviewItem.joinToString(separator = ", ")
+        val goodReviewItem = state.goodReviewItem.joinToString(separator = ", ")
+        val reviewDetail = state.reviewDetail
+        val allAttend = state.allAttend
+        val unAttendMember = state.unAttendMember.joinToString(separator = ", ")
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val result = sendReview.invoke(SendMatchReview.Param(
+                allAttend = allAttend,
+                matchType = matchType,
+                matchId = matchId,
+                mood = reviewButton,
+                negativePoints = badReviewItem,
+                noShowMembers = unAttendMember,
+                positivePoints = goodReviewItem,
+                reviewContent = reviewDetail
+            ))){
+                is SendMatchReview.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(writeReview = UiState.Error(result.errorMessage))
+                    }
+                }
+                is SendMatchReview.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(writeReview = UiState.Success(result.matchId))
                     }
                 }
             }
@@ -199,11 +419,29 @@ class MainViewModel @Inject constructor(
         val matchState: UiState<MatchData> = UiState.Loading,
         val firstMatch: UiState<String> = UiState.Loading,
         val latestDay: UiState<LatestDayInfo> = UiState.Loading,
+        val matchDetail: UiState<MatchDetail> = UiState.Loading,
+        val matchLate: UiState<MatchLate> = UiState.Loading,
+        val participants: UiState<Participant> = UiState.Loading,
+        val reviewButton: Int = REVIEW_SELECT_NOTHING,
+        val badReviewItem: ArrayList<String> = arrayListOf(),
+        val goodReviewItem: ArrayList<String> = arrayListOf(),
+        val reviewDetail: String = "",
+        val allAttend: Boolean = true,
+        val unAttendMember: ArrayList<String> = arrayListOf(),
+        val writeReview : UiState<Int> = UiState.Loading
     )
 
 }
-
+data class Participant(
+    val person : List<Participants>,
+    val matchId : Int,
+    val matchType: String
+)
 data class LatestDayInfo(
     val time: String, val applyTime: Int, val confirmTime: Int,
 )
 
+data class MatchLate(
+    val time: Int,
+    val matchId: Int,
+)

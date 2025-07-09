@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="top_meet_guide">모임 가이드</string>
+    <!-- 모임 준비  -->
+    <string name="guide_ready_title">모임준비</string>
+    <string name="guide_ready_title_first">프로필 최신화</string>
+    <string name="guide_ready_content_first">프로필 최신화 모임 전, 프로필 사진과 기본 정보를 최신 상태로 업데이트해 주세요.</string>
+    <string name="guide_ready_title_sec">연락처 확인</string>
+    <string name="guide_ready_content_sec">연락처 확인 원활한 소통을 위해 이메일 및 전화번호가 정확한지 확인해 주세요.</string>
+    <string name="guide_ready_title_third">복장 및 매너</string>
+    <string name="guide_ready_content_third">단정하고 편안한 복장으로 참석해 주세요.모든 참가자와 상호 존중하는 태도로 모임에 임해 주시기를 바랍니다.</string>
+    <!-- 모임 중 행동 수칙  -->
+    <string name="guide_rule_title">모임 중 행동 수칙</string>
+    <string name="guide_rule_title_first">존중과 배려</string>
+    <string name="guide_rule_content_first">모든 참석자는 서로의 다양성을 존중하고, 진솔한 소통을 나누어야 합니다.</string>
+    <string name="guide_rule_title_sec">정시 참석</string>
+    <string name="guide_rule_content_sec">예약된 시간에 반드시 참석해 주시고, 부득이한 경우 미리 취소해 주세요.</string>
+    <string name="guide_rule_title_third">부적절한 콘텐츠 금지</string>
+    <string name="guide_rule_content_third">노골적이거나 외설적, 성적으로 부적절한 이미지나 발언은 삼가해 주세요</string>
+    <string name="guide_rule_title_last">괴롭힘 및 학대 금지</string>
+    <string name="guide_rule_content_last">타인을 모욕하거나 위협, 괴롭히는 행위는 허용되지 않습니다.</string>
+    <!-- 유의사항   -->
+    <string name="guide_note_title">모임 관련 유의사항</string>
+    <string name="guide_note_title_first">취소 및 노쇼 정책</string>
+    <string name="guide_note_content_first">예약 취소는 정해진 기한 내에 진행해 주시기를 바랍니다. 취소 기한을 넘긴 취소는 환불이 어려울 수 있으며, 무단 결석(노쇼)이 반복될 경우 계정 제한 조치가 적용될 수 있습니다.</string>
+    <string name="guide_note_title_sec">문제 발생 시 신고</string>
+    <string name="guide_note_content_sec">모임 중 불편한 상황이나 가이드라인 위반 사항이 발생하면, 즉시 고객 지원(이메일주소), 전화(원띵전화번호)로 신고해 주세요.</string>
+    <!-- 추가 안내   -->
+    <string name="guide_additional_title">추가 안내 및 문의</string>
+    <string name="guide_additional_title_first">최신 정보 및 변경 사항</string>
+    <string name="guide_additional_content_first">모임 전, 최신 정보 및 변경 사항은 원띵 웹사이트 및 모바일 앱에서 확인해 주세요.</string>
+    <string name="guide_additional_title_sec">기타 문의 사항</string>
+    <string name="guide_additional_content_sec">기타 문의 사항은 고객 지원팀(이메일주소), 전화(원띵전화번호)로 연락 주시기를 바랍니다.</string>
+
+</resources>

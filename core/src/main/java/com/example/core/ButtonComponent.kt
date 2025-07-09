@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
+
 @Composable
 fun ButtonXXLPurple400(
     onClick: () -> Unit,
@@ -123,6 +125,7 @@ fun ButtonCheckBoxLeftL(
     content: String,
     isChecked: Boolean,
     onCheckChange: (Boolean) -> Unit,
+    checkImageShow : Boolean = true
 ) {
     val shape = RoundedCornerShape(8.dp)
     val borderColor = if (isChecked) ColorStyle.PURPLE_200 else Color.Transparent
@@ -145,11 +148,13 @@ fun ButtonCheckBoxLeftL(
             .clickable { onCheckChange(!isChecked) },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CircularCheckBoxLarge(
-            checked = isChecked,
-            onCheckChange = onCheckChange
-        )
-        Spacer(modifier = Modifier.width(14.dp))
+        if(checkImageShow){
+            CircularCheckBoxLarge(
+                checked = isChecked,
+                onCheckChange = onCheckChange
+            )
+            Spacer(modifier = Modifier.width(14.dp))
+        }
         Text(
             text = content,
             style = AppTextStyles.BODY_14_20_MEDIUM,
@@ -284,6 +289,103 @@ fun ButtonSmall(
                 true -> ColorStyle.PURPLE_400
                 false -> ColorStyle.GRAY_800
             }
+        )
+    }
+}
+
+@Composable
+fun ButtonL(
+    text: String,
+    isEnable: Boolean = true,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            when (isEnable) {
+                true -> ColorStyle.PURPLE_400
+                false -> ColorStyle.GRAY_300
+            }
+        ),
+        onClick = onClick,
+        enabled = isEnable
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = when (isEnable) {
+                true -> ColorStyle.WHITE_100
+                false -> ColorStyle.GRAY_800
+            }
+        )
+    }
+}
+
+@Composable
+fun ButtonLWhite(
+    text: String,
+    isEnable: Boolean = true,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .border(
+                width = 1.dp,
+                color = ColorStyle.GRAY_300,
+                shape = RoundedCornerShape(size = 8.dp)
+            ),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            ColorStyle.WHITE_100
+        ),
+        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
+        onClick = onClick,
+        enabled = isEnable
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color =  ColorStyle.GRAY_800
+        )
+    }
+}
+
+@Composable
+fun ButtonLargeCustom(
+    text: String,
+    isEnable: Boolean = true,
+    modifier: Modifier = Modifier,
+    buttonColor: Color,
+    onClick: () -> Unit,
+    textColor: Color,
+) {
+    Button(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            buttonColor
+        ),
+        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
+        onClick = onClick,
+        enabled = isEnable
+    ) {
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = textColor
         )
     }
 }

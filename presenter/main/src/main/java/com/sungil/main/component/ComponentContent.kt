@@ -22,6 +22,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,7 +41,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,8 +50,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.sungil.domain.CATEGORY
@@ -58,14 +61,13 @@ import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.NotificationData
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
-import com.sungil.main.Screen
+import com.sungil.main.BottomView
 import com.sungil.main.bottomNavItems
 import kotlinx.coroutines.delay
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -79,6 +81,7 @@ fun BottomNavigation(navController: NavHostController) {
                     strokeWidth = strokeWidth
                 )
             }
+            .navigationBarsPadding()
             .background(Color.White),
         contentAlignment = Alignment.TopCenter
     ) {
@@ -112,7 +115,7 @@ fun BottomNavigation(navController: NavHostController) {
 
 @Composable
 fun BottomNavItem(
-    item: Screen,
+    item: BottomView,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -165,6 +168,7 @@ fun CustomMainPageTopBar(text: String) {
         modifier = Modifier
             .background(color = ColorStyle.WHITE_100)
             .fillMaxWidth()
+            .statusBarsPadding()
             .height(48.dp)
             .padding(start = 17.dp, end = 12.dp),
         contentAlignment = Alignment.CenterStart
@@ -173,7 +177,7 @@ fun CustomMainPageTopBar(text: String) {
             text = text,
             modifier = Modifier.fillMaxWidth(),
             style = AppTextStyles.TITLE_20_28_SEMI,
-            color = Color(0xFF000000)
+            color = ColorStyle.GRAY_800
         )
     }
 }
@@ -237,46 +241,36 @@ fun MyPageItem(text: String, icon: Int, click: () -> Unit) {
 }
 
 @Composable
-fun CustomHomeTopBar(
-    text: String,
-    bellImage: Int,
+fun HomeViewTopBar(
     click: () -> Unit,
+    image: Int,
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .height(48.dp)
-            .background(Color(0xFFF7F7F7))
-            .padding(horizontal = 17.dp),
-        contentAlignment = Alignment.CenterStart
+            .background(color = ColorStyle.GRAY_100)
+            .padding(start = 17.dp, end = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_logo_str),
-                contentDescription = "logo",
-                modifier = Modifier.size(
-                    width = 100.dp,
-                    height = 24.dp
-                )
+        Image(
+            painter = painterResource(id = R.drawable.ic_logo_str),
+            contentDescription = "logo",
+            modifier = Modifier.size(
+                width = 100.dp,
+                height = 24.dp
             )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = text,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color.Black
-            )
-            Spacer(Modifier.weight(1f))
-            Icon(
-                painter = painterResource(id = bellImage),
-                contentDescription = "알람",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable { click() }
-            )
-        }
+        )
+
+        Image(
+            painter = painterResource(id = image),
+            contentDescription = "알람",
+            modifier = Modifier
+                .size(24.dp)
+                .clickable { click() }
+        )
     }
 }
 
@@ -368,37 +362,6 @@ fun CustomNotifyBar(
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
-
-
-@Composable
-fun HomeTitleText(
-    text: String,
-    size: String = "",
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start,
-        modifier = Modifier
-            .padding(start = 17.dp, end = 16.dp)
-            .height(28.dp)
-    ) {
-        Text(
-            text = text,
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            color = Color(0xFF383838)
-        )
-
-        if (size.isNotEmpty()) {
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(
-                text = size,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF6700CE)
             )
         }
     }
@@ -591,11 +554,11 @@ fun CustomHomeButton(
     Button(
         modifier = modifier
             .height(84.dp)
-            .border(1.dp, Color(0xFFF7F7F7), shape = RoundedCornerShape(14.dp)),
+            .border(1.dp, ColorStyle.GRAY_100, shape = RoundedCornerShape(14.dp)),
         onClick = onClick,
         contentPadding = PaddingValues(horizontal = 0.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFFFFFF)
+            containerColor = ColorStyle.WHITE_100
         ),
         shape = RoundedCornerShape(14.dp)
     ) {
@@ -618,12 +581,12 @@ fun CustomHomeButton(
                 Text(
                     text = titleText,
                     style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                    color = Color(0xFF171717)
+                    color = ColorStyle.GRAY_800
                 )
                 Text(
                     text = contentText,
                     style = AppTextStyles.CAPTION_12_18_SEMI,
-                    color = Color(0xFF666666)
+                    color = ColorStyle.GRAY_600
                 )
             }
         }
@@ -631,7 +594,6 @@ fun CustomHomeButton(
 }
 
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun AutoSlidingBanner(
     image: List<BannerData>,
@@ -667,11 +629,14 @@ fun AutoSlidingBanner(
             modifier = Modifier
                 .fillMaxWidth()
         ) { page ->
-            GlideImage(
-                model = image[page].image,
+            val context = LocalContext.current
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(image[page].image)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = "banner",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(width = 393.dp , height = 109.dp)
+                modifier = Modifier.fillMaxWidth()
             )
         }
         PageIndicator(
@@ -729,5 +694,150 @@ fun Indicator(
             .aspectRatio(1f)
             .clip(CircleShape)
             .background(if (isSelected) selectedColor else defaultColor)
+    )
+}
+
+@Composable
+fun SmallButton(
+    text: String,
+    onClick: () -> Unit,
+    isClick: Boolean,
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.height(30.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isClick) ColorStyle.PURPLE_400 else ColorStyle.WHITE_100,
+            contentColor = if (isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_600
+        ),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+    ) {
+        Text(
+            text = text,
+            style = AppTextStyles.CAPTION_12_18_SEMI,
+            color = if (isClick) ColorStyle.WHITE_100 else ColorStyle.GRAY_600
+        )
+    }
+}
+
+@Composable
+fun ReviewImageView(
+    image: Int,
+    content: String,
+    isSelect: Boolean,
+    isClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .width(60.dp)
+            .height(86.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(
+                    color = ColorStyle.GRAY_200,
+                    shape = RoundedCornerShape(size = 12.dp)
+                )
+                .clickable { isClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(image),
+                contentDescription = content,
+                tint = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(
+            text = content,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_600,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+
+
+@Composable
+fun ReviewItemContent(
+    isClick: () -> Unit,
+    isSelect: Boolean,
+    content: String,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Icon(
+            painter = painterResource(com.example.core.R.drawable.ic_check),
+            contentDescription = content,
+            tint = ColorStyle.WHITE_100,
+            modifier = Modifier
+                .size(16.dp)
+                .background(
+                    color = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400,
+                    shape = RoundedCornerShape(size = 4.dp)
+                )
+                .padding(start = 2.dp, top = 2.dp, end = 2.dp, bottom = 2.dp)
+                .clickable { isClick() }
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(
+            text = content,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            color = ColorStyle.GRAY_700
+        )
+    }
+}
+
+@Composable
+fun ReviewTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    TextField(
+        value = value,
+        onValueChange = { newText ->
+            onValueChange(newText)
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(152.dp)
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = ColorStyle.GRAY_300,
+                shape = RoundedCornerShape(size = 12.dp)
+            ),
+        singleLine = false,
+        placeholder = {
+            Text(
+                text = stringResource(R.string.review_detail_hint),
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_500
+            )
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = ColorStyle.WHITE_100,
+            unfocusedContainerColor = ColorStyle.WHITE_100,
+            disabledContainerColor = ColorStyle.WHITE_100,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = ColorStyle.GRAY_500,
+            cursorColor =ColorStyle.GRAY_800,
+            focusedPlaceholderColor = ColorStyle.GRAY_500,
+            unfocusedPlaceholderColor = ColorStyle.GRAY_500,
+            focusedTextColor = ColorStyle.GRAY_800,
+            unfocusedTextColor = ColorStyle.GRAY_800
+        )
     )
 }

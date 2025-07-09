@@ -28,19 +28,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.sungil.domain.model.BannerData
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun LoginPager(
     state: PagerState,
@@ -83,12 +83,14 @@ fun LoginPager(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    GlideImage(
-                        model = data[page].image,
+                    val context = LocalContext.current
+                    AsyncImage(
+                        model = ImageRequest.Builder(context)
+                            .data(data[page].image)
+                            .crossfade(true)
+                            .build(),
                         contentDescription = data[page].headText,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(230.dp)
-
+                        modifier = Modifier.size(200.dp)
                     )
                     Spacer(modifier = Modifier.height(40.dp))
                     Text(

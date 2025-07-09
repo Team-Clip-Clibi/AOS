@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -35,7 +36,7 @@ fun TopAppBarNumber(
                 text = title,
                 style = AppTextStyles.TITLE_20_28_SEMI,
                 textAlign = TextAlign.Center,
-                color = Color(0xFF000000)
+                color = ColorStyle.GRAY_800
             )
         },
         navigationIcon = {
@@ -73,6 +74,7 @@ fun TopAppBarWithCloseButton(
     CenterAlignedTopAppBar(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .border(width = 1.dp, color = ColorStyle.GRAY_200),
         title = {
             Text(

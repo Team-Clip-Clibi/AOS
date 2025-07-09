@@ -129,6 +129,7 @@ class ApplicationConventionPlugin : Plugin<Project> {
                 ":presenter:main:first_match",
                 ":presenter:main:random",
                 ":presenter:pay_finish",
+                ":presenter:main:guide",
                 ":kakao",
                 ":domain",
                 ":database",

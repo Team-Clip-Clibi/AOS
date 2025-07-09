@@ -7,13 +7,17 @@ import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchDetail
+import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.RandomInfo
 import com.sungil.domain.model.NetworkResult
+import com.sungil.domain.model.Participants
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import kotlinx.coroutines.flow.Flow
@@ -138,4 +142,43 @@ interface NetworkRepository {
         isAllowNotify: Boolean,
     ): Int
 
+    fun requestMatchingData(
+        matchStatus : String,
+        lastTime : String
+    ) : Flow<PagingData<MatchingData>>
+
+    fun requestMatchNotice(
+        lastTime: String,
+    ): Flow<PagingData<MatchNotice>>
+
+    suspend fun requestMatchDetail(
+        token: String,
+        matchingId: Int,
+        matchType : String
+    ): NetworkResult<MatchDetail>
+
+    suspend fun sendLateMatch(
+        token: String,
+        matchId: Int,
+        matchType: String,
+        lateTime : Int
+    ): NetworkResult<Int>
+
+    suspend fun sendReviewData(
+        token : String,
+        mood: String,
+        positivePoints : String,
+        negativePoints : String,
+        reviewContent : String,
+        noShowMembers : String,
+        allAttend : Boolean,
+        matchId : Int,
+        matchType: String
+    ) : NetworkResult<Int>
+
+    suspend fun requestParticipants(
+        token: String,
+        matchId: Int,
+        matchType: String,
+    ) : NetworkResult<List<Participants>>
 }

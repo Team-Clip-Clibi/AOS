@@ -124,7 +124,7 @@ class LoginViewModel @Inject constructor(
     }
     private fun setPermissionCheck(){
         viewModelScope.launch {
-            when(val message = setPermission.invoke(SetPermissionCheck.Param(key = BuildConfig.NOTIFY_PERMISSION_KEY , data = false))){
+            when(val message = setPermission.invoke(SetPermissionCheck.Param(key = BuildConfig.NOTIFY_PERMISSION_KEY , data = true))){
                 is SetPermissionCheck.Result.Success -> {
                     _actionFlow.update { current ->
                         current.copy(notification = UiState.Success(message.message))
@@ -158,7 +158,7 @@ class LoginViewModel @Inject constructor(
 
                 is UpdateAndSaveToken.Result.Fail -> {
                     _actionFlow.update { current ->
-                        current.copy(fcmToken = UiState.Error(ERROR_FCM_TOKEN))
+                        current.copy(fcmToken = UiState.Error(saveFcm.errorMessage))
                     }
                 }
             }

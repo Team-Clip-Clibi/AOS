@@ -49,10 +49,10 @@ internal fun SplashScreen(
             is LoginViewModel.UiState.Success -> {
                 when(result.data){
                     true ->{
-                        notification()
+                        viewModel.getToken()
                     }
                     false -> {
-                        viewModel.getToken()
+                        notification()
                     }
                 }
             }
@@ -91,12 +91,19 @@ internal fun SplashScreen(
         }
     }
     LaunchedEffect(uiState.fcmToken) {
-        when (uiState.fcmToken) {
+        when (val fcmToken = uiState.fcmToken) {
             is LoginViewModel.UiState.Error -> {
-                snackBarHostState.showSnackbar(
-                    message = context.getString(R.string.msg_app_error_fcm),
-                    duration = SnackbarDuration.Short
-                )
+                when(fcmToken.error){
+                    ERROR_RE_LOGIN -> {
+                        viewModel.banner()
+                    }
+                    else -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_app_error_fcm),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
             }
 
             is LoginViewModel.UiState.Success -> {
