@@ -6,7 +6,7 @@ import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
-import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
@@ -91,7 +91,7 @@ interface NetworkRepository {
 
     suspend fun requestMatchingData(
         accessToken: String,
-    ): Match
+    ): NetworkResult<MatchData>
 
     suspend fun requestUpdateToken(
         refreshToken: String,

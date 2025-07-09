@@ -4,24 +4,22 @@ import android.app.Activity
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.data.mapper.toMatchData
 import com.example.data.paging.MatchNoticePagingSource
 import com.example.data.paging.MatchPagingSource
 import com.example.data.paging.NotificationPagingSource
 import com.example.data.paging.NotificationReadPagingSource
 import com.example.fcm.FirebaseFCM
 import com.sungil.database.token.TokenManager
-import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietData
 import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.Love
 import com.sungil.domain.model.LoveResponse
-import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDate
 import com.sungil.domain.model.MatchDetail
-import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
 import com.sungil.domain.model.MatchingData
@@ -44,7 +42,6 @@ import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchReviewDTO
-import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
 import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingOrder
@@ -335,37 +332,20 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun requestMatchingData(accessToken: String): Match {
-        val result = api.requestMatchData(accessToken)
-        if (result.code() != 200) {
-            return Match(
-                responseCode = result.code(),
-                MatchData(
-                    oneThingMatch = emptyList(),
-                    randomMatch = emptyList()
-                )
+    override suspend fun requestMatchingData(accessToken: String): NetworkResult<MatchData> {
+        try {
+            val response = api.requestMatchData(accessToken)
+            if (!response.isSuccessful) {
+                return NetworkResult.Error(code = response.code(), message = response.message())
+            }
+            val body = response.body() ?: return NetworkResult.Error(
+                code = response.code(),
+                message = response.message()
             )
+            return NetworkResult.Success(body.toMatchData())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }
-        if (result.body() == null) {
-            return Match(
-                responseCode = -100,
-                MatchData(
-                    oneThingMatch = emptyList(),
-                    randomMatch = emptyList()
-                )
-            )
-        }
-        return Match(
-            responseCode = result.code(),
-            data = MatchData(
-                oneThingMatch = result.body()!!.oneThingMatchings.map {
-                    it.toDomainMatchData(
-                        CATEGORY.CONTENT_ONE_THING
-                    )
-                },
-                randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_RANDOM) }
-            ),
-        )
     }
 
     override fun requestMatchingData(
@@ -694,15 +674,6 @@ class NetworkRepositoryImpl @Inject constructor(
                 diet = "NONE",
                 language = "KOREAN"
             )
-        )
-    }
-
-    private fun MatchingDto.toDomainMatchData(category: CATEGORY): MatchInfo {
-        return MatchInfo(
-            category = category,
-            matchingId = matchingId,
-            daysUntilMeeting = daysUntilMeeting,
-            meetingPlace = meetingPlace
         )
     }
 

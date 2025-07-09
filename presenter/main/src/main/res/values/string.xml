@@ -6,6 +6,8 @@
     <string name="nav_my">마이</string>
     <string name="nav_guide">guide</string>
     <string name="btn_finish">완료</string>
+    <string name="match_flow_title">모임이 진행 중이에요</string>
+    <string name="match_flow_content">지금까지 나눈 이야기, 다시 이어가요</string>
     <!--  my page  -->
     <string name="txt_mayPage_hi">안녕하세요!</string>
     <string name="txt_myPage_sir">%1$s님</string>

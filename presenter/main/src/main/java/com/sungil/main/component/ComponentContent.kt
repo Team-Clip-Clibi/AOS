@@ -183,33 +183,6 @@ fun CustomMainPageTopBar(text: String) {
 }
 
 @Composable
-fun CustomMyPageButton(
-    text: String,
-    color: Long,
-    textColor: Long,
-    onClick: () -> Unit,
-) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(color),
-            contentColor = Color(textColor)
-        ),
-        elevation = null
-    ) {
-        Text(
-            text = text,
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
 fun MyPageItem(text: String, icon: Int, click: () -> Unit) {
     Row(
         modifier = Modifier
@@ -765,6 +738,56 @@ fun ReviewImageView(
     }
 }
 
+@Composable
+fun MatchIngFlowView(modifier: Modifier,onClick: () -> Unit) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(74.dp)
+            .background(color = ColorStyle.GRAY_700, shape = RoundedCornerShape(50.dp))
+            .padding(
+                start = 24.dp, top = 14.dp, end = 24.dp, bottom = 14.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_match_flow_person),
+            contentDescription = "match is ing",
+            modifier = Modifier
+                .width(19.dp)
+                .height(18.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = stringResource(R.string.match_flow_title),
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.WHITE_100,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = stringResource(R.string.match_flow_content),
+                style = AppTextStyles.BODY_14_20_REGULAR,
+                color = ColorStyle.GRAY_300,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        Icon(
+            painter = painterResource(R.drawable.ic_arrow_right),
+            contentDescription = "match detail",
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp),
+            tint = ColorStyle.WHITE_100
+        )
+    }
+}
 
 
 @Composable

@@ -17,6 +17,8 @@ enum class MyMatchDestination(val route: String, val label: String) {
     MATCH_HISTORY("matchHistory", "모임 내역"),
     MATCH_NOTICE("matchNotice", "안내문");
 }
+const val TRIGGER_TIME_UP ="TIME_UP"
+const val TRIGGER_OVERDUE = "OVERDUE"
 
 enum class ReviewIcon(val image: Int, val content: Int, val buttonInt: Int, val value: String) {
     REVIEW_DISAPPOINTED(
