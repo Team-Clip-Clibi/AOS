@@ -3,7 +3,7 @@ package com.sungil.main
 
 sealed class BottomView(val title: Int, val icon: Int = -1, val screenRoute: String) {
     data object Home : BottomView(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
-    data object Calendar : BottomView(R.string.nav_calendar, R.drawable.ic_calendar, MATCH)
+    data object MatchView : BottomView(R.string.nav_calendar, R.drawable.ic_calendar, MATCH)
     data object MyPage : BottomView(R.string.nav_my, R.drawable.ic_my, NAV_MY)
 }
 
@@ -80,6 +80,8 @@ const val REVIEW_UNSATISFIED_VALUE = "UNSATISFIED"
 const val REVIEW_NORMAL_VALUE = "NEUTRAL"
 const val REVIEW_GOOD_VALUE = "GOOD"
 const val REVIEW_BEST_VALUE = "EXCELLENT"
+const val PAGE_MATCH_HISTORY = 0
+const val PAGE_MATCH_NOTICE= 1
 
 enum class MatchStatus(val route: String, val label: String) {
     MATCH_CANCEL("CANCELLED", "취소"),
@@ -138,7 +140,7 @@ enum class CATEGORY(val displayName: String) {
 
 val bottomNavItems = listOf(
     BottomView.Home,
-    BottomView.Calendar,
+    BottomView.MatchView,
     BottomView.MyPage
 )
 

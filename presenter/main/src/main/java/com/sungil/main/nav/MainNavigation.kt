@@ -3,20 +3,21 @@ package com.sungil.main.nav
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sungil.main.MainViewModel
 import com.sungil.main.BottomView
 import com.sungil.main.MainView
-import com.sungil.main.ui.myMatch.MyMatchView
 import com.sungil.main.ui.home.HomeViewScreen
 import com.sungil.main.ui.matchDetail.MeetDetailView
+import com.sungil.main.ui.myMatch.MyMatchViewScreen
 import com.sungil.main.ui.myPage.MyPageViewScreen
 import com.sungil.main.ui.payDetail.PayDetailView
 import com.sungil.main.ui.review.ReviewView
+import androidx.compose.animation.core.tween
+import androidx.navigation.NavBackStackEntry
+import androidx.compose.animation.AnimatedContentTransitionScope
 
 @Composable
 fun MainNavigation(
@@ -34,17 +35,45 @@ fun MainNavigation(
     paddingValues: PaddingValues,
     snackBarHostState: SnackbarHostState,
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val bottomRoutes = setOf(
+        BottomView.Home.screenRoute,
+        BottomView.MatchView.screenRoute,
+        BottomView.MyPage.screenRoute
+    )
 
-    NavHost(navController = navController, startDestination = BottomView.Home.screenRoute) {
+    NavHost(
+        navController = navController,
+        startDestination = BottomView.Home.screenRoute,
+        enterTransition = {
+            slideIntoContainer(
+                getSlideDirection(initialState, targetState, bottomRoutes, forward = true),
+                animationSpec = tween(700)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                getSlideDirection(initialState, targetState, bottomRoutes, forward = true),
+                animationSpec = tween(700)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                getSlideDirection(initialState, targetState, bottomRoutes, forward = false),
+                animationSpec = tween(700)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                getSlideDirection(initialState, targetState, bottomRoutes, forward = false),
+                animationSpec = tween(700)
+            )
+        }
+    ) {
         composable(BottomView.Home.screenRoute) {
             HomeViewScreen(
                 viewModel = viewModel,
                 firstMatchClick = firstMatchClick,
-                notifyClick = {
-                    //TODO 출시 직전 구현 완료
-                },
+                notifyClick = {},
                 oneThingClick = oneThingClick,
                 randomMatchClick = randomMatchClick,
                 reLogin = login,
@@ -52,17 +81,15 @@ fun MainNavigation(
             )
         }
 
-        composable(BottomView.Calendar.screenRoute) {
-            MyMatchView(
+        composable(BottomView.MatchView.screenRoute) {
+            MyMatchViewScreen(
                 viewModel = viewModel,
-                login = login,
                 guide = guide,
+                login = login,
                 matchDetail = { navController.navigate(MainView.MATCH_DETAIL.route) },
-                review = {
-                    navController.navigate(MainView.REVIEW.route) {
-                        launchSingleTop = true
-                    }
-                })
+                review = { navController.navigate(MainView.REVIEW.route) },
+                snackBarHostState = snackBarHostState
+            )
         }
 
         composable(BottomView.MyPage.screenRoute) {
@@ -78,9 +105,7 @@ fun MainNavigation(
             MeetDetailView(
                 onBack = { navController.popBackStack() },
                 viewModel = viewModel,
-                payDetail = {
-                    navController.navigate(MainView.PAY_DETAIL.route)
-                }
+                payDetail = { navController.navigate(MainView.PAY_DETAIL.route) }
             )
         }
 
@@ -90,6 +115,7 @@ fun MainNavigation(
                 viewModel = viewModel
             )
         }
+
         composable(MainView.REVIEW.route) {
             ReviewView(
                 onClose = { navController.popBackStack() },
@@ -97,5 +123,23 @@ fun MainNavigation(
                 paddingValues = paddingValues
             )
         }
+    }
+}
+
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.getSlideDirection(
+    from: NavBackStackEntry,
+    to: NavBackStackEntry,
+    bottomRoutes: Set<String>,
+    forward: Boolean
+): AnimatedContentTransitionScope.SlideDirection {
+    val fromRoute = from.destination.route
+    val toRoute = to.destination.route
+
+    val isBottom = fromRoute in bottomRoutes && toRoute in bottomRoutes
+    return when {
+        isBottom && forward -> AnimatedContentTransitionScope.SlideDirection.Left
+        isBottom && !forward -> AnimatedContentTransitionScope.SlideDirection.Right
+        !isBottom && forward -> AnimatedContentTransitionScope.SlideDirection.Up
+        else -> AnimatedContentTransitionScope.SlideDirection.Down
     }
 }

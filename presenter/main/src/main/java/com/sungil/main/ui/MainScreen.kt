@@ -33,7 +33,7 @@ import com.sungil.main.nav.MainNavigation
 
 @Composable
 fun MainScreenView(
-    navController : NavHostController,
+    navController: NavHostController,
     viewModel: MainViewModel,
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
@@ -45,7 +45,7 @@ fun MainScreenView(
     login: () -> Unit,
     guide: () -> Unit,
 ) {
-    val bottomNavBottomViews = listOf(BottomView.Home, BottomView.Calendar, BottomView.MyPage)
+    val bottomNavBottomViews = listOf(BottomView.Home, BottomView.MatchView, BottomView.MyPage)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val shouldShowBottomBar = bottomNavBottomViews.any { it.screenRoute == currentRoute }
@@ -57,8 +57,8 @@ fun MainScreenView(
             }
         },
         topBar = {
-            when(currentRoute){
-                MainView.REVIEW.route ->{
+            when (currentRoute) {
+                MainView.REVIEW.route -> {
                     TopAppBarWithCloseButton(
                         title = stringResource(R.string.review_app_bar),
                         onBackClick = {
@@ -67,9 +67,10 @@ fun MainScreenView(
                         isNavigationShow = false,
                     )
                 }
+
                 BottomView.Home.screenRoute -> {
                     val alarmState by viewModel.userState.collectAsState()
-                    val icons = when(val state = alarmState.oneThingState){
+                    val icons = when (val state = alarmState.oneThingState) {
                         is MainViewModel.UiState.Success ->
                             state.data.takeIf { it.isNotEmpty() }
                                 ?.let { R.drawable.ic_bell_signal }
@@ -84,8 +85,13 @@ fun MainScreenView(
                         }
                     )
                 }
-                BottomView.MyPage.screenRoute ->{
+
+                BottomView.MyPage.screenRoute -> {
                     CustomMainPageTopBar(text = stringResource(R.string.nav_my))
+                }
+
+                BottomView.MatchView.screenRoute -> {
+                    CustomMainPageTopBar(text = stringResource(R.string.my_match_top_bar))
                 }
             }
         },
@@ -109,7 +115,8 @@ fun MainScreenView(
         modifier = Modifier.navigationBarsPadding()
     ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(
                     paddingValues
                 )
