@@ -127,7 +127,6 @@ fun MainScreenView(
                 profileButtonClick = profileButtonClick,
                 reportClick = reportClick,
                 lowClick = lowClick,
-                alarmClick = alarmClick,
                 oneThingClick = oneThingClick,
                 firstMatchClick = firstMatchClick,
                 randomMatchClick = randomMatchClick,

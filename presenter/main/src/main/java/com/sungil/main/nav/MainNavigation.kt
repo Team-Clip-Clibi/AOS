@@ -26,7 +26,6 @@ fun MainNavigation(
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
     lowClick: () -> Unit,
-    alarmClick: () -> Unit,
     oneThingClick: () -> Unit,
     firstMatchClick: (String) -> Unit,
     randomMatchClick: () -> Unit,
@@ -126,7 +125,7 @@ fun MainNavigation(
     }
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.getSlideDirection(
+private fun getSlideDirection(
     from: NavBackStackEntry,
     to: NavBackStackEntry,
     bottomRoutes: Set<String>,
