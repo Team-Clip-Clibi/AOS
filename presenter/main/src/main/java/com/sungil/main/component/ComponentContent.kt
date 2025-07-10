@@ -20,17 +20,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,11 +64,18 @@ import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.NotificationData
+import com.sungil.domain.model.Participants
+import com.sungil.main.BottomSheetView
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
 import com.sungil.main.BottomView
+import com.sungil.main.MainViewModel
 import com.sungil.main.bottomNavItems
+import com.sungil.main.bottomSheetView.HostView
+import com.sungil.main.bottomSheetView.MatchParticipantView
+import com.sungil.main.bottomSheetView.StartMatchView
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
@@ -863,4 +875,61 @@ fun ReviewTextField(
             unfocusedTextColor = ColorStyle.GRAY_800
         )
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MatchingBottomSheet(
+    viewModel: MainViewModel,
+) {
+    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    ModalBottomSheet(
+        onDismissRequest = { scope.launch { bottomSheetState.hide() } },
+        sheetState = bottomSheetState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f)
+    ) {
+        val view = viewModel.bottomSheetButton.collectAsState()
+        val dummyParticipants = listOf(
+            Participants(id = 1, nickName = "김성일"),
+            Participants(id = 2, nickName = "윤동주"),
+            Participants(id = 3, nickName = "오현식"),
+            Participants(id = 4, nickName = "장정우"),
+            Participants(id = 5, nickName = "장세은"),
+            Participants(id = 6, nickName = "김병진"),
+            Participants(id = 7, nickName = "하서은"),
+            Participants(id = 8, nickName = "신민선")
+        )
+        when (view.value) {
+            BottomSheetView.MATCH_START_HELLO_VIEW -> StartMatchView(
+                onClick = {
+                    viewModel.setBottomSheetButton(
+                        BottomSheetView.MATCH_START_HOST_VIEW
+                    )
+                }
+            )
+
+            BottomSheetView.MATCH_START_HOST_VIEW -> HostView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_INTRODUCE)
+                }
+            )
+
+            BottomSheetView.MATCH_START_INTRODUCE -> MatchParticipantView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_TMI)
+                },
+                participant = dummyParticipants
+            )
+
+            BottomSheetView.MATCH_START_TMI -> TODO()
+            BottomSheetView.MATCH_STAT_ONE_THING -> TODO()
+            BottomSheetView.MATCH_START_CONVERSATION -> TODO()
+            BottomSheetView.MATCH_START_END -> TODO()
+        }
+    }
 }

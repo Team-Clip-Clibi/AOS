@@ -19,6 +19,16 @@ enum class MyMatchDestination(val route: String, val label: String) {
 }
 const val TRIGGER_TIME_UP ="TIME_UP"
 
+enum class BottomSheetView {
+    MATCH_START_HELLO_VIEW,
+    MATCH_START_HOST_VIEW,
+    MATCH_START_INTRODUCE,
+    MATCH_START_TMI,
+    MATCH_STAT_ONE_THING,
+    MATCH_START_CONVERSATION,
+    MATCH_START_END
+}
+
 enum class ReviewIcon(val image: Int, val content: Int, val buttonInt: Int, val value: String) {
     REVIEW_DISAPPOINTED(
         R.drawable.ic_disappointed,

@@ -76,6 +76,9 @@ class MainViewModel @Inject constructor(
     private var _matchButton = MutableStateFlow(0)
     val matchButton: StateFlow<Int> = _matchButton.asStateFlow()
 
+    private var _bottomSheetButton = MutableStateFlow(BottomSheetView.MATCH_START_HELLO_VIEW)
+    val bottomSheetButton : StateFlow<BottomSheetView> = _bottomSheetButton.asStateFlow()
+
     init {
         requestUserInfo()
         oneThingNotify()
@@ -427,6 +430,14 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setBottomSheetButton(data: BottomSheetView) {
+        _bottomSheetButton.value = data
+    }
+
+    fun initBottomSheetButton() {
+        _bottomSheetButton.value = BottomSheetView.MATCH_START_HELLO_VIEW
     }
 
     sealed interface UiState<out T> {
