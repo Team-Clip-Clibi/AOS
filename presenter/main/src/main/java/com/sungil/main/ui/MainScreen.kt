@@ -1,6 +1,6 @@
 package com.sungil.main.ui
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,14 +26,17 @@ import com.sungil.main.MainViewModel
 import com.sungil.main.BottomView
 import com.sungil.main.MainView
 import com.sungil.main.R
+import com.sungil.main.TRIGGER_TIME_UP
 import com.sungil.main.component.BottomNavigation
 import com.sungil.main.component.CustomMainPageTopBar
 import com.sungil.main.component.HomeViewTopBar
+import com.sungil.main.component.MatchIngFlowView
 import com.sungil.main.nav.MainNavigation
+import androidx.compose.ui.Alignment
 
 @Composable
 fun MainScreenView(
-    navController : NavHostController,
+    navController: NavHostController,
     viewModel: MainViewModel,
     profileButtonClick: () -> Unit,
     reportClick: () -> Unit,
@@ -45,11 +48,17 @@ fun MainScreenView(
     login: () -> Unit,
     guide: () -> Unit,
 ) {
-    val bottomNavBottomViews = listOf(BottomView.Home, BottomView.Calendar, BottomView.MyPage)
+    val bottomNavBottomViews = listOf(BottomView.Home, BottomView.MatchView, BottomView.MyPage)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val shouldShowBottomBar = bottomNavBottomViews.any { it.screenRoute == currentRoute }
     val snackBarHostState = remember { SnackbarHostState() }
+    val matchTriggerState by viewModel.meetingTrigger.collectAsState()
+    val showMatchFlowView = remember(matchTriggerState) {
+        matchTriggerState is MainViewModel.MatchTriggerUiState.Triggered &&
+                (matchTriggerState as MainViewModel.MatchTriggerUiState.Triggered).dto.trigger == TRIGGER_TIME_UP
+    }
+
     Scaffold(
         bottomBar = {
             if (shouldShowBottomBar) {
@@ -57,8 +66,8 @@ fun MainScreenView(
             }
         },
         topBar = {
-            when(currentRoute){
-                MainView.REVIEW.route ->{
+            when (currentRoute) {
+                MainView.REVIEW.route -> {
                     TopAppBarWithCloseButton(
                         title = stringResource(R.string.review_app_bar),
                         onBackClick = {
@@ -67,9 +76,10 @@ fun MainScreenView(
                         isNavigationShow = false,
                     )
                 }
+
                 BottomView.Home.screenRoute -> {
                     val alarmState by viewModel.userState.collectAsState()
-                    val icons = when(val state = alarmState.oneThingState){
+                    val icons = when (val state = alarmState.oneThingState) {
                         is MainViewModel.UiState.Success ->
                             state.data.takeIf { it.isNotEmpty() }
                                 ?.let { R.drawable.ic_bell_signal }
@@ -84,8 +94,13 @@ fun MainScreenView(
                         }
                     )
                 }
-                BottomView.MyPage.screenRoute ->{
+
+                BottomView.MyPage.screenRoute -> {
                     CustomMainPageTopBar(text = stringResource(R.string.nav_my))
+                }
+
+                BottomView.MatchView.screenRoute -> {
+                    CustomMainPageTopBar(text = stringResource(R.string.my_match_top_bar))
                 }
             }
         },
@@ -108,11 +123,10 @@ fun MainScreenView(
         },
         modifier = Modifier.navigationBarsPadding()
     ) { paddingValues ->
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(
-                    paddingValues
-                )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = paddingValues.calculateTopPadding() , bottom = paddingValues.calculateBottomPadding())
         ) {
             MainNavigation(
                 navController = navController,
@@ -120,7 +134,6 @@ fun MainScreenView(
                 profileButtonClick = profileButtonClick,
                 reportClick = reportClick,
                 lowClick = lowClick,
-                alarmClick = alarmClick,
                 oneThingClick = oneThingClick,
                 firstMatchClick = firstMatchClick,
                 randomMatchClick = randomMatchClick,
@@ -129,6 +142,15 @@ fun MainScreenView(
                 paddingValues = paddingValues,
                 snackBarHostState = snackBarHostState
             )
+
+            if (showMatchFlowView && shouldShowBottomBar) {
+                MatchIngFlowView(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 66.dp, start = 17.dp, end = 16.dp),
+                    onClick = { /* TODO */ }
+                )
+            }
         }
     }
 }

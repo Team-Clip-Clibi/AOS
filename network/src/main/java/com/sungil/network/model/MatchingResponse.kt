@@ -4,13 +4,15 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class MatchingResponse (
+data class MatchingResponse(
     val oneThingMatchings: List<MatchingDto>,
-    val randomMatchings: List<MatchingDto>
+    val randomMatchings: List<MatchingDto>,
 )
+
 @Serializable
 data class MatchingDto(
     val matchingId: Int,
     val daysUntilMeeting: Int,
-    val meetingPlace: String
+    val meetingPlace: String,
+    val meetingTime: String,
 )

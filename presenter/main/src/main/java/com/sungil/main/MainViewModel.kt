@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
+import com.sungil.domain.model.MatchTrigger
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.Participants
@@ -22,6 +23,7 @@ import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
 import com.sungil.domain.useCase.GetParticipants
 import com.sungil.domain.useCase.GetUserInfo
+import com.sungil.domain.useCase.MonitoryMeetingTime
 import com.sungil.domain.useCase.SendLateMatch
 import com.sungil.domain.useCase.SendMatchReview
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,10 +50,14 @@ class MainViewModel @Inject constructor(
     private val sendLate: SendLateMatch,
     private val sendReview: SendMatchReview,
     private val participants: GetParticipants,
+    private val meetTime: MonitoryMeetingTime,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
     val userState: StateFlow<MainViewState> = _userState.asStateFlow()
+
+    private val _meetingTrigger = MutableStateFlow<MatchTriggerUiState>(MatchTriggerUiState.Idle)
+    val meetingTrigger: StateFlow<MatchTriggerUiState> = _meetingTrigger.asStateFlow()
 
     val matchAllData = matching.invoke(matchingStatus = MATCH_KEY_ALL, lastMeetingTime = "")
         .cachedIn(viewModelScope)
@@ -69,6 +75,9 @@ class MainViewModel @Inject constructor(
 
     private var _matchButton = MutableStateFlow(0)
     val matchButton: StateFlow<Int> = _matchButton.asStateFlow()
+
+    private var _bottomSheetButton = MutableStateFlow(BottomSheetView.MATCH_START_HELLO_VIEW)
+    val bottomSheetButton : StateFlow<BottomSheetView> = _bottomSheetButton.asStateFlow()
 
     init {
         requestUserInfo()
@@ -96,6 +105,7 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
 
     private fun oneThingNotify() {
         viewModelScope.launch {
@@ -147,8 +157,18 @@ class MainViewModel @Inject constructor(
                     _userState.update { state ->
                         state.copy(matchState = UiState.Success(result.data))
                     }
+                    startMonitoringMatch(result.data)
                 }
             }
+        }
+    }
+
+    private fun startMonitoringMatch(data: MatchData) {
+        viewModelScope.launch {
+            meetTime.invoke(MonitoryMeetingTime.Param(data))
+                .collect { data ->
+                    _meetingTrigger.value = MatchTriggerUiState.Triggered(data)
+                }
         }
     }
 
@@ -288,18 +308,22 @@ class MainViewModel @Inject constructor(
 
                 is GetParticipants.Result.Success -> {
                     _userState.update { state ->
-                        state.copy(participants = UiState.Success(Participant(
-                            person = result.person,
-                            matchId = matchId,
-                            matchType = matchType
-                        )))
+                        state.copy(
+                            participants = UiState.Success(
+                                Participant(
+                                    person = result.person,
+                                    matchId = matchId,
+                                    matchType = matchType
+                                )
+                            )
+                        )
                     }
                 }
             }
         }
     }
 
-    fun initParticipants(){
+    fun initParticipants() {
         _userState.update { state ->
             state.copy(participants = UiState.Loading)
         }
@@ -359,7 +383,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setUnAttendMember(data : String){
+    fun setUnAttendMember(data: String) {
         val currentItem = _userState.value
         val list = currentItem.unAttendMember.toMutableList()
         if (list.contains(data)) {
@@ -381,21 +405,24 @@ class MainViewModel @Inject constructor(
         val allAttend = state.allAttend
         val unAttendMember = state.unAttendMember.joinToString(separator = ", ")
         viewModelScope.launch(Dispatchers.IO) {
-            when(val result = sendReview.invoke(SendMatchReview.Param(
-                allAttend = allAttend,
-                matchType = matchType,
-                matchId = matchId,
-                mood = reviewButton,
-                negativePoints = badReviewItem,
-                noShowMembers = unAttendMember,
-                positivePoints = goodReviewItem,
-                reviewContent = reviewDetail
-            ))){
+            when (val result = sendReview.invoke(
+                SendMatchReview.Param(
+                    allAttend = allAttend,
+                    matchType = matchType,
+                    matchId = matchId,
+                    mood = reviewButton,
+                    negativePoints = badReviewItem,
+                    noShowMembers = unAttendMember,
+                    positivePoints = goodReviewItem,
+                    reviewContent = reviewDetail
+                )
+            )) {
                 is SendMatchReview.Result.Fail -> {
                     _userState.update { state ->
                         state.copy(writeReview = UiState.Error(result.errorMessage))
                     }
                 }
+
                 is SendMatchReview.Result.Success -> {
                     _userState.update { state ->
                         state.copy(writeReview = UiState.Success(result.matchId))
@@ -405,12 +432,23 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun setBottomSheetButton(data: BottomSheetView) {
+        _bottomSheetButton.value = data
+    }
+
+    fun initBottomSheetButton() {
+        _bottomSheetButton.value = BottomSheetView.MATCH_START_HELLO_VIEW
+    }
+
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
         data class Error(val message: String) : UiState<Nothing>
     }
-
+    sealed interface MatchTriggerUiState {
+        data object Idle : MatchTriggerUiState
+        data class Triggered(val dto: MatchTrigger) : MatchTriggerUiState
+    }
     data class MainViewState(
         val userDataState: UiState<UserData> = UiState.Loading,
         val notificationResponseState: UiState<List<NotificationData>> = UiState.Loading,
@@ -428,15 +466,17 @@ class MainViewModel @Inject constructor(
         val reviewDetail: String = "",
         val allAttend: Boolean = true,
         val unAttendMember: ArrayList<String> = arrayListOf(),
-        val writeReview : UiState<Int> = UiState.Loading
+        val writeReview: UiState<Int> = UiState.Loading,
     )
 
 }
+
 data class Participant(
-    val person : List<Participants>,
-    val matchId : Int,
-    val matchType: String
+    val person: List<Participants>,
+    val matchId: Int,
+    val matchType: String,
 )
+
 data class LatestDayInfo(
     val time: String, val applyTime: Int, val confirmTime: Int,
 )

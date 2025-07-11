@@ -20,17 +20,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,11 +64,20 @@ import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.NotificationData
+import com.sungil.domain.model.OneThingContent
+import com.sungil.domain.model.Participants
+import com.sungil.main.BottomSheetView
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
 import com.sungil.main.BottomView
+import com.sungil.main.MainViewModel
 import com.sungil.main.bottomNavItems
+import com.sungil.main.bottomSheetView.HostView
+import com.sungil.main.bottomSheetView.MatchParticipantView
+import com.sungil.main.bottomSheetView.StartMatchView
+import com.sungil.main.bottomSheetView.TmiMatchView
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
@@ -178,33 +192,6 @@ fun CustomMainPageTopBar(text: String) {
             modifier = Modifier.fillMaxWidth(),
             style = AppTextStyles.TITLE_20_28_SEMI,
             color = ColorStyle.GRAY_800
-        )
-    }
-}
-
-@Composable
-fun CustomMyPageButton(
-    text: String,
-    color: Long,
-    textColor: Long,
-    onClick: () -> Unit,
-) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(color),
-            contentColor = Color(textColor)
-        ),
-        elevation = null
-    ) {
-        Text(
-            text = text,
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            textAlign = TextAlign.Center
         )
     }
 }
@@ -765,6 +752,56 @@ fun ReviewImageView(
     }
 }
 
+@Composable
+fun MatchIngFlowView(modifier: Modifier,onClick: () -> Unit) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(74.dp)
+            .background(color = ColorStyle.GRAY_700, shape = RoundedCornerShape(50.dp))
+            .padding(
+                start = 24.dp, top = 14.dp, end = 24.dp, bottom = 14.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_match_flow_person),
+            contentDescription = "match is ing",
+            modifier = Modifier
+                .width(19.dp)
+                .height(18.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = stringResource(R.string.match_flow_title),
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.WHITE_100,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = stringResource(R.string.match_flow_content),
+                style = AppTextStyles.BODY_14_20_REGULAR,
+                color = ColorStyle.GRAY_300,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        Icon(
+            painter = painterResource(R.drawable.ic_arrow_right),
+            contentDescription = "match detail",
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp),
+            tint = ColorStyle.WHITE_100
+        )
+    }
+}
 
 
 @Composable
@@ -840,4 +877,118 @@ fun ReviewTextField(
             unfocusedTextColor = ColorStyle.GRAY_800
         )
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MatchingBottomSheet(
+    viewModel: MainViewModel,
+) {
+    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    ModalBottomSheet(
+        onDismissRequest = { scope.launch { bottomSheetState.hide() } },
+        sheetState = bottomSheetState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f)
+    ) {
+        val view = viewModel.bottomSheetButton.collectAsState()
+        val dummyParticipants = listOf(
+            Participants(id = 1, nickName = "김성일"),
+            Participants(id = 2, nickName = "윤동주"),
+            Participants(id = 3, nickName = "오현식"),
+            Participants(id = 4, nickName = "장정우"),
+            Participants(id = 5, nickName = "장세은"),
+            Participants(id = 6, nickName = "김병진"),
+            Participants(id = 7, nickName = "하서은"),
+            Participants(id = 8, nickName = "신민선")
+        )
+        val dummyTMI = listOf(
+            "데이팅앱을 운영하고 있어요",
+            "축구를 좋아해요",
+            "영국 어학연수 가는 것이 목표에요",
+            "제주도 스탭을 했었어요",
+            "제주도 스탭을 했었어요",
+            "축구를 좋아해요",
+            "피자를 좋아해요",
+            "치킨을 좋아해요"
+        )
+        val dummyOneThing = listOf(
+            OneThingContent(
+                nickName = "김성일",
+                contentCategory = "자기계발",
+                content = "매일 아침 6시에 일어나 책을 읽고 있어요"
+            ),
+            OneThingContent(
+                nickName = "윤동주",
+                contentCategory = "인생",
+                content = "시간이 날 때마다 별을 바라보며 생각을 정리해요"
+            ),
+            OneThingContent(
+                nickName = "오현식",
+                contentCategory = "건강",
+                content = "최근에 러닝 5km 챌린지를 완주했어요"
+            ),
+            OneThingContent(
+                nickName = "장정우",
+                contentCategory = "취미",
+                content = "주말마다 수채화 그림을 그려요"
+            ),
+            OneThingContent(
+                nickName = "장세은",
+                contentCategory = "돈",
+                content = "매달 가계부를 쓰며 소비를 관리하고 있어요"
+            ),
+            OneThingContent(
+                nickName = "김병진",
+                contentCategory = "직장",
+                content = "스타트업에서 UX 디자이너로 일하고 있어요"
+            ),
+            OneThingContent(
+                nickName = "하서은",
+                contentCategory = "연애",
+                content = "좋은 대화가 좋은 관계를 만든다고 생각해요"
+            ),
+            OneThingContent(
+                nickName = "신민선",
+                contentCategory = "선택안함",
+                content = "아직은 어떤 목표를 정하지 않았어요"
+            )
+        )
+        when (view.value) {
+            BottomSheetView.MATCH_START_HELLO_VIEW -> StartMatchView(
+                onClick = {
+                    viewModel.setBottomSheetButton(
+                        BottomSheetView.MATCH_START_HOST_VIEW
+                    )
+                }
+            )
+
+            BottomSheetView.MATCH_START_HOST_VIEW -> HostView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_INTRODUCE)
+                }
+            )
+
+            BottomSheetView.MATCH_START_INTRODUCE -> MatchParticipantView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_TMI)
+                },
+                participant = dummyParticipants
+            )
+
+            BottomSheetView.MATCH_START_TMI -> TmiMatchView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_STAT_ONE_THING)
+                },
+                data = dummyTMI
+            )
+            BottomSheetView.MATCH_STAT_ONE_THING -> TODO()
+            BottomSheetView.MATCH_START_CONVERSATION -> TODO()
+            BottomSheetView.MATCH_START_END -> TODO()
+        }
+    }
 }

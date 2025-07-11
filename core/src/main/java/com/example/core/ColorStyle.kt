@@ -25,6 +25,24 @@ object ColorStyle {
     val PURPLE_500 = Color(0xFF4D12AC)
     val PURPLE_600 = Color(0xFF391085)
 
+    //orange
+    val ORANGE_100 = Color(0xFFFF8E62)
+
+    //green
+    val GREEN_100 = Color(0xFF61C9A0)
+
+    //blue
+    val BLUE_100 = Color(0xFF61A8C9)
+
+    //Coral
+    val CORAL_100 = Color(0xFFFD7474)
+
+    //Mint
+    val MINT_100 = Color(0xFF76E4E3)
+
+    //Pink
+    val PINK_100 = Color(0xFFF88CCF)
+
     //RED
     val RED_100 = Color(0xFFFB4F4F)
 
