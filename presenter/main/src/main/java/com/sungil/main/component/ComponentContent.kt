@@ -76,6 +76,7 @@ import com.sungil.main.bottomSheetView.HostView
 import com.sungil.main.bottomSheetView.MatchParticipantView
 import com.sungil.main.bottomSheetView.StartMatchView
 import com.sungil.main.bottomSheetView.TmiMatchView
+import com.sungil.main.bottomSheetView.OneThingContentView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -986,7 +987,12 @@ fun MatchingBottomSheet(
                 },
                 data = dummyTMI
             )
-            BottomSheetView.MATCH_STAT_ONE_THING -> TODO()
+            BottomSheetView.MATCH_STAT_ONE_THING -> OneThingContentView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_CONVERSATION)
+                },
+                oneThingContent = dummyOneThing
+            )
             BottomSheetView.MATCH_START_CONVERSATION -> TODO()
             BottomSheetView.MATCH_START_END -> TODO()
         }
