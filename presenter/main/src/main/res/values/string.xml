@@ -137,6 +137,10 @@
     <string name="match_start_next_btn">다음</string>
     <string name="match_start_participants_content">닉네임으로 나를 소개해요</string>
     <string name="match_start_participants_content_sub">아래 순서대로 나이, 취미, 관심사 등을 소개해 주세요\n공개하고 싶지 않은 정보는 생략해도 괜찮아요</string>
+    <string name="match_start_tmi_content">TMI로 조금 더 친해져요</string>
+    <string name="match_start_tmi_content_sub">지금까지 나눈 대화를 참고해, 각 TMI의 주인을 맞춰보세요</string>
+    <string name="match_start_oneThing_content">원띵을 소개해요</string>
+    <string name="match_start_oneThing_content_sub">카드를 넘겨 멤버들의 원띵을 확인하며 이야기를 나눠 보세요</string>
     <!-- Error message   -->
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <string name="msg_network_error">네트워크 에러</string>

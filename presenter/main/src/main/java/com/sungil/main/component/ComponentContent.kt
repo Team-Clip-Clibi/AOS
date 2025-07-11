@@ -64,6 +64,7 @@ import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.NotificationData
+import com.sungil.domain.model.OneThingContent
 import com.sungil.domain.model.Participants
 import com.sungil.main.BottomSheetView
 import com.sungil.main.CONTENT_NOTICE
@@ -74,6 +75,7 @@ import com.sungil.main.bottomNavItems
 import com.sungil.main.bottomSheetView.HostView
 import com.sungil.main.bottomSheetView.MatchParticipantView
 import com.sungil.main.bottomSheetView.StartMatchView
+import com.sungil.main.bottomSheetView.TmiMatchView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -904,6 +906,58 @@ fun MatchingBottomSheet(
             Participants(id = 7, nickName = "하서은"),
             Participants(id = 8, nickName = "신민선")
         )
+        val dummyTMI = listOf(
+            "데이팅앱을 운영하고 있어요",
+            "축구를 좋아해요",
+            "영국 어학연수 가는 것이 목표에요",
+            "제주도 스탭을 했었어요",
+            "제주도 스탭을 했었어요",
+            "축구를 좋아해요",
+            "피자를 좋아해요",
+            "치킨을 좋아해요"
+        )
+        val dummyOneThing = listOf(
+            OneThingContent(
+                nickName = "김성일",
+                contentCategory = "자기계발",
+                content = "매일 아침 6시에 일어나 책을 읽고 있어요"
+            ),
+            OneThingContent(
+                nickName = "윤동주",
+                contentCategory = "인생",
+                content = "시간이 날 때마다 별을 바라보며 생각을 정리해요"
+            ),
+            OneThingContent(
+                nickName = "오현식",
+                contentCategory = "건강",
+                content = "최근에 러닝 5km 챌린지를 완주했어요"
+            ),
+            OneThingContent(
+                nickName = "장정우",
+                contentCategory = "취미",
+                content = "주말마다 수채화 그림을 그려요"
+            ),
+            OneThingContent(
+                nickName = "장세은",
+                contentCategory = "돈",
+                content = "매달 가계부를 쓰며 소비를 관리하고 있어요"
+            ),
+            OneThingContent(
+                nickName = "김병진",
+                contentCategory = "직장",
+                content = "스타트업에서 UX 디자이너로 일하고 있어요"
+            ),
+            OneThingContent(
+                nickName = "하서은",
+                contentCategory = "연애",
+                content = "좋은 대화가 좋은 관계를 만든다고 생각해요"
+            ),
+            OneThingContent(
+                nickName = "신민선",
+                contentCategory = "선택안함",
+                content = "아직은 어떤 목표를 정하지 않았어요"
+            )
+        )
         when (view.value) {
             BottomSheetView.MATCH_START_HELLO_VIEW -> StartMatchView(
                 onClick = {
@@ -926,7 +980,12 @@ fun MatchingBottomSheet(
                 participant = dummyParticipants
             )
 
-            BottomSheetView.MATCH_START_TMI -> TODO()
+            BottomSheetView.MATCH_START_TMI -> TmiMatchView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_STAT_ONE_THING)
+                },
+                data = dummyTMI
+            )
             BottomSheetView.MATCH_STAT_ONE_THING -> TODO()
             BottomSheetView.MATCH_START_CONVERSATION -> TODO()
             BottomSheetView.MATCH_START_END -> TODO()
