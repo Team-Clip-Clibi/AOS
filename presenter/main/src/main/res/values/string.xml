@@ -131,6 +131,7 @@
     <string name="match_start_first_image_content">원하는 메뉴를 주문하고, \n닉네임 또는 실명으로 소개해 주세요</string>
     <string name="match_start_first_btn">모임 시작하기</string>
     <string name="match_start_ing">모임진행</string>
+    <string name="match_start_end">마무리"</string>
     <string name="match_start_host_content">진행자를 선정해요</string>
     <string name="match_start_host_sub_content">오늘 모임에서는 두 번째로 도착하신 분이, 약 10분 동안 모임을 진행해 주세요</string>
     <string name="match_start_host_image_content">진행자는 카드에 적힌 질문을\n한 장씩 읽으며, 대화를 이끌어 주세요</string>
@@ -141,6 +142,9 @@
     <string name="match_start_tmi_content_sub">지금까지 나눈 대화를 참고해, 각 TMI의 주인을 맞춰보세요</string>
     <string name="match_start_oneThing_content">원띵을 소개해요</string>
     <string name="match_start_oneThing_content_sub">카드를 넘겨 멤버들의 원띵을 확인하며 이야기를 나눠 보세요</string>
+    <string name="match_end_content">즐거운 시간 보내셨나요?</string>
+    <string name="match_end_content_sub">짧은 시간이지만, 깊이 있는 대화를 나누셨길 바라요\n이야기를 더 나누고 싶다면 2차를 가는 것도 추천해요</string>
+    <string name="match_end_image_content">오늘의 원띵으로\n좋은 인사이트를 얻으셨길 바라요</string>
     <!-- Error message   -->
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <string name="msg_network_error">네트워크 에러</string>
