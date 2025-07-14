@@ -33,6 +33,7 @@ import com.sungil.main.component.HomeViewTopBar
 import com.sungil.main.component.MatchIngFlowView
 import com.sungil.main.nav.MainNavigation
 import androidx.compose.ui.Alignment
+import com.sungil.main.component.MatchingBottomSheet
 
 @Composable
 fun MainScreenView(
@@ -58,6 +59,7 @@ fun MainScreenView(
         matchTriggerState is MainViewModel.MatchTriggerUiState.Triggered &&
                 (matchTriggerState as MainViewModel.MatchTriggerUiState.Triggered).dto.trigger == TRIGGER_TIME_UP
     }
+    val showBottomSheet by viewModel.bottomSheetShow.collectAsState()
 
     Scaffold(
         bottomBar = {
@@ -126,7 +128,10 @@ fun MainScreenView(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding() , bottom = paddingValues.calculateBottomPadding())
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding()
+                )
         ) {
             MainNavigation(
                 navController = navController,
@@ -147,9 +152,16 @@ fun MainScreenView(
                 MatchIngFlowView(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 66.dp, start = 17.dp, end = 16.dp),
-                    onClick = { /* TODO */ }
+                        .padding(
+                            bottom = paddingValues.calculateBottomPadding() + 12.dp,
+                            start = 17.dp,
+                            end = 16.dp
+                        ),
+                    onClick = { viewModel.showBottomSheet() }
                 )
+                if (showBottomSheet) {
+                    MatchingBottomSheet(viewModel = viewModel)
+                }
             }
         }
     }

@@ -79,6 +79,9 @@ class MainViewModel @Inject constructor(
     private var _bottomSheetButton = MutableStateFlow(BottomSheetView.MATCH_START_HELLO_VIEW)
     val bottomSheetButton : StateFlow<BottomSheetView> = _bottomSheetButton.asStateFlow()
 
+    private var _bottomSheetViewShow = MutableStateFlow(false)
+    val bottomSheetShow : StateFlow<Boolean> = _bottomSheetViewShow.asStateFlow()
+
     init {
         requestUserInfo()
         oneThingNotify()
@@ -438,8 +441,12 @@ class MainViewModel @Inject constructor(
 
     fun initBottomSheetButton() {
         _bottomSheetButton.value = BottomSheetView.MATCH_START_HELLO_VIEW
+        _bottomSheetViewShow.value = false
     }
 
+    fun showBottomSheet(){
+        _bottomSheetViewShow.value = true
+    }
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>

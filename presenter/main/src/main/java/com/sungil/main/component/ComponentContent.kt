@@ -72,6 +72,8 @@ import com.sungil.main.R
 import com.sungil.main.BottomView
 import com.sungil.main.MainViewModel
 import com.sungil.main.bottomNavItems
+import com.sungil.main.bottomSheetView.ConversationMatchView
+import com.sungil.main.bottomSheetView.EndMatchView
 import com.sungil.main.bottomSheetView.HostView
 import com.sungil.main.bottomSheetView.MatchParticipantView
 import com.sungil.main.bottomSheetView.StartMatchView
@@ -798,7 +800,8 @@ fun MatchIngFlowView(modifier: Modifier,onClick: () -> Unit) {
             contentDescription = "match detail",
             modifier = Modifier
                 .width(24.dp)
-                .height(24.dp),
+                .height(24.dp)
+                .clickable { onClick() },
             tint = ColorStyle.WHITE_100
         )
     }
@@ -890,11 +893,14 @@ fun MatchingBottomSheet(
         skipPartiallyExpanded = true
     )
     ModalBottomSheet(
-        onDismissRequest = { scope.launch { bottomSheetState.hide() } },
+        onDismissRequest = {
+            scope.launch { bottomSheetState.hide() }
+            viewModel.initBottomSheetButton() },
         sheetState = bottomSheetState,
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.8f)
+            .fillMaxHeight(0.9f)
+            .navigationBarsPadding()
     ) {
         val view = viewModel.bottomSheetButton.collectAsState()
         val dummyParticipants = listOf(
@@ -959,6 +965,11 @@ fun MatchingBottomSheet(
                 content = "아직은 어떤 목표를 정하지 않았어요"
             )
         )
+        val dummyConversationData = listOf(
+            "원띵에 대해 이야기 해 보아요",
+            "Android Native vs Ios Native",
+            "가데이터 가데이터 가데이터 가데이터 가데이터"
+        )
         when (view.value) {
             BottomSheetView.MATCH_START_HELLO_VIEW -> StartMatchView(
                 onClick = {
@@ -993,8 +1004,17 @@ fun MatchingBottomSheet(
                 },
                 oneThingContent = dummyOneThing
             )
-            BottomSheetView.MATCH_START_CONVERSATION -> TODO()
-            BottomSheetView.MATCH_START_END -> TODO()
+            BottomSheetView.MATCH_START_CONVERSATION -> ConversationMatchView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_END)
+                },
+                conversationData = dummyConversationData
+            )
+            BottomSheetView.MATCH_START_END -> EndMatchView(
+                onClick = {
+                    viewModel.initBottomSheetButton()
+                }
+            )
         }
     }
 }
