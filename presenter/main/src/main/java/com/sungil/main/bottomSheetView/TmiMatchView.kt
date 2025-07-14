@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,7 +32,9 @@ import com.example.core.AppTextStyles
 internal fun TmiMatchView(data: List<String>, onClick: () -> Unit) {
     Scaffold(
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(bottom = 8.dp)) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     thickness = 1.dp,
@@ -79,7 +82,7 @@ internal fun TmiMatchView(data: List<String>, onClick: () -> Unit) {
                 items(data.chunked(2)) { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
                     ) {
                         rowItems.forEachIndexed { index, tmi ->
                             TmiView(index = index, data = tmi)
@@ -102,15 +105,19 @@ private fun TmiView(index: Int, data: String) {
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start,
     ) {
-        Text(
-            text = index.toString(),
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            color = ColorStyle.GRAY_800,
+        Box(
             modifier = Modifier
                 .width(40.dp)
                 .height(28.dp)
-                .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(8.dp))
-        )
+                .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(8.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = index.toString(),
+                style = AppTextStyles.TITLE_20_28_SEMI,
+                color = ColorStyle.GRAY_800
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()

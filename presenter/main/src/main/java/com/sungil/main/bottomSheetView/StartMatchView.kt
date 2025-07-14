@@ -5,10 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
@@ -29,7 +32,12 @@ internal fun StartMatchView(
 ) {
     Scaffold(
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(bottom = 8.dp)
+            ) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     thickness = 1.dp,
@@ -53,7 +61,7 @@ internal fun StartMatchView(
                 .padding(
                     start = 24.dp,
                     end = 24.dp,
-                    bottom = paddingValues.calculateBottomPadding()
+                    bottom = paddingValues.calculateBottomPadding() + 46.dp
                 )
         ) {
             Text(
@@ -71,9 +79,8 @@ internal fun StartMatchView(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .background(color = ColorStyle.PURPLE_100)
-                    .padding(bottom = 56.dp),
+                    .fillMaxHeight()
+                    .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(24.dp)),
                 verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {

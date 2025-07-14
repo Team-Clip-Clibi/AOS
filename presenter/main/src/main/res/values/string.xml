@@ -143,6 +143,7 @@
     <string name="match_start_tmi_content_sub">지금까지 나눈 대화를 참고해, 각 TMI의 주인을 맞춰보세요</string>
     <string name="match_start_oneThing_content">원띵을 소개해요</string>
     <string name="match_start_oneThing_content_sub">카드를 넘겨 멤버들의 원띵을 확인하며 이야기를 나눠 보세요</string>
+    <string name="match_start_oneThing_nickName">%1$s님의 원띵</string>
     <string name="match_end_content">즐거운 시간 보내셨나요?</string>
     <string name="match_end_content_sub">짧은 시간이지만, 깊이 있는 대화를 나누셨길 바라요\n이야기를 더 나누고 싶다면 2차를 가는 것도 추천해요</string>
     <string name="match_end_image_content">오늘의 원띵으로\n좋은 인사이트를 얻으셨길 바라요</string>

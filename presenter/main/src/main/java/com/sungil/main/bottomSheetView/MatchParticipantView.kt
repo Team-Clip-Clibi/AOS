@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -33,7 +34,9 @@ import com.example.core.AppTextStyles
 internal fun MatchParticipantView(onClick: () -> Unit, participant: List<Participants>) {
     Scaffold(
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(bottom = 8.dp)) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     thickness = 1.dp,
@@ -93,30 +96,36 @@ internal fun MatchParticipantView(onClick: () -> Unit, participant: List<Partici
 
 @Composable
 private fun ParticipantsView(data: List<Participants>) {
-    data.fastForEachIndexed { index, person ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(68.dp)
-                .background(color = ColorStyle.GRAY_100, shape = RoundedCornerShape(16.dp))
-                .border(
-                    width = 1.dp,
-                    color = ColorStyle.GRAY_200,
-                    shape = RoundedCornerShape(size = 16.dp)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp) // ✅ 수직 간격 적용
+    ) {
+        data.fastForEachIndexed { index, person ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(68.dp)
+                    .background(color = ColorStyle.GRAY_100, shape = RoundedCornerShape(16.dp))
+                    .border(
+                        width = 1.dp,
+                        color = ColorStyle.GRAY_200,
+                        shape = RoundedCornerShape(size = 16.dp)
+                    )
+                    .padding(start = 16.dp, top = 14.dp, end = 16.dp, bottom = 14.dp),
+                horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.Start),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                PersonNumberView(index = index.toString())
+                Text(
+                    text = person.nickName,
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = ColorStyle.GRAY_800
                 )
-                .padding(start = 16.dp, top = 14.dp, end = 16.dp, bottom = 14.dp),
-            horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.Start),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            PersonNumberView(index = index.toString())
-            Text(
-                text = person.nickName,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = ColorStyle.GRAY_800
-            )
+            }
         }
     }
 }
+
+
 
 @Composable
 private fun PersonNumberView(index: String) {
@@ -124,7 +133,7 @@ private fun PersonNumberView(index: String) {
         modifier = Modifier
             .width(40.dp)
             .height(40.dp)
-            .background(color = ColorStyle.WHITE_100),
+            .background(color = ColorStyle.WHITE_100 , shape = RoundedCornerShape(16.dp)),
         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

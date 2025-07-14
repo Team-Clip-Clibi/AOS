@@ -147,21 +147,33 @@ fun MainScreenView(
                 paddingValues = paddingValues,
                 snackBarHostState = snackBarHostState
             )
-
+            MatchIngFlowView(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(
+                        bottom =  12.dp,
+                        start = 17.dp,
+                        end = 16.dp
+                    ),
+                onClick = { viewModel.showBottomSheet() }
+            )
+            if (showBottomSheet) {
+                MatchingBottomSheet(viewModel = viewModel)
+            }
             if (showMatchFlowView && shouldShowBottomBar) {
-                MatchIngFlowView(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(
-                            bottom = paddingValues.calculateBottomPadding() + 12.dp,
-                            start = 17.dp,
-                            end = 16.dp
-                        ),
-                    onClick = { viewModel.showBottomSheet() }
-                )
-                if (showBottomSheet) {
-                    MatchingBottomSheet(viewModel = viewModel)
-                }
+//                MatchIngFlowView(
+//                    modifier = Modifier
+//                        .align(Alignment.BottomCenter)
+//                        .padding(
+//                            bottom = paddingValues.calculateBottomPadding() + 12.dp,
+//                            start = 17.dp,
+//                            end = 16.dp
+//                        ),
+//                    onClick = { viewModel.showBottomSheet() }
+//                )
+//                if (showBottomSheet) {
+//                    MatchingBottomSheet(viewModel = viewModel)
+//                }
             }
         }
     }

@@ -2,11 +2,13 @@ package com.sungil.main.bottomSheetView
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
@@ -29,7 +31,10 @@ import com.example.core.AppTextStyles
 @Composable
 internal fun ConversationMatchView(conversationData: List<String>, onClick: () -> Unit) {
     Scaffold(bottomBar = {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(bottom = 8.dp)) {
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
@@ -107,21 +112,24 @@ private fun ConversationView(
                     .fillMaxSize()
                     .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(20.dp))
                     .padding(20.dp),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = (page + 1).toString(),
-                    style = AppTextStyles.HEAD_24_34_BOLD,
-                    color = ColorStyle.WHITE_100,
+                Box(
                     modifier = Modifier
                         .width(44.dp)
                         .height(44.dp)
                         .background(
                             color = ColorStyle.PURPLE_400,
                             shape = RoundedCornerShape(10.dp)
-                        )
-                )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = (page + 1).toString(),
+                        style = AppTextStyles.HEAD_24_34_BOLD,
+                        color = ColorStyle.WHITE_100,
+                        textAlign = TextAlign.Center
+                    )
+                }
                 Spacer(modifier = Modifier.height(28.dp))
                 Text(
                     text = data[page],

@@ -895,12 +895,13 @@ fun MatchingBottomSheet(
     ModalBottomSheet(
         onDismissRequest = {
             scope.launch { bottomSheetState.hide() }
-            viewModel.initBottomSheetButton() },
+            viewModel.initBottomSheetButton()
+        },
         sheetState = bottomSheetState,
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
-            .navigationBarsPadding()
+            .fillMaxHeight(0.9f),
+        contentColor = ColorStyle.WHITE_100
     ) {
         val view = viewModel.bottomSheetButton.collectAsState()
         val dummyParticipants = listOf(
@@ -998,21 +999,27 @@ fun MatchingBottomSheet(
                 },
                 data = dummyTMI
             )
+
             BottomSheetView.MATCH_STAT_ONE_THING -> OneThingContentView(
                 onClick = {
                     viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_CONVERSATION)
                 },
                 oneThingContent = dummyOneThing
             )
+
             BottomSheetView.MATCH_START_CONVERSATION -> ConversationMatchView(
                 onClick = {
                     viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_END)
                 },
                 conversationData = dummyConversationData
             )
+
             BottomSheetView.MATCH_START_END -> EndMatchView(
                 onClick = {
-                    viewModel.initBottomSheetButton()
+                    scope.launch {
+                        bottomSheetState.hide()
+                        viewModel.initBottomSheetButton()
+                    }
                 }
             )
         }

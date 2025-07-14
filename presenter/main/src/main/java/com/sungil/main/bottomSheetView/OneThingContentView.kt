@@ -2,12 +2,15 @@ package com.sungil.main.bottomSheetView
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,7 +42,10 @@ internal fun OneThingContentView(
 
     Scaffold(
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(bottom = 8.dp)) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     thickness = 1.dp,
@@ -62,7 +68,6 @@ internal fun OneThingContentView(
                 .fillMaxSize()
                 .background(color = ColorStyle.WHITE_100)
                 .padding(
-                    top = paddingValues.calculateTopPadding(),
                     start = 24.dp,
                     end = 24.dp,
                     bottom = paddingValues.calculateBottomPadding()
@@ -84,6 +89,14 @@ internal fun OneThingContentView(
                 data = oneThingContent,
                 currentPage = currentPage
             )
+            Text(
+                text = "${currentPage.value + 1}/${oneThingContent.size}",
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                modifier = Modifier.fillMaxWidth(),
+                color = ColorStyle.GRAY_500,
+                textAlign = TextAlign.Center
+            )
+
         }
     }
 }
@@ -92,7 +105,7 @@ internal fun OneThingContentView(
 @Composable
 private fun OneThingContentPagerView(
     data: List<OneThingContent>,
-    currentPage: MutableState<Int>
+    currentPage: MutableState<Int>,
 ) {
     val color = listOf(
         ColorStyle.ORANGE_100,
@@ -111,7 +124,6 @@ private fun OneThingContentPagerView(
         modifier = Modifier
             .fillMaxWidth()
             .height(400.dp)
-            .padding(bottom = 68.dp)
     ) {
         HorizontalPager(
             state = pagerState,
@@ -123,17 +135,25 @@ private fun OneThingContentPagerView(
             val backgroundColor = color[page % color.size]
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .height(400.dp)
                     .background(color = backgroundColor, shape = RoundedCornerShape(20.dp))
                     .padding(28.dp),
                 verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = page.toString(),
-                    style = AppTextStyles.HEAD_24_34_BOLD,
-                    color = ColorStyle.GRAY_800
-                )
+                Box(
+                    modifier = Modifier
+                        .width(44.dp)
+                        .height(44.dp)
+                        .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(10.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = page.toString(),
+                        style = AppTextStyles.HEAD_24_34_BOLD,
+                        color = ColorStyle.GRAY_800
+                    )
+                }
                 Spacer(modifier = Modifier.height(28.dp))
                 Text(
                     text = item.contentCategory,
@@ -150,18 +170,13 @@ private fun OneThingContentPagerView(
                         .weight(1f)
                 )
                 Text(
-                    text = item.nickName,
+                    text = stringResource(R.string.match_start_oneThing_nickName , item.nickName),
                     style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                    color = ColorStyle.GRAY_800
+                    color = ColorStyle.GRAY_800,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
                 )
             }
         }
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "${pagerState.currentPage + 1}/${data.size}",
-            style = AppTextStyles.CAPTION_12_18_SEMI,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
     }
 }

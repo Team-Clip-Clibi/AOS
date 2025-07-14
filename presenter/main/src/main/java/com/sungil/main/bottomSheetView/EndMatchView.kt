@@ -21,12 +21,19 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import com.example.core.AppTextStyles
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
 
 @Composable
 internal fun EndMatchView(onClick: () -> Unit) {
     Scaffold(bottomBar = {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(bottom = 8.dp)
+        ) {
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
@@ -48,11 +55,12 @@ internal fun EndMatchView(onClick: () -> Unit) {
                 .background(color = ColorStyle.WHITE_100)
                 .padding(
                     start = 24.dp,
-                    bottom = paddingValues.calculateBottomPadding(),
+                    bottom = paddingValues.calculateBottomPadding() + 32.dp,
                     end = 24.dp
                 )
         ) {
             TopView()
+            Spacer(modifier = Modifier.height(20.dp))
             ContentView()
         }
     }
@@ -87,7 +95,7 @@ private fun ContentView() {
         modifier = Modifier
             .fillMaxWidth()
             .height(460.dp)
-            .background(color = ColorStyle.PURPLE_100),
+            .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(24.dp)),
         verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -97,9 +105,7 @@ private fun ContentView() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(223.dp)
-                .padding(start = 15.dp, top = 5.dp, end = 15.dp, bottom = 38.dp)
         )
-        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = stringResource(R.string.match_end_image_content),
             style = AppTextStyles.TITLE_20_28_SEMI,
