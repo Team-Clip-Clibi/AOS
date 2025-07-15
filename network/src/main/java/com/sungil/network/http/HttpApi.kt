@@ -401,4 +401,8 @@ interface HttpApi {
         @Path("matchingType") matchingType: String,
     ) : Response<List<ParticipantsDTO>>
 
+    /**
+     * 진행중인 모임 조회
+     */
+
 }
