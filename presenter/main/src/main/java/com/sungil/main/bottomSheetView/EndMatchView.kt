@@ -41,7 +41,7 @@ internal fun EndMatchView(onClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(10.dp))
             ButtonXXLPurple400(
-                buttonText = stringResource(R.string.match_start_next_btn),
+                buttonText = stringResource(R.string.match_start_end_btn),
                 onClick = onClick,
                 modifier = Modifier
                     .fillMaxWidth()

@@ -887,6 +887,7 @@ fun ReviewTextField(
 @Composable
 fun MatchingBottomSheet(
     viewModel: MainViewModel,
+    onClick: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(
@@ -901,7 +902,8 @@ fun MatchingBottomSheet(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.9f),
-        contentColor = ColorStyle.WHITE_100
+        contentColor = ColorStyle.WHITE_100,
+        containerColor = ColorStyle.WHITE_100
     ) {
         val view = viewModel.bottomSheetButton.collectAsState()
         val dummyParticipants = listOf(
@@ -1019,6 +1021,7 @@ fun MatchingBottomSheet(
                     scope.launch {
                         bottomSheetState.hide()
                         viewModel.initBottomSheetButton()
+                        onClick()
                     }
                 }
             )

@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -33,6 +35,10 @@ import com.sungil.main.component.HomeViewTopBar
 import com.sungil.main.component.MatchIngFlowView
 import com.sungil.main.nav.MainNavigation
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
+import com.example.core.CustomDialogTwoButton
+import com.sungil.editprofile.ERROR_NETWORK
+import com.sungil.editprofile.ERROR_TOKEN_EXPIRE
 import com.sungil.main.component.MatchingBottomSheet
 
 @Composable
@@ -49,58 +55,65 @@ fun MainScreenView(
     login: () -> Unit,
     guide: () -> Unit,
 ) {
-    val bottomNavBottomViews = listOf(BottomView.Home, BottomView.MatchView, BottomView.MyPage)
+    val context = LocalContext.current
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val shouldShowBottomBar = bottomNavBottomViews.any { it.screenRoute == currentRoute }
+
+    val bottomNavRoutes = listOf(BottomView.Home, BottomView.MatchView, BottomView.MyPage)
+    val shouldShowBottomBar = currentRoute in bottomNavRoutes.map { it.screenRoute }
+
     val snackBarHostState = remember { SnackbarHostState() }
     val matchTriggerState by viewModel.meetingTrigger.collectAsState()
-    val showMatchFlowView = remember(matchTriggerState) {
-        matchTriggerState is MainViewModel.MatchTriggerUiState.Triggered &&
-                (matchTriggerState as MainViewModel.MatchTriggerUiState.Triggered).dto.trigger == TRIGGER_TIME_UP
-    }
     val showBottomSheet by viewModel.bottomSheetShow.collectAsState()
+    val showDialog by viewModel.dialogShow.collectAsState()
+    val userState by viewModel.userState.collectAsState()
+
+    val dto = (matchTriggerState as? MainViewModel.MatchTriggerUiState.Triggered)?.dto
+    val showMatchFlowView = remember(dto) { dto?.trigger == TRIGGER_TIME_UP }
+
+    LaunchedEffect(userState.participants) {
+        when (val result = userState.participants) {
+            is MainViewModel.UiState.Error -> {
+                val message = when (result.message) {
+                    ERROR_TOKEN_EXPIRE -> context.getString(R.string.msg_re_login).also { login() }
+                    ERROR_NETWORK -> context.getString(R.string.msg_network_error)
+                    else -> null
+                }
+                message?.let {
+                    snackBarHostState.showSnackbar(message = it, duration = SnackbarDuration.Short)
+                }
+            }
+            is MainViewModel.UiState.Success -> {
+                navController.navigate(MainView.REVIEW.route)
+            }
+            else -> Unit
+        }
+    }
 
     Scaffold(
         bottomBar = {
-            if (shouldShowBottomBar) {
-                BottomNavigation(navController = navController)
-            }
+            if (shouldShowBottomBar) BottomNavigation(navController)
         },
         topBar = {
             when (currentRoute) {
                 MainView.REVIEW.route -> {
                     TopAppBarWithCloseButton(
                         title = stringResource(R.string.review_app_bar),
-                        onBackClick = {
-                            viewModel.initParticipants()
-                        },
+                        onBackClick = { viewModel.initParticipants() },
                         isNavigationShow = false,
                     )
                 }
-
                 BottomView.Home.screenRoute -> {
-                    val alarmState by viewModel.userState.collectAsState()
-                    val icons = when (val state = alarmState.oneThingState) {
+                    val icons = when (val state = userState.oneThingState) {
                         is MainViewModel.UiState.Success ->
-                            state.data.takeIf { it.isNotEmpty() }
-                                ?.let { R.drawable.ic_bell_signal }
-                                ?: R.drawable.ic_bell
-
+                            if (state.data.isNotEmpty()) R.drawable.ic_bell_signal else R.drawable.ic_bell
                         else -> R.drawable.ic_bell
                     }
-                    HomeViewTopBar(
-                        image = icons,
-                        click = {
-                            alarmClick()
-                        }
-                    )
+                    HomeViewTopBar(image = icons, click = alarmClick)
                 }
-
                 BottomView.MyPage.screenRoute -> {
                     CustomMainPageTopBar(text = stringResource(R.string.nav_my))
                 }
-
                 BottomView.MatchView.screenRoute -> {
                     CustomMainPageTopBar(text = stringResource(R.string.my_match_top_bar))
                 }
@@ -109,17 +122,13 @@ fun MainScreenView(
         snackbarHost = {
             SnackbarHost(
                 hostState = snackBarHostState,
-                snackbar = { data ->
-                    CustomSnackBar(data)
-                },
+                snackbar = { data -> CustomSnackBar(data) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         start = 17.dp,
                         end = 16.dp,
-                        bottom = WindowInsets.navigationBars
-                            .asPaddingValues()
-                            .calculateBottomPadding() + 8.dp
+                        bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 8.dp
                     )
             )
         },
@@ -147,34 +156,33 @@ fun MainScreenView(
                 paddingValues = paddingValues,
                 snackBarHostState = snackBarHostState
             )
-            MatchIngFlowView(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(
-                        bottom =  12.dp,
-                        start = 17.dp,
-                        end = 16.dp
-                    ),
-                onClick = { viewModel.showBottomSheet() }
-            )
+
             if (showBottomSheet) {
-                MatchingBottomSheet(viewModel = viewModel)
+                MatchingBottomSheet(viewModel = viewModel, onClick = { viewModel.showDialog() })
             }
+
             if (showMatchFlowView && shouldShowBottomBar) {
-//                MatchIngFlowView(
-//                    modifier = Modifier
-//                        .align(Alignment.BottomCenter)
-//                        .padding(
-//                            bottom = paddingValues.calculateBottomPadding() + 12.dp,
-//                            start = 17.dp,
-//                            end = 16.dp
-//                        ),
-//                    onClick = { viewModel.showBottomSheet() }
-//                )
-//                if (showBottomSheet) {
-//                    MatchingBottomSheet(viewModel = viewModel)
-//                }
+                MatchIngFlowView(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 12.dp, start = 17.dp, end = 16.dp),
+                    onClick = { viewModel.showBottomSheet() }
+                )
             }
+        }
+
+        if (showDialog) {
+            CustomDialogTwoButton(
+                buttonText = stringResource(R.string.review_dialog_btn_okay),
+                dismissButtonText = stringResource(R.string.review_dialog_btn_cancel),
+                titleText = stringResource(R.string.review_dialog_title),
+                onDismiss = { viewModel.closeDialog() },
+                buttonClick = {
+                    viewModel.closeDialog()
+                    viewModel.getParticipants(matchId = 1, matchType = "ONE_THING")
+                },
+                contentText = "${dto?.localTime ?: ""} ${dto?.matchType ?: ""}"
+            )
         }
     }
 }

@@ -97,6 +97,9 @@
     <string name="my_match_content_apply">신청완료</string>
     <string name="my_match_content_confirm">모임확정</string>
     <!--모임 후기 작성-->
+    <string name="review_dialog_title">후기를 작성하러 갈까요?</string>
+    <string name="review_dialog_btn_okay">후기 남기기</string>
+    <string name="review_dialog_btn_cancel">다음에 작성하기</string>
     <string name="review_app_bar">모임 후기</string>
     <string name="review_title">모임은 어떠셨나요?</string>
     <string name="review_sub_title">솔직한 후기를 남겨 주시면 큰 도움이 되어요\n작성하신 후기는 원띵과 본인만 확인할 수 있어요</string>

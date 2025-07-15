@@ -48,7 +48,7 @@ class GetParticipants @Inject constructor(
                         }
                         return Result.Fail("network error")
                     }
-                    400 ->{
+                    400 , 200 ->{
                         /**
                          * TODO 가데이터 적용 배포 시 삭제
                          */

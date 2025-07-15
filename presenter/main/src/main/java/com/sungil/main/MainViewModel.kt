@@ -82,6 +82,9 @@ class MainViewModel @Inject constructor(
     private var _bottomSheetViewShow = MutableStateFlow(false)
     val bottomSheetShow : StateFlow<Boolean> = _bottomSheetViewShow.asStateFlow()
 
+    private var _dialogShow = MutableStateFlow(false)
+    val dialogShow : StateFlow<Boolean> = _dialogShow.asStateFlow()
+
     init {
         requestUserInfo()
         oneThingNotify()
@@ -446,6 +449,14 @@ class MainViewModel @Inject constructor(
 
     fun showBottomSheet(){
         _bottomSheetViewShow.value = true
+    }
+
+    fun closeDialog(){
+        _dialogShow.value = false
+    }
+
+    fun showDialog(){
+        _dialogShow.value = true
     }
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
