@@ -889,7 +889,7 @@ fun ReviewTextField(
 fun MatchingBottomSheet(
     viewModel: MainViewModel,
     onClick: () -> Unit,
-    matchData : MatchProgressUiModel? = null //TODO 배포시 무조건 수정
+    matchData : MatchProgressUiModel //TODO 배포시 무조건 수정
 ) {
     val scope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(
@@ -908,68 +908,6 @@ fun MatchingBottomSheet(
         containerColor = ColorStyle.WHITE_100
     ) {
         val view = viewModel.bottomSheetButton.collectAsState()
-        val dummyParticipants = listOf(
-            Participants(id = 1, nickName = "김성일"),
-            Participants(id = 2, nickName = "윤동주"),
-            Participants(id = 3, nickName = "오현식"),
-            Participants(id = 4, nickName = "장정우"),
-            Participants(id = 5, nickName = "장세은"),
-            Participants(id = 6, nickName = "김병진"),
-            Participants(id = 7, nickName = "하서은"),
-            Participants(id = 8, nickName = "신민선")
-        )
-        val dummyTMI = listOf(
-            "데이팅앱을 운영하고 있어요",
-            "축구를 좋아해요",
-            "영국 어학연수 가는 것이 목표에요",
-            "제주도 스탭을 했었어요",
-            "제주도 스탭을 했었어요",
-            "축구를 좋아해요",
-            "피자를 좋아해요",
-            "치킨을 좋아해요"
-        )
-        val dummyOneThing = listOf(
-            OneThingContent(
-                nickName = "김성일",
-                contentCategory = "자기계발",
-                content = "매일 아침 6시에 일어나 책을 읽고 있어요"
-            ),
-            OneThingContent(
-                nickName = "윤동주",
-                contentCategory = "인생",
-                content = "시간이 날 때마다 별을 바라보며 생각을 정리해요"
-            ),
-            OneThingContent(
-                nickName = "오현식",
-                contentCategory = "건강",
-                content = "최근에 러닝 5km 챌린지를 완주했어요"
-            ),
-            OneThingContent(
-                nickName = "장정우",
-                contentCategory = "취미",
-                content = "주말마다 수채화 그림을 그려요"
-            ),
-            OneThingContent(
-                nickName = "장세은",
-                contentCategory = "돈",
-                content = "매달 가계부를 쓰며 소비를 관리하고 있어요"
-            ),
-            OneThingContent(
-                nickName = "김병진",
-                contentCategory = "직장",
-                content = "스타트업에서 UX 디자이너로 일하고 있어요"
-            ),
-            OneThingContent(
-                nickName = "하서은",
-                contentCategory = "연애",
-                content = "좋은 대화가 좋은 관계를 만든다고 생각해요"
-            ),
-            OneThingContent(
-                nickName = "신민선",
-                contentCategory = "선택안함",
-                content = "아직은 어떤 목표를 정하지 않았어요"
-            )
-        )
         val dummyConversationData = listOf(
             "원띵에 대해 이야기 해 보아요",
             "Android Native vs Ios Native",
@@ -994,21 +932,21 @@ fun MatchingBottomSheet(
                 onClick = {
                     viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_TMI)
                 },
-                participant = dummyParticipants
+                participant = matchData.nickName
             )
 
             BottomSheetView.MATCH_START_TMI -> TmiMatchView(
                 onClick = {
                     viewModel.setBottomSheetButton(BottomSheetView.MATCH_STAT_ONE_THING)
                 },
-                data = dummyTMI
+                data = matchData.tmi
             )
 
             BottomSheetView.MATCH_STAT_ONE_THING -> OneThingContentView(
                 onClick = {
                     viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_CONVERSATION)
                 },
-                oneThingContent = dummyOneThing
+                oneThingContent = matchData.content
             )
 
             BottomSheetView.MATCH_START_CONVERSATION -> ConversationMatchView(

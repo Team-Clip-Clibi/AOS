@@ -31,7 +31,7 @@ import androidx.compose.ui.util.fastForEachIndexed
 import com.example.core.AppTextStyles
 
 @Composable
-internal fun MatchParticipantView(onClick: () -> Unit, participant: List<Participants>) {
+internal fun MatchParticipantView(onClick: () -> Unit, participant: List<String>) {
     Scaffold(
         bottomBar = {
             Column(modifier = Modifier.fillMaxWidth()
@@ -95,9 +95,9 @@ internal fun MatchParticipantView(onClick: () -> Unit, participant: List<Partici
 }
 
 @Composable
-private fun ParticipantsView(data: List<Participants>) {
+private fun ParticipantsView(data: List<String>) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp) // ✅ 수직 간격 적용
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         data.fastForEachIndexed { index, person ->
             Row(
@@ -116,7 +116,7 @@ private fun ParticipantsView(data: List<Participants>) {
             ) {
                 PersonNumberView(index = index.toString())
                 Text(
-                    text = person.nickName,
+                    text = person,
                     style = AppTextStyles.TITLE_20_28_SEMI,
                     color = ColorStyle.GRAY_800
                 )
