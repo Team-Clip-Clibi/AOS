@@ -86,7 +86,14 @@ fun MainNavigation(
                 guide = guide,
                 login = login,
                 matchDetail = { navController.navigate(MainView.MATCH_DETAIL.route) },
-                review = { navController.navigate(MainView.REVIEW.route) },
+                review = { participants, matchId, matchType ->
+                    viewModel.setReviewData(
+                        participants = participants,
+                        matchId = matchId,
+                        matchType = matchType
+                    )
+                    navController.navigate(MainView.REVIEW.route)
+                },
                 snackBarHostState = snackBarHostState
             )
         }
@@ -116,10 +123,14 @@ fun MainNavigation(
         }
 
         composable(MainView.REVIEW.route) {
+            val data = viewModel.getReviewData()
             ReviewView(
                 onClose = { navController.popBackStack() },
                 viewModel = viewModel,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                participant = data.participants,
+                matchId = data.matchId,
+                matchType = data.matchType
             )
         }
     }
@@ -129,7 +140,7 @@ private fun getSlideDirection(
     from: NavBackStackEntry,
     to: NavBackStackEntry,
     bottomRoutes: Set<String>,
-    forward: Boolean
+    forward: Boolean,
 ): AnimatedContentTransitionScope.SlideDirection {
     val fromRoute = from.destination.route
     val toRoute = to.destination.route

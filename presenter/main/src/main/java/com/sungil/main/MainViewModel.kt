@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
+import com.sungil.domain.model.MatchProgressUiModel
 import com.sungil.domain.model.MatchTrigger
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.OneThineNotify
@@ -22,6 +23,7 @@ import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
 import com.sungil.domain.useCase.GetParticipants
+import com.sungil.domain.useCase.GetProgressMatchInfo
 import com.sungil.domain.useCase.GetUserInfo
 import com.sungil.domain.useCase.MonitoryMeetingTime
 import com.sungil.domain.useCase.SendLateMatch
@@ -51,6 +53,7 @@ class MainViewModel @Inject constructor(
     private val sendReview: SendMatchReview,
     private val participants: GetParticipants,
     private val meetTime: MonitoryMeetingTime,
+    private val progressMatch : GetProgressMatchInfo
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -85,6 +88,9 @@ class MainViewModel @Inject constructor(
     private var _dialogShow = MutableStateFlow(false)
     val dialogShow : StateFlow<Boolean> = _dialogShow.asStateFlow()
 
+    private var participantsData: List<String> = emptyList()
+    private var matchId : Int = 0
+    private var matchType : String = ""
     init {
         requestUserInfo()
         oneThingNotify()
@@ -329,6 +335,29 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun progressMatchInfo(matchId: Int, matchType: String) {
+        viewModelScope.launch {
+            when (val result = progressMatch.invoke(
+                GetProgressMatchInfo.Param(
+                    matchId = matchId,
+                    matchType = matchType
+                )
+            )) {
+                is GetProgressMatchInfo.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(progressMatchInfo = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is GetProgressMatchInfo.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(progressMatchInfo = UiState.Success(result.data))
+                    }
+                }
+            }
+        }
+    }
+
     fun initParticipants() {
         _userState.update { state ->
             state.copy(participants = UiState.Loading)
@@ -458,6 +487,24 @@ class MainViewModel @Inject constructor(
     fun showDialog(){
         _dialogShow.value = true
     }
+    fun setReviewData(
+        participants : List<String>,
+        matchId : Int,
+        matchType :String
+    ){
+        this.participantsData = participants
+        this.matchId = matchId
+        this.matchType = matchType
+    }
+
+    fun getReviewData(): ReviewData {
+        return ReviewData(
+            participants = participantsData,
+            matchId = matchId,
+            matchType = matchType
+        )
+    }
+
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
@@ -485,6 +532,7 @@ class MainViewModel @Inject constructor(
         val allAttend: Boolean = true,
         val unAttendMember: ArrayList<String> = arrayListOf(),
         val writeReview: UiState<Int> = UiState.Loading,
+        val progressMatchInfo : UiState<MatchProgressUiModel> = UiState.Loading
     )
 
 }
@@ -502,4 +550,9 @@ data class LatestDayInfo(
 data class MatchLate(
     val time: Int,
     val matchId: Int,
+)
+data class ReviewData(
+    val participants: List<String>,
+    val matchId: Int,
+    val matchType: String
 )

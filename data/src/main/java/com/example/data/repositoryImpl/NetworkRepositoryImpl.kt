@@ -4,7 +4,9 @@ import android.app.Activity
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.data.mapper.toDomain
 import com.example.data.mapper.toMatchData
+import com.example.data.mapper.toMatchProgress
 import com.example.data.paging.MatchNoticePagingSource
 import com.example.data.paging.MatchPagingSource
 import com.example.data.paging.NotificationPagingSource
@@ -22,6 +24,7 @@ import com.sungil.domain.model.MatchDate
 import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.MatchProgress
 import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.NotificationData
@@ -662,28 +665,29 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {
-        return UserInfo(
-            responseCode = responseCode,
-            data = UserData(
-                userName = username ?: "",
-                nickName = nickname,
-                phoneNumber = phoneNumber ?: "",
-                job = "NONE",
-                loveState = Pair("NONE", false),
-                diet = "NONE",
-                language = "KOREAN"
+    override suspend fun requestProgressMatch(
+        token: String,
+        matchId: Int,
+        matchType: String,
+    ): NetworkResult<MatchProgress> {
+        try {
+            val request = api.requestProgressMatchInfo(
+                bearerToken = token,
+                id = matchId,
+                type = matchType
             )
-        )
+            if (!request.isSuccessful) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            if (request.code() != 200) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            if (request.body() == null) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            return NetworkResult.Success(request.body()!!.toMatchProgress())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
     }
-
-    private fun OneThinNotify.toDomain(): OneThineNotify {
-        return OneThineNotify(
-            id = id,
-            notificationType = notificationType,
-            content = content,
-            createdAt = createdAt
-        )
-    }
-
 }

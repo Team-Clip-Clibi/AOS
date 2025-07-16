@@ -94,6 +94,8 @@ const val REVIEW_BEST_VALUE = "EXCELLENT"
 const val PAGE_MATCH_HISTORY = 0
 const val PAGE_MATCH_NOTICE= 1
 
+const val NAV_KEY_MATCH_ID = "matchId"
+const val NAV_KEY_MATCH_TYPE = "matchType"
 enum class MatchStatus(val route: String, val label: String) {
     MATCH_CANCEL("CANCELLED", "취소"),
     MATCH_COMPLETED("COMPLETED", "모임종료"),

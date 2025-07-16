@@ -29,6 +29,7 @@ import com.sungil.network.model.UserDetailRequest
 import com.sungil.network.model.UserInfoResponse
 import com.sungil.network.model.MatchDetailResponse
 import com.sungil.network.model.MatchNoticeDto
+import com.sungil.network.model.MatchProgressDTO
 import com.sungil.network.model.MatchReviewDTO
 import com.sungil.network.model.ParticipantsDTO
 import retrofit2.Response
@@ -388,21 +389,26 @@ interface HttpApi {
         @Header("Authorization") bearerToken: String,
         @Path("matchingId") id: Int,
         @Path("matchingType") matchingType: String,
-        @Body review: MatchReviewDTO
-    ) : Response<Unit>
+        @Body review: MatchReviewDTO,
+    ): Response<Unit>
 
     /**
      * 참여자 조회 API
      */
-    @GET(BuildConfig.MATCH_REVIEW_URL + "/" +"{matchingId}"+"/"+"{matchingType}"+"/participants")
+    @GET(BuildConfig.MATCH_REVIEW_URL + "/" + "{matchingId}" + "/" + "{matchingType}" + "/participants")
     suspend fun requestParticipants(
         @Header("Authorization") bearerToken: String,
         @Path("matchingId") id: Int,
         @Path("matchingType") matchingType: String,
-    ) : Response<List<ParticipantsDTO>>
+    ): Response<List<ParticipantsDTO>>
 
     /**
      * 진행중인 모임 조회
      */
-
+    @GET(BuildConfig.MATCH_PROGRESS_MATCH_URL + "/" + "{matchingType}" + "/" + "{id}" + "/" + BuildConfig.MATCH_PROGRESS_PROGRESS_URL)
+    suspend fun requestProgressMatchInfo(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingType") type: String,
+        @Path("id") id: Int,
+    ): Response<MatchProgressDTO>
 }

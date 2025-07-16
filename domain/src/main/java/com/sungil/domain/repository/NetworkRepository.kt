@@ -10,6 +10,7 @@ import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.MatchProgress
 import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
@@ -181,4 +182,10 @@ interface NetworkRepository {
         matchId: Int,
         matchType: String,
     ) : NetworkResult<List<Participants>>
+
+    suspend fun requestProgressMatch(
+        token : String,
+        matchId: Int,
+        matchType: String
+    ) : NetworkResult<MatchProgress>
 }

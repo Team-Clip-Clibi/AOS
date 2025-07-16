@@ -63,6 +63,7 @@ import com.example.core.ColorStyle
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
+import com.sungil.domain.model.MatchProgressUiModel
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.OneThingContent
 import com.sungil.domain.model.Participants
@@ -887,7 +888,8 @@ fun ReviewTextField(
 @Composable
 fun MatchingBottomSheet(
     viewModel: MainViewModel,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    matchData : MatchProgressUiModel? = null //TODO 배포시 무조건 수정
 ) {
     val scope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(

@@ -58,38 +58,37 @@ fun MainScreenView(
     val context = LocalContext.current
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
     val bottomNavRoutes = listOf(BottomView.Home, BottomView.MatchView, BottomView.MyPage)
     val shouldShowBottomBar = currentRoute in bottomNavRoutes.map { it.screenRoute }
-
     val snackBarHostState = remember { SnackbarHostState() }
     val matchTriggerState by viewModel.meetingTrigger.collectAsState()
     val showBottomSheet by viewModel.bottomSheetShow.collectAsState()
     val showDialog by viewModel.dialogShow.collectAsState()
     val userState by viewModel.userState.collectAsState()
-
     val dto = (matchTriggerState as? MainViewModel.MatchTriggerUiState.Triggered)?.dto
     val showMatchFlowView = remember(dto) { dto?.trigger == TRIGGER_TIME_UP }
+    val progressMatchInfo = (userState.progressMatchInfo as? MainViewModel.UiState.Success)?.data
 
-    LaunchedEffect(userState.participants) {
-        when (val result = userState.participants) {
+    LaunchedEffect(userState.progressMatchInfo) {
+        when (val result = userState.progressMatchInfo) {
             is MainViewModel.UiState.Error -> {
                 val message = when (result.message) {
                     ERROR_TOKEN_EXPIRE -> context.getString(R.string.msg_re_login).also { login() }
                     ERROR_NETWORK -> context.getString(R.string.msg_network_error)
-                    else -> null
+                    else -> "error"
                 }
-                message?.let {
+                message.let {
                     snackBarHostState.showSnackbar(message = it, duration = SnackbarDuration.Short)
                 }
             }
+
             is MainViewModel.UiState.Success -> {
-                navController.navigate(MainView.REVIEW.route)
+                viewModel.showBottomSheet()
             }
+
             else -> Unit
         }
     }
-
     Scaffold(
         bottomBar = {
             if (shouldShowBottomBar) BottomNavigation(navController)
@@ -103,17 +102,21 @@ fun MainScreenView(
                         isNavigationShow = false,
                     )
                 }
+
                 BottomView.Home.screenRoute -> {
                     val icons = when (val state = userState.oneThingState) {
                         is MainViewModel.UiState.Success ->
                             if (state.data.isNotEmpty()) R.drawable.ic_bell_signal else R.drawable.ic_bell
+
                         else -> R.drawable.ic_bell
                     }
                     HomeViewTopBar(image = icons, click = alarmClick)
                 }
+
                 BottomView.MyPage.screenRoute -> {
                     CustomMainPageTopBar(text = stringResource(R.string.nav_my))
                 }
+
                 BottomView.MatchView.screenRoute -> {
                     CustomMainPageTopBar(text = stringResource(R.string.my_match_top_bar))
                 }
@@ -128,7 +131,8 @@ fun MainScreenView(
                     .padding(
                         start = 17.dp,
                         end = 16.dp,
-                        bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 8.dp
+                        bottom = WindowInsets.navigationBars.asPaddingValues()
+                            .calculateBottomPadding() + 8.dp
                     )
             )
         },
@@ -158,7 +162,11 @@ fun MainScreenView(
             )
 
             if (showBottomSheet) {
-                MatchingBottomSheet(viewModel = viewModel, onClick = { viewModel.showDialog() })
+                MatchingBottomSheet(
+                    viewModel = viewModel,
+                    onClick = { viewModel.showDialog() },
+                    matchData = progressMatchInfo
+                )
             }
 
             if (showMatchFlowView && shouldShowBottomBar) {
@@ -166,7 +174,12 @@ fun MainScreenView(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 12.dp, start = 17.dp, end = 16.dp),
-                    onClick = { viewModel.showBottomSheet() }
+                    onClick = {
+                        viewModel.progressMatchInfo(
+                            matchId = dto!!.id,
+                            matchType = dto.type
+                        )
+                    }
                 )
             }
         }
@@ -179,7 +192,12 @@ fun MainScreenView(
                 onDismiss = { viewModel.closeDialog() },
                 buttonClick = {
                     viewModel.closeDialog()
-                    viewModel.getParticipants(matchId = 1, matchType = "ONE_THING")
+                    viewModel.setReviewData(
+                        participants = progressMatchInfo!!.nickName,
+                        matchType = dto!!.matchType,
+                        matchId = dto.id
+                    )
+                    navController.navigate(MainView.REVIEW.route)
                 },
                 contentText = "${dto?.localTime ?: ""} ${dto?.matchType ?: ""}"
             )

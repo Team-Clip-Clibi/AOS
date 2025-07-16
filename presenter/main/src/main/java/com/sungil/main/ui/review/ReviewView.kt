@@ -41,7 +41,6 @@ import com.sungil.main.component.ReviewItemContent
 import com.sungil.main.component.ReviewTextField
 import com.example.core.ButtonCheckBoxLeftL
 import com.example.core.ButtonXXLPurple400
-import com.sungil.domain.model.Participants
 import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.REVIEW_BEST_BTN
@@ -50,7 +49,14 @@ import com.sungil.main.REVIEW_NORMAL_BTN
 import com.sungil.main.REVIEW_SELECT_NOTHING
 
 @Composable
-internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit , paddingValues: PaddingValues) {
+internal fun ReviewView(
+    viewModel: MainViewModel,
+    onClose: () -> Unit,
+    paddingValues: PaddingValues,
+    participant: List<String>,
+    matchId: Int,
+    matchType: String,
+) {
     val uiState by viewModel.userState.collectAsState()
     val review = uiState.reviewButton
     val badItem = uiState.badReviewItem
@@ -99,12 +105,15 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit , paddingV
             else -> Unit
         }
     }
-    if (participantsState !is MainViewModel.UiState.Success) return
-    val person = participantsState.data
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(color = ColorStyle.WHITE_100)
-            .padding(start = 17.dp , end = 16.dp , bottom = paddingValues.calculateBottomPadding() + 8.dp)
+            .padding(
+                start = 17.dp,
+                end = 16.dp,
+                bottom = paddingValues.calculateBottomPadding() + 8.dp
+            )
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(16.dp))
@@ -174,7 +183,7 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit , paddingV
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     UnAttendMemberView(
-                        person = person.person,
+                        person = participant,
                         selectItem = selectPerson,
                         viewModel = viewModel
                     )
@@ -186,8 +195,8 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit , paddingV
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     viewModel.sendReview(
-                        matchId = person.matchId,
-                        matchType = person.matchType
+                        matchId = matchId,
+                        matchType = matchType
                     )
                 },
             )
@@ -336,7 +345,7 @@ private fun AllMemberAttendView(viewModel: MainViewModel, selectItem: Boolean) {
 
 @Composable
 private fun UnAttendMemberView(
-    person: List<Participants>,
+    person: List<String>,
     viewModel: MainViewModel,
     selectItem: ArrayList<String>,
 ) {
@@ -352,11 +361,11 @@ private fun UnAttendMemberView(
         Spacer(modifier = Modifier.height(16.dp))
         person.forEach { data ->
             ReviewItemContent(
-                content = data.nickName,
+                content = data,
                 isClick = {
-                    viewModel.setUnAttendMember(data.nickName)
+                    viewModel.setUnAttendMember(data)
                 },
-                isSelect = selectItem.contains(data.nickName)
+                isSelect = selectItem.contains(data)
             )
             Spacer(modifier = Modifier.height(12.dp))
         }
