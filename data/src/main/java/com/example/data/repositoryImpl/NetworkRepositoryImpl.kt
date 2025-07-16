@@ -30,11 +30,9 @@ import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
-import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.Participants
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.RandomInfo
-import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.NetworkRepository
@@ -46,14 +44,12 @@ import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchReviewDTO
 import com.sungil.network.model.NickNameCheckRequest
-import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.Payment
 import com.sungil.network.model.PreferredDate
 import com.sungil.network.model.RandomOrder
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
-import com.sungil.network.model.RequestUserInfo
 import com.sungil.network.model.SLANG
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
