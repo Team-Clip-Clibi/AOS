@@ -360,7 +360,16 @@ class MainViewModel @Inject constructor(
 
     fun initParticipants() {
         _userState.update { state ->
-            state.copy(participants = UiState.Loading)
+            state.copy(
+                participants = UiState.Loading,
+                reviewDetail = "",
+                allAttend = true,
+                badReviewItem = arrayListOf(),
+                goodReviewItem = arrayListOf(),
+                reviewButton = REVIEW_SELECT_NOTHING,
+                writeReview = UiState.Loading,
+                unAttendMember = arrayListOf(),
+            )
         }
     }
 
