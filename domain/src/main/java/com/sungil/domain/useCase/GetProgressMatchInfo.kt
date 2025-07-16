@@ -50,7 +50,7 @@ class GetProgressMatchInfo @Inject constructor(
                         }
                         return Result.Fail("network error")
                     }
-                    204 ->{
+                    204 ,400 ->{
                         //TODO 배포 이전까지 사용
                         val dummyMatchProgress = MatchProgressUiModel(
                             nickName = listOf(
