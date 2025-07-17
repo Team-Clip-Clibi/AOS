@@ -18,7 +18,7 @@ class App : Application() {
         super.onCreate()
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_KEY)
         Firebase.initialize(this)
-        var keyHash = Utility.getKeyHash(this)
+        val keyHash = Utility.getKeyHash(this)
         Log.i("kjwTest", "keyHash: $keyHash")
         FirebaseMessage.intentProvider = object : FirebaseIntentProvider {
             override fun getFCMIntent(context: Context): Intent {
