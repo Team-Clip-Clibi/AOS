@@ -90,7 +90,7 @@ internal fun OneThingContentView(
                 currentPage = currentPage
             )
             Text(
-                text = "${currentPage.value + 1}/${oneThingContent.size}",
+                text = "${currentPage.intValue + 1}/${oneThingContent.size}",
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 modifier = Modifier.fillMaxWidth(),
                 color = ColorStyle.GRAY_500,
