@@ -1,7 +1,11 @@
 package com.sungil.onething
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import com.example.fcm.FirebaseIntentProvider
+import com.example.fcm.FirebaseMessage
 import com.google.firebase.Firebase
 import com.google.firebase.initialize
 import com.kakao.sdk.common.KakaoSdk
@@ -12,9 +16,14 @@ import dagger.hilt.android.HiltAndroidApp
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this , BuildConfig.KAKAO_NATIVE_KEY)
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_KEY)
         Firebase.initialize(this)
         var keyHash = Utility.getKeyHash(this)
         Log.i("kjwTest", "keyHash: $keyHash")
+        FirebaseMessage.intentProvider = object : FirebaseIntentProvider {
+            override fun getFCMIntent(context: Context): Intent {
+                return Intent(context, MainActivity::class.java)
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@ import com.example.data.paging.MatchNoticePagingSource
 import com.example.data.paging.MatchPagingSource
 import com.example.data.paging.NotificationPagingSource
 import com.example.data.paging.NotificationReadPagingSource
-import com.example.fcm.FirebaseFCM
+import com.example.fcm.FirebaseToken
 import com.sungil.database.token.TokenManager
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietData
@@ -59,7 +59,7 @@ import javax.inject.Inject
 class NetworkRepositoryImpl @Inject constructor(
     private val firebase: FirebaseSMSRepo,
     private val api: HttpApi,
-    private val fcmRepo: FirebaseFCM,
+    private val fcmRepo: FirebaseToken,
     private val tokenManger: TokenManager,
 ) :
     NetworkRepository {
