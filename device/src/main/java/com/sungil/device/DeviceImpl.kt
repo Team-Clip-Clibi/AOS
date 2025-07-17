@@ -1,17 +1,18 @@
 package com.sungil.device
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.telephony.TelephonyManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
+import com.sungil.device.model.MatchTriggerDTO
+import com.sungil.device.model.TriggerType
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import java.time.Duration
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class DeviceImpl @Inject constructor(@ApplicationContext private val application: Context) :
@@ -44,5 +45,48 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
             false
         }
     }
+
+    override fun monitorMeetingTime(
+        meetTime: String,
+        meetId: Int,
+        meetType: String,
+    ): Flow<MatchTriggerDTO> = flow {
+        val targetTime = ZonedDateTime.parse(meetTime)
+        var timeUpEmitted = false
+
+        while (true) {
+            val now = ZonedDateTime.now()
+            val secondsDiff = Duration.between(targetTime, now).seconds
+            Log.d(
+                javaClass.name,
+                "Meeting ID: $meetId 지난 시간: $secondsDiff 초"
+            )
+            if (!timeUpEmitted && secondsDiff >= 0) {
+                requestVibrate()
+                emit(
+                    MatchTriggerDTO(
+                        matchId = meetId,
+                        matchTime = meetTime,
+                        meetingType = meetType,
+                        triggerType = TriggerType.TIME_UP
+                    )
+                )
+                timeUpEmitted = true
+            }
+            if (timeUpEmitted && secondsDiff >= 120) {
+                emit(
+                    MatchTriggerDTO(
+                        matchId = meetId,
+                        matchTime = meetTime,
+                        meetingType = meetType,
+                        triggerType = TriggerType.OVERDUE
+                    )
+                )
+                break
+            }
+            delay(1000L)
+        }
+    }
+
 
 }

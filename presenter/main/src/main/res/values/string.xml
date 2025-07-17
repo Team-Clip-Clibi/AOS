@@ -6,6 +6,8 @@
     <string name="nav_my">마이</string>
     <string name="nav_guide">guide</string>
     <string name="btn_finish">완료</string>
+    <string name="match_flow_title">모임이 진행 중이에요</string>
+    <string name="match_flow_content">지금까지 나눈 이야기, 다시 이어가요</string>
     <!--  my page  -->
     <string name="txt_mayPage_hi">안녕하세요!</string>
     <string name="txt_myPage_sir">%1$s님</string>
@@ -95,6 +97,9 @@
     <string name="my_match_content_apply">신청완료</string>
     <string name="my_match_content_confirm">모임확정</string>
     <!--모임 후기 작성-->
+    <string name="review_dialog_title">후기를 작성하러 갈까요?</string>
+    <string name="review_dialog_btn_okay">후기 남기기</string>
+    <string name="review_dialog_btn_cancel">다음에 작성하기</string>
     <string name="review_app_bar">모임 후기</string>
     <string name="review_title">모임은 어떠셨나요?</string>
     <string name="review_sub_title">솔직한 후기를 남겨 주시면 큰 도움이 되어요\n작성하신 후기는 원띵과 본인만 확인할 수 있어요</string>
@@ -123,6 +128,30 @@
     <string name="review_not_attend_title">오늘 참석하지 않은 멤버가 있나요?</string>
     <string name="review_not_attend_item_all_come">모두 참석했어요</string>
     <string name="review_not_attend_item_not_all_come">참석하지 않은 멤버가 있어요</string>
+    <!--  MatchStart  -->
+    <string name="match_start_first">인사는 나누셨나요?</string>
+    <string name="match_start_first_content">아직 도착하지 않은 멤버가 있다면, 앱 내 알림내역에서 도착 예정 시간을 확인 후 메뉴를 먼저 주문해요</string>
+    <string name="match_start_first_image_content">원하는 메뉴를 주문하고, \n닉네임 또는 실명으로 소개해 주세요</string>
+    <string name="match_start_first_btn">모임 시작하기</string>
+    <string name="match_start_ing">모임진행</string>
+    <string name="match_start_end">마무리"</string>
+    <string name="match_start_host_content">진행자를 선정해요</string>
+    <string name="match_start_host_sub_content">오늘 모임에서는 두 번째로 도착하신 분이, 약 10분 동안 모임을 진행해 주세요</string>
+    <string name="match_start_host_image_content">진행자는 카드에 적힌 질문을\n한 장씩 읽으며, 대화를 이끌어 주세요</string>
+    <string name="match_start_next_btn">다음</string>
+    <string name="match_start_end_btn">종료</string>
+    <string name="match_start_participants_content">닉네임으로 나를 소개해요</string>
+    <string name="match_start_participants_content_sub">아래 순서대로 나이, 취미, 관심사 등을 소개해 주세요\n공개하고 싶지 않은 정보는 생략해도 괜찮아요</string>
+    <string name="match_start_tmi_content">TMI로 조금 더 친해져요</string>
+    <string name="match_start_tmi_content_sub">지금까지 나눈 대화를 참고해, 각 TMI의 주인을 맞춰보세요</string>
+    <string name="match_start_oneThing_content">원띵을 소개해요</string>
+    <string name="match_start_oneThing_content_sub">카드를 넘겨 멤버들의 원띵을 확인하며 이야기를 나눠 보세요</string>
+    <string name="match_start_oneThing_nickName">%1$s님의 원띵</string>
+    <string name="match_end_content">즐거운 시간 보내셨나요?</string>
+    <string name="match_end_content_sub">짧은 시간이지만, 깊이 있는 대화를 나누셨길 바라요\n이야기를 더 나누고 싶다면 2차를 가는 것도 추천해요</string>
+    <string name="match_end_image_content">오늘의 원띵으로\n좋은 인사이트를 얻으셨길 바라요</string>
+    <string name="match_conversation_content">자유롭게 대화를 나눠요</string>
+    <string name="match_conversation_content_sub">준비된 원띵 질문은 여기까지! 원띵 질문 외에 다양한 주제로 대화를 이어가 보세요</string>
     <!-- Error message   -->
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <string name="msg_network_error">네트워크 에러</string>

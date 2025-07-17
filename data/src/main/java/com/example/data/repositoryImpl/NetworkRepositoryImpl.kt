@@ -4,36 +4,35 @@ import android.app.Activity
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.data.mapper.toDomain
+import com.example.data.mapper.toMatchData
+import com.example.data.mapper.toMatchProgress
 import com.example.data.paging.MatchNoticePagingSource
 import com.example.data.paging.MatchPagingSource
 import com.example.data.paging.NotificationPagingSource
 import com.example.data.paging.NotificationReadPagingSource
-import com.example.fcm.FirebaseFCM
+import com.example.fcm.FirebaseToken
 import com.sungil.database.token.TokenManager
-import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietData
 import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.Love
 import com.sungil.domain.model.LoveResponse
-import com.sungil.domain.model.Match
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDate
 import com.sungil.domain.model.MatchDetail
-import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.MatchProgress
 import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.NotificationResponse
 import com.sungil.domain.model.OneThineNotification
-import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.Participants
 import com.sungil.domain.model.PhoneNumberCheckResult
 import com.sungil.domain.model.RandomInfo
-import com.sungil.domain.model.UserData
 import com.sungil.domain.model.UserInfo
 import com.sungil.domain.model.WeekData
 import com.sungil.domain.repository.NetworkRepository
@@ -44,16 +43,13 @@ import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
 import com.sungil.network.model.MatchReviewDTO
-import com.sungil.network.model.MatchingDto
 import com.sungil.network.model.NickNameCheckRequest
-import com.sungil.network.model.OneThinNotify
 import com.sungil.network.model.OneThingOrder
 import com.sungil.network.model.Payment
 import com.sungil.network.model.PreferredDate
 import com.sungil.network.model.RandomOrder
 import com.sungil.network.model.RelationShip
 import com.sungil.network.model.Report
-import com.sungil.network.model.RequestUserInfo
 import com.sungil.network.model.SLANG
 import com.sungil.network.model.TermData
 import com.sungil.network.model.UserDetailRequest
@@ -63,7 +59,7 @@ import javax.inject.Inject
 class NetworkRepositoryImpl @Inject constructor(
     private val firebase: FirebaseSMSRepo,
     private val api: HttpApi,
-    private val fcmRepo: FirebaseFCM,
+    private val fcmRepo: FirebaseToken,
     private val tokenManger: TokenManager,
 ) :
     NetworkRepository {
@@ -335,37 +331,20 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun requestMatchingData(accessToken: String): Match {
-        val result = api.requestMatchData(accessToken)
-        if (result.code() != 200) {
-            return Match(
-                responseCode = result.code(),
-                MatchData(
-                    oneThingMatch = emptyList(),
-                    randomMatch = emptyList()
-                )
+    override suspend fun requestMatchingData(accessToken: String): NetworkResult<MatchData> {
+        try {
+            val response = api.requestMatchData(accessToken)
+            if (!response.isSuccessful) {
+                return NetworkResult.Error(code = response.code(), message = response.message())
+            }
+            val body = response.body() ?: return NetworkResult.Error(
+                code = response.code(),
+                message = response.message()
             )
+            return NetworkResult.Success(body.toMatchData())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }
-        if (result.body() == null) {
-            return Match(
-                responseCode = -100,
-                MatchData(
-                    oneThingMatch = emptyList(),
-                    randomMatch = emptyList()
-                )
-            )
-        }
-        return Match(
-            responseCode = result.code(),
-            data = MatchData(
-                oneThingMatch = result.body()!!.oneThingMatchings.map {
-                    it.toDomainMatchData(
-                        CATEGORY.CONTENT_ONE_THING
-                    )
-                },
-                randomMatch = result.body()!!.randomMatchings.map { it.toDomainMatchData(CATEGORY.CONTENT_RANDOM) }
-            ),
-        )
     }
 
     override fun requestMatchingData(
@@ -387,7 +366,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestUpdateToken(refreshToken: String): Triple<Int, String?, String?> {
         val result = api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
-        return Triple(result.code() , result.body()?.accessToken ?: "", refreshToken)
+        return Triple(result.code() , result.body()?.accessToken ?: "", result.body()?.refreshToken)
     }
 
     override suspend fun requestOneThineNotification(accessToken: String): OneThineNotification {
@@ -682,37 +661,29 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun RequestUserInfo.toDomain(responseCode: Int): UserInfo {
-        return UserInfo(
-            responseCode = responseCode,
-            data = UserData(
-                userName = username ?: "",
-                nickName = nickname,
-                phoneNumber = phoneNumber ?: "",
-                job = "NONE",
-                loveState = Pair("NONE", false),
-                diet = "NONE",
-                language = "KOREAN"
+    override suspend fun requestProgressMatch(
+        token: String,
+        matchId: Int,
+        matchType: String,
+    ): NetworkResult<MatchProgress> {
+        try {
+            val request = api.requestProgressMatchInfo(
+                bearerToken = token,
+                id = matchId,
+                type = matchType
             )
-        )
+            if (!request.isSuccessful) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            if (request.code() != 200) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            if (request.body() == null) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            return NetworkResult.Success(request.body()!!.toMatchProgress())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
     }
-
-    private fun MatchingDto.toDomainMatchData(category: CATEGORY): MatchInfo {
-        return MatchInfo(
-            category = category,
-            matchingId = matchingId,
-            daysUntilMeeting = daysUntilMeeting,
-            meetingPlace = meetingPlace
-        )
-    }
-
-    private fun OneThinNotify.toDomain(): OneThineNotify {
-        return OneThineNotify(
-            id = id,
-            notificationType = notificationType,
-            content = content,
-            createdAt = createdAt
-        )
-    }
-
 }

@@ -8,8 +8,9 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+import java.util.Properties
 
-class HiltLibraryConventionPlugin : Plugin<Project>  {
+class HiltLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
         pluginManager.apply("com.android.library")
@@ -22,6 +23,15 @@ class HiltLibraryConventionPlugin : Plugin<Project>  {
                 minSdk = 31
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 consumerProguardFiles("consumer-rules.pro")
+                val properties = Properties()
+                val localPropsFile = rootProject.file("local.properties")
+                if (localPropsFile.exists()) {
+                    localPropsFile.inputStream().use { properties.load(it) }
+                }
+                val fcmChannelId = properties.getProperty("fcmChannelId", "")
+                val fcmChannelName = properties.getProperty("fcmChannelName", "")
+                buildConfigField("String", "FCM_ID", fcmChannelId)
+                buildConfigField("String", "FCM_NAME", fcmChannelName)
             }
             buildFeatures.buildConfig = true
             compileOptions {

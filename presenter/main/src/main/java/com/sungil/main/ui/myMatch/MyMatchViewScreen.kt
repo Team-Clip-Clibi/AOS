@@ -62,7 +62,7 @@ internal fun MyMatchViewScreen(
     login: () -> Unit,
     guide: () -> Unit,
     matchDetail: () -> Unit,
-    review: () -> Unit,
+    review: (List<String> , Int , String) -> Unit,
     snackBarHostState: SnackbarHostState,
 ) {
     val state by viewModel.userState.collectAsState()
@@ -449,7 +449,7 @@ private fun HandleParticipants(
     context: Context,
     snackBarHostState: SnackbarHostState,
     login: () -> Unit,
-    review: () -> Unit,
+    review: (List<String> , Int , String) -> Unit,
 ) {
     LaunchedEffect(state.participants) {
         when (val result = state.participants) {
@@ -473,7 +473,11 @@ private fun HandleParticipants(
             }
 
             is MainViewModel.UiState.Success -> {
-                review()
+                review(
+                    result.data.person.map { data -> data.nickName },
+                    result.data.matchId,
+                    result.data.matchType
+                )
             }
 
             else -> Unit

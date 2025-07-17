@@ -1,11 +1,17 @@
 package com.sungil.domain.useCase
 
+import android.util.Log
+import com.sungil.domain.CATEGORY
 import com.sungil.domain.TOKEN_FORM
 import com.sungil.domain.UseCase
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.MatchInfo
+import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class GetMatch @Inject constructor(
@@ -21,27 +27,60 @@ class GetMatch @Inject constructor(
 
     suspend fun invoke(): Result {
         val token = database.getToken()
-        val data = network.requestMatchingData(TOKEN_FORM + token.first)
-        when (data.responseCode) {
-            401 -> {
-                val refreshToken = tokenManger.requestUpdateToken(token.second)
-                if (!refreshToken) return Result.Fail("reLogin")
-                val newToken = database.getToken()
-                val reRequest = network.requestMatchingData(TOKEN_FORM + newToken.first)
-                if (reRequest.responseCode == 200) {
-                    val serverMatch = reRequest.data
-                    return Result.Success(serverMatch)
+        when (val response = network.requestMatchingData(TOKEN_FORM + token.first)) {
+            is NetworkResult.Error -> {
+                when (response.code) {
+                    401 -> {
+                        val refreshToken = tokenManger.requestUpdateToken(token.second)
+                        if (!refreshToken) return Result.Fail("reLogin")
+                        val newToken = database.getToken()
+                        val reRequest = network.requestMatchingData(TOKEN_FORM + newToken.first)
+                        if (reRequest is NetworkResult.Success) {
+                            val serverMatch = reRequest.data
+                            return Result.Success(serverMatch)
+                        }
+                        return Result.Fail("network error")
+                    }
+
+                    else -> return Result.Fail("network error")
                 }
-                return Result.Fail("network error")
             }
 
-            200 -> {
-                val serverMatch = data.data
-                return Result.Success(serverMatch)
+            is NetworkResult.Success -> {
+                if (response.data.randomMatch.isEmpty() || response.data.oneThingMatch.isEmpty()) {
+                    val testData = generateDummyMatchData()
+                    Log.d(javaClass.name.toString(), "testData insert")
+                    return Result.Success(testData)
+                }
+                return Result.Success(response.data)
             }
-
-            else -> return Result.Fail("network error")
         }
     }
+}
 
+fun generateDummyMatchData(): MatchData {
+    val matchTime = ZonedDateTime.now()
+        .plusMinutes(1)
+        .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+
+    return MatchData(
+        oneThingMatch = listOf(
+            MatchInfo(
+                category = CATEGORY.CONTENT_ONE_THING,
+                matchingId = 1,
+                daysUntilMeeting = 1,
+                meetingPlace = "서울 강남역 3번 출구 앞",
+                matchTime = matchTime
+            )
+        ),
+        randomMatch = listOf(
+            MatchInfo(
+                category = CATEGORY.CONTENT_RANDOM,
+                matchingId = 2,
+                daysUntilMeeting = 0,
+                meetingPlace = "서울 신촌역 1번 출구 앞",
+                matchTime = matchTime
+            )
+        )
+    )
 }

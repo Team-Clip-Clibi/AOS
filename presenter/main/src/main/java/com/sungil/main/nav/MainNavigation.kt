@@ -18,6 +18,8 @@ import com.sungil.main.ui.review.ReviewView
 import androidx.compose.animation.core.tween
 import androidx.navigation.NavBackStackEntry
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 
 @Composable
 fun MainNavigation(
@@ -34,40 +36,52 @@ fun MainNavigation(
     paddingValues: PaddingValues,
     snackBarHostState: SnackbarHostState,
 ) {
-    val bottomRoutes = setOf(
-        BottomView.Home.screenRoute,
-        BottomView.MatchView.screenRoute,
-        BottomView.MyPage.screenRoute
-    )
 
     NavHost(
         navController = navController,
         startDestination = BottomView.Home.screenRoute,
         enterTransition = {
-            slideIntoContainer(
-                getSlideDirection(initialState, targetState, bottomRoutes, forward = true),
-                animationSpec = tween(700)
-            )
+            if (targetState.destination.route == MainView.REVIEW.route) {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(700)
+                )
+            } else {
+                EnterTransition.None
+            }
         },
         exitTransition = {
-            slideOutOfContainer(
-                getSlideDirection(initialState, targetState, bottomRoutes, forward = true),
-                animationSpec = tween(700)
-            )
+            if (initialState.destination.route == MainView.REVIEW.route) {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(700)
+                )
+            } else {
+                ExitTransition.None
+            }
         },
         popEnterTransition = {
-            slideIntoContainer(
-                getSlideDirection(initialState, targetState, bottomRoutes, forward = false),
-                animationSpec = tween(700)
-            )
+            if (targetState.destination.route == MainView.REVIEW.route) {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(700)
+                )
+            } else {
+                EnterTransition.None
+            }
         },
         popExitTransition = {
-            slideOutOfContainer(
-                getSlideDirection(initialState, targetState, bottomRoutes, forward = false),
-                animationSpec = tween(700)
-            )
+            if (initialState.destination.route == MainView.REVIEW.route) {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(700)
+                )
+            } else {
+                ExitTransition.None
+            }
         }
-    ) {
+    )
+    {
         composable(BottomView.Home.screenRoute) {
             HomeViewScreen(
                 viewModel = viewModel,
@@ -86,7 +100,14 @@ fun MainNavigation(
                 guide = guide,
                 login = login,
                 matchDetail = { navController.navigate(MainView.MATCH_DETAIL.route) },
-                review = { navController.navigate(MainView.REVIEW.route) },
+                review = { participants, matchId, matchType ->
+                    viewModel.setReviewData(
+                        participants = participants,
+                        matchId = matchId,
+                        matchType = matchType
+                    )
+                    navController.navigate(MainView.REVIEW.route)
+                },
                 snackBarHostState = snackBarHostState
             )
         }
@@ -116,29 +137,16 @@ fun MainNavigation(
         }
 
         composable(MainView.REVIEW.route) {
+            val data = viewModel.getReviewData()
             ReviewView(
                 onClose = { navController.popBackStack() },
                 viewModel = viewModel,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                participant = data.participants,
+                matchId = data.matchId,
+                matchType = data.matchType
             )
         }
     }
 }
 
-private fun getSlideDirection(
-    from: NavBackStackEntry,
-    to: NavBackStackEntry,
-    bottomRoutes: Set<String>,
-    forward: Boolean
-): AnimatedContentTransitionScope.SlideDirection {
-    val fromRoute = from.destination.route
-    val toRoute = to.destination.route
-
-    val isBottom = fromRoute in bottomRoutes && toRoute in bottomRoutes
-    return when {
-        isBottom && forward -> AnimatedContentTransitionScope.SlideDirection.Left
-        isBottom && !forward -> AnimatedContentTransitionScope.SlideDirection.Right
-        !isBottom && forward -> AnimatedContentTransitionScope.SlideDirection.Up
-        else -> AnimatedContentTransitionScope.SlideDirection.Down
-    }
-}

@@ -103,6 +103,83 @@ fun CustomDialogOneButton(
 }
 
 @Composable
+fun CustomDialogTwoButton(
+    onDismiss: () -> Unit,
+    buttonClick: () -> Unit,
+    titleText: String,
+    contentText: String,
+    buttonText: String,
+    dismissButtonText: String,
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = ColorStyle.GRAY_200,
+                    shape = RoundedCornerShape(24.dp)
+                )
+                .width(324.dp)
+                .height(232.dp)
+                .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(24.dp))
+                .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 24.dp),
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = titleText,
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = ColorStyle.GRAY_800,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = contentText,
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = ColorStyle.GRAY_600,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ColorStyle.PURPLE_400
+                    ),
+                    onClick = buttonClick,
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = buttonText,
+                        color = ColorStyle.WHITE_100,
+                        style = AppTextStyles.SUBTITLE_16_24_SEMI
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    onClick = onDismiss,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ColorStyle.GRAY_200
+                    )
+                ) {
+                    Text(
+                        text = dismissButtonText,
+                        color = ColorStyle.GRAY_800,
+                        style = AppTextStyles.SUBTITLE_16_24_SEMI
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun CustomSnackBar(
     data: SnackbarData,
 ) {
