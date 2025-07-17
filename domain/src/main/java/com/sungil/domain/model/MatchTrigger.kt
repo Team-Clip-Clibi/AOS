@@ -1,5 +1,8 @@
 package com.sungil.domain.model
 
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+import java.time.ZonedDateTime
 
 data class MatchTrigger(
     val id: Int,
@@ -12,15 +15,10 @@ data class MatchTrigger(
 
     private fun String.toLocalTime(): String {
         return try {
-            val isoFormat = java.text.SimpleDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                java.util.Locale.getDefault()
-            )
-            isoFormat.timeZone = java.util.TimeZone.getTimeZone("UTC")
-            val date = isoFormat.parse(this)
-
-            val outputFormat = java.text.SimpleDateFormat("MM월 dd일", java.util.Locale.getDefault())
-            outputFormat.format(date!!)
+            val zonedDateTime = ZonedDateTime.parse(this)
+            val formatter = DateTimeFormatter.ofPattern("MM월 dd일", Locale.KOREAN)
+            val formatted = zonedDateTime.format(formatter)
+            return formatted
         } catch (e: Exception) {
             this
         }

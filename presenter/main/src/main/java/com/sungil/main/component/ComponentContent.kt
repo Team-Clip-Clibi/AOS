@@ -399,7 +399,7 @@ fun MeetingCardList(
             ) {
                 MeetingCard(
                     category = match.category,
-                    time = "${match.daysUntilMeeting}일 후",
+                    time = if (match.daysUntilMeeting == 0) "오늘" else "${match.daysUntilMeeting}일 후",
                     location = match.meetingPlace
                 )
             }
@@ -411,7 +411,9 @@ fun MeetingCardList(
                 MainCardView(
                     contentString = stringResource(R.string.txt_home_not_meeting),
                     addClick = onAddClick,
-                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(192.dp)
+                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(
+                        192.dp
+                    )
                 )
             }
         }
