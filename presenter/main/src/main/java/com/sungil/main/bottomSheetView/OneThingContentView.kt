@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
-import com.sungil.domain.model.OneThingContent
 import com.sungil.main.R
 import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
