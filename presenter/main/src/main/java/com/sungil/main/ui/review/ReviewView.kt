@@ -63,15 +63,9 @@ internal fun ReviewView(
     val goodItem = uiState.goodReviewItem
     val detail = uiState.reviewDetail
     val allAttend = uiState.allAttend
-    val participantsState = uiState.participants
     val selectPerson = uiState.unAttendMember
     val writeReview = uiState.writeReview
     val snackBarHostState = remember { SnackbarHostState() }
-    LaunchedEffect(participantsState) {
-        if (participantsState is MainViewModel.UiState.Loading) {
-            onClose()
-        }
-    }
     val context = LocalContext.current
     LaunchedEffect(writeReview) {
         when (val result = writeReview) {
@@ -100,6 +94,7 @@ internal fun ReviewView(
                     duration = SnackbarDuration.Short
                 )
                 viewModel.initParticipants()
+                onClose()
             }
 
             else -> Unit

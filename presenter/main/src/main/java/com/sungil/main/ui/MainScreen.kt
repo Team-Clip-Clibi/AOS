@@ -98,7 +98,10 @@ fun MainScreenView(
                 MainView.REVIEW.route -> {
                     TopAppBarWithCloseButton(
                         title = stringResource(R.string.review_app_bar),
-                        onBackClick = { viewModel.initParticipants() },
+                        onBackClick = {
+                            viewModel.initParticipants()
+                            navController.popBackStack()
+                        },
                         isNavigationShow = false,
                     )
                 }
