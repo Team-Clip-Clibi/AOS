@@ -97,7 +97,7 @@ internal fun MatchParticipantView(onClick: () -> Unit, participant: List<Partici
 @Composable
 private fun ParticipantsView(data: List<Participants>) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp) // ✅ 수직 간격 적용
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         data.fastForEachIndexed { index, person ->
             Row(
