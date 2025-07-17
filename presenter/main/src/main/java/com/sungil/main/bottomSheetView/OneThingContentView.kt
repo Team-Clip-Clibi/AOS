@@ -31,11 +31,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.style.TextAlign
 import com.example.core.AppTextStyles
+import com.sungil.domain.model.OneThingMap
 
 @Composable
 internal fun OneThingContentView(
     onClick: () -> Unit,
-    oneThingContent: List<OneThingContent>
+    oneThingContent: List<OneThingMap>
 ) {
     val currentPage = remember { mutableIntStateOf(0) }
     val isLastPage = currentPage.intValue + 1 == oneThingContent.size
@@ -104,7 +105,7 @@ internal fun OneThingContentView(
 
 @Composable
 private fun OneThingContentPagerView(
-    data: List<OneThingContent>,
+    data: List<OneThingMap>,
     currentPage: MutableState<Int>,
 ) {
     val color = listOf(
@@ -156,7 +157,7 @@ private fun OneThingContentPagerView(
                 }
                 Spacer(modifier = Modifier.height(28.dp))
                 Text(
-                    text = item.contentCategory,
+                    text = item.nickName,
                     style = AppTextStyles.TITLE_20_28_SEMI,
                     color = ColorStyle.GRAY_800
                 )
