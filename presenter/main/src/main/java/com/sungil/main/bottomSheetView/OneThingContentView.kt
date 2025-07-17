@@ -150,7 +150,7 @@ private fun OneThingContentPagerView(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = page.toString(),
+                        text = (page+1).toString(),
                         style = AppTextStyles.HEAD_24_34_BOLD,
                         color = ColorStyle.GRAY_800
                     )

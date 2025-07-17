@@ -161,7 +161,7 @@ fun MainScreenView(
                 snackBarHostState = snackBarHostState
             )
 
-            if (showBottomSheet) {
+            if (showBottomSheet && progressMatchInfo != null) {
                 MatchingBottomSheet(
                     viewModel = viewModel,
                     onClick = { viewModel.showDialog() },

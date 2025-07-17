@@ -114,7 +114,7 @@ private fun ParticipantsView(data: List<String>) {
                 horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                PersonNumberView(index = index.toString())
+                PersonNumberView(index = (index +1).toString())
                 Text(
                     text = person,
                     style = AppTextStyles.TITLE_20_28_SEMI,
