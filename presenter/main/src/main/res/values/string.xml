@@ -152,6 +152,10 @@
     <string name="match_end_image_content">오늘의 원띵으로\n좋은 인사이트를 얻으셨길 바라요</string>
     <string name="match_conversation_content">자유롭게 대화를 나눠요</string>
     <string name="match_conversation_content_sub">준비된 원띵 질문은 여기까지! 원띵 질문 외에 다양한 주제로 대화를 이어가 보세요</string>
+    <!--Alarm Setting-->
+    <string name="alarm_top_bar">알림 설정</string>
+    <string name="alarm_content">알림 수신 설정</string>
+    <string name="alarm_sub_content">서비스 이용 및 공지, 이벤트 등</string>
     <!-- Error message   -->
     <string name="msg_user_data_null">ERROR CODE : USER DATA IS NULL</string>
     <string name="msg_network_error">네트워크 에러</string>

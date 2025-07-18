@@ -40,6 +40,7 @@ internal fun MyPageViewScreen(
     profileEdit: () -> Unit,
     reportClick: () -> Unit,
     lowGuide: () -> Unit,
+    alarmSetting : () -> Unit
 ) {
     val userState by viewModel.userState.collectAsState()
     Column(
@@ -50,7 +51,7 @@ internal fun MyPageViewScreen(
             .verticalScroll(rememberScrollState())
     ) {
         ProfileBoxView(userState = userState, profileEdit = profileEdit)
-        ButtonView(reportClick = reportClick)
+        ButtonView(reportClick = reportClick ,alarmSetting = alarmSetting)
         Spacer(modifier = Modifier.weight(1f))
         BottomView(lowGuide = lowGuide)
     }
@@ -119,7 +120,7 @@ private fun ProfileBoxView(userState: MainViewModel.MainViewState, profileEdit: 
 }
 
 @Composable
-private fun ButtonView(reportClick: () -> Unit) {
+private fun ButtonView(reportClick: () -> Unit, alarmSetting: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -128,7 +129,7 @@ private fun ButtonView(reportClick: () -> Unit) {
         MyPageItem(
             text = stringResource(R.string.txt_myPage_notify),
             icon = R.drawable.ic_bell,
-            click = {}
+            click = { alarmSetting() }
         )
         Spacer(modifier = Modifier.height(12.dp))
         MyPageItem(
@@ -153,7 +154,9 @@ private fun ButtonView(reportClick: () -> Unit) {
 
 @Composable
 private fun BottomView(lowGuide: () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = 8.dp)) {
         HorizontalDivider(
             thickness = 1.dp,
             color = ColorStyle.GRAY_300,
