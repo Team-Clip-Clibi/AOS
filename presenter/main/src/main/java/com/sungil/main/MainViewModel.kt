@@ -31,7 +31,6 @@ import com.sungil.domain.useCase.SendLateMatch
 import com.sungil.domain.useCase.SendMatchReview
 import com.sungil.domain.useCase.SetNotifyState
 import com.sungil.domain.useCase.SetPermissionCheck
-import com.sungil.editprofile.UiError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
