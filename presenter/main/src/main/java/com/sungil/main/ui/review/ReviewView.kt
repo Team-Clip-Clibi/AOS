@@ -3,21 +3,17 @@ package com.sungil.main.ui.review
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.ColorStyle
-import com.example.core.TopAppBarWithCloseButton
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import com.sungil.main.ReviewIcon
@@ -46,8 +41,6 @@ import com.sungil.main.component.ReviewItemContent
 import com.sungil.main.component.ReviewTextField
 import com.example.core.ButtonCheckBoxLeftL
 import com.example.core.ButtonXXLPurple400
-import com.example.core.CustomSnackBar
-import com.sungil.domain.model.Participants
 import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.REVIEW_BEST_BTN
@@ -56,22 +49,23 @@ import com.sungil.main.REVIEW_NORMAL_BTN
 import com.sungil.main.REVIEW_SELECT_NOTHING
 
 @Composable
-internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
+internal fun ReviewView(
+    viewModel: MainViewModel,
+    onClose: () -> Unit,
+    paddingValues: PaddingValues,
+    participant: List<String>,
+    matchId: Int,
+    matchType: String,
+) {
     val uiState by viewModel.userState.collectAsState()
     val review = uiState.reviewButton
     val badItem = uiState.badReviewItem
     val goodItem = uiState.goodReviewItem
     val detail = uiState.reviewDetail
     val allAttend = uiState.allAttend
-    val participantsState = uiState.participants
     val selectPerson = uiState.unAttendMember
     val writeReview = uiState.writeReview
     val snackBarHostState = remember { SnackbarHostState() }
-    LaunchedEffect(participantsState) {
-        if (participantsState is MainViewModel.UiState.Loading) {
-            onClose()
-        }
-    }
     val context = LocalContext.current
     LaunchedEffect(writeReview) {
         when (val result = writeReview) {
@@ -100,136 +94,107 @@ internal fun ReviewView(viewModel: MainViewModel, onClose: () -> Unit) {
                     duration = SnackbarDuration.Short
                 )
                 viewModel.initParticipants()
+                onClose()
             }
 
             else -> Unit
         }
     }
-    if (participantsState !is MainViewModel.UiState.Success) return
-    val person = participantsState.data
-    Scaffold(
-        topBar = {
-            TopAppBarWithCloseButton(
-                title = stringResource(R.string.review_app_bar),
-                onBackClick = {
-                    viewModel.initParticipants()
-                    onClose()
-                },
-                isNavigationShow = false,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = ColorStyle.WHITE_100)
+            .padding(
+                start = 17.dp,
+                end = 16.dp,
+                bottom = paddingValues.calculateBottomPadding() + 8.dp
             )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackBarHostState,
-                snackbar = { data ->
-                    CustomSnackBar(data)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 17.dp,
-                        end = 16.dp,
-                        bottom = WindowInsets.navigationBars.asPaddingValues().calculateTopPadding() + 8.dp
-                    )
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = ColorStyle.WHITE_100)
-                .padding(
-                    top = paddingValues.calculateTopPadding() + 16.dp,
-                    start = 17.dp,
-                    end = 16.dp,
-                    bottom = paddingValues.calculateBottomPadding() + 8.dp
+            .verticalScroll(rememberScrollState())
+    ) {
+        Spacer(modifier = Modifier.height(16.dp))
+        TopView(viewModel = viewModel, review = review)
+        when (review) {
+            REVIEW_DISAPPOINTED_BTN, REVIEW_SHAME_BTN -> {
+                Spacer(modifier = Modifier.height(24.dp))
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = ColorStyle.GRAY_200
                 )
-                .verticalScroll(rememberScrollState())
-        ) {
-            TopView(viewModel = viewModel, review = review)
-            when (review) {
-                REVIEW_DISAPPOINTED_BTN, REVIEW_SHAME_BTN -> {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    HorizontalDivider(
-                        modifier = Modifier.fillMaxWidth(),
-                        thickness = 1.dp,
-                        color = ColorStyle.GRAY_200
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    BadReviewView(
-                        selectReviewButton = review,
-                        selectItem = badItem,
-                        viewModel = viewModel
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    GoodReview(
-                        selectReviewButton = review,
-                        selectItem = goodItem,
-                        viewModel = viewModel
-                    )
-                }
-
-                REVIEW_GOOD_BTN, REVIEW_NORMAL_BTN, REVIEW_BEST_BTN -> {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    HorizontalDivider(
-                        modifier = Modifier.fillMaxWidth(),
-                        thickness = 1.dp,
-                        color = ColorStyle.GRAY_200
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    GoodReview(
-                        selectReviewButton = review,
-                        selectItem = goodItem,
-                        viewModel = viewModel
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    BadReviewView(
-                        selectReviewButton = review,
-                        selectItem = badItem,
-                        viewModel = viewModel
-                    )
-                }
-            }
-            if (review != REVIEW_SELECT_NOTHING) {
-                Spacer(modifier = Modifier.height(20.dp))
-                WriteReview(
-                    input = detail,
+                Spacer(modifier = Modifier.height(24.dp))
+                BadReviewView(
+                    selectReviewButton = review,
+                    selectItem = badItem,
                     viewModel = viewModel
                 )
-                Spacer(modifier = Modifier.height(32.dp))
-                AllMemberAttendView(viewModel = viewModel, selectItem = allAttend)
-                when (allAttend) {
-                    true -> {
-                        Spacer(modifier = Modifier.height(22.dp))
-                    }
-
-                    false -> {
-                        Spacer(modifier = Modifier.height(24.dp))
-                        HorizontalDivider(
-                            modifier = Modifier.fillMaxWidth(),
-                            thickness = 1.dp,
-                            color = ColorStyle.GRAY_200
-                        )
-                        Spacer(modifier = Modifier.height(24.dp))
-                        UnAttendMemberView(
-                            person = person.person,
-                            selectItem = selectPerson,
-                            viewModel = viewModel
-                        )
-                        Spacer(modifier = Modifier.height(22.dp))
-                    }
-                }
-                ButtonXXLPurple400(
-                    buttonText = stringResource(R.string.btn_finish),
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        viewModel.sendReview(
-                            matchId = person.matchId,
-                            matchType = person.matchType
-                        )
-                    },
+                Spacer(modifier = Modifier.height(20.dp))
+                GoodReview(
+                    selectReviewButton = review,
+                    selectItem = goodItem,
+                    viewModel = viewModel
                 )
             }
+
+            REVIEW_GOOD_BTN, REVIEW_NORMAL_BTN, REVIEW_BEST_BTN -> {
+                Spacer(modifier = Modifier.height(24.dp))
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = ColorStyle.GRAY_200
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                GoodReview(
+                    selectReviewButton = review,
+                    selectItem = goodItem,
+                    viewModel = viewModel
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                BadReviewView(
+                    selectReviewButton = review,
+                    selectItem = badItem,
+                    viewModel = viewModel
+                )
+            }
+        }
+        if (review != REVIEW_SELECT_NOTHING) {
+            Spacer(modifier = Modifier.height(20.dp))
+            WriteReview(
+                input = detail,
+                viewModel = viewModel
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            AllMemberAttendView(viewModel = viewModel, selectItem = allAttend)
+            when (allAttend) {
+                true -> {
+                    Spacer(modifier = Modifier.height(22.dp))
+                }
+
+                false -> {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        thickness = 1.dp,
+                        color = ColorStyle.GRAY_200
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                    UnAttendMemberView(
+                        person = participant,
+                        selectItem = selectPerson,
+                        viewModel = viewModel
+                    )
+                    Spacer(modifier = Modifier.height(22.dp))
+                }
+            }
+            ButtonXXLPurple400(
+                buttonText = stringResource(R.string.btn_finish),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    viewModel.sendReview(
+                        matchId = matchId,
+                        matchType = matchType
+                    )
+                },
+            )
         }
     }
 }
@@ -375,7 +340,7 @@ private fun AllMemberAttendView(viewModel: MainViewModel, selectItem: Boolean) {
 
 @Composable
 private fun UnAttendMemberView(
-    person: List<Participants>,
+    person: List<String>,
     viewModel: MainViewModel,
     selectItem: ArrayList<String>,
 ) {
@@ -391,11 +356,11 @@ private fun UnAttendMemberView(
         Spacer(modifier = Modifier.height(16.dp))
         person.forEach { data ->
             ReviewItemContent(
-                content = data.nickName,
+                content = data,
                 isClick = {
-                    viewModel.setUnAttendMember(data.nickName)
+                    viewModel.setUnAttendMember(data)
                 },
-                isSelect = selectItem.contains(data.nickName)
+                isSelect = selectItem.contains(data)
             )
             Spacer(modifier = Modifier.height(12.dp))
         }

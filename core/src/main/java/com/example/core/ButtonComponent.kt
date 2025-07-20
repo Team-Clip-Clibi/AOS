@@ -6,19 +6,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,16 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import kotlinx.coroutines.launch
 
 @Composable
 fun ButtonXXLPurple400(
@@ -370,24 +359,24 @@ fun ButtonLWhite(
     }
 }
 
-
 @Composable
-fun ButtonLargePurple400Gray100(
+fun ButtonLargeCustom(
     text: String,
     isEnable: Boolean = true,
+    modifier: Modifier = Modifier,
+    buttonColor: Color,
     onClick: () -> Unit,
+    textColor: Color,
 ) {
     Button(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(48.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            when (isEnable) {
-                true -> ColorStyle.PURPLE_400
-                false -> ColorStyle.GRAY_100
-            }
+            buttonColor
         ),
+        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
         onClick = onClick,
         enabled = isEnable
     ) {
@@ -396,10 +385,7 @@ fun ButtonLargePurple400Gray100(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = when (isEnable) {
-                true -> ColorStyle.WHITE_100
-                false -> ColorStyle.GRAY_800
-            }
+            color = textColor
         )
     }
 }

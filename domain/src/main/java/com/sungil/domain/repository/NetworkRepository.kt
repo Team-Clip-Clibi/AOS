@@ -6,10 +6,11 @@ import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietResponse
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
-import com.sungil.domain.model.Match
+import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchNotice
 import com.sungil.domain.model.MatchOverView
+import com.sungil.domain.model.MatchProgress
 import com.sungil.domain.model.MatchingData
 import com.sungil.domain.model.Notification
 import com.sungil.domain.model.NotificationResponse
@@ -91,7 +92,7 @@ interface NetworkRepository {
 
     suspend fun requestMatchingData(
         accessToken: String,
-    ): Match
+    ): NetworkResult<MatchData>
 
     suspend fun requestUpdateToken(
         refreshToken: String,
@@ -181,4 +182,10 @@ interface NetworkRepository {
         matchId: Int,
         matchType: String,
     ) : NetworkResult<List<Participants>>
+
+    suspend fun requestProgressMatch(
+        token : String,
+        matchId: Int,
+        matchType: String
+    ) : NetworkResult<MatchProgress>
 }

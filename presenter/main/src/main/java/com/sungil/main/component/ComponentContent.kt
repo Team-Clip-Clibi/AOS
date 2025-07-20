@@ -20,17 +20,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,17 +63,29 @@ import com.example.core.ColorStyle
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
+import com.sungil.domain.model.MatchProgressUiModel
 import com.sungil.domain.model.NotificationData
+import com.sungil.domain.model.OneThingContent
+import com.sungil.domain.model.Participants
+import com.sungil.main.BottomSheetView
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
 import com.sungil.main.BottomView
+import com.sungil.main.MainViewModel
 import com.sungil.main.bottomNavItems
+import com.sungil.main.bottomSheetView.ConversationMatchView
+import com.sungil.main.bottomSheetView.EndMatchView
+import com.sungil.main.bottomSheetView.HostView
+import com.sungil.main.bottomSheetView.MatchParticipantView
+import com.sungil.main.bottomSheetView.StartMatchView
+import com.sungil.main.bottomSheetView.TmiMatchView
+import com.sungil.main.bottomSheetView.OneThingContentView
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,6 +99,7 @@ fun BottomNavigation(navController: NavHostController) {
                     strokeWidth = strokeWidth
                 )
             }
+            .navigationBarsPadding()
             .background(Color.White),
         contentAlignment = Alignment.TopCenter
     ) {
@@ -168,6 +186,7 @@ fun CustomMainPageTopBar(text: String) {
         modifier = Modifier
             .background(color = ColorStyle.WHITE_100)
             .fillMaxWidth()
+            .statusBarsPadding()
             .height(48.dp)
             .padding(start = 17.dp, end = 12.dp),
         contentAlignment = Alignment.CenterStart
@@ -176,34 +195,7 @@ fun CustomMainPageTopBar(text: String) {
             text = text,
             modifier = Modifier.fillMaxWidth(),
             style = AppTextStyles.TITLE_20_28_SEMI,
-            color = Color(0xFF000000)
-        )
-    }
-}
-
-@Composable
-fun CustomMyPageButton(
-    text: String,
-    color: Long,
-    textColor: Long,
-    onClick: () -> Unit,
-) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(color),
-            contentColor = Color(textColor)
-        ),
-        elevation = null
-    ) {
-        Text(
-            text = text,
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            textAlign = TextAlign.Center
+            color = ColorStyle.GRAY_800
         )
     }
 }
@@ -240,46 +232,36 @@ fun MyPageItem(text: String, icon: Int, click: () -> Unit) {
 }
 
 @Composable
-fun CustomHomeTopBar(
-    text: String,
-    bellImage: Int,
+fun HomeViewTopBar(
     click: () -> Unit,
+    image: Int,
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .height(48.dp)
-            .background(Color(0xFFF7F7F7))
-            .padding(horizontal = 17.dp),
-        contentAlignment = Alignment.CenterStart
+            .background(color = ColorStyle.GRAY_100)
+            .padding(start = 17.dp, end = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_logo_str),
-                contentDescription = "logo",
-                modifier = Modifier.size(
-                    width = 100.dp,
-                    height = 24.dp
-                )
+        Image(
+            painter = painterResource(id = R.drawable.ic_logo_str),
+            contentDescription = "logo",
+            modifier = Modifier.size(
+                width = 100.dp,
+                height = 24.dp
             )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = text,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color.Black
-            )
-            Spacer(Modifier.weight(1f))
-            Icon(
-                painter = painterResource(id = bellImage),
-                contentDescription = "알람",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable { click() }
-            )
-        }
+        )
+
+        Image(
+            painter = painterResource(id = image),
+            contentDescription = "알람",
+            modifier = Modifier
+                .size(24.dp)
+                .clickable { click() }
+        )
     }
 }
 
@@ -376,37 +358,6 @@ fun CustomNotifyBar(
     }
 }
 
-
-
-@Composable
-fun HomeTitleText(
-    text: String,
-    size: String = "",
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start,
-        modifier = Modifier
-            .padding(start = 17.dp, end = 16.dp)
-            .height(28.dp)
-    ) {
-        Text(
-            text = text,
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            color = Color(0xFF383838)
-        )
-
-        if (size.isNotEmpty()) {
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(
-                text = size,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF6700CE)
-            )
-        }
-    }
-}
-
 @Composable
 fun MeetingCardList(
     matchList: List<MatchInfo>,
@@ -448,7 +399,7 @@ fun MeetingCardList(
             ) {
                 MeetingCard(
                     category = match.category,
-                    time = "${match.daysUntilMeeting}일 후",
+                    time = if (match.daysUntilMeeting == 0) "오늘" else "${match.daysUntilMeeting}일 후",
                     location = match.meetingPlace
                 )
             }
@@ -460,7 +411,9 @@ fun MeetingCardList(
                 MainCardView(
                     contentString = stringResource(R.string.txt_home_not_meeting),
                     addClick = onAddClick,
-                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(192.dp)
+                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(
+                        192.dp
+                    )
                 )
             }
         }
@@ -594,11 +547,11 @@ fun CustomHomeButton(
     Button(
         modifier = modifier
             .height(84.dp)
-            .border(1.dp, Color(0xFFF7F7F7), shape = RoundedCornerShape(14.dp)),
+            .border(1.dp, ColorStyle.GRAY_100, shape = RoundedCornerShape(14.dp)),
         onClick = onClick,
         contentPadding = PaddingValues(horizontal = 0.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFFFFFF)
+            containerColor = ColorStyle.WHITE_100
         ),
         shape = RoundedCornerShape(14.dp)
     ) {
@@ -621,12 +574,12 @@ fun CustomHomeButton(
                 Text(
                     text = titleText,
                     style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                    color = Color(0xFF171717)
+                    color = ColorStyle.GRAY_800
                 )
                 Text(
                     text = contentText,
                     style = AppTextStyles.CAPTION_12_18_SEMI,
-                    color = Color(0xFF666666)
+                    color = ColorStyle.GRAY_600
                 )
             }
         }
@@ -805,6 +758,57 @@ fun ReviewImageView(
     }
 }
 
+@Composable
+fun MatchIngFlowView(modifier: Modifier,onClick: () -> Unit) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(74.dp)
+            .background(color = ColorStyle.GRAY_700, shape = RoundedCornerShape(50.dp))
+            .padding(
+                start = 24.dp, top = 14.dp, end = 24.dp, bottom = 14.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_match_flow_person),
+            contentDescription = "match is ing",
+            modifier = Modifier
+                .width(19.dp)
+                .height(18.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = stringResource(R.string.match_flow_title),
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.WHITE_100,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = stringResource(R.string.match_flow_content),
+                style = AppTextStyles.BODY_14_20_REGULAR,
+                color = ColorStyle.GRAY_300,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        Icon(
+            painter = painterResource(R.drawable.ic_arrow_right),
+            contentDescription = "match detail",
+            modifier = Modifier
+                .width(24.dp)
+                .height(24.dp)
+                .clickable { onClick() },
+            tint = ColorStyle.WHITE_100
+        )
+    }
+}
 
 
 @Composable
@@ -849,10 +853,15 @@ fun ReviewTextField(
         onValueChange = { newText ->
             onValueChange(newText)
         },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .height(152.dp)
-            .background(color = ColorStyle.WHITE_100 , shape = RoundedCornerShape(12.dp))
-            .border(width = 1.dp, color = ColorStyle.GRAY_300, shape = RoundedCornerShape(size = 12.dp)),
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = ColorStyle.GRAY_300,
+                shape = RoundedCornerShape(size = 12.dp)
+            ),
         singleLine = false,
         placeholder = {
             Text(
@@ -875,4 +884,89 @@ fun ReviewTextField(
             unfocusedTextColor = ColorStyle.GRAY_800
         )
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MatchingBottomSheet(
+    viewModel: MainViewModel,
+    onClick: () -> Unit,
+    matchData : MatchProgressUiModel //TODO 배포시 무조건 수정
+) {
+    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    ModalBottomSheet(
+        onDismissRequest = {
+            scope.launch { bottomSheetState.hide() }
+            viewModel.initBottomSheetButton()
+        },
+        sheetState = bottomSheetState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.9f),
+        contentColor = ColorStyle.WHITE_100,
+        containerColor = ColorStyle.WHITE_100
+    ) {
+        val view = viewModel.bottomSheetButton.collectAsState()
+        val dummyConversationData = listOf(
+            "원띵에 대해 이야기 해 보아요",
+            "Android Native vs Ios Native",
+            "가데이터 가데이터 가데이터 가데이터 가데이터"
+        )
+        when (view.value) {
+            BottomSheetView.MATCH_START_HELLO_VIEW -> StartMatchView(
+                onClick = {
+                    viewModel.setBottomSheetButton(
+                        BottomSheetView.MATCH_START_HOST_VIEW
+                    )
+                }
+            )
+
+            BottomSheetView.MATCH_START_HOST_VIEW -> HostView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_INTRODUCE)
+                }
+            )
+
+            BottomSheetView.MATCH_START_INTRODUCE -> MatchParticipantView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_TMI)
+                },
+                participant = matchData.nickName
+            )
+
+            BottomSheetView.MATCH_START_TMI -> TmiMatchView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_STAT_ONE_THING)
+                },
+                data = matchData.tmi
+            )
+
+            BottomSheetView.MATCH_STAT_ONE_THING -> OneThingContentView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_CONVERSATION)
+                },
+                oneThingContent = matchData.content
+            )
+
+            BottomSheetView.MATCH_START_CONVERSATION -> ConversationMatchView(
+                onClick = {
+                    viewModel.setBottomSheetButton(BottomSheetView.MATCH_START_END)
+                },
+                conversationData = dummyConversationData
+            )
+
+            BottomSheetView.MATCH_START_END -> EndMatchView(
+                onClick = {
+                    scope.launch {
+                        bottomSheetState.hide()
+                        viewModel.initBottomSheetButton()
+                        onClick()
+                    }
+                }
+            )
+        }
+    }
 }

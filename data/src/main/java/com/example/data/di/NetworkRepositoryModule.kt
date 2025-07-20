@@ -1,7 +1,7 @@
 package com.example.data.di
 
 import com.example.data.repositoryImpl.NetworkRepositoryImpl
-import com.example.fcm.FirebaseFCM
+import com.example.fcm.FirebaseToken
 import com.sungil.database.token.TokenManager
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.network.FirebaseSMSRepo
@@ -22,7 +22,7 @@ class NetworkRepositoryModule {
     fun provideNetWorkRepo(
         firebaseSMSRepo: FirebaseSMSRepo,
         networkApi: HttpApi,
-        fcm: FirebaseFCM,
+        fcm: FirebaseToken,
         tokenManager: TokenManager,
     ): NetworkRepository {
         return NetworkRepositoryImpl(firebaseSMSRepo, networkApi, fcm, tokenManager)

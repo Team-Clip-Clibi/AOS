@@ -7,6 +7,8 @@ import androidx.paging.cachedIn
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
+import com.sungil.domain.model.MatchProgressUiModel
+import com.sungil.domain.model.MatchTrigger
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.Participants
@@ -20,10 +22,15 @@ import com.sungil.domain.useCase.GetMatchNotice
 import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
 import com.sungil.domain.useCase.GetNotification
+import com.sungil.domain.useCase.GetNotificationStatus
 import com.sungil.domain.useCase.GetParticipants
+import com.sungil.domain.useCase.GetProgressMatchInfo
 import com.sungil.domain.useCase.GetUserInfo
+import com.sungil.domain.useCase.MonitoryMeetingTime
 import com.sungil.domain.useCase.SendLateMatch
 import com.sungil.domain.useCase.SendMatchReview
+import com.sungil.domain.useCase.SetNotifyState
+import com.sungil.domain.useCase.SetPermissionCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,10 +55,18 @@ class MainViewModel @Inject constructor(
     private val sendLate: SendLateMatch,
     private val sendReview: SendMatchReview,
     private val participants: GetParticipants,
+    private val meetTime: MonitoryMeetingTime,
+    private val progressMatch: GetProgressMatchInfo,
+    private val alarmStatus: GetNotificationStatus,
+    private val setAlarmStatus: SetNotifyState,
+    private val setPermission: SetPermissionCheck,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
     val userState: StateFlow<MainViewState> = _userState.asStateFlow()
+
+    private val _meetingTrigger = MutableStateFlow<MatchTriggerUiState>(MatchTriggerUiState.Idle)
+    val meetingTrigger: StateFlow<MatchTriggerUiState> = _meetingTrigger.asStateFlow()
 
     val matchAllData = matching.invoke(matchingStatus = MATCH_KEY_ALL, lastMeetingTime = "")
         .cachedIn(viewModelScope)
@@ -70,6 +85,19 @@ class MainViewModel @Inject constructor(
     private var _matchButton = MutableStateFlow(0)
     val matchButton: StateFlow<Int> = _matchButton.asStateFlow()
 
+    private var _bottomSheetButton = MutableStateFlow(BottomSheetView.MATCH_START_HELLO_VIEW)
+    val bottomSheetButton: StateFlow<BottomSheetView> = _bottomSheetButton.asStateFlow()
+
+    private var _bottomSheetViewShow = MutableStateFlow(false)
+    val bottomSheetShow: StateFlow<Boolean> = _bottomSheetViewShow.asStateFlow()
+
+    private var _dialogShow = MutableStateFlow(false)
+    val dialogShow: StateFlow<Boolean> = _dialogShow.asStateFlow()
+
+    private var participantsData: List<String> = emptyList()
+    private var matchId: Int = 0
+    private var matchType: String = ""
+
     init {
         requestUserInfo()
         oneThingNotify()
@@ -77,6 +105,7 @@ class MainViewModel @Inject constructor(
         requestMatch()
         getBanner()
         getLatestMatch()
+        alarm()
     }
 
     private fun requestUserInfo() {
@@ -96,6 +125,7 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
 
     private fun oneThingNotify() {
         viewModelScope.launch {
@@ -147,8 +177,18 @@ class MainViewModel @Inject constructor(
                     _userState.update { state ->
                         state.copy(matchState = UiState.Success(result.data))
                     }
+                    startMonitoringMatch(result.data)
                 }
             }
+        }
+    }
+
+    private fun startMonitoringMatch(data: MatchData) {
+        viewModelScope.launch {
+            meetTime.invoke(MonitoryMeetingTime.Param(data))
+                .collect { data ->
+                    _meetingTrigger.value = MatchTriggerUiState.Triggered(data)
+                }
         }
     }
 
@@ -288,20 +328,104 @@ class MainViewModel @Inject constructor(
 
                 is GetParticipants.Result.Success -> {
                     _userState.update { state ->
-                        state.copy(participants = UiState.Success(Participant(
-                            person = result.person,
-                            matchId = matchId,
-                            matchType = matchType
-                        )))
+                        state.copy(
+                            participants = UiState.Success(
+                                Participant(
+                                    person = result.person,
+                                    matchId = matchId,
+                                    matchType = matchType
+                                )
+                            )
+                        )
                     }
                 }
             }
         }
     }
 
-    fun initParticipants(){
+    fun progressMatchInfo(matchId: Int, matchType: String) {
+        viewModelScope.launch {
+            when (val result = progressMatch.invoke(
+                GetProgressMatchInfo.Param(
+                    matchId = matchId,
+                    matchType = matchType
+                )
+            )) {
+                is GetProgressMatchInfo.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(progressMatchInfo = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is GetProgressMatchInfo.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(progressMatchInfo = UiState.Success(result.data))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun alarm() {
+        viewModelScope.launch {
+            val result = alarmStatus.invoke()
+            _userState.update { state ->
+                state.copy(alarmStatus = UiState.Success(result))
+            }
+        }
+    }
+
+    fun changeAlarm(data: Boolean) {
+        viewModelScope.launch {
+            when (val result = setAlarmStatus.invoke(SetNotifyState.Param(data))) {
+                is SetNotifyState.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(alarmStatus = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is SetNotifyState.Result.Success -> {
+                    setAlarmStatus(data)
+                }
+            }
+        }
+    }
+
+    private fun setAlarmStatus(data: Boolean) {
+        viewModelScope.launch {
+            when (val result = setPermission.invoke(
+                SetPermissionCheck.Param(
+                    key = BuildConfig.NOTIFY_PERMISSION_KEY,
+                    data = data
+                )
+            )) {
+                is SetPermissionCheck.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(alarmStatus = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is SetPermissionCheck.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(alarmStatus = UiState.Success(data))
+                    }
+                }
+            }
+        }
+    }
+
+    fun initParticipants() {
         _userState.update { state ->
-            state.copy(participants = UiState.Loading)
+            state.copy(
+                participants = UiState.Loading,
+                reviewDetail = "",
+                allAttend = true,
+                badReviewItem = arrayListOf(),
+                goodReviewItem = arrayListOf(),
+                reviewButton = REVIEW_SELECT_NOTHING,
+                writeReview = UiState.Loading,
+                unAttendMember = arrayListOf(),
+            )
         }
     }
 
@@ -359,7 +483,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setUnAttendMember(data : String){
+    fun setUnAttendMember(data: String) {
         val currentItem = _userState.value
         val list = currentItem.unAttendMember.toMutableList()
         if (list.contains(data)) {
@@ -381,21 +505,24 @@ class MainViewModel @Inject constructor(
         val allAttend = state.allAttend
         val unAttendMember = state.unAttendMember.joinToString(separator = ", ")
         viewModelScope.launch(Dispatchers.IO) {
-            when(val result = sendReview.invoke(SendMatchReview.Param(
-                allAttend = allAttend,
-                matchType = matchType,
-                matchId = matchId,
-                mood = reviewButton,
-                negativePoints = badReviewItem,
-                noShowMembers = unAttendMember,
-                positivePoints = goodReviewItem,
-                reviewContent = reviewDetail
-            ))){
+            when (val result = sendReview.invoke(
+                SendMatchReview.Param(
+                    allAttend = allAttend,
+                    matchType = matchType,
+                    matchId = matchId,
+                    mood = reviewButton,
+                    negativePoints = badReviewItem,
+                    noShowMembers = unAttendMember,
+                    positivePoints = goodReviewItem,
+                    reviewContent = reviewDetail
+                )
+            )) {
                 is SendMatchReview.Result.Fail -> {
                     _userState.update { state ->
                         state.copy(writeReview = UiState.Error(result.errorMessage))
                     }
                 }
+
                 is SendMatchReview.Result.Success -> {
                     _userState.update { state ->
                         state.copy(writeReview = UiState.Success(result.matchId))
@@ -405,10 +532,54 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun setBottomSheetButton(data: BottomSheetView) {
+        _bottomSheetButton.value = data
+    }
+
+    fun initBottomSheetButton() {
+        _bottomSheetButton.value = BottomSheetView.MATCH_START_HELLO_VIEW
+        _bottomSheetViewShow.value = false
+    }
+
+    fun showBottomSheet() {
+        _bottomSheetViewShow.value = true
+    }
+
+    fun closeDialog() {
+        _dialogShow.value = false
+    }
+
+    fun showDialog() {
+        _dialogShow.value = true
+    }
+
+    fun setReviewData(
+        participants: List<String>,
+        matchId: Int,
+        matchType: String,
+    ) {
+        this.participantsData = participants
+        this.matchId = matchId
+        this.matchType = matchType
+    }
+
+    fun getReviewData(): ReviewData {
+        return ReviewData(
+            participants = participantsData,
+            matchId = matchId,
+            matchType = matchType
+        )
+    }
+
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
         data class Error(val message: String) : UiState<Nothing>
+    }
+
+    sealed interface MatchTriggerUiState {
+        data object Idle : MatchTriggerUiState
+        data class Triggered(val dto: MatchTrigger) : MatchTriggerUiState
     }
 
     data class MainViewState(
@@ -422,21 +593,25 @@ class MainViewModel @Inject constructor(
         val matchDetail: UiState<MatchDetail> = UiState.Loading,
         val matchLate: UiState<MatchLate> = UiState.Loading,
         val participants: UiState<Participant> = UiState.Loading,
+        val alarmStatus: UiState<Boolean> = UiState.Loading,
         val reviewButton: Int = REVIEW_SELECT_NOTHING,
         val badReviewItem: ArrayList<String> = arrayListOf(),
         val goodReviewItem: ArrayList<String> = arrayListOf(),
         val reviewDetail: String = "",
         val allAttend: Boolean = true,
         val unAttendMember: ArrayList<String> = arrayListOf(),
-        val writeReview : UiState<Int> = UiState.Loading
+        val writeReview: UiState<Int> = UiState.Loading,
+        val progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
     )
 
 }
+
 data class Participant(
-    val person : List<Participants>,
-    val matchId : Int,
-    val matchType: String
+    val person: List<Participants>,
+    val matchId: Int,
+    val matchType: String,
 )
+
 data class LatestDayInfo(
     val time: String, val applyTime: Int, val confirmTime: Int,
 )
@@ -444,4 +619,10 @@ data class LatestDayInfo(
 data class MatchLate(
     val time: Int,
     val matchId: Int,
+)
+
+data class ReviewData(
+    val participants: List<String>,
+    val matchId: Int,
+    val matchType: String,
 )

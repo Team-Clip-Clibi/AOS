@@ -1,5 +1,5 @@
 package com.example.fcm
 
-interface FirebaseFCM {
+interface FirebaseToken {
     suspend fun getFirebaseToken() : String
 }
