@@ -20,7 +20,9 @@ android {
         val matchKey: String = properties.getProperty("matchKey", "")
         val oneThing: String = properties.getProperty("oneThing", "")
         val random: String = properties.getProperty("random", "")
+        val notifyPermission: String = properties.getProperty("notifyPermssion", "")
 
+        buildConfigField("String", "NOTIFY_PERMISSION_KEY", notifyPermission)
         buildConfigField("String", "ONE_THING", oneThing)
         buildConfigField("String", "RANDOM", random)
         buildConfigField("String", "KEY_MATCH", matchKey)
