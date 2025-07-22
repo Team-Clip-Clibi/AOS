@@ -7,10 +7,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sungil.login.ui.LoginScreen
+import com.sungil.login.ui.PreviewOneThing
 import com.sungil.login.ui.SplashScreen
 
 @Composable
-internal fun LoginNav(viewModel: LoginViewModel, kakao: () -> Unit, notification: () -> Unit , home : () -> Unit) {
+internal fun LoginNav(
+    viewModel: LoginViewModel,
+    kakao: () -> Unit,
+    notification: () -> Unit,
+    home: () -> Unit,
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -29,12 +35,13 @@ internal fun LoginNav(viewModel: LoginViewModel, kakao: () -> Unit, notification
             )
         }
 
-        composable(NAV_LOGIN, enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(700)
-            )
-        },
+        composable(
+            NAV_LOGIN, enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            },
             popEnterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
@@ -43,7 +50,32 @@ internal fun LoginNav(viewModel: LoginViewModel, kakao: () -> Unit, notification
             }) {
             LoginScreen(
                 viewModel = viewModel,
-                kakaoLogin = kakao
+                kakaoLogin = kakao,
+                preview = {
+                    navController.navigate(NAV_PREVIEW) {
+                        popUpTo(NAV_PREVIEW) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable(
+            NAV_PREVIEW, enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(700)
+                )
+            }) {
+            PreviewOneThing(
+                onclick = {
+                    navController.popBackStack()
+                }
             )
         }
     }
