@@ -2,6 +2,7 @@ package com.sungil.main.ui.alarm
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,9 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
@@ -125,11 +124,10 @@ private fun AlarmStatus(
                 .width(52.dp)
                 .height(28.dp),
             thumbContent = {
-                Icon(
-                    imageVector = Icons.Filled.Check,
-                    contentDescription = null,
-                    tint = ColorStyle.GRAY_300,
-                    modifier = Modifier.size(10.dp)
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .background(ColorStyle.WHITE_100, shape = CircleShape)
                 )
             },
             colors = SwitchDefaults.colors(

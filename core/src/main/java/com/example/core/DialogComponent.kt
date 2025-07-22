@@ -65,7 +65,7 @@ fun CustomDialogOneButton(
                     shape = RoundedCornerShape(24.dp)
                 )
                 .width(324.dp)
-                .height(194.dp)
+                .height(174.dp)
                 .background(
                     color = ColorStyle.WHITE_100,
                     shape = RoundedCornerShape(24.dp)
@@ -81,14 +81,16 @@ fun CustomDialogOneButton(
                     text = titleText,
                     style = AppTextStyles.TITLE_20_28_SEMI,
                     color = ColorStyle.GRAY_800,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = contentText,
                     style = AppTextStyles.BODY_14_20_MEDIUM,
                     color = ColorStyle.GRAY_600,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 ButtonPurple100MEDIUM(
