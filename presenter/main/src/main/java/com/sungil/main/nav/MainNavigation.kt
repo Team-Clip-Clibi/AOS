@@ -16,10 +16,10 @@ import com.sungil.main.ui.myPage.MyPageViewScreen
 import com.sungil.main.ui.payDetail.PayDetailView
 import com.sungil.main.ui.review.ReviewView
 import androidx.compose.animation.core.tween
-import androidx.navigation.NavBackStackEntry
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import com.sungil.main.ui.alarm.AlarmSettingView
 
 @Composable
 fun MainNavigation(
@@ -117,7 +117,10 @@ fun MainNavigation(
                 viewModel = viewModel,
                 profileEdit = profileButtonClick,
                 reportClick = reportClick,
-                lowGuide = lowClick
+                lowGuide = lowClick,
+                alarmSetting = {
+                    navController.navigate(MainView.ALARM.route)
+                }
             )
         }
 
@@ -145,6 +148,13 @@ fun MainNavigation(
                 participant = data.participants,
                 matchId = data.matchId,
                 matchType = data.matchType
+            )
+        }
+        composable(MainView.ALARM.route) {
+            AlarmSettingView(
+                viewModel = viewModel,
+                reLogin = login,
+                snackbarHostState = snackBarHostState
             )
         }
     }

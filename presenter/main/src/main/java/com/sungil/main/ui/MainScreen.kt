@@ -105,7 +105,15 @@ fun MainScreenView(
                         isNavigationShow = false,
                     )
                 }
-
+                MainView.ALARM.route ->{
+                    TopAppBarWithCloseButton(
+                        title = stringResource(R.string.alarm_top_bar),
+                        onBackClick = {
+                            navController.popBackStack()
+                        },
+                        isNavigationShow = false
+                    )
+                }
                 BottomView.Home.screenRoute -> {
                     val icons = when (val state = userState.oneThingState) {
                         is MainViewModel.UiState.Success ->
