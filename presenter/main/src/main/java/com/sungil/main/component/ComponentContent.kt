@@ -1,6 +1,5 @@
 package com.sungil.main.component
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -66,8 +65,6 @@ import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.MatchProgressUiModel
 import com.sungil.domain.model.NotificationData
-import com.sungil.domain.model.OneThingContent
-import com.sungil.domain.model.Participants
 import com.sungil.main.BottomSheetView
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
