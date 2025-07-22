@@ -32,6 +32,7 @@ import com.sungil.login.component.PageIndicator
 @Composable
 internal fun LoginScreen(
     kakaoLogin: () -> Unit,
+    preview: () -> Unit,
     viewModel: LoginViewModel,
 ) {
     val uiState by viewModel.actionFlow.collectAsState()
@@ -75,7 +76,7 @@ internal fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
-                    onClick = { /* TODO: Implement One Thing Preview */ },
+                    onClick = { preview() },
                     enabled = true,
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(

@@ -13,3 +13,24 @@ const val NAV_SPLASH = "splash"
 const val NAV_LOGIN = "Login"
 const val NAV_KAKAO = "KAKAO"
 const val NAV_MAIN = "Main"
+const val NAV_PREVIEW = "preview"
+
+enum class CATEGORY {
+    CONTENT_ONE_THING,
+    CONTENT_RANDOM
+}
+sealed class BottomView(val title: Int, val icon: Int = -1, val screenRoute: String) {
+    data object Home : BottomView(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
+    data object MatchView : BottomView(R.string.nav_calendar, R.drawable.ic_calendar, MATCH)
+    data object MyPage : BottomView(R.string.nav_my, R.drawable.ic_my, NAV_MY)
+}
+
+const val NAV_HOME = "home"
+const val MATCH = "match"
+const val NAV_MY = "my"
+
+val bottomNavItems = listOf(
+    BottomView.Home,
+    BottomView.MatchView,
+    BottomView.MyPage
+)

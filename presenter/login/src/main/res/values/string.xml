@@ -8,4 +8,23 @@
     <string name="msg_app_error_notification">App Error Notification</string>
     <string name="msg_app_error_fcm">App Error FCM</string>
     <string name="msg_app_error_network">network error</string>
+    <!-- preview   -->
+    <string name="preview_nickname_match">원띵 미리보기님의 모임</string>
+    <string name="card_one_thing_title">원띵 모임</string>
+    <string name="card_random_title">랜덤 모임</string>
+    <string name="txt_home_not_meeting">다른 모임도 \n신청해볼까요?</string>
+    <string name="txt_home_sub_title">모임 신청</string>
+    <string name="btn_home_oneThing">원띵 모임</string>
+    <string name="btn_home_oneThing_content">대화하고 싶은 나만의 주제를 나눠요</string>
+    <string name="btn_home_random">랜덤 모임</string>
+    <string name="btn_home_random_content">매주 월요일 7시</string>
+    <string name="btn_home_light">번개 모임</string>
+    <string name="btn_home_light_content">오픈 예정이에요</string>
+    <string name="msg_not_service">앗! 해당 서비스는 아직 개발중이에요</string>
+    <string name="nav_home">홈</string>
+    <string name="nav_calendar">일정</string>
+    <string name="nav_my">마이</string>
+    <string name="dialog_login_title">로그인이 필요해요</string>
+    <string name="dialog_login_content">원띵 서비스를 이용하시려면 로그인이 필요해요.</string>
+    <string name="dialog_login_button">로그인하러 가기</string>
 </resources>
