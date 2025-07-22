@@ -82,7 +82,8 @@ fun BottomNavigation(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(54.dp)
+            .height(88.dp)
+            .navigationBarsPadding()
             .drawBehind {
                 val strokeWidth = 1.dp.toPx()
                 drawLine(

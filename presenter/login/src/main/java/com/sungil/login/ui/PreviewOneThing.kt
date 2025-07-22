@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
@@ -41,6 +42,7 @@ internal fun PreviewOneThing(onclick: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = ColorStyle.GRAY_100)
+                    .statusBarsPadding()
                     .padding(start = 17.dp, end = 12.dp, top = 12.dp, bottom = 12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
