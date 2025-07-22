@@ -1,5 +1,6 @@
 package com.sungil.main.component
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -93,7 +94,7 @@ fun BottomNavigation(navController: NavHostController) {
             .drawBehind {
                 val strokeWidth = 1.dp.toPx()
                 drawLine(
-                    color = Color(0xFFEFEFEF),
+                    color = ColorStyle.GRAY_200,
                     start = Offset(0f, 0f),
                     end = Offset(size.width, 0f),
                     strokeWidth = strokeWidth
@@ -138,7 +139,7 @@ fun BottomNavItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val contentColor = if (isSelected) Color(0xFF171717) else Color(0xFF989898)
+    val contentColor = if (isSelected) ColorStyle.GRAY_800 else ColorStyle.GRAY_500
 
     Box(
         modifier = modifier
@@ -424,13 +425,14 @@ fun MeetingCardList(
 fun MainCardView(
     contentString: String,
     addClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 
-) {
+    ) {
     Column(
         modifier = modifier
             .height(174.dp)
-            .background(color = Color(0xFFEFEFEF), shape = RoundedCornerShape(size = 24.dp))
+            .background(color = ColorStyle.GRAY_200, shape = RoundedCornerShape(size = 24.dp))
+            .border(width = 1.dp, color = ColorStyle.GRAY_300, shape = RoundedCornerShape(24.dp))
             .padding(20.dp)
             .clickable { addClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -445,7 +447,7 @@ fun MainCardView(
         Text(
             text = contentString,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = Color(0xFF666666),
+            color = ColorStyle.GRAY_600,
             textAlign = TextAlign.Center
         )
     }
@@ -464,8 +466,8 @@ fun MeetingCard(
             .height(174.dp)
             .background(
                 color = when (category) {
-                    CATEGORY.CONTENT_ONE_THING -> Color(0xFF6700CE)
-                    CATEGORY.CONTENT_RANDOM -> Color(0xFF61C9A0)
+                    CATEGORY.CONTENT_ONE_THING -> ColorStyle.PURPLE_400
+                    CATEGORY.CONTENT_RANDOM -> ColorStyle.GREEN_100
                 },
                 shape = RoundedCornerShape(size = 24.dp)
             )
@@ -478,7 +480,7 @@ fun MeetingCard(
                 CATEGORY.CONTENT_RANDOM -> stringResource(R.string.card_random_title)
             },
             style = AppTextStyles.SUBTITLE_18_26_SEMI,
-            color = Color(0xFFFFFFFF)
+            color = ColorStyle.WHITE_100
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -487,7 +489,7 @@ fun MeetingCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)
-                .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 12.dp))
+                .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 12.dp))
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -504,7 +506,7 @@ fun MeetingCard(
             Text(
                 text = time,
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                color = Color(0xFF171717)
+                color = ColorStyle.GRAY_800
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -512,7 +514,7 @@ fun MeetingCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)
-                .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 12.dp))
+                .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 12.dp))
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -529,7 +531,7 @@ fun MeetingCard(
             Text(
                 text = location,
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                color = Color(0xFF171717)
+                color = ColorStyle.GRAY_800
             )
         }
     }
