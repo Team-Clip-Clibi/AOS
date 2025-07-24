@@ -30,9 +30,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.core.ButtonXXLPurple400
-import com.example.core.ColorStyle
-import com.example.core.CustomSnackBar
+import com.oneThing.core.ButtonXXLPurple400
+import com.oneThing.core.ColorStyle
+import com.oneThing.core.CustomSnackBar
 import com.oneThing.first_matrch.DIET
 import com.oneThing.first_matrch.DomainError
 import com.oneThing.first_matrch.FirstMatchViewModel

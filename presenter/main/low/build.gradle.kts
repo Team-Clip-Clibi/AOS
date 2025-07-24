@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.low"
+    namespace = "com.oneThing.low"
 }
 
 dependencies {

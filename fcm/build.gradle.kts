@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.fcm"
+    namespace = "com.oneThing.fcm"
 }
 
 dependencies {

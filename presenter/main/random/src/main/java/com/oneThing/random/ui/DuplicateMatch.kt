@@ -27,8 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.example.core.AppTextStyles
-import com.example.core.ColorStyle
+import com.oneThing.core.AppTextStyles
+import com.oneThing.core.ColorStyle
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
 import kotlin.math.absoluteValue

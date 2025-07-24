@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.report"
+    namespace = "com.oneThing.report"
 }
 
 dependencies {

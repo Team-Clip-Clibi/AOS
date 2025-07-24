@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.core.AppTextStyles
-import com.example.core.ColorStyle
-import com.example.core.TextFieldComponent
+import com.oneThing.core.AppTextStyles
+import com.oneThing.core.ColorStyle
+import com.oneThing.core.TextFieldComponent
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
 import com.oneThing.random.component.SlidingTextBox

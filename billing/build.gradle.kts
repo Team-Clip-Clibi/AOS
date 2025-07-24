@@ -13,7 +13,7 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.sungil.billing"
+    namespace = "com.oneThing.billing"
 
     defaultConfig {
         val userIdKey: String = properties.getProperty("userIdKey", "")

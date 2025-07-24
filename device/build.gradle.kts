@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.device"
+    namespace = "com.oneThing.device"
 }
 
 dependencies {

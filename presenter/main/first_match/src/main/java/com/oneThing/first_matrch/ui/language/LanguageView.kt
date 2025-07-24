@@ -14,9 +14,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core.AppTextStyles
-import com.example.core.ButtonLeftLarge
-import com.example.core.ColorStyle
+import com.oneThing.core.AppTextStyles
+import com.oneThing.core.ButtonLeftLarge
+import com.oneThing.core.ColorStyle
 import com.oneThing.first_matrch.FirstMatchViewModel
 import com.oneThing.first_matrch.LANGUAGE
 import com.oneThing.first_matrch.R

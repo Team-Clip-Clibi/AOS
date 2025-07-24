@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.presenter"
+    namespace = "com.oneThing.presenter"
 }
 
 dependencies {

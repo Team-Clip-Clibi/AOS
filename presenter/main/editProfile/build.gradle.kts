@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.editprofile"
+    namespace = "com.oneThing.editprofile"
 }
 
 dependencies {

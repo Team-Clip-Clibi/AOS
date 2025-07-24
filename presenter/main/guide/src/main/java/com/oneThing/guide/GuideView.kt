@@ -30,9 +30,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.core.AppTextStyles
-import com.example.core.ColorStyle
-import com.example.core.TopAppBarWithCloseButton
+import com.oneThing.core.AppTextStyles
+import com.oneThing.core.ColorStyle
+import com.oneThing.core.TopAppBarWithCloseButton
 
 @Composable
 internal fun GuideView(onClose : () -> Unit) {

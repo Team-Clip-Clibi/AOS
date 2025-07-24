@@ -15,9 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.core.ButtonCenterLarge
-import com.example.core.ColorStyle
-import com.example.core.TopAppBarNumber
+import com.oneThing.core.ButtonCenterLarge
+import com.oneThing.core.ColorStyle
+import com.oneThing.core.TopAppBarNumber
 import com.oneThing.first_matrch.JOB
 
 @Composable

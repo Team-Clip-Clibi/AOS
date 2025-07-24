@@ -38,11 +38,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.core.AppTextStyles
-import com.example.core.ButtonXXLPurple400
-import com.example.core.ButtonXXLWhite
-import com.example.core.ColorStyle
-import com.example.core.TopAppBarNumber
+import com.oneThing.core.AppTextStyles
+import com.oneThing.core.ButtonXXLPurple400
+import com.oneThing.core.ButtonXXLWhite
+import com.oneThing.core.ColorStyle
+import com.oneThing.core.TopAppBarNumber
 import com.oneThing.random.R
 import kotlinx.coroutines.delay
 

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.kakao"
+    namespace = "com.oneThing.kakao"
 }
 
 dependencies {
