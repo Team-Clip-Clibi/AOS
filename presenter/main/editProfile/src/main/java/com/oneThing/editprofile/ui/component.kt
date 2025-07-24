@@ -40,43 +40,6 @@ import com.oneThing.core.AppTextStyles
 import com.oneThing.editprofile.JOB
 import com.oneThing.editprofile.R
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CustomTopBar(
-    title: String,
-    onBackClick: () -> Unit,
-) {
-    CenterAlignedTopAppBar(
-        modifier = Modifier
-            .border(width = 1.dp, color = Color(0xFFEFEFEF))
-            .fillMaxWidth()
-            .padding(start = 5.dp, end = 16.dp),
-        title = {
-            Text(
-                text = title,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF000000),
-                textAlign = TextAlign.Center
-            )
-        },
-        navigationIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.ic_back_gray),
-                contentDescription = "뒤로가기",
-                modifier = Modifier
-                    .padding(12.dp)
-                    .size(24.dp)
-                    .clickable { onBackClick() }
-            )
-        },
-        actions = {},
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.White
-        )
-    )
-}
-
-
 @Composable
 fun CustomLittleTitleText(
     text : String,

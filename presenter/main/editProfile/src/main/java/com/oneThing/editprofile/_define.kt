@@ -48,11 +48,11 @@ enum class JOB(val displayName: String) {
     }
 }
 
-enum class LOVE(val displayName: String) {
-    SINGLE("싱글"),
-    COUPLE("연애중"),
-    MARRIAGE("기혼"),
-    SECRET("밝히고 싶지 않아요")
+enum class LOVE() {
+    SINGLE,
+    COUPLE,
+    MARRIAGE,
+    SECRET
 }
 
 enum class MEETING(val displayName: Boolean) {

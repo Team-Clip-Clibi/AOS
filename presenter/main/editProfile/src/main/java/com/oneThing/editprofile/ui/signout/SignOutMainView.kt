@@ -44,7 +44,7 @@ internal fun SignOutMainView(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(uiState.success, uiState.error) {
-        when (val error = uiState.error) {
+        when (uiState.error) {
             is UiError.Error -> {
                 snackBarHost.showSnackbar(
                     message = context.getString(R.string.txt_delete_fail),
