@@ -476,8 +476,8 @@ fun LoginPager(
     HorizontalPager(
         state = state,
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 10.dp),
-        pageSpacing = 10.dp
+        contentPadding = PaddingValues(horizontal = 20.dp),
+        pageSpacing = 20.dp
     ) { page ->
         Card(
             modifier = Modifier
