@@ -635,9 +635,9 @@ fun AutoSlidingBanner(
             numberOfPages = image.size,
             selectedPage = pagerState.currentPage,
             modifier = Modifier.padding(bottom = 2.dp),
-            selectedColor = Color(0xFF6700CE) ,
-            defaultColor = Color(0xFFDCDCDC),
-            space = 8.dp,
+            selectedColor = ColorStyle.PURPLE_400 ,
+            defaultColor = ColorStyle.GRAY_400,
+            space = 6.dp,
         )
     }
 }
