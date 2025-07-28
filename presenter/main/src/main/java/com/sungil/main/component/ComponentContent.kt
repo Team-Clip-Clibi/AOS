@@ -774,7 +774,8 @@ fun MatchIngFlowView(modifier: Modifier,onClick: () -> Unit) {
             contentDescription = "match is ing",
             modifier = Modifier
                 .width(19.dp)
-                .height(18.dp)
+                .height(18.dp),
+            tint = ColorStyle.PURPLE_200
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
