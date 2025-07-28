@@ -564,7 +564,7 @@ fun CustomHomeButton(
             Image(
                 painter = painterResource(image),
                 contentDescription = "button image",
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(44.dp)
             )
             Spacer(modifier = padding)
             Column(

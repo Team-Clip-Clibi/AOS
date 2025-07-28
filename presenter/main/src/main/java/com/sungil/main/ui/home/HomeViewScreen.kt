@@ -106,7 +106,7 @@ private fun NotifyView(
     notifyClick: (String) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        if (notificationState is MainViewModel.UiState.Success) {
+        if (notificationState is MainViewModel.UiState.Success && notificationState.data.isNotEmpty()) {
             NotificationBarListStable(
                 notifications = notificationState.data,
                 notifyClick = { notifyClick(notificationState.data.first().link) },
