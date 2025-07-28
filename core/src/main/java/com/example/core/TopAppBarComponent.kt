@@ -3,6 +3,7 @@ package com.example.core
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -74,7 +75,7 @@ fun TopAppBarWithCloseButton(
     title: String,
     onBackClick: () -> Unit,
     isNavigationShow: Boolean = true,
-    isActionShow: Boolean = true
+    isActionShow: Boolean = true,
 ) {
     Column {
         CenterAlignedTopAppBar(
@@ -88,19 +89,24 @@ fun TopAppBarWithCloseButton(
                     style = AppTextStyles.TITLE_20_28_SEMI,
                     textAlign = TextAlign.Center,
                     color = ColorStyle.GRAY_800,
-                    modifier = Modifier.padding(top = 10.dp , bottom = 10.dp)
+                    modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
                 )
             },
             navigationIcon = {
                 if (isNavigationShow) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_back_gray),
-                        contentDescription = "go back",
+                    Box(
                         modifier = Modifier
-                            .padding(12.dp)
-                            .size(24.dp)
+                            .size(48.dp)
                             .clickable { onBackClick() }
-                    )
+                            .padding(12.dp)) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_back_gray),
+                            contentDescription = "go back",
+                            modifier = Modifier
+                                .padding(12.dp)
+                                .size(24.dp)
+                        )
+                    }
                 }
             },
             actions = {
