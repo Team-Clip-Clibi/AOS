@@ -111,7 +111,8 @@ fun MainScreenView(
                         onBackClick = {
                             navController.popBackStack()
                         },
-                        isNavigationShow = false
+                        isNavigationShow = true,
+                        isActionShow = false
                     )
                 }
                 BottomView.Home.screenRoute -> {
