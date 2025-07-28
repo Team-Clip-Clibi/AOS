@@ -44,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import kotlinx.coroutines.launch
@@ -250,17 +251,19 @@ fun CustomDialogOneButton(
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_right),
                 contentDescription = stringResource(R.string.txt_detail),
+                tint = ColorStyle.GRAY_500
             )
         }
         //content View
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = meetState,
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 color = when(meetState){
                     "취소" -> ColorStyle.RED_100
                     else -> ColorStyle.PURPLE_400
-                }
+                },
             )
             Spacer(modifier = Modifier.width(6.dp))
             Icon(
@@ -269,14 +272,14 @@ fun CustomDialogOneButton(
                 modifier = Modifier
                     .padding(1.dp)
                     .width(2.dp)
-                    .height(2.dp)
-                    .alignByBaseline()
+                    .height(2.dp),
+                tint = ColorStyle.GRAY_500
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = meetKind,
                 style = AppTextStyles.CAPTION_12_18_SEMI,
-                color = ColorStyle.GRAY_800
+                color = ColorStyle.GRAY_800,
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
