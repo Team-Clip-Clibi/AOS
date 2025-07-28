@@ -375,7 +375,7 @@ fun MeetingCardList(
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 17.dp, end = 16.dp),
+            .padding(start = 17.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         itemsIndexed(matchList, key = { _, item -> item.matchingId }) { _, match ->
