@@ -35,26 +35,17 @@ fun ButtonXXLPurple400(
     onClick: () -> Unit,
     buttonText: String,
     modifier: Modifier,
-    isEnable : Boolean = true
+    isEnable: Boolean = true
 ) {
     Button(
-        modifier = modifier
-            .height(60.dp)
-            .background(
-                color = when (isEnable) {
-                    true -> {
-                        ColorStyle.PURPLE_400
-                    }
-
-                    else -> {
-                        ColorStyle.GRAY_200
-                    }
-                },
-                shape = RoundedCornerShape(12.dp)
-            ),
+        modifier = modifier.height(60.dp),
         onClick = onClick,
         enabled = isEnable,
         shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isEnable) ColorStyle.PURPLE_400 else ColorStyle.GRAY_200,
+            contentColor = if (isEnable) ColorStyle.WHITE_100 else ColorStyle.GRAY_800
+        )
     ) {
         Text(
             text = buttonText,
@@ -68,6 +59,7 @@ fun ButtonXXLPurple400(
         )
     }
 }
+
 
 @Composable
 fun ButtonXXLWhite(
