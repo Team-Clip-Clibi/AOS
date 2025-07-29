@@ -101,6 +101,7 @@ private fun NoticeView(
             val late = (matchLateState).data
             late.matchId to late.time
         }
+
         else -> -1 to 0
     }
 
@@ -119,7 +120,33 @@ private fun NoticeView(
                     meetState = MatchStatus.fromRoute(data.matchStatus).label,
                     meetKind = MatchType.fromRoute(data.matchType).matchType,
                     title = data.category,
-                    detail = data.detailTime,
+                    detail = when (data.diet.size) {
+                        1 -> stringResource(
+                            R.string.match_notice_menu_info_size_1,
+                            data.diet.first().dietaryOption,
+                            data.diet.first().count
+                        )
+
+                        2 -> stringResource(
+                            R.string.match_notice_menu_info_size_2,
+                            data.diet.first().dietaryOption,
+                            data.diet.first().count,
+                            data.diet[1].dietaryOption,
+                            data.diet[1].count
+                        )
+
+                        3 -> stringResource(
+                            R.string.match_notice_menu_info_size_3,
+                            data.diet.first().dietaryOption,
+                            data.diet.first().count,
+                            data.diet[1].dietaryOption,
+                            data.diet[1].count,
+                            data.diet[2].dietaryOption,
+                            data.diet[2].count
+                        )
+
+                        else -> stringResource(R.string.match_notice_menu_info_no_diet)
+                    },
                     restaurant = data.restaurantName,
                     location = data.restaurantAddress,
                     people = stringResource(

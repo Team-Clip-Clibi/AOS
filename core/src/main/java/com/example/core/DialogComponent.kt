@@ -364,6 +364,7 @@ fun NoticePage(
                 color = ColorStyle.GRAY_800
             )
         }
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = title,
             style = AppTextStyles.HEAD_24_34_BOLD,
@@ -371,8 +372,8 @@ fun NoticePage(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
-        NoticeItemView(image = painterResource(R.drawable.ic_calendar), text = dateDetail , highlighted = dateDetail)
-        NoticeItemView(image = painterResource(R.drawable.ic_location), text = "$restaurant($location)", highlighted = restaurant)
+        NoticeItemView(image = painterResource(R.drawable.ic_match_notice_calendar), text = dateDetail , highlighted = dateDetail)
+        NoticeItemView(image = painterResource(R.drawable.ic_match_notice_location), text = "$restaurant($location)", highlighted = restaurant)
         NoticeItemView(image = painterResource(R.drawable.ic_people), text = people , highlighted = job)
         NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
         NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail , highlighted = "")
