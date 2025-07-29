@@ -75,8 +75,8 @@
     <string name="txt_sign_out_content_etc_hint">기타 사유를 입력해주세요</string>
     <!--  dialog  -->
     <string name="dialog_logout_title">로그아웃 하시겠어요?</string>
-    <string name="dialog_logout_content">저장된 정보는 유지되며, 다시 로그인하면 이어서 이용할 수 있습니다</string>
-    <string name="dialog_logout_okay_button">로그아웃</string>
+    <string name="dialog_logout_content">저장된 정보는 유지되며\n다시 로그인하면 이어서 이용할 수 있습니다</string>
+    <string name="dialog_logout_okay_button">로그아웃하기</string>
     <string name="dialog_logout_dismiss">취소</string>
     <string name="dialog_sign_out_title">회원탈퇴가 완료되었습니다</string>
     <string name="dialog_sign_out_content">계정이 삭제되면 모든 데이터가 영구 삭제됩니다.</string>

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.core.AppTextStyles
+import com.example.core.ColorStyle
 import com.sungil.editprofile.JOB
 import com.sungil.editprofile.R
 
@@ -274,59 +276,58 @@ fun CustomDialog(
     titleText: String,
     contentText: String,
     buttonText: String,
-    subButtonText : String
+    subButtonText: String,
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             modifier = Modifier
                 .border(
                     width = 1.dp,
-                    color = Color(0xFFF7F7F7),
+                    color = ColorStyle.GRAY_100,
                     shape = RoundedCornerShape(size = 24.dp)
                 )
                 .width(324.dp)
-                .height(240.dp)
+                .wrapContentHeight()
                 .background(
-                    color = Color(0xFFFFFFFF),
+                    color = ColorStyle.WHITE_100,
                     shape = RoundedCornerShape(size = 24.dp)
                 )
                 .padding(24.dp),
-
-            ) {
+        ) {
             Column(
-                modifier = Modifier.fillMaxSize()
-                    .background(Color(0xFFFFFFFF)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(ColorStyle.WHITE_100),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = titleText,
                     style = AppTextStyles.TITLE_20_28_SEMI,
-                    color = Color(0xFF171717),
+                    color = ColorStyle.GRAY_800,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(5.dp))
-
+                Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = contentText,
                     style = AppTextStyles.BODY_14_20_MEDIUM,
-                    color = Color(0xFF666666),
+                    color = ColorStyle.GRAY_600,
                     textAlign = TextAlign.Center,
                 )
-
                 Spacer(modifier = Modifier.height(24.dp))
-
                 Button(
                     onClick = buttonClick,
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
-                        .background(color = Color(0xFF6700CE), shape = RoundedCornerShape(size = 12.dp))
+                        .height(48.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ColorStyle.PURPLE_400
+                    )
                 ) {
                     Text(
                         text = buttonText,
                         style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                        color = Color(0xFFFFFFFF),
+                        color = ColorStyle.WHITE_100,
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
@@ -335,7 +336,7 @@ fun CustomDialog(
                     onClick = onDismiss,
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        Color(0xFFEFEFEF)
+                        ColorStyle.GRAY_200
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -344,7 +345,7 @@ fun CustomDialog(
                     Text(
                         text = subButtonText,
                         style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                        color = Color(0xFF171717),
+                        color = ColorStyle.GRAY_800,
                     )
                 }
             }
