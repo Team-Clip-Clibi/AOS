@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -362,45 +363,18 @@ fun MeetingCardList(
     onAddClick: () -> Unit,
     canAdd: Boolean,
 ) {
-    val visibleMatchIds = remember { mutableStateListOf<Int>() }
-
-    LaunchedEffect(matchList.map { it.matchingId }) {
-        visibleMatchIds.clear()
-        matchList.forEachIndexed { _, item ->
-            delay(200L)
-            visibleMatchIds.add(item.matchingId)
-        }
-    }
-
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 17.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        itemsIndexed(matchList, key = { _, item -> item.matchingId }) { _, match ->
-            val isVisible = match.matchingId in visibleMatchIds
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = fadeIn(
-                    animationSpec = tween(
-                        durationMillis = 600,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + slideInHorizontally(
-                    animationSpec = tween(
-                        durationMillis = 600,
-                        easing = FastOutSlowInEasing
-                    ),
-                    initialOffsetX = { it / 2 }
-                )
-            ) {
-                MeetingCard(
-                    category = match.category,
-                    time = if (match.daysUntilMeeting == 0) "오늘" else "${match.daysUntilMeeting}일 후",
-                    location = match.meetingPlace
-                )
-            }
+        items(matchList, key = { it.matchingId }) { match ->
+            MeetingCard(
+                category = match.category,
+                time = if (match.daysUntilMeeting == 0) "오늘" else "${match.daysUntilMeeting}일 후",
+                location = match.meetingPlace
+            )
         }
 
         if (canAdd) {
@@ -409,14 +383,13 @@ fun MeetingCardList(
                 MainCardView(
                     contentString = stringResource(R.string.txt_home_not_meeting),
                     addClick = onAddClick,
-                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(
-                        192.dp
-                    )
+                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(192.dp)
                 )
             }
         }
     }
 }
+
 
 @Composable
 fun MainCardView(
