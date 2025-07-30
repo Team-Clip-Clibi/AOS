@@ -99,12 +99,7 @@ internal fun ChangeJobMainView(
                 bottom = paddingValues.calculateBottomPadding()
             )
     ) {
-        Text(
-            text = stringResource(R.string.txt_job_select_one),
-            color = ColorStyle.GRAY_600,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         JobGridSelector(
             selectedJobs = if (uiState.newJob.trim()
                     .isNotEmpty()
