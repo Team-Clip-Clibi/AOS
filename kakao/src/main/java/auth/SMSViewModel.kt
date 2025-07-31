@@ -1,4 +1,4 @@
-package com.sungil.kakao.com.kakao.sdk.auth
+package auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

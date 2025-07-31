@@ -11,7 +11,7 @@ import com.sungil.alarm.AlarmMainActivity
 import com.sungil.billing.BillingActivity
 import com.sungil.domain.model.Router
 import com.sungil.editprofile.ProfileEditMainActivity
-import com.sungil.kakao.com.kakao.sdk.auth.AuthCodeHandlerActivity
+import auth.AuthCodeHandlerActivity
 import com.sungil.login.LoginActivity
 import com.sungil.low.ui.low.LowActivity
 import com.sungil.main.MainActivity

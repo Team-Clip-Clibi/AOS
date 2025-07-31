@@ -1,4 +1,4 @@
-package com.sungil.kakao.com.kakao.sdk.auth
+package auth
 
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +9,8 @@ import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import androidx.activity.viewModels
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.auth.model.Prompt
 import com.sungil.domain.model.DebugProvider
 
 @AndroidEntryPoint
@@ -17,18 +19,29 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
 
     @Inject
     lateinit var router: Router
+
     @Inject
-    lateinit var debugProvider : DebugProvider
+    lateinit var debugProvider: DebugProvider
+
+    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+            Log.e(javaClass.name.toString(), "카카오계정으로 로그인 실패", error)
+        } else if (token != null) {
+            Log.i(javaClass.name.toString(), "카카오계정으로 로그인 성공 ${token.accessToken}")
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (debugProvider.provide()) {
-            Log.d(javaClass.name.toString(), "Debug Build")
-        } else {
-            Log.d(javaClass.name.toString(), "Release Build")
-        }
-        startKakaoLogin()
+        val loginAction = if (debugProvider.provide()) ::startKAKAOWebLogin else ::startKakaoLogin
+        loginAction()
         addListener()
+    }
+
+
+    private fun startKAKAOWebLogin() {
+        UserApiClient.instance.loginWithKakaoAccount(this@AuthCodeHandlerActivity, prompts = listOf(Prompt.LOGIN) , callback = callback)
     }
 
     private fun startKakaoLogin() {
