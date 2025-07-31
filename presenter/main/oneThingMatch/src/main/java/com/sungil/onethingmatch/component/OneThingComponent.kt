@@ -390,7 +390,7 @@ fun NotifyMeeting() {
             color = ColorStyle.GRAY_600,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 28.dp, end = 12.dp)
+                .padding(start = 38.dp, end = 12.dp)
         )
         Spacer(modifier = Modifier.height(12.dp))
 
