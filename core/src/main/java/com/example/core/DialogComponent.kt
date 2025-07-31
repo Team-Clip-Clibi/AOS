@@ -211,6 +211,67 @@ fun CustomSnackBar(
 }
 
 @Composable
+fun CustomDialogImageOneButton(
+    image: Int,
+    title: String,
+    content: String,
+    buttonText: String,
+    onClick: () -> Unit,
+) {
+    Dialog(onDismissRequest = onClick) {
+        Surface(
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = ColorStyle.GRAY_100,
+                    shape = RoundedCornerShape(24.dp)
+                )
+                .width(324.dp)
+                .height(280.dp)
+                .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(24.dp))
+                .padding(24.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize().background(color = ColorStyle.WHITE_100),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(image),
+                    contentDescription = "dialog_image",
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = title,
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = ColorStyle.GRAY_800,
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = content,
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = ColorStyle.GRAY_600
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    onClick = onClick,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ColorStyle.PURPLE_400
+                    )
+                ){
+                    Text(
+                        text = buttonText,
+                        color = ColorStyle.WHITE_100,
+                        style = AppTextStyles.SUBTITLE_16_24_SEMI
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun CustomDialogOneButton(
     time: String,
     meetState: String,
@@ -486,7 +547,7 @@ fun SimpleBottomSheet(
                 color = ColorStyle.GRAY_600
             )
             Spacer(modifier = Modifier.height(24.dp))
-            item.forEachIndexed { index, label ->
+            item.forEachIndexed { _, label ->
                 SimpleSheetItem(
                     text = label,
                     onClick = {

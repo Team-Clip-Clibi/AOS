@@ -36,6 +36,7 @@ import com.sungil.main.component.MatchIngFlowView
 import com.sungil.main.nav.MainNavigation
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import com.example.core.CustomDialogImageOneButton
 import com.example.core.CustomDialogTwoButton
 import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.editprofile.ERROR_TOKEN_EXPIRE
@@ -63,7 +64,8 @@ fun MainScreenView(
     val snackBarHostState = remember { SnackbarHostState() }
     val matchTriggerState by viewModel.meetingTrigger.collectAsState()
     val showBottomSheet by viewModel.bottomSheetShow.collectAsState()
-    val showDialog by viewModel.dialogShow.collectAsState()
+    val reviewDialog by viewModel.reviewDialog.collectAsState()
+    val lightMatchDialog by viewModel.lightDialogShow.collectAsState()
     val userState by viewModel.userState.collectAsState()
     val dto = (matchTriggerState as? MainViewModel.MatchTriggerUiState.Triggered)?.dto
     val showMatchFlowView = remember(dto) { dto?.trigger == TRIGGER_TIME_UP }
@@ -105,7 +107,8 @@ fun MainScreenView(
                         isNavigationShow = false,
                     )
                 }
-                MainView.ALARM.route ->{
+
+                MainView.ALARM.route -> {
                     TopAppBarWithCloseButton(
                         title = stringResource(R.string.alarm_top_bar),
                         onBackClick = {
@@ -115,6 +118,7 @@ fun MainScreenView(
                         isActionShow = false
                     )
                 }
+
                 BottomView.Home.screenRoute -> {
                     val icons = when (val state = userState.oneThingState) {
                         is MainViewModel.UiState.Success ->
@@ -176,7 +180,7 @@ fun MainScreenView(
             if (showBottomSheet && progressMatchInfo != null) {
                 MatchingBottomSheet(
                     viewModel = viewModel,
-                    onClick = { viewModel.showDialog() },
+                    onClick = { viewModel.showReviewDialog() },
                     matchData = progressMatchInfo
                 )
             }
@@ -196,14 +200,14 @@ fun MainScreenView(
             }
         }
 
-        if (showDialog) {
+        if (reviewDialog) {
             CustomDialogTwoButton(
                 buttonText = stringResource(R.string.review_dialog_btn_okay),
                 dismissButtonText = stringResource(R.string.review_dialog_btn_cancel),
                 titleText = stringResource(R.string.review_dialog_title),
-                onDismiss = { viewModel.closeDialog() },
+                onDismiss = { viewModel.closeReviewDialog() },
                 buttonClick = {
-                    viewModel.closeDialog()
+                    viewModel.closeReviewDialog()
                     viewModel.setReviewData(
                         participants = progressMatchInfo!!.nickName,
                         matchType = dto!!.matchType,
@@ -212,6 +216,17 @@ fun MainScreenView(
                     navController.navigate(MainView.REVIEW.route)
                 },
                 contentText = "${dto?.localTime ?: ""} ${dto?.matchType ?: ""}"
+            )
+        }
+        if (lightMatchDialog) {
+            CustomDialogImageOneButton(
+                buttonText = stringResource(R.string.dialog_light_btn),
+                content = stringResource(R.string.dialog_light_content),
+                image = R.drawable.ic_coming_soon,
+                onClick = {
+                    viewModel.closeLightDialog()
+                },
+                title = stringResource(R.string.dialog_light_title)
             )
         }
     }

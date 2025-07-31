@@ -91,8 +91,11 @@ class MainViewModel @Inject constructor(
     private var _bottomSheetViewShow = MutableStateFlow(false)
     val bottomSheetShow: StateFlow<Boolean> = _bottomSheetViewShow.asStateFlow()
 
-    private var _dialogShow = MutableStateFlow(false)
-    val dialogShow: StateFlow<Boolean> = _dialogShow.asStateFlow()
+    private var _reviewDialogShow = MutableStateFlow(false)
+    val reviewDialog: StateFlow<Boolean> = _reviewDialogShow.asStateFlow()
+
+    private var _lightDialogShow = MutableStateFlow(false)
+    val lightDialogShow : StateFlow<Boolean> = _lightDialogShow.asStateFlow()
 
     private var participantsData: List<String> = emptyList()
     private var matchId: Int = 0
@@ -545,12 +548,20 @@ class MainViewModel @Inject constructor(
         _bottomSheetViewShow.value = true
     }
 
-    fun closeDialog() {
-        _dialogShow.value = false
+    fun closeReviewDialog() {
+        _reviewDialogShow.value = false
     }
 
-    fun showDialog() {
-        _dialogShow.value = true
+    fun showReviewDialog() {
+        _reviewDialogShow.value = true
+    }
+
+    fun closeLightDialog() {
+        _lightDialogShow.value = false
+    }
+
+    fun showLightDialog() {
+        _lightDialogShow.value = true
     }
 
     fun setReviewData(

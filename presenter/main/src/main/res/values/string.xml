@@ -91,6 +91,9 @@
     <string name="btn_home_light_content">오픈 예정이에요</string>
     <string name="card_one_thing_title">원띵 모임</string>
     <string name="card_random_title">랜덤 모임</string>
+    <string name="dialog_light_title">서비스 준비 중이에요</string>
+    <string name="dialog_light_content">빠른 시일내에 준비하여 찾아뵐게요</string>
+    <string name="dialog_light_btn">확인</string>
     <!--MyMatch-->
     <string name="my_match_top_bar">내 모임</string>
     <string name="my_match_title">%1$s님의</string>
