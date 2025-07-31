@@ -9,6 +9,7 @@ import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import androidx.activity.viewModels
+import com.sungil.domain.model.DebugProvider
 
 @AndroidEntryPoint
 class AuthCodeHandlerActivity : AppCompatActivity() {
@@ -16,8 +17,16 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
 
     @Inject
     lateinit var router: Router
+    @Inject
+    lateinit var debugProvider : DebugProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (debugProvider.provide()) {
+            Log.d(javaClass.name.toString(), "Debug Build")
+        } else {
+            Log.d(javaClass.name.toString(), "Release Build")
+        }
         startKakaoLogin()
         addListener()
     }
