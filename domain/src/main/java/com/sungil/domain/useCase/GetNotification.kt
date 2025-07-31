@@ -7,7 +7,6 @@ import com.sungil.domain.model.NotificationData
 import com.sungil.domain.repository.DatabaseRepository
 import com.sungil.domain.repository.NetworkRepository
 import com.sungil.domain.tokenManger.TokenMangerController
-import com.sungil.domain.useCase.GetLatestMatch.Result
 import javax.inject.Inject
 
 class GetNotification @Inject constructor(
