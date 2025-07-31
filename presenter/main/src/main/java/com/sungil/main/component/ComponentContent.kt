@@ -312,12 +312,13 @@ fun NotificationBarListStable(
 fun CustomNotifyBar(
     notifications: List<NotificationData>,
     notifyClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val currentIndex by remember { mutableIntStateOf(0) }
     val currentNotification = notifications[currentIndex]
 
-    val titleColor = if (currentNotification.noticeType == CONTENT_NOTICE) Color(0xFFFB4F4F) else Color(0xFF171717)
+    val titleColor =
+        if (currentNotification.noticeType == CONTENT_NOTICE) ColorStyle.RED_100 else ColorStyle.GRAY_800
     val titleText = if (currentNotification.noticeType == CONTENT_NOTICE)
         stringResource(R.string.notify_notice)
     else
@@ -327,7 +328,7 @@ fun CustomNotifyBar(
         modifier = modifier
             .fillMaxWidth()
             .height(34.dp)
-            .background(Color(0xFFEFEFEF))
+            .background(color = ColorStyle.GRAY_200)
             .clickable { notifyClick(currentNotification.link) }
             .padding(start = 17.dp, end = 8.5.dp)
     ) {
