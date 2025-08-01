@@ -19,4 +19,6 @@ dependencies {
     implementation(libs.jetbrains.kotlinx.serialization.json)
     // Paging
     implementation(libs.paging.runtime)
+    //SNS Login
+    implementation(libs.kakao.common)
 }
