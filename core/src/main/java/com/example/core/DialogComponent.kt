@@ -211,6 +211,67 @@ fun CustomSnackBar(
 }
 
 @Composable
+fun CustomDialogImageOneButton(
+    image: Int,
+    title: String,
+    content: String,
+    buttonText: String,
+    onClick: () -> Unit,
+) {
+    Dialog(onDismissRequest = onClick) {
+        Surface(
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = ColorStyle.GRAY_100,
+                    shape = RoundedCornerShape(24.dp)
+                )
+                .width(324.dp)
+                .height(280.dp)
+                .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(24.dp))
+                .padding(24.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize().background(color = ColorStyle.WHITE_100),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(image),
+                    contentDescription = "dialog_image",
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = title,
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    color = ColorStyle.GRAY_800,
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = content,
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = ColorStyle.GRAY_600
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    onClick = onClick,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ColorStyle.PURPLE_400
+                    )
+                ){
+                    Text(
+                        text = buttonText,
+                        color = ColorStyle.WHITE_100,
+                        style = AppTextStyles.SUBTITLE_16_24_SEMI
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun CustomDialogOneButton(
     time: String,
     meetState: String,
@@ -250,17 +311,19 @@ fun CustomDialogOneButton(
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_right),
                 contentDescription = stringResource(R.string.txt_detail),
+                tint = ColorStyle.GRAY_500
             )
         }
         //content View
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = meetState,
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 color = when(meetState){
                     "취소" -> ColorStyle.RED_100
                     else -> ColorStyle.PURPLE_400
-                }
+                },
             )
             Spacer(modifier = Modifier.width(6.dp))
             Icon(
@@ -269,14 +332,14 @@ fun CustomDialogOneButton(
                 modifier = Modifier
                     .padding(1.dp)
                     .width(2.dp)
-                    .height(2.dp)
-                    .alignByBaseline()
+                    .height(2.dp),
+                tint = ColorStyle.GRAY_500
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = meetKind,
                 style = AppTextStyles.CAPTION_12_18_SEMI,
-                color = ColorStyle.GRAY_800
+                color = ColorStyle.GRAY_800,
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -361,6 +424,7 @@ fun NoticePage(
                 color = ColorStyle.GRAY_800
             )
         }
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = title,
             style = AppTextStyles.HEAD_24_34_BOLD,
@@ -368,8 +432,8 @@ fun NoticePage(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
-        NoticeItemView(image = painterResource(R.drawable.ic_calendar), text = dateDetail , highlighted = dateDetail)
-        NoticeItemView(image = painterResource(R.drawable.ic_location), text = "$restaurant($location)", highlighted = restaurant)
+        NoticeItemView(image = painterResource(R.drawable.ic_match_notice_calendar), text = dateDetail , highlighted = dateDetail)
+        NoticeItemView(image = painterResource(R.drawable.ic_match_notice_location), text = "$restaurant($location)", highlighted = restaurant)
         NoticeItemView(image = painterResource(R.drawable.ic_people), text = people , highlighted = job)
         NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
         NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail , highlighted = "")
@@ -483,7 +547,7 @@ fun SimpleBottomSheet(
                 color = ColorStyle.GRAY_600
             )
             Spacer(modifier = Modifier.height(24.dp))
-            item.forEachIndexed { index, label ->
+            item.forEachIndexed { _, label ->
                 SimpleSheetItem(
                     text = label,
                     onClick = {

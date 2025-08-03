@@ -28,6 +28,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.core.AppTextStyles
@@ -96,7 +97,7 @@ private fun AlarmStatus(
         modifier = Modifier
             .fillMaxWidth()
             .height(62.dp)
-            .padding(top = 10.dp, bottom = 10.dp, end = 16.dp),
+            .padding(top = 10.dp, bottom = 10.dp , end = 32.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -134,7 +135,8 @@ private fun AlarmStatus(
                 checkedThumbColor = ColorStyle.WHITE_100,
                 checkedTrackColor = ColorStyle.PURPLE_400,
                 uncheckedThumbColor = ColorStyle.WHITE_100,
-                uncheckedTrackColor = ColorStyle.GRAY_500
+                uncheckedTrackColor = ColorStyle.GRAY_500,
+                uncheckedBorderColor = Color.Transparent
             )
         )
     }

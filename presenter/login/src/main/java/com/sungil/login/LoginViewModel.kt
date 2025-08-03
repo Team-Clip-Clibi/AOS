@@ -1,5 +1,6 @@
 package com.sungil.login
 
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.BannerData
@@ -8,6 +9,7 @@ import com.sungil.domain.useCase.CheckPermissionShow
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFcmToken
 import com.sungil.domain.useCase.GetKakaoId
+import com.sungil.domain.useCase.LoginKAKAO
 import com.sungil.domain.useCase.SetNotifyState
 import com.sungil.domain.useCase.SetPermissionCheck
 import com.sungil.domain.useCase.UpdateAndSaveToken
@@ -27,14 +29,17 @@ class LoginViewModel @Inject constructor(
     private val updateAndSaveToken: UpdateAndSaveToken,
     private val notifyState: SetNotifyState,
     private val banner: GetBanner,
-    private val permissionCheck : CheckPermissionShow,
-    private val setPermission : SetPermissionCheck
+    private val permissionCheck: CheckPermissionShow,
+    private val setPermission: SetPermissionCheck,
+    private val snsLogin: LoginKAKAO
 ) : ViewModel() {
     private val _actionFlow = MutableStateFlow(LoginViewState())
     val actionFlow: StateFlow<LoginViewState> = _actionFlow.asStateFlow()
+
     init {
         checkPermissionShow()
     }
+
     fun banner() {
         viewModelScope.launch {
             when (val result = banner.invoke(GetBanner.Param(BANNER))) {
@@ -90,6 +95,25 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun loginKaKao(activity: Activity, isDebug: Boolean) {
+        viewModelScope.launch {
+            when (val result =
+                snsLogin.invoke(LoginKAKAO.Param(activity = activity, isDebug = isDebug))) {
+                is LoginKAKAO.Result.Success -> {
+                    _actionFlow.update { current ->
+                        current.copy(kakaoLogin = UiState.Success(result.snsData))
+                    }
+                }
+
+                is LoginKAKAO.Result.Fail -> {
+                    _actionFlow.update { current ->
+                        current.copy(kakaoLogin = UiState.Error(result.errorMessage))
+                    }
+                }
+            }
+        }
+    }
+
     fun setNotification(data: Boolean) {
         viewModelScope.launch {
             when (val result = notifyState.invoke(SetNotifyState.Param(data))) {
@@ -106,14 +130,15 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun checkPermissionShow(){
+    private fun checkPermissionShow() {
         viewModelScope.launch {
-            when(permissionCheck.invoke(BuildConfig.NOTIFY_PERMISSION_KEY)){
+            when (permissionCheck.invoke(BuildConfig.NOTIFY_PERMISSION_KEY)) {
                 true -> {
                     _actionFlow.update { current ->
                         current.copy(permissionShow = UiState.Success(true))
                     }
                 }
+
                 false -> {
                     _actionFlow.update { current ->
                         current.copy(permissionShow = UiState.Success(false))
@@ -122,14 +147,21 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
-    private fun setPermissionCheck(){
+
+    private fun setPermissionCheck() {
         viewModelScope.launch {
-            when(val message = setPermission.invoke(SetPermissionCheck.Param(key = BuildConfig.NOTIFY_PERMISSION_KEY , data = true))){
+            when (val message = setPermission.invoke(
+                SetPermissionCheck.Param(
+                    key = BuildConfig.NOTIFY_PERMISSION_KEY,
+                    data = true
+                )
+            )) {
                 is SetPermissionCheck.Result.Success -> {
                     _actionFlow.update { current ->
                         current.copy(notification = UiState.Success(message.message))
                     }
                 }
+
                 is SetPermissionCheck.Result.Fail -> {
                     _actionFlow.update { current ->
                         current.copy(notification = UiState.Error(message.errorMessage))
@@ -174,11 +206,12 @@ class LoginViewModel @Inject constructor(
     data class LoginViewState(
         val userId: UiState<String> = UiState.Loading,
         val signUp: UiState<String> = UiState.Loading,
+        val kakaoLogin : UiState<String> = UiState.Loading,
         val fcmToken: UiState<String> = UiState.Loading,
         val notification: UiState<String> = UiState.Loading,
         val banner: UiState<List<BannerData>> = UiState.Loading,
-        val permissionShow : UiState<Boolean> = UiState.Loading,
-        val permissionSet : UiState<Boolean> = UiState.Loading
+        val permissionShow: UiState<Boolean> = UiState.Loading,
+        val permissionSet: UiState<Boolean> = UiState.Loading
     )
 
 }

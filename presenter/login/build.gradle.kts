@@ -29,4 +29,5 @@ dependencies {
     implementation(libs.firebase.crash)
     implementation(libs.coil.svg)
     implementation(libs.compose.nav)
+    implementation(libs.kakao.common)
 }

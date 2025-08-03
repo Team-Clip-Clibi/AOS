@@ -281,14 +281,14 @@ fun GuideButton(
 ) {
     Button(
         modifier = Modifier
-            .width(134.dp)
+            .width(137.dp)
             .height(48.dp),
         shape = RoundedCornerShape(size = 40.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = ColorStyle.GRAY_700,
             contentColor = ColorStyle.GRAY_700
         ),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp),
         onClick = onClick,
     ) {
         Row(
@@ -308,7 +308,8 @@ fun GuideButton(
             Text(
                 text = stringResource(R.string.btn_meet_guide),
                 style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = ColorStyle.WHITE_100
+                color = ColorStyle.WHITE_100,
+                textAlign = TextAlign.Center
             )
         }
     }

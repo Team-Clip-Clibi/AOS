@@ -17,7 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -35,12 +36,13 @@ import com.example.core.ColorStyle
 import com.example.core.TopAppBarWithCloseButton
 
 @Composable
-internal fun GuideView(onClose : () -> Unit) {
+internal fun GuideView(onClose: () -> Unit) {
     Scaffold(topBar = {
         TopAppBarWithCloseButton(
             title = stringResource(R.string.top_meet_guide),
             onBackClick = { onClose() },
-            isNavigationShow = false
+            isNavigationShow = false,
+            tint = ColorStyle.GRAY_500
         )
     }) { paddingValues ->
         Column(
@@ -59,6 +61,7 @@ internal fun GuideView(onClose : () -> Unit) {
         }
     }
 }
+
 @Composable
 fun DynamicTimelineView() {
     val context = LocalContext.current
@@ -133,7 +136,7 @@ fun DynamicTimelineView() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(start = 16.dp, end = 17.dp)
     ) {
         timelineList.forEachIndexed { index, guideInfo ->
             TimeLineNodeManual(
@@ -152,13 +155,14 @@ fun TimeLineNodeManual(
     contents: GuideInfo,
     isLast: Boolean,
 ) {
-    var contentHeightPx by remember { mutableStateOf(0) }
+    var contentHeightPx by remember { mutableIntStateOf(0) }
     Row(
         verticalAlignment = Alignment.Top
     ) {
         Box(
             modifier = Modifier
                 .size(32.dp)
+                .alignBy(FirstBaseline)
                 .drawBehind {
                     val circleRadius = size.width / 2f
                     val center = Offset(circleRadius, circleRadius)
@@ -175,7 +179,7 @@ fun TimeLineNodeManual(
                             color = ColorStyle.GRAY_200,
                             start = Offset(center.x, lineStartY),
                             end = Offset(center.x, lineEndY),
-                            strokeWidth = 2.dp.toPx(),
+                            strokeWidth = 3.dp.toPx(),
                             cap = StrokeCap.Round
                         )
                     }
@@ -192,6 +196,7 @@ fun TimeLineNodeManual(
         Column(
             modifier = Modifier
                 .weight(1f)
+                .alignBy(FirstBaseline)
                 .onGloballyPositioned { coordinates ->
                     contentHeightPx = coordinates.size.height
                 }
@@ -213,7 +218,7 @@ fun TimeLineNodeManual(
                 }
                 Text(
                     text = data.content,
-                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    style = AppTextStyles.BODY_14_20_REGULAR,
                     color = ColorStyle.GRAY_800,
                     modifier = Modifier.padding(start = 12.dp)
                 )
@@ -223,7 +228,6 @@ fun TimeLineNodeManual(
         }
     }
 }
-
 
 
 data class GuideInfo(

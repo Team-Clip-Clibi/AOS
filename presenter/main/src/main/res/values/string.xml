@@ -56,6 +56,10 @@
     <string name="match_notice_people">이번 모임의 멤버는 %1$s으로 구성되어 있어요</string>
     <string name="match_notice_job">%1$s %2$d명</string>
     <string name="match_notice_cuisine">식사 메뉴는 %1$s으로 준비했어요</string>
+    <string name="match_notice_menu_info_no_diet">다 잘먹어요, 메뉴 선택 시 참고해 주세요</string>
+    <string name="match_notice_menu_info_size_1">모임에는 %1$s 멤버 %2$s명이 있으니, 메뉴 선택 시 참고해 주세요</string>
+    <string name="match_notice_menu_info_size_2">모임에는 %1$s 멤버 %2$s명와 %3$s 맴버 %4$s명이 있으니, 메뉴 선택 시 참고해 주세요</string>
+    <string name="match_notice_menu_info_size_3">모임에는 %1$s 멤버 %2$s명, %3$s 맴버 %4$s명와 %5$s 맴버 %6$s명이 있으니, 메뉴 선택 시 참고해 주세요</string>
     <string name="match_notice_pay_content">식사 비용은 각자 부담하거나, 멤버들과 상의해 결정해 주세요</string>
     <string name="match_notice_late_10">10분</string>
     <string name="match_notice_late_20">20분</string>
@@ -87,6 +91,9 @@
     <string name="btn_home_light_content">오픈 예정이에요</string>
     <string name="card_one_thing_title">원띵 모임</string>
     <string name="card_random_title">랜덤 모임</string>
+    <string name="dialog_light_title">서비스 준비 중이에요</string>
+    <string name="dialog_light_content">빠른 시일내에 준비하여 찾아뵐게요</string>
+    <string name="dialog_light_btn">확인</string>
     <!--MyMatch-->
     <string name="my_match_top_bar">내 모임</string>
     <string name="my_match_title">%1$s님의</string>

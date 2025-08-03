@@ -26,18 +26,17 @@
         </activity>
 
         <activity
-            android:name="com.sungil.kakao.com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            tools:replace="android:theme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="oauth"
-                    android:scheme="kakao${NATIVE_APP_KEY}" />
+                    android:scheme="kakao4d1dbfdfed5d66ba9fe3aef7eb4e0dca" />
             </intent-filter>
         </activity>
 

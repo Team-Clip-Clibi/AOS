@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import com.sungil.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.sungil.domain.model.DebugProvider
 
 @AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
@@ -19,6 +20,9 @@ class LoginActivity : ComponentActivity() {
     @Inject
     lateinit var router: Router
 
+    @Inject
+    lateinit var debugProvider: DebugProvider
+
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,16 +30,15 @@ class LoginActivity : ComponentActivity() {
         setContent {
             LoginNav(
                 viewModel = viewModel,
-                kakao = {
-                    router.navigation(NAV_KAKAO)
-                },
                 notification = {
                     requestNotification()
                 },
                 home = {
                     router.navigation(NAV_MAIN)
-                })
-
+                },
+                isDebug = debugProvider.provide(),
+                activity = this@LoginActivity
+            )
         }
     }
 

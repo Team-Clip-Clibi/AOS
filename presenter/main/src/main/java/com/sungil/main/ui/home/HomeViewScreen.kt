@@ -21,7 +21,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -45,7 +44,6 @@ import com.sungil.domain.model.UserData
 import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.MeetingCardList
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun HomeViewScreen(
@@ -91,9 +89,7 @@ internal fun HomeViewScreen(
             snackBarHost = snackBarHostState,
         )
         MatchButtonView(
-            context = context,
             randomMatchClick = randomMatchClick,
-            snackBarHost = snackBarHostState,
             viewModel = viewModel
         )
         BannerView(banner = banner)
@@ -194,11 +190,7 @@ private fun MatchView(
 private fun MatchButtonView(
     viewModel: MainViewModel,
     randomMatchClick: () -> Unit,
-    snackBarHost: SnackbarHostState,
-    context: Context,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -240,12 +232,7 @@ private fun MatchButtonView(
                 titleText = stringResource(R.string.btn_home_light),
                 contentText = stringResource(R.string.btn_home_light_content),
                 onClick = {
-                    coroutineScope.launch {
-                        snackBarHost.showSnackbar(
-                            message = context.getString(R.string.msg_not_service),
-                            duration = SnackbarDuration.Short
-                        )
-                    }
+                    viewModel.showLightDialog()
                 },
                 image = R.drawable.ic_lighting_match,
                 modifier = Modifier

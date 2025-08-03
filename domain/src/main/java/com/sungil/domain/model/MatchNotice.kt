@@ -33,7 +33,8 @@ data class MatchNotice(
     private fun String.toDetailDate(): String {
         return try {
             val parsed = LocalDateTime.parse(this)
-            parsed.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"))
+            val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd(E) a hh시 mm분", Locale.KOREAN)
+            parsed.format(formatter)
         } catch (e: Exception) {
             this
         }

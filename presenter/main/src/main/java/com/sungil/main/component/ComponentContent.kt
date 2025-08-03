@@ -1,11 +1,9 @@
 package com.sungil.main.component
 
-import androidx.compose.animation.AnimatedVisibility
+
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -32,7 +30,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -315,12 +312,13 @@ fun NotificationBarListStable(
 fun CustomNotifyBar(
     notifications: List<NotificationData>,
     notifyClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val currentIndex by remember { mutableIntStateOf(0) }
     val currentNotification = notifications[currentIndex]
 
-    val titleColor = if (currentNotification.noticeType == CONTENT_NOTICE) Color(0xFFFB4F4F) else Color(0xFF171717)
+    val titleColor =
+        if (currentNotification.noticeType == CONTENT_NOTICE) ColorStyle.RED_100 else ColorStyle.GRAY_800
     val titleText = if (currentNotification.noticeType == CONTENT_NOTICE)
         stringResource(R.string.notify_notice)
     else
@@ -330,7 +328,7 @@ fun CustomNotifyBar(
         modifier = modifier
             .fillMaxWidth()
             .height(34.dp)
-            .background(Color(0xFFEFEFEF))
+            .background(color = ColorStyle.GRAY_200)
             .clickable { notifyClick(currentNotification.link) }
             .padding(start = 17.dp, end = 8.5.dp)
     ) {
@@ -362,45 +360,18 @@ fun MeetingCardList(
     onAddClick: () -> Unit,
     canAdd: Boolean,
 ) {
-    val visibleMatchIds = remember { mutableStateListOf<Int>() }
-
-    LaunchedEffect(matchList.map { it.matchingId }) {
-        visibleMatchIds.clear()
-        matchList.forEachIndexed { _, item ->
-            delay(200L)
-            visibleMatchIds.add(item.matchingId)
-        }
-    }
-
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 17.dp, end = 16.dp),
+            .padding(start = 17.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        itemsIndexed(matchList, key = { _, item -> item.matchingId }) { _, match ->
-            val isVisible = match.matchingId in visibleMatchIds
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = fadeIn(
-                    animationSpec = tween(
-                        durationMillis = 600,
-                        easing = FastOutSlowInEasing
-                    )
-                ) + slideInHorizontally(
-                    animationSpec = tween(
-                        durationMillis = 600,
-                        easing = FastOutSlowInEasing
-                    ),
-                    initialOffsetX = { it / 2 }
-                )
-            ) {
-                MeetingCard(
-                    category = match.category,
-                    time = if (match.daysUntilMeeting == 0) "오늘" else "${match.daysUntilMeeting}일 후",
-                    location = match.meetingPlace
-                )
-            }
+        items(matchList, key = { it.matchingId }) { match ->
+            MeetingCard(
+                category = match.category,
+                time = if (match.daysUntilMeeting == 0) "오늘" else "${match.daysUntilMeeting}일 후",
+                location = match.meetingPlace
+            )
         }
 
         if (canAdd) {
@@ -409,14 +380,13 @@ fun MeetingCardList(
                 MainCardView(
                     contentString = stringResource(R.string.txt_home_not_meeting),
                     addClick = onAddClick,
-                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(
-                        192.dp
-                    )
+                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(192.dp)
                 )
             }
         }
     }
 }
+
 
 @Composable
 fun MainCardView(
@@ -564,7 +534,7 @@ fun CustomHomeButton(
             Image(
                 painter = painterResource(image),
                 contentDescription = "button image",
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(44.dp)
             )
             Spacer(modifier = padding)
             Column(
@@ -635,9 +605,9 @@ fun AutoSlidingBanner(
             numberOfPages = image.size,
             selectedPage = pagerState.currentPage,
             modifier = Modifier.padding(bottom = 2.dp),
-            selectedColor = Color(0xFF6700CE) ,
-            defaultColor = Color(0xFFDCDCDC),
-            space = 8.dp,
+            selectedColor = ColorStyle.PURPLE_400 ,
+            defaultColor = ColorStyle.GRAY_400,
+            space = 6.dp,
         )
     }
 }
@@ -774,7 +744,8 @@ fun MatchIngFlowView(modifier: Modifier,onClick: () -> Unit) {
             contentDescription = "match is ing",
             modifier = Modifier
                 .width(19.dp)
-                .height(18.dp)
+                .height(18.dp),
+            tint = ColorStyle.PURPLE_200
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
