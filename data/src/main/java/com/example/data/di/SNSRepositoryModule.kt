@@ -1,5 +1,6 @@
 package com.example.data.di
 
+import auth.SNSLogin
 import com.example.data.repositoryImpl.SNSLoginRepositoryImpl
 import com.sungil.domain.repository.SNSLoginRepository
 import dagger.Module
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 class SNSRepositoryModule {
     @Provides
     @Singleton
-    fun provideSNSRepository(): SNSLoginRepository {
-        return SNSLoginRepositoryImpl()
+    fun provideSNSRepository(snsLogin: SNSLogin): SNSLoginRepository {
+        return SNSLoginRepositoryImpl(snsLogin)
     }
 }

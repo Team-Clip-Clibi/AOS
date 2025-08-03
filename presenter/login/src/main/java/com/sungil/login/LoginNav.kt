@@ -13,9 +13,10 @@ import com.sungil.login.ui.SplashScreen
 @Composable
 internal fun LoginNav(
     viewModel: LoginViewModel,
-    kakao: () -> Unit,
     notification: () -> Unit,
     home: () -> Unit,
+    isDebug : Boolean,
+    activity: LoginActivity
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -50,7 +51,9 @@ internal fun LoginNav(
             }) {
             LoginScreen(
                 viewModel = viewModel,
-                kakaoLogin = kakao,
+                isDebug = isDebug,
+                activity = activity,
+                home = home,
                 preview = {
                     navController.navigate(NAV_PREVIEW) {
                         popUpTo(NAV_PREVIEW) { inclusive = true }

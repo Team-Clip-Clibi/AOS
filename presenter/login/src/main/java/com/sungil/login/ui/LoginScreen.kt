@@ -1,12 +1,16 @@
 package com.sungil.login.ui
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
@@ -14,16 +18,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
+import com.example.core.CustomSnackBar
 import com.sungil.login.LoginViewModel
 import com.sungil.login.R
 import com.sungil.login.component.LoginPager
@@ -31,14 +41,32 @@ import com.sungil.login.component.PageIndicator
 
 @Composable
 internal fun LoginScreen(
-    kakaoLogin: () -> Unit,
+    isDebug: Boolean,
+    activity: Activity,
     preview: () -> Unit,
     viewModel: LoginViewModel,
+    home: () -> Unit
 ) {
+    val snackBarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.actionFlow.collectAsState()
     val banners = (uiState.banner as? LoginViewModel.UiState.Success)?.data.orEmpty()
     val pageState = rememberPagerState { banners.size }
+    LaunchedEffect(uiState.signUp) {
+        when (val result = uiState.signUp) {
+            is LoginViewModel.UiState.Error -> {
+                snackBarHostState.showSnackbar(
+                    message = result.error,
+                    duration = SnackbarDuration.Short
+                )
+            }
 
+            is LoginViewModel.UiState.Success<*> -> {
+                home()
+            }
+
+            else -> Unit
+        }
+    }
     Scaffold(
         bottomBar = {
             Column(
@@ -52,7 +80,9 @@ internal fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
-                    onClick = kakaoLogin,
+                    onClick = {
+                        viewModel.loginKaKao(activity = activity, isDebug = isDebug)
+                    },
                     enabled = uiState.banner is LoginViewModel.UiState.Success,
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -92,6 +122,23 @@ internal fun LoginScreen(
                     )
                 }
             }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState,
+                snackbar = { data ->
+                    CustomSnackBar(data)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 17.dp,
+                        end = 16.dp,
+                        bottom = WindowInsets.navigationBars
+                            .asPaddingValues()
+                            .calculateTopPadding()
+                    )
+            )
         }
     ) { paddingValues ->
         Column(
