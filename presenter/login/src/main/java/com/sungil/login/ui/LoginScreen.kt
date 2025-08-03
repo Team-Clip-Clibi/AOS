@@ -51,8 +51,8 @@ internal fun LoginScreen(
     val uiState by viewModel.actionFlow.collectAsState()
     val banners = (uiState.banner as? LoginViewModel.UiState.Success)?.data.orEmpty()
     val pageState = rememberPagerState { banners.size }
-    LaunchedEffect(uiState.signUp) {
-        when (val result = uiState.signUp) {
+    LaunchedEffect(uiState.kakaoLogin) {
+        when (val result = uiState.kakaoLogin) {
             is LoginViewModel.UiState.Error -> {
                 snackBarHostState.showSnackbar(
                     message = result.error,

@@ -101,13 +101,13 @@ class LoginViewModel @Inject constructor(
                 snsLogin.invoke(LoginKAKAO.Param(activity = activity, isDebug = isDebug))) {
                 is LoginKAKAO.Result.Success -> {
                     _actionFlow.update { current ->
-                        current.copy(signUp = UiState.Success(result.snsData))
+                        current.copy(kakaoLogin = UiState.Success(result.snsData))
                     }
                 }
 
                 is LoginKAKAO.Result.Fail -> {
                     _actionFlow.update { current ->
-                        current.copy(signUp = UiState.Error(result.errorMessage))
+                        current.copy(kakaoLogin = UiState.Error(result.errorMessage))
                     }
                 }
             }
@@ -206,6 +206,7 @@ class LoginViewModel @Inject constructor(
     data class LoginViewState(
         val userId: UiState<String> = UiState.Loading,
         val signUp: UiState<String> = UiState.Loading,
+        val kakaoLogin : UiState<String> = UiState.Loading,
         val fcmToken: UiState<String> = UiState.Loading,
         val notification: UiState<String> = UiState.Loading,
         val banner: UiState<List<BannerData>> = UiState.Loading,
