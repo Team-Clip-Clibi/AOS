@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
@@ -232,7 +234,9 @@ fun CustomDialogImageOneButton(
                 .padding(24.dp)
         ) {
             Column(
-                modifier = Modifier.fillMaxSize().background(color = ColorStyle.WHITE_100),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = ColorStyle.WHITE_100),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -253,7 +257,9 @@ fun CustomDialogImageOneButton(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Button(
-                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
                     onClick = onClick,
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -380,14 +386,17 @@ fun NoticePage(
     job : String,
     cuisine: String,
     cuisineHighLight: String,
-    detail: String,
+    detail: List<String>,
     pay: String,
     onClick: () -> Unit,
     buttonShow : Boolean,
     buttonText : String,
     latButtonShow : Boolean = false ,
     lateButtonText : String = "",
-    lateButtonTime : String = ""
+    lateButtonTime : String = "",
+    dietTitle : String,
+    dietImage : Int,
+    dietContentImage : Int
 ) {
     Column(
         modifier = Modifier
@@ -436,7 +445,7 @@ fun NoticePage(
         NoticeItemView(image = painterResource(R.drawable.ic_match_notice_location), text = "$restaurant($location)", highlighted = restaurant)
         NoticeItemView(image = painterResource(R.drawable.ic_people), text = people , highlighted = job)
         NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
-        NoticeItemView(image = painterResource(R.drawable.ic_detail), text = detail , highlighted = "")
+        DietView(dietList = detail , titleText = dietTitle , titleImage = dietImage, dietImage = dietContentImage)
         NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay , highlighted = "" , isLinePrint = buttonShow)
         if(buttonShow && !latButtonShow){
             Spacer(modifier = Modifier.height(10.dp))
@@ -455,6 +464,73 @@ fun NoticePage(
     }
 }
 
+
+@Composable
+fun DietView(
+    dietList: List<String>,
+    titleText: String,
+    titleImage: Int,
+    dietImage: Int
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp)
+    ) {
+        Row {
+            Icon(
+                painter = painterResource(titleImage),
+                contentDescription = titleText
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = titleText,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_800
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        dietList.forEach { diet ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(start = 25.dp)
+            ) {
+                Image(
+                    painter = painterResource(dietImage),
+                    contentDescription = diet,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(22.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(start = 19.dp, bottom = 4.dp)
+                ) {
+                    Text(
+                        text = diet,
+                        style = AppTextStyles.CAPTION_10_14_MEDIUM,
+                        color = ColorStyle.GRAY_800
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        Spacer(modifier = Modifier.height(2.dp))
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(color = ColorStyle.GRAY_200)
+        )
+    }
+}
 @Composable
 fun NoticeItemView(image: Painter, text: String , highlighted : String , isLinePrint : Boolean = true) {
     Column(
