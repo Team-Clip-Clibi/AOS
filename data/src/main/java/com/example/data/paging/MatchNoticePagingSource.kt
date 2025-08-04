@@ -17,7 +17,7 @@ class MatchNoticePagingSource @Inject constructor(
     private val token: TokenManager,
     private val lastMeetingTime: String = "",
 ) : PagingSource<String, MatchNotice>() {
-    override fun getRefreshKey(state: PagingState<String, MatchNotice>): String? {
+    override fun getRefreshKey(state: PagingState<String, MatchNotice>): String {
         return lastMeetingTime
     }
 
