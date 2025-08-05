@@ -83,11 +83,6 @@ fun MainScreenView(
                     snackBarHostState.showSnackbar(message = it, duration = SnackbarDuration.Short)
                 }
             }
-
-            is MainViewModel.UiState.Success -> {
-                viewModel.showBottomSheet()
-            }
-
             else -> Unit
         }
     }
