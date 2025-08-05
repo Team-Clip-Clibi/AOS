@@ -224,5 +224,8 @@ fun MainScreenView(
                 title = stringResource(R.string.dialog_light_title)
             )
         }
+        if(dto?.trigger == "OVERDUE"){
+            viewModel.initProgressMatch()
+        }
     }
 }
