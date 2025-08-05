@@ -588,6 +588,9 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    fun initProgressMatch() {
+        _userState.value.progressMatchInfo = UiState.Loading
+    }
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
@@ -618,7 +621,7 @@ class MainViewModel @Inject constructor(
         val allAttend: Boolean = true,
         val unAttendMember: ArrayList<String> = arrayListOf(),
         val writeReview: UiState<Int> = UiState.Loading,
-        val progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
+        var progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
     )
 
 }
