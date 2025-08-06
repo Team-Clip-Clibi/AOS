@@ -86,7 +86,13 @@ internal fun TmiMatchView(data: List<String>, onClick: () -> Unit) {
                     ) {
                         rowItems.forEachIndexed { localIndex, tmi ->
                             val displayIndex = rowIndex * 2 + localIndex + 1
-                            TmiView(index = displayIndex, data = tmi)
+                            val isLastSingleItem = rowItems.size == 1
+                            val itemModifier = if (isLastSingleItem) {
+                                Modifier.width(167.dp)
+                            } else {
+                                Modifier.weight(1f)
+                            }
+                            TmiView(index = displayIndex, data = tmi, modifier = itemModifier)
                         }
                     }
                 }
@@ -96,10 +102,9 @@ internal fun TmiMatchView(data: List<String>, onClick: () -> Unit) {
 }
 
 @Composable
-private fun TmiView(index: Int, data: String) {
+private fun TmiView(index: Int, data: String , modifier: Modifier) {
     Column(
-        modifier = Modifier
-            .width(167.dp)
+        modifier = modifier
             .height(160.dp)
             .background(color = ColorStyle.GRAY_100, shape = RoundedCornerShape(16.dp))
             .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
