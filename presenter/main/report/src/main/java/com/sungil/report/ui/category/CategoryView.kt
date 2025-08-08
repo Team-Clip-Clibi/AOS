@@ -15,7 +15,6 @@ import com.sungil.report.R
 import com.sungil.report.ReportViewModel
 import com.sungil.report.ui.CustomSnackBar
 import com.sungil.report.ui.CustomTopBar
-import com.sungil.report.ui.main.ReportMainView
 
 @Composable
 internal fun CategoryView(

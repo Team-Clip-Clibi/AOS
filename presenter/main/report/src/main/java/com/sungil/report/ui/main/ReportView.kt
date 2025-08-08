@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sungil.report.R
-import com.sungil.report.ReportViewModel
 import com.sungil.report.ui.CustomSnackBar
 import com.sungil.report.ui.CustomTopBar
 
