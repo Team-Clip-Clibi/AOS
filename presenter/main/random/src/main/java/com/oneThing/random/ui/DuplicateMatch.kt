@@ -1,5 +1,6 @@
 package com.oneThing.random.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,8 +37,12 @@ import kotlin.math.absoluteValue
 @Composable
 internal fun DuplicateMatch(
     viewModel: RandomMatchViewModel,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

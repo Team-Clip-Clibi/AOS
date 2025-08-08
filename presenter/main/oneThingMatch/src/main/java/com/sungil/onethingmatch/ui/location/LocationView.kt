@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.location
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +26,11 @@ import androidx.compose.material3.Text
 @Composable
 internal fun LocationView(
     viewModel: OneThingViewModel,
+    onBackClick: () -> Unit,
 ) {
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     val uiState by viewModel.uiState.collectAsState()
     Column(
         modifier = Modifier

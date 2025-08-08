@@ -1,5 +1,6 @@
 package com.oneThing.random.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,13 +24,19 @@ import com.oneThing.random.RandomMatchViewModel
 import com.oneThing.random.component.SlidingTextBox
 
 @Composable
-internal fun RandomTmi(viewModel: RandomMatchViewModel) {
+internal fun RandomTmi(
+    viewModel: RandomMatchViewModel,
+    onBackClick: () -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsState()
     val tmiData = listOf(
         "ex. 저는 시드니에 사는 것이 꿈이에요",
         "ex. 저는 매년 생일마다 증명사진을 찍어서 모아요",
         "ex. 저는 피자를 좋아 해요."
     )
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

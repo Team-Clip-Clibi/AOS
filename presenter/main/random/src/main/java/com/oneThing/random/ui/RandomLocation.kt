@@ -1,5 +1,6 @@
 package com.oneThing.random.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +23,13 @@ import com.oneThing.random.RandomMatchViewModel
 import com.oneThing.random.component.Location
 
 @Composable
-internal fun RandomLocation(viewModel: RandomMatchViewModel) {
+internal fun RandomLocation(
+    viewModel: RandomMatchViewModel,
+    onBackClick: () -> Unit,
+) {
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     val uiState by viewModel.uiState.collectAsState()
     Column(
         modifier = Modifier

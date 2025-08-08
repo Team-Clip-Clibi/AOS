@@ -288,7 +288,9 @@ fun OneThingNav(
                         animationSpec = tween(700)
                     )
                 }) {
-                IntroView()
+                IntroView(
+                    onBackClick = home
+                )
             }
 
             composable(NAV_CATEGORY,
@@ -305,7 +307,10 @@ fun OneThingNav(
                     )
                 }) {
                 CategoryView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -341,7 +346,10 @@ fun OneThingNav(
                     )
                 }) {
                 LocationView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -359,7 +367,10 @@ fun OneThingNav(
                     )
                 }) {
                 BudgetView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -377,7 +388,10 @@ fun OneThingNav(
                     )
                 }) {
                 TmiView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -395,7 +409,10 @@ fun OneThingNav(
                     )
                 }) {
                 OneThingDayView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 

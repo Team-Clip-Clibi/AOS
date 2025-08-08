@@ -1,5 +1,6 @@
 package com.oneThing.random.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,9 +27,13 @@ import com.oneThing.random.component.RandomMatchDataView
 @Composable
 internal fun RandomBeforePay(
     viewModel: RandomMatchViewModel,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val error = uiState.error
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

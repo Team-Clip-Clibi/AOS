@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.categort
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,11 +30,15 @@ import com.sungil.onethingmatch.component.CategoryItemView
 @Composable
 internal fun CategoryView(
     viewModel: OneThingViewModel,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val subTextColor = when (uiState.error) {
         UiError.MaxCategorySelected -> ColorStyle.RED_100
         else -> ColorStyle.GRAY_600
+    }
+    BackHandler(enabled = true) {
+        onBackClick()
     }
     Column(
         modifier = Modifier

@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.day
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import com.sungil.onethingmatch.component.SelectDateList
 @Composable
 internal fun OneThingDayView(
     viewModel: OneThingViewModel,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val subTextColor = when (uiState.error) {
@@ -33,6 +35,9 @@ internal fun OneThingDayView(
     val subText = when (uiState.error) {
         UiError.MaxDateSelected -> stringResource(R.string.txt_date_sub_title_error)
         else -> stringResource(R.string.txt_date_sub_title)
+    }
+    BackHandler(enabled = true) {
+        onBackClick()
     }
     Column(
         modifier = Modifier
