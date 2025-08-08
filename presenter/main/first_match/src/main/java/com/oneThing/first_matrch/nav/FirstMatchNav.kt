@@ -240,7 +240,11 @@ internal fun FirstMatchNav(
                         animationSpec = tween(700)
                     )
                 }) {
-                FirstMatchIntroView()
+                FirstMatchIntroView(
+                    onBackClick = {
+                        home()
+                    }
+                )
             }
 
             composable(
@@ -258,7 +262,10 @@ internal fun FirstMatchNav(
                     )
                 }) {
                 JobView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -277,7 +284,10 @@ internal fun FirstMatchNav(
                     )
                 }) {
                 DietView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -296,7 +306,10 @@ internal fun FirstMatchNav(
                     )
                 }) {
                 LanguageView(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
         }

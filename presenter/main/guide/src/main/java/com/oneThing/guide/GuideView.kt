@@ -1,5 +1,6 @@
 package com.oneThing.guide
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,15 +58,17 @@ internal fun GuideView(onClose: () -> Unit) {
                 )
                 .verticalScroll(rememberScrollState())
         ) {
-            DynamicTimelineView()
+            DynamicTimelineView(onBackClick = onClose)
         }
     }
 }
 
 @Composable
-fun DynamicTimelineView() {
+fun DynamicTimelineView(onBackClick : () -> Unit) {
     val context = LocalContext.current
-
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     val timelineList = listOf(
         GuideInfo(
             title = context.getString(R.string.guide_ready_title),

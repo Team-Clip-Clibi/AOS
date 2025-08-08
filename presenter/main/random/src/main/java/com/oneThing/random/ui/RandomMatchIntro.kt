@@ -1,5 +1,6 @@
 package com.oneThing.random.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,8 +32,13 @@ import com.oneThing.random.R
 import kotlin.math.absoluteValue
 
 @Composable
-internal fun RandomMatchIntro() {
+internal fun RandomMatchIntro(
+    onBackClick: () -> Unit,
+) {
     val pageState = rememberPagerState(pageCount = { 1 })
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

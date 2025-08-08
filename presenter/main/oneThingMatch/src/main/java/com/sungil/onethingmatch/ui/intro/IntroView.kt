@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.intro
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +32,10 @@ import com.sungil.onethingmatch.R
 import kotlin.math.absoluteValue
 
 @Composable
-internal fun IntroView() {
+internal fun IntroView(onBackClick : () -> Unit) {
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     val pageState = rememberPagerState(pageCount = {
         1
     })

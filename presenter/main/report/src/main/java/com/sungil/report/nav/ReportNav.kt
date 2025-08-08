@@ -34,7 +34,9 @@ internal fun ReportNav(
         composable(NAV_REPORT_MATCH){
             CategoryView(
                 viewModel = viewModel,
-                onBackClick = onProfilePage,
+                onBackClick = {
+                    navController.popBackStack()
+                },
                 content = {
                     navController.navigate(NAV_REPORT_REASON)
                 }
@@ -43,7 +45,9 @@ internal fun ReportNav(
         composable(NAV_REPORT_REASON) {
             ContentView(
                 viewModel = viewModel,
-                onBackClick = onProfilePage
+                onBackClick = {
+                    navController.popBackStack()
+                }
             )
         }
     }

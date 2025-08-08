@@ -38,7 +38,8 @@ internal fun EditProfileView(
             editLanguageClick = editLanguageClick,
             goToLoginPage = goToLoginPage,
             signOutPage = signOutPage,
-            dietPage = dietPage
+            dietPage = dietPage,
+            actionButtonClick = actionButtonClick
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.tmi
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +25,12 @@ import com.sungil.onethingmatch.component.SlidingTextBox
 
 @Composable
 internal fun TmiView(
-    viewModel: OneThingViewModel) {
+    viewModel: OneThingViewModel,
+    onBackClick: () -> Unit,
+) {
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     val tmiData = listOf(
         "ex. 저는 시드니에 사는 것이 꿈이에요",
         "ex. 저는 매년 생일마다 증명사진을 찍어서 모아요",

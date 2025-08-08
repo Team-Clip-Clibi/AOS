@@ -1,5 +1,6 @@
 package com.oneThing.first_matrch.ui.language
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,9 +24,13 @@ import com.oneThing.first_matrch.R
 
 @Composable
 internal fun LanguageView(
-    viewModel: FirstMatchViewModel
+    viewModel: FirstMatchViewModel,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Column(
         modifier = Modifier
             .background(color = ColorStyle.WHITE_100)
