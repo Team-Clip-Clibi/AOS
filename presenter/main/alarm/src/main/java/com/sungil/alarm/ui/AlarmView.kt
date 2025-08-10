@@ -1,5 +1,6 @@
 package com.sungil.alarm.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,9 @@ internal fun AlarmView(
     backClick: () -> Unit,
     reLogin : () -> Unit
 ) {
+    BackHandler(enabled = true) {
+        backClick()
+    }
     val snackBarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {

@@ -83,11 +83,6 @@ fun MainScreenView(
                     snackBarHostState.showSnackbar(message = it, duration = SnackbarDuration.Short)
                 }
             }
-
-            is MainViewModel.UiState.Success -> {
-                viewModel.showBottomSheet()
-            }
-
             else -> Unit
         }
     }
@@ -228,6 +223,9 @@ fun MainScreenView(
                 },
                 title = stringResource(R.string.dialog_light_title)
             )
+        }
+        if(dto?.trigger == "OVERDUE"){
+            viewModel.initProgressMatch()
         }
     }
 }

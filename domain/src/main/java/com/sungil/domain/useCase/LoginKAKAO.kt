@@ -13,7 +13,7 @@ class LoginKAKAO @Inject constructor(
     private val database: DatabaseRepository,
     private val networkRepository: NetworkRepository,
     private val deviceRepository: DeviceRepository,
-    private val snsLoginRepository: SNSLoginRepository
+    private val snsLoginRepository: SNSLoginRepository,
 ) : UseCase<LoginKAKAO.Param, LoginKAKAO.Result> {
 
     data class Param(val activity: Activity, val isDebug: Boolean) : UseCase.Param
@@ -24,27 +24,27 @@ class LoginKAKAO @Inject constructor(
     }
 
     override suspend fun invoke(param: Param): Result {
-        val savedKakaoId = database.getKaKaoId().trim()
-        val kakaoId = if (savedKakaoId.isNotEmpty()) {
-            savedKakaoId
-        } else {
-            val loginResult = if (param.isDebug) {
-                snsLoginRepository.loginKAKOWeb(param.activity)
-            } else {
+        val kakaoId = database.getKaKaoId().trim()
+        when {
+            kakaoId.isEmpty() -> {
                 if (!snsLoginRepository.checkKAKAOLogin(param.activity)) {
-                    return Result.Fail("KAKAO Login not available")
+                    val webLogin = snsLoginRepository.loginKAKOWeb(param.activity)
+                    if (webLogin.contains("error", ignoreCase = true)) {
+                        return Result.Fail("kakao Login failed: $webLogin")
+                    }
+                    return handleLoginWithKakaoId(webLogin)
                 }
-                snsLoginRepository.loginKAKAOSdk(param.activity)
+                val sdkLogin = snsLoginRepository.loginKAKAOSdk(param.activity)
+                if (sdkLogin.contains("error", ignoreCase = true)) {
+                    return Result.Fail("kakao Login failed: $sdkLogin")
+                }
+                return handleLoginWithKakaoId(sdkLogin)
             }
-            if (loginResult.contains("error", ignoreCase = true)) {
-                return Result.Fail("KAKAO Login failed: $loginResult")
+
+            else -> {
+                return handleLoginWithKakaoId(kakaoId)
             }
-            if (!database.saveKaKaoId(loginResult)) {
-                return Result.Fail("Fail to save KAKAO ID")
-            }
-            loginResult
         }
-        return handleLoginWithKakaoId(kakaoId)
     }
 
     private suspend fun handleLoginWithKakaoId(kakaoId: String): Result {
@@ -89,6 +89,7 @@ class LoginKAKAO @Inject constructor(
                 }
                 Result.Success("Success Login")
             }
+
             else -> Result.Fail("Network Error")
         }
     }

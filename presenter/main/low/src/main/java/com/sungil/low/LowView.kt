@@ -1,5 +1,6 @@
 package com.sungil.low
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -19,6 +20,9 @@ internal fun LowView(
     onBackClick: () -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Scaffold(
         topBar = {
             CustomTopBar(

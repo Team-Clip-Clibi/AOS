@@ -1,5 +1,6 @@
 package com.sungil.editprofile.ui.editProfile
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,7 +42,8 @@ internal fun EditProfileMainView(
     editLanguageClick : () -> Unit,
     goToLoginPage : () -> Unit,
     signOutPage : () -> Unit,
-    dietPage : () -> Unit
+    dietPage : () -> Unit,
+    actionButtonClick : () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
@@ -52,6 +54,9 @@ internal fun EditProfileMainView(
             }
             else -> Unit
         }
+    }
+    BackHandler(enabled = true) {
+        actionButtonClick()
     }
 
     Box(

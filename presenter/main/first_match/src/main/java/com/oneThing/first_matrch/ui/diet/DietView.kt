@@ -1,5 +1,6 @@
 package com.oneThing.first_matrch.ui.diet
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,8 +27,12 @@ import com.oneThing.first_matrch.R
 @Composable
 internal fun DietView(
     viewModel: FirstMatchViewModel,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

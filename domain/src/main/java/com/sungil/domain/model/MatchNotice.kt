@@ -1,6 +1,7 @@
 package com.sungil.domain.model
 
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
@@ -14,7 +15,7 @@ data class MatchNotice(
     val restaurantAddress: String,
     val menuCategory: String,
     val jonInfos: List<Job>,
-    val diet: List<DietOption>,
+    val diet: List<String>,
     val category : String
 ) {
     val simpleTime = matchTime.toSimpleTime()
@@ -23,7 +24,7 @@ data class MatchNotice(
 
     private fun String.toSimpleTime(): String {
         return try {
-            val parsed = LocalDateTime.parse(this)
+            val parsed = Instant.parse(this).atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
             parsed.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
         } catch (e: Exception) {
             this
@@ -32,7 +33,7 @@ data class MatchNotice(
 
     private fun String.toDetailDate(): String {
         return try {
-            val parsed = LocalDateTime.parse(this)
+            val parsed = Instant.parse(this).atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
             val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd(E) a hh시 mm분", Locale.KOREAN)
             parsed.format(formatter)
         } catch (e: Exception) {
@@ -41,7 +42,7 @@ data class MatchNotice(
     }
     private fun String.getWeek(): String {
         return try {
-            val dateTime = LocalDateTime.parse(this)
+            val dateTime = Instant.parse(this).atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
             val date = dateTime.toLocalDate()
             val dayOfWeek = date.dayOfWeek
             dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
@@ -53,10 +54,5 @@ data class MatchNotice(
 
 data class Job(
     val jobName: String,
-    val count: Int,
-)
-
-data class DietOption(
-    val dietaryOption: String,
     val count: Int,
 )

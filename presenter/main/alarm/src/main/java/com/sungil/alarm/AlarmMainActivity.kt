@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.sungil.alarm.component.NAV_LOGIN
 import com.sungil.alarm.component.NAV_MAIN
 import com.sungil.alarm.ui.AlarmView
 import com.sungil.domain.model.Router
@@ -26,7 +27,7 @@ class AlarmMainActivity : ComponentActivity() {
                     router.navigation(NAV_MAIN)
                 },
                 reLogin = {
-
+                    router.navigation(NAV_LOGIN)
                 }
             )
         }

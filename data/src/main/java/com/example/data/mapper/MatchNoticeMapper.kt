@@ -1,7 +1,6 @@
 package com.example.data.mapper
 
 import androidx.paging.PagingSource
-import com.sungil.domain.model.DietOption
 import com.sungil.domain.model.Job
 import com.sungil.domain.model.MatchNotice
 import com.sungil.network.model.MatchNoticeDto
@@ -24,7 +23,7 @@ private fun MatchNoticeDto.toMatchNotice(): MatchNotice {
     return MatchNotice(
         matchId = this.matchingId,
         matchTime = this.meetingTime,
-        matchStatus = this.matchingStatus,
+        matchStatus = this.matchingStatus[0],
         matchType = this.matchingType,
         restaurantName = this.restaurantName,
         restaurantAddress = this.location,
@@ -35,12 +34,7 @@ private fun MatchNoticeDto.toMatchNotice(): MatchNotice {
                 count = it.count
             )
         },
-        diet = this.dietaryInfos.map {
-            DietOption(
-                dietaryOption = it.dietaryOption,
-                count = it.count
-            )
-        },
+        diet = this.dietaryList,
         category = this.myOneThingContent
     )
 }

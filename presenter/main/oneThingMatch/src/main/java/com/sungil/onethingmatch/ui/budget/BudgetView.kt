@@ -1,5 +1,6 @@
 package com.sungil.onethingmatch.ui.budget
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,9 +24,13 @@ import com.sungil.onethingmatch.R
 
 @Composable
 internal fun BudgetView(
-    viewModel: OneThingViewModel
+    viewModel: OneThingViewModel,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

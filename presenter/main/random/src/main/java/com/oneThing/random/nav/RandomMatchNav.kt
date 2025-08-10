@@ -274,7 +274,9 @@ internal fun RandomMatchNav(
                         animationSpec = tween(700)
                     )
                 }) {
-                RandomMatchIntro()
+                RandomMatchIntro(
+                    onBackClick = onBack
+                )
             }
 
             composable(
@@ -292,7 +294,10 @@ internal fun RandomMatchNav(
                     )
                 }) {
                 DuplicateMatch(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -312,6 +317,9 @@ internal fun RandomMatchNav(
                 }) {
                 RandomLocation(
                     viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -331,6 +339,9 @@ internal fun RandomMatchNav(
                 }) {
                 RandomTopic(
                     viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -349,7 +360,10 @@ internal fun RandomMatchNav(
                     )
                 }) {
                 RandomTmi(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
             composable(
@@ -367,7 +381,10 @@ internal fun RandomMatchNav(
                     )
                 }) {
                 RandomBeforePay(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
                 )
             }
         }

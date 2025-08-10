@@ -1,5 +1,6 @@
 package com.oneThing.first_matrch.ui.job
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import com.oneThing.first_matrch.component.JobGridSelector
 @Composable
 internal fun JobView(
     viewModel: FirstMatchViewModel,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val subTitleColor = when (val error = uiState.error) {
@@ -37,6 +39,9 @@ internal fun JobView(
         }
 
         else -> ColorStyle.GRAY_600
+    }
+    BackHandler(enabled = true) {
+        onBackClick()
     }
     Column(
         modifier = Modifier

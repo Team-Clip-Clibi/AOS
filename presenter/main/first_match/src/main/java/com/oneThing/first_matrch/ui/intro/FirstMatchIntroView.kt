@@ -1,5 +1,6 @@
 package com.oneThing.first_matrch.ui.intro
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,10 +32,15 @@ import com.oneThing.first_matrch.R
 import kotlin.math.absoluteValue
 
 @Composable
-internal fun FirstMatchIntroView() {
+internal fun FirstMatchIntroView(
+    onBackClick: () -> Unit,
+) {
     val pageState = rememberPagerState(pageCount = {
         1
     })
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

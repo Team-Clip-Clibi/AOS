@@ -95,7 +95,7 @@ class MainViewModel @Inject constructor(
     val reviewDialog: StateFlow<Boolean> = _reviewDialogShow.asStateFlow()
 
     private var _lightDialogShow = MutableStateFlow(false)
-    val lightDialogShow : StateFlow<Boolean> = _lightDialogShow.asStateFlow()
+    val lightDialogShow: StateFlow<Boolean> = _lightDialogShow.asStateFlow()
 
     private var participantsData: List<String> = emptyList()
     private var matchId: Int = 0
@@ -347,6 +347,11 @@ class MainViewModel @Inject constructor(
     }
 
     fun progressMatchInfo(matchId: Int, matchType: String) {
+        val currentState = _userState.value.progressMatchInfo
+        if (currentState is UiState.Success) {
+            showBottomSheet()
+            return
+        }
         viewModelScope.launch {
             when (val result = progressMatch.invoke(
                 GetProgressMatchInfo.Param(
@@ -364,6 +369,7 @@ class MainViewModel @Inject constructor(
                     _userState.update { state ->
                         state.copy(progressMatchInfo = UiState.Success(result.data))
                     }
+                    showBottomSheet()
                 }
             }
         }
@@ -544,7 +550,7 @@ class MainViewModel @Inject constructor(
         _bottomSheetViewShow.value = false
     }
 
-    fun showBottomSheet() {
+    private fun showBottomSheet() {
         _bottomSheetViewShow.value = true
     }
 
@@ -582,6 +588,9 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    fun initProgressMatch() {
+        _userState.value.progressMatchInfo = UiState.Loading
+    }
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
@@ -612,7 +621,7 @@ class MainViewModel @Inject constructor(
         val allAttend: Boolean = true,
         val unAttendMember: ArrayList<String> = arrayListOf(),
         val writeReview: UiState<Int> = UiState.Loading,
-        val progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
+        var progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
     )
 
 }

@@ -1,5 +1,6 @@
 package com.sungil.report.ui.content
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,7 +15,6 @@ import com.sungil.report.R
 import com.sungil.report.ReportViewModel
 import com.sungil.report.ui.CustomSnackBar
 import com.sungil.report.ui.CustomTopBar
-import com.sungil.report.ui.category.CategoryMainView
 
 @Composable
 internal fun ContentView(
@@ -22,6 +22,9 @@ internal fun ContentView(
     onBackClick: () -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
+    BackHandler(enabled = true) {
+        onBackClick()
+    }
     Scaffold(
         topBar = {
             CustomTopBar(

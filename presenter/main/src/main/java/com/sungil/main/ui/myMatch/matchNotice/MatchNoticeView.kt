@@ -120,33 +120,7 @@ private fun NoticeView(
                     meetState = MatchStatus.fromRoute(data.matchStatus).label,
                     meetKind = MatchType.fromRoute(data.matchType).matchType,
                     title = data.category,
-                    detail = when (data.diet.size) {
-                        1 -> stringResource(
-                            R.string.match_notice_menu_info_size_1,
-                            data.diet.first().dietaryOption,
-                            data.diet.first().count
-                        )
-
-                        2 -> stringResource(
-                            R.string.match_notice_menu_info_size_2,
-                            data.diet.first().dietaryOption,
-                            data.diet.first().count,
-                            data.diet[1].dietaryOption,
-                            data.diet[1].count
-                        )
-
-                        3 -> stringResource(
-                            R.string.match_notice_menu_info_size_3,
-                            data.diet.first().dietaryOption,
-                            data.diet.first().count,
-                            data.diet[1].dietaryOption,
-                            data.diet[1].count,
-                            data.diet[2].dietaryOption,
-                            data.diet[2].count
-                        )
-
-                        else -> stringResource(R.string.match_notice_menu_info_no_diet)
-                    },
+                    detail = data.diet,
                     restaurant = data.restaurantName,
                     location = data.restaurantAddress,
                     people = stringResource(
@@ -169,7 +143,10 @@ private fun NoticeView(
                         data.matchStatus
                     ) == MatchStatus.MATCH_CONFIRMED,
                     lateButtonText = stringResource(R.string.btn_late),
-                    lateButtonTime = stringResource(R.string.match_notice_late_item, lateTime)
+                    lateButtonTime = stringResource(R.string.match_notice_late_item, lateTime),
+                    dietTitle = stringResource(R.string.match_notice_cuisine_info),
+                    dietImage = R.drawable.ic_diet_info,
+                    dietContentImage = R.drawable.img_diet_content
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
