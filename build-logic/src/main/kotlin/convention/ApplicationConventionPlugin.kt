@@ -33,7 +33,7 @@ class ApplicationConventionPlugin : Plugin<Project> {
                 minSdk = 31
                 targetSdk = 35
                 versionCode = 1
-                versionName = "1.0.16"
+                versionName = "1.0.17"
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 vectorDrawables.useSupportLibrary = true
 
