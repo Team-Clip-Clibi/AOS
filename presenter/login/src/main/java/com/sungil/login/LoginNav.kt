@@ -16,7 +16,8 @@ internal fun LoginNav(
     notification: () -> Unit,
     home: () -> Unit,
     isDebug : Boolean,
-    activity: LoginActivity
+    activity: LoginActivity,
+    signUp : () -> Unit
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -58,6 +59,9 @@ internal fun LoginNav(
                     navController.navigate(NAV_PREVIEW) {
                         popUpTo(NAV_PREVIEW) { inclusive = true }
                     }
+                },
+                signUp = {
+                    signUp()
                 }
             )
         }

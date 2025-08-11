@@ -37,7 +37,10 @@ class LoginActivity : ComponentActivity() {
                     router.navigation(NAV_MAIN)
                 },
                 isDebug = debugProvider.provide(),
-                activity = this@LoginActivity
+                activity = this@LoginActivity,
+                signUp = {
+                    router.navigation(NAV_SIGNUP)
+                }
             )
         }
     }

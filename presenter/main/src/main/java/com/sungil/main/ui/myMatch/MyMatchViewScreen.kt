@@ -293,7 +293,7 @@ fun GuideButton(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.Center  ,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Icon(
