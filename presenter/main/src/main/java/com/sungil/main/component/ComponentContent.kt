@@ -360,10 +360,15 @@ fun MeetingCardList(
     onAddClick: () -> Unit,
     canAdd: Boolean,
 ) {
+    val isFirstCard = canAdd && matchList.isEmpty()
+    val hasAnyCard = canAdd || matchList.isNotEmpty()
     LazyRow(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 17.dp),
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(
+            start = if (isFirstCard) 0.dp else 17.dp,
+            end = if (hasAnyCard) 16.dp else 0.dp
+        ),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(matchList, key = { it.matchingId }) { match ->
@@ -375,12 +380,13 @@ fun MeetingCardList(
         }
 
         if (canAdd) {
-            val isFirstCard = matchList.isEmpty()
             item {
                 MainCardView(
                     contentString = stringResource(R.string.txt_home_not_meeting),
                     addClick = onAddClick,
-                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(192.dp)
+                    modifier = if (isFirstCard) Modifier.fillParentMaxWidth() else Modifier.width(
+                        192.dp
+                    )
                 )
             }
         }
