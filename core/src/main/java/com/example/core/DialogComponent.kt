@@ -291,7 +291,7 @@ fun CustomDialogOneButton(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(193.dp)
+            .wrapContentHeight()
             .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 12.dp))
             .padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 18.dp)
     ) {
@@ -320,6 +320,7 @@ fun CustomDialogOneButton(
                 tint = ColorStyle.GRAY_500
             )
         }
+        Spacer(modifier = Modifier.height(4.dp))
         //content View
         Row(modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically) {
@@ -339,7 +340,7 @@ fun CustomDialogOneButton(
                     .padding(1.dp)
                     .width(2.dp)
                     .height(2.dp),
-                tint = ColorStyle.GRAY_500
+                tint = ColorStyle.GRAY_800
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(

@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
+import com.sungil.login.ERROR_NOT_SIGNUP
 import com.sungil.login.LoginViewModel
 import com.sungil.login.R
 import com.sungil.login.component.LoginPager
@@ -45,7 +46,8 @@ internal fun LoginScreen(
     activity: Activity,
     preview: () -> Unit,
     viewModel: LoginViewModel,
-    home: () -> Unit
+    home: () -> Unit,
+    signUp: () -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.actionFlow.collectAsState()
@@ -54,10 +56,15 @@ internal fun LoginScreen(
     LaunchedEffect(uiState.kakaoLogin) {
         when (val result = uiState.kakaoLogin) {
             is LoginViewModel.UiState.Error -> {
-                snackBarHostState.showSnackbar(
-                    message = result.error,
-                    duration = SnackbarDuration.Short
-                )
+                if (result.error == ERROR_NOT_SIGNUP) {
+                    signUp()
+                } else {
+                    snackBarHostState.showSnackbar(
+                        message = result.error,
+                        duration = SnackbarDuration.Short
+                    )
+
+                }
             }
 
             is LoginViewModel.UiState.Success<*> -> {
