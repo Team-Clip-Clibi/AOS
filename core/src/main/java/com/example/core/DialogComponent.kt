@@ -340,7 +340,7 @@ fun CustomDialogOneButton(
                     .padding(1.dp)
                     .width(2.dp)
                     .height(2.dp),
-                tint = ColorStyle.GRAY_500
+                tint = ColorStyle.GRAY_800
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
