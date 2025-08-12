@@ -157,7 +157,7 @@ fun TopAppBarWithProgress(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(4.dp),
-                color = ColorStyle.PURPLE_400,
+                color = ColorStyle.PURPLE_100,
                 trackColor = ColorStyle.GRAY_200
             )
         } else {
@@ -366,7 +366,9 @@ fun NotifyMeeting() {
             .background(color = ColorStyle.GRAY_100, shape = RoundedCornerShape(size = 4.dp))
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 12.dp ,start =12.dp,end = 12.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, start = 12.dp, end = 12.dp)
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_notify),
@@ -390,7 +392,7 @@ fun NotifyMeeting() {
             color = ColorStyle.GRAY_600,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 38.dp, end = 12.dp)
+                .padding(start = 40.dp, end = 12.dp)
         )
         Spacer(modifier = Modifier.height(12.dp))
 
