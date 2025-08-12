@@ -23,16 +23,6 @@ internal fun JobView(
     onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val subTitleColor = when (val error = uiState.error) {
-        is UiError.Error -> {
-            when (Error.fromCode(error.message)) {
-                Error.ERROR_TO_MANY_SELECT -> ColorStyle.RED_100
-                else -> ColorStyle.GRAY_600
-            }
-        }
-
-        else -> ColorStyle.GRAY_600
-    }
     BackHandler(enabled = true) {
         onBackClick()
     }
