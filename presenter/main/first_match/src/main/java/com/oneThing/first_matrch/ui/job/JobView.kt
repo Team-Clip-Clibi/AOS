@@ -11,9 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.core.ColorStyle
-import com.oneThing.first_matrch.Error
 import com.oneThing.first_matrch.FirstMatchViewModel
-import com.oneThing.first_matrch.UiError
 import com.oneThing.first_matrch.component.JobGridSelector
 
 
