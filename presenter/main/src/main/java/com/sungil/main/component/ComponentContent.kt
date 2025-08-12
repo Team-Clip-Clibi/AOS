@@ -604,7 +604,7 @@ fun AutoSlidingBanner(
                     .crossfade(true)
                     .build(),
                 contentDescription = "banner",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp))
             )
         }
         PageIndicator(

@@ -95,6 +95,14 @@ internal fun DietChangeMainView(
             )
     ) {
         ButtonLeftLarge(
+            text = stringResource(R.string.txt_diet_all),
+            isSelected = uiState.diet == DIET.ALL.displayName,
+            onClick = {
+                viewModel.changeDiet(DIET.ALL)
+            }
+        )
+        Spacer(Modifier.height(10.dp))
+        ButtonLeftLarge(
             text = stringResource(R.string.txt_diet_vg),
             isSelected = uiState.diet == DIET.VG.displayName,
             onClick = {
@@ -115,14 +123,6 @@ internal fun DietChangeMainView(
             isSelected = uiState.diet == DIET.GF.displayName,
             onClick = {
                 viewModel.changeDiet(DIET.GF)
-            }
-        )
-        Spacer(Modifier.height(10.dp))
-        ButtonLeftLarge(
-            text = stringResource(R.string.txt_diet_all),
-            isSelected = uiState.diet == DIET.ALL.displayName,
-            onClick = {
-                viewModel.changeDiet(DIET.ALL)
             }
         )
         Spacer(Modifier.height(10.dp))
