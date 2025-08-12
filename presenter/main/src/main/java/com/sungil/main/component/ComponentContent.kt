@@ -182,7 +182,7 @@ fun CustomMainPageTopBar(text: String) {
             .background(color = ColorStyle.WHITE_100)
             .fillMaxWidth()
             .statusBarsPadding()
-            .height(48.dp)
+            .height(60.dp)
             .padding(start = 17.dp, end = 12.dp),
         contentAlignment = Alignment.CenterStart
     ) {
@@ -235,7 +235,7 @@ fun HomeViewTopBar(
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .height(48.dp)
+            .height(60.dp)
             .background(color = ColorStyle.GRAY_100)
             .padding(start = 17.dp, end = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
