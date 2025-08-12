@@ -98,8 +98,11 @@ fun ButtonPurple100MEDIUM(
 ) {
     Button(
         modifier = modifier
-            .height(48.dp)
-            .background(color = ColorStyle.PURPLE_400, shape = RoundedCornerShape(size = 12.dp)),
+            .height(48.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = ColorStyle.PURPLE_400,
+            contentColor = ColorStyle.PURPLE_400
+        ),
         onClick = onClick,
         shape = RoundedCornerShape(8.dp),
     ) {
