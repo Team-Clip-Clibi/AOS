@@ -548,8 +548,7 @@ fun DietView(
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
         }
         Spacer(modifier = Modifier.height(2.dp))
         HorizontalDivider(
