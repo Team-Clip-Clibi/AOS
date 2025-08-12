@@ -53,20 +53,6 @@ internal fun JobView(
                 end = 16.dp
             )
     ) {
-        Text(
-            text = stringResource(R.string.txt_job_title),
-            style = AppTextStyles.HEAD_28_40_BOLD,
-            color = ColorStyle.GRAY_800,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = stringResource(R.string.txt_job_sub_title),
-            style = AppTextStyles.SUBTITLE_16_24_SEMI,
-            color = subTitleColor,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(24.dp))
         JobGridSelector(
             selectJobs = uiState.job,
             onJobToggle = { job -> viewModel.selectJob(job) }
