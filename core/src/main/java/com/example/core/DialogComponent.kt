@@ -265,7 +265,7 @@ fun CustomDialogImageOneButton(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = ColorStyle.PURPLE_400
                     )
-                ){
+                ) {
                     Text(
                         text = buttonText,
                         color = ColorStyle.WHITE_100,
@@ -286,7 +286,7 @@ fun CustomDialogOneButton(
     reviewWrite: Boolean,
     buttonText: String,
     onClick: () -> Unit,
-    onClickDetail: () -> Unit
+    onClickDetail: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -322,12 +322,14 @@ fun CustomDialogOneButton(
         }
         Spacer(modifier = Modifier.height(4.dp))
         //content View
-        Row(modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = meetState,
                 style = AppTextStyles.CAPTION_12_18_SEMI,
-                color = when(meetState){
+                color = when (meetState) {
                     "취소" -> ColorStyle.RED_100
                     else -> ColorStyle.PURPLE_400
                 },
@@ -364,7 +366,7 @@ fun CustomDialogOneButton(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(14.dp))
-        if(meetState != "취소"){
+        if (meetState != "취소") {
             ButtonL(
                 text = buttonText,
                 isEnable = !reviewWrite,
@@ -381,23 +383,23 @@ fun NoticePage(
     meetKind: String,
     title: String,
     dateDetail: String,
-    restaurant : String,
+    restaurant: String,
     location: String,
-    people : String,
-    job : String,
+    people: String,
+    job: String,
     cuisine: String,
     cuisineHighLight: String,
     detail: List<String>,
     pay: String,
     onClick: () -> Unit,
-    buttonShow : Boolean,
-    buttonText : String,
-    latButtonShow : Boolean = false ,
-    lateButtonText : String = "",
-    lateButtonTime : String = "",
-    dietTitle : String,
-    dietImage : Int,
-    dietContentImage : Int
+    buttonShow: Boolean,
+    buttonText: String,
+    latButtonShow: Boolean = false,
+    lateButtonText: String = "",
+    lateButtonTime: String = "",
+    dietTitle: String,
+    dietImage: Int,
+    dietContentImage: Int,
 ) {
     Column(
         modifier = Modifier
@@ -442,20 +444,46 @@ fun NoticePage(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
-        NoticeItemView(image = painterResource(R.drawable.ic_match_notice_calendar), text = dateDetail , highlighted = dateDetail)
-        NoticeItemView(image = painterResource(R.drawable.ic_match_notice_location), text = "$restaurant($location)", highlighted = restaurant)
-        NoticeItemView(image = painterResource(R.drawable.ic_people), text = people , highlighted = job)
-        NoticeItemView(image = painterResource(R.drawable.ic_cuisine), text = cuisine , highlighted = cuisineHighLight)
-        DietView(dietList = detail , titleText = dietTitle , titleImage = dietImage, dietImage = dietContentImage)
-        NoticeItemView(image = painterResource(R.drawable.ic_pay), text = pay , highlighted = "" , isLinePrint = buttonShow)
-        if(buttonShow && !latButtonShow){
+        NoticeItemView(
+            image = painterResource(R.drawable.ic_match_notice_calendar),
+            text = dateDetail,
+            highlighted = dateDetail
+        )
+        NoticeItemView(
+            image = painterResource(R.drawable.ic_match_notice_location),
+            text = "$restaurant($location)",
+            highlighted = restaurant
+        )
+        NoticeItemView(
+            image = painterResource(R.drawable.ic_people),
+            text = people,
+            highlighted = job
+        )
+        NoticeItemView(
+            image = painterResource(R.drawable.ic_cuisine),
+            text = cuisine,
+            highlighted = cuisineHighLight
+        )
+        DietView(
+            dietList = detail,
+            titleText = dietTitle,
+            titleImage = dietImage,
+            dietImage = dietContentImage
+        )
+        NoticeItemView(
+            image = painterResource(R.drawable.ic_pay),
+            text = pay,
+            highlighted = "",
+            isLinePrint = buttonShow
+        )
+        if (buttonShow && !latButtonShow) {
             Spacer(modifier = Modifier.height(10.dp))
             ButtonLWhite(
                 text = buttonText,
                 onClick = onClick
             )
         }
-        if(buttonShow && latButtonShow){
+        if (buttonShow && latButtonShow) {
             LateButton(
                 lateTime = lateButtonTime,
                 onClick = onClick,
@@ -471,7 +499,7 @@ fun DietView(
     dietList: List<String>,
     titleText: String,
     titleImage: Int,
-    dietImage: Int
+    dietImage: Int,
 ) {
     Column(
         modifier = Modifier
@@ -527,13 +555,14 @@ fun DietView(
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(1.dp)
-                .background(color = ColorStyle.GRAY_200)
+                .height(1.dp),
+            color = ColorStyle.GRAY_200
         )
     }
 }
+
 @Composable
-fun NoticeItemView(image: Painter, text: String , highlighted : String , isLinePrint : Boolean = true) {
+fun NoticeItemView(image: Painter, text: String, highlighted: String, isLinePrint: Boolean = true) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -568,12 +597,12 @@ fun NoticeItemView(image: Painter, text: String , highlighted : String , isLineP
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        if(isLinePrint){
+        if (isLinePrint) {
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1.dp)
-                    .background(color = ColorStyle.GRAY_200)
+                    .height(1.dp),
+                color = ColorStyle.GRAY_200
             )
         }
     }
@@ -583,12 +612,12 @@ fun NoticeItemView(image: Painter, text: String , highlighted : String , isLineP
 @Composable
 fun SimpleBottomSheet(
     item: List<String>,
-    click: (String , Int) -> Unit,
-    buttonText : String,
+    click: (String, Int) -> Unit,
+    buttonText: String,
     title: String,
     content: String,
-    noticeId : Int,
-    onDismiss: () -> Unit
+    noticeId: Int,
+    onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -638,7 +667,7 @@ fun SimpleBottomSheet(
                 text = buttonText,
                 isEnable = selectedItem != "",
                 onClick = {
-                    click(selectedItem ,noticeId)
+                    click(selectedItem, noticeId)
                     coroutineScope.launch {
                         sheetState.hide()
                         onDismiss()

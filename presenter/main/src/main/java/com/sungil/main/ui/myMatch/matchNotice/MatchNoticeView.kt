@@ -130,7 +130,7 @@ private fun NoticeView(
                     job = data.jonInfos.toViewString(LocalContext.current),
                     cuisine = stringResource(R.string.match_notice_cuisine, data.menuCategory),
                     cuisineHighLight = data.menuCategory,
-                    dateDetail = "${data.detailTime}(${data.week})",
+                    dateDetail = "${data.detailTime}",
                     pay = stringResource(R.string.match_notice_pay_content),
                     onClick = {
                         noticeId = data.matchId
