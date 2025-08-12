@@ -1,5 +1,7 @@
 package com.sungil.main.ui.myPage
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +18,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,8 +28,13 @@ import com.example.core.ColorStyle
 import com.sungil.main.MainViewModel
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.core.AppTextStyles
@@ -33,6 +42,7 @@ import com.example.core.ButtonLargeCustom
 import com.sungil.domain.model.MatchData
 import com.sungil.main.R
 import com.sungil.main.component.MyPageItem
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MyPageViewScreen(
@@ -40,9 +50,28 @@ internal fun MyPageViewScreen(
     profileEdit: () -> Unit,
     reportClick: () -> Unit,
     lowGuide: () -> Unit,
-    alarmSetting : () -> Unit
+    alarmSetting : () -> Unit,
+    snackBarHostState: SnackbarHostState
 ) {
     val userState by viewModel.userState.collectAsState()
+    var lastBackPressed by remember { mutableStateOf(0L) }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    BackHandler {
+        val now = System.currentTimeMillis()
+        if (now - lastBackPressed <= 2000L) {
+            (context as? Activity)?.finish() // 또는 finishAffinity()로 완전 종료
+        } else {
+            lastBackPressed = now
+            scope.launch {
+                snackBarHostState.currentSnackbarData?.dismiss()
+                snackBarHostState.showSnackbar(
+                    message = context.getString(R.string.app_finish),
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -1,6 +1,8 @@
 package com.sungil.main.ui.home
 
+import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +37,9 @@ import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import com.sungil.main.component.NotificationBarListStable
 import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import com.example.core.AppTextStyles
@@ -44,6 +49,7 @@ import com.sungil.domain.model.UserData
 import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.MeetingCardList
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun HomeViewScreen(
@@ -58,6 +64,23 @@ internal fun HomeViewScreen(
     val context = LocalContext.current
     val state by viewModel.userState.collectAsState()
     val notificationState = state.notificationResponseState
+    var lastBackPressed by remember { mutableStateOf(0L) }
+    val scope = rememberCoroutineScope()
+    BackHandler {
+        val now = System.currentTimeMillis()
+        if (now - lastBackPressed <= 2000L) {
+            (context as? Activity)?.finish() // 또는 finishAffinity()로 완전 종료
+        } else {
+            lastBackPressed = now
+            scope.launch {
+                snackBarHostState.currentSnackbarData?.dismiss()
+                snackBarHostState.showSnackbar(
+                    message = context.getString(R.string.app_finish),
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
     HandleNotifyError(
         notificationState = notificationState,
         snackBarHost = snackBarHostState,

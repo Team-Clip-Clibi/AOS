@@ -1,6 +1,8 @@
 package com.sungil.main.ui.myMatch
 
+import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,6 +41,9 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,6 +60,7 @@ import com.sungil.main.PAGE_MATCH_HISTORY
 import com.sungil.main.PAGE_MATCH_NOTICE
 import com.sungil.main.ui.myMatch.matchHistory.MatchHistoryView
 import com.sungil.main.ui.myMatch.matchNotice.MatchNoticeView
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MyMatchViewScreen(
@@ -70,6 +76,23 @@ internal fun MyMatchViewScreen(
     val latestDay = state.latestDay
     val userName = state.userDataState
     val context = LocalContext.current
+    var lastBackPressed by remember { mutableStateOf(0L) }
+    val scope = rememberCoroutineScope()
+    BackHandler {
+        val now = System.currentTimeMillis()
+        if (now - lastBackPressed <= 2000L) {
+            (context as? Activity)?.finish() // 또는 finishAffinity()로 완전 종료
+        } else {
+            lastBackPressed = now
+            scope.launch {
+                snackBarHostState.currentSnackbarData?.dismiss()
+                snackBarHostState.showSnackbar(
+                    message = context.getString(R.string.app_finish),
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
     HandleMatchLateError(
         state = state,
         context = context,

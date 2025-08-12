@@ -120,7 +120,8 @@ fun MainNavigation(
                 lowGuide = lowClick,
                 alarmSetting = {
                     navController.navigate(MainView.ALARM.route)
-                }
+                },
+                snackBarHostState = snackBarHostState
             )
         }
 
