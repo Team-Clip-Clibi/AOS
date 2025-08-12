@@ -222,7 +222,7 @@ fun ButtonLeftLarge(
         Modifier.border(
             width = 1.dp,
             color = ColorStyle.PURPLE_200,
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(8.dp)
         )
     } else Modifier
 
