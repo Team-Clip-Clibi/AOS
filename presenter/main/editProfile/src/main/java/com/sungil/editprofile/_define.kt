@@ -1,6 +1,5 @@
 package com.sungil.editprofile
 
-import com.sungil.editprofile.MEETING.OKAY
 
 const val NAV_PROFILE_MAIN = "profileMain"
 const val NAV_CHANGE_NICK_NAME = "changeNickName"
