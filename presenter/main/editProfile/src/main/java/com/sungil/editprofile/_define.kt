@@ -1,5 +1,7 @@
 package com.sungil.editprofile
 
+import com.sungil.editprofile.MEETING.OKAY
+
 const val NAV_PROFILE_MAIN = "profileMain"
 const val NAV_CHANGE_NICK_NAME = "changeNickName"
 const val NAV_CHANGE_JOB = "changeJob"
@@ -52,7 +54,13 @@ enum class LOVE(val displayName: String) {
     SINGLE("싱글"),
     COUPLE("연애중"),
     MARRIAGE("기혼"),
-    SECRET("밝히고 싶지 않아요")
+    SECRET("밝히고 싶지 않아요");
+
+    companion object {
+        fun fromDisplayName(value: String): LOVE {
+            return LOVE.entries.find { it.displayName == value } ?: SINGLE
+        }
+    }
 }
 
 enum class MEETING(val displayName: Boolean) {
@@ -66,10 +74,16 @@ enum class MEETING(val displayName: Boolean) {
     }
 }
 
-enum class LANGUAGE {
-    KOREAN,
-    ENGLISH,
-    BOTH
+enum class LANGUAGE(val displayName: String) {
+    KOREAN("한국어"),
+    ENGLISH("영어"),
+    BOTH("한국어, 영어 모두 가능");
+
+    companion object {
+        fun fromDisplayName(value: String): LANGUAGE {
+            return entries.find { it.name == value } ?: ENGLISH
+        }
+    }
 }
 
 enum class SignOutData {

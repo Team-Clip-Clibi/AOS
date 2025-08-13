@@ -22,6 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.core.ColorStyle
+import com.sungil.editprofile.DIET
+import com.sungil.editprofile.JOB
+import com.sungil.editprofile.LANGUAGE
+import com.sungil.editprofile.LOVE
 import com.sungil.editprofile.ProfileEditViewModel
 import com.sungil.editprofile.R
 import com.sungil.editprofile.UiSuccess
@@ -36,22 +41,23 @@ import com.sungil.editprofile.ui.GraySpacer
 internal fun EditProfileMainView(
     paddingValues: PaddingValues,
     editNickNameClick: () -> Unit,
-    editJobClick : () -> Unit,
+    editJobClick: () -> Unit,
     viewModel: ProfileEditViewModel,
-    loveClick : () -> Unit,
-    editLanguageClick : () -> Unit,
-    goToLoginPage : () -> Unit,
-    signOutPage : () -> Unit,
-    dietPage : () -> Unit,
-    actionButtonClick : () -> Unit
+    loveClick: () -> Unit,
+    editLanguageClick: () -> Unit,
+    goToLoginPage: () -> Unit,
+    signOutPage: () -> Unit,
+    dietPage: () -> Unit,
+    actionButtonClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
     LaunchedEffect(uiState.success) {
-        when(uiState.success){
-            is UiSuccess.Success ->{
+        when (uiState.success) {
+            is UiSuccess.Success -> {
                 goToLoginPage()
             }
+
             else -> Unit
         }
     }
@@ -78,36 +84,36 @@ internal fun EditProfileMainView(
             Section {
                 CustomLittleTitleText(
                     text = stringResource(R.string.txt_title_default_info),
-                    color = 0xFF666666
+                    color = ColorStyle.GRAY_600
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomTwoText(
                     firstText = stringResource(R.string.txt_name),
-                    firstTextColor = 0xFF171717,
+                    firstTextColor = ColorStyle.GRAY_800,
                     subText = uiState.name,
-                    subTextColor = 0xFF171717
+                    subTextColor = ColorStyle.GRAY_800
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithImage(
                     title = stringResource(R.string.txt_sns_login),
-                    textColor = 0xFF171717,
+                    textColor = ColorStyle.GRAY_800,
                     subTitle = "카카오톡",
-                    subTitleColor = 0xFF171717,
+                    subTitleColor = ColorStyle.GRAY_800,
                     imageResId = R.drawable.ic_kakao
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomTwoText(
                     firstText = stringResource(R.string.txt_phoneNumber),
-                    firstTextColor = 0xFF171717,
+                    firstTextColor = ColorStyle.GRAY_800,
                     subText = uiState.phoneNumber,
-                    subTextColor = 0xFF171717
+                    subTextColor = ColorStyle.GRAY_800
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_nickName),
-                    textColor = 0xFF171717,
+                    textColor = ColorStyle.GRAY_800,
                     subTitle = uiState.nickName,
-                    subTitleColor = 0xFF171717,
+                    subTitleColor = ColorStyle.GRAY_800,
                     buttonClick = editNickNameClick
                 )
             }
@@ -118,38 +124,40 @@ internal fun EditProfileMainView(
             Section {
                 CustomLittleTitleText(
                     text = stringResource(R.string.txt_title_oneThing_info),
-                    color = 0xFF666666
+                    color = ColorStyle.GRAY_200
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_my_job),
-                    textColor = 0xFF171717,
-                    subTitle = "",
-                    subTitleColor = 0xFF171717,
+                    textColor = ColorStyle.GRAY_800,
+                    subTitle = JOB.fromName(uiState.job).displayName,
+                    subTitleColor = ColorStyle.GRAY_800,
                     buttonClick = editJobClick
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_love_state),
-                    textColor = 0xFF171717,
-                    subTitle = "",
-                    subTitleColor = 0xFF171717,
+                    textColor = ColorStyle.GRAY_800,
+                    subTitle = LOVE.fromDisplayName(uiState.loveState).displayName,
+                    subTitleColor = ColorStyle.GRAY_800,
                     buttonClick = loveClick
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_diet),
-                    textColor = 0xFF171717,
-                    subTitle = "",
-                    subTitleColor = 0xFF171717,
+                    textColor = ColorStyle.GRAY_800,
+                    subTitle = if (uiState.dietContent.trim() != "" && DIET.fromDisplayName(uiState.diet) == DIET.ETC) uiState.dietContent else DIET.fromDisplayName(
+                        uiState.diet
+                    ).displayName,
+                    subTitleColor = ColorStyle.GRAY_800,
                     buttonClick = dietPage
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_language),
-                    textColor = 0xFF171717,
-                    subTitle = "",
-                    subTitleColor = 0xFF171717,
+                    textColor = ColorStyle.GRAY_800,
+                    subTitle = LANGUAGE.fromDisplayName(uiState.language).displayName,
+                    subTitleColor = ColorStyle.GRAY_800,
                     buttonClick = editLanguageClick
                 )
             }
@@ -160,33 +168,33 @@ internal fun EditProfileMainView(
             Section {
                 CustomLittleTitleText(
                     text = stringResource(R.string.txt_title_account),
-                    color = 0xFF666666
+                    color = ColorStyle.GRAY_600
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_log_out),
-                    textColor = 0xFF171717,
+                    textColor = ColorStyle.GRAY_800,
                     subTitle = "",
-                    subTitleColor = 0xFF171717,
+                    subTitleColor = ColorStyle.GRAY_800,
                     buttonClick = {
                         viewModel.isDialogShow(true)
                     }
                 )
                 CustomProfileItemWithMore(
                     title = stringResource(R.string.txt_sign_out),
-                    textColor = 0xFF171717,
+                    textColor = ColorStyle.GRAY_800,
                     subTitle = "",
-                    subTitleColor = 0xFF171717,
+                    subTitleColor = ColorStyle.GRAY_800,
                     buttonClick = {
                         signOutPage()
                     }
                 )
             }
         }
-        if(uiState.isDialogShow){
+        if (uiState.isDialogShow) {
             CustomDialog(
-                onDismiss = {viewModel.isDialogShow(false)},
-                buttonClick = {viewModel.logout()},
+                onDismiss = { viewModel.isDialogShow(false) },
+                buttonClick = { viewModel.logout() },
                 titleText = stringResource(R.string.dialog_logout_title),
                 contentText = stringResource(R.string.dialog_logout_content),
                 buttonText = stringResource(R.string.dialog_logout_okay_button),
@@ -202,7 +210,7 @@ fun Section(content: @Composable ColumnScope.() -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(top = 20.dp , start = 16.dp , end  = 17.dp)
+            .padding(top = 20.dp, start = 16.dp, end = 17.dp)
     ) {
         content()
     }

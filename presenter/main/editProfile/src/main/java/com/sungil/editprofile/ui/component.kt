@@ -42,22 +42,22 @@ import com.sungil.editprofile.R
 @Composable
 fun CustomLittleTitleText(
     text : String,
-    color : Long
+    color : Color
 ){
     Text(
         modifier = Modifier.fillMaxWidth(),
         text = text,
         style = AppTextStyles.CAPTION_12_18_SEMI,
-        color = Color(color)
+        color = color
     )
 }
 
 @Composable
 fun CustomProfileItemWithImage(
     title: String,
-    textColor: Long,
+    textColor: Color,
     subTitle: String,
-    subTitleColor: Long,
+    subTitleColor: Color,
     imageResId: Int? = null,
 ) {
     Row(
@@ -70,7 +70,7 @@ fun CustomProfileItemWithImage(
         Text(
             text = title,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = Color(textColor)
+            color = textColor
         )
         Spacer(modifier = Modifier.weight(1f))
         Row(
@@ -87,7 +87,7 @@ fun CustomProfileItemWithImage(
             Text(
                 text = subTitle,
                 style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = Color(subTitleColor)
+                color = subTitleColor
             )
         }
     }
@@ -97,9 +97,9 @@ fun CustomProfileItemWithImage(
 @Composable
 fun CustomProfileItemWithMore(
     title: String,
-    textColor: Long,
+    textColor:Color,
     subTitle: String,
-    subTitleColor: Long,
+    subTitleColor: Color,
     buttonClick: () -> Unit,
 ) {
     Row(
@@ -112,7 +112,7 @@ fun CustomProfileItemWithMore(
         Text(
             text = title,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = Color(textColor)
+            color = textColor
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -124,7 +124,7 @@ fun CustomProfileItemWithMore(
             Text(
                 text = subTitle,
                 style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = Color(subTitleColor)
+                color = subTitleColor
             )
 
             Spacer(modifier = Modifier.width(4.dp))
@@ -142,11 +142,11 @@ fun CustomProfileItemWithMore(
 
 @Composable
 fun CustomTwoText(
-    firstText : String,
-    firstTextColor : Long,
-    subText : String,
-    subTextColor : Long
-){
+    firstText: String,
+    firstTextColor: Color,
+    subText: String,
+    subTextColor: Color,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -158,7 +158,7 @@ fun CustomTwoText(
         Text(
             text = firstText,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = Color(firstTextColor)
+            color = firstTextColor
         )
 
         Row(
@@ -168,12 +168,13 @@ fun CustomTwoText(
             Text(
                 text = subText,
                 style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = Color(subTextColor)
+                color = subTextColor
             )
 
         }
     }
 }
+
 @Composable
 fun GraySpacer() {
     Spacer(
