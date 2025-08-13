@@ -86,20 +86,24 @@ internal fun OneThingContentView(
                 text = stringResource(R.string.match_start_ing),
                 style = AppTextStyles.CAPTION_12_18_SEMI,
                 color = ColorStyle.PURPLE_400,
-                modifier = Modifier.fillMaxWidth().padding(
-                    start = 24.dp,
-                    end = 24.dp,
-                )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 24.dp,
+                        end = 24.dp,
+                    )
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = stringResource(R.string.match_start_oneThing_content),
                 style = AppTextStyles.HEAD_24_34_BOLD,
                 color = ColorStyle.GRAY_800,
-                modifier = Modifier.fillMaxWidth().padding(
-                    start = 24.dp,
-                    end = 24.dp,
-                )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 24.dp,
+                        end = 24.dp,
+                    )
             )
             Spacer(modifier = Modifier.height(20.dp))
             OneThingContentPagerView(
@@ -109,10 +113,12 @@ internal fun OneThingContentView(
             Text(
                 text = "${currentPage.intValue + 1}/${oneThingContent.size}",
                 style = AppTextStyles.CAPTION_12_18_SEMI,
-                modifier = Modifier.fillMaxWidth().padding(
-                    start = 24.dp,
-                    end = 24.dp,
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 24.dp,
+                        end = 24.dp,
+                    ),
                 color = ColorStyle.GRAY_500,
                 textAlign = TextAlign.Center
             )
@@ -120,8 +126,6 @@ internal fun OneThingContentView(
         }
     }
 }
-
-
 
 
 @Composable
@@ -136,7 +140,6 @@ private fun OneThingContentPagerView(
 
     val pagerState = rememberPagerState(pageCount = { data.size })
 
-    // composition 밖에서 업데이트
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { currentPage.value = it }
     }
@@ -145,12 +148,11 @@ private fun OneThingContentPagerView(
     val basePad = 24.dp
     val isScrolling = pagerState.isScrollInProgress
     val frac = pagerState.currentPageOffsetFraction
-    // 방향: 오른쪽(다음 페이지)로 스와이프 중 -> +1, 왼쪽(이전 페이지) -> -1, 정지/미세 -> 0
     val dir = when {
-        !isScrolling        -> 0
-        frac < 0f           -> +1   // 오른쪽으로 스크롤 중
-        frac > 0f           -> -1   // 왼쪽으로 스크롤 중
-        else                -> 0
+        !isScrolling -> 0
+        frac < 0f -> +1
+        frac > 0f -> -1
+        else -> 0
     }
 
     Column(
@@ -163,14 +165,11 @@ private fun OneThingContentPagerView(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = 20.dp),
-            // 정지 기준으로 양쪽 24dp 고정 → 폭/측정값 변동 없음
             contentPadding = PaddingValues(horizontal = basePad),
-            pageSpacing = 12.dp // 카드 간 간격 12dp 유지
+            pageSpacing = 12.dp
         ) { page ->
             val item = data[page]
             val bg = colors[page % colors.size]
-
-            // 현재 페이지만 스크롤 방향으로 24dp 만큼 시각적 이동(패딩 채우기)
             val isCurrent = page == pagerState.currentPage
             val offsetX = if (isCurrent && dir != 0) {
                 with(density) { (basePad * dir).roundToPx() }
@@ -180,9 +179,8 @@ private fun OneThingContentPagerView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(400.dp)
-                    .offset { IntOffset(offsetX, 0) } // ← 레이아웃 크기 불변, 화면에서만 이동
+                    .offset { IntOffset(offsetX, 0) }
                     .graphicsLayer {
-                        // (선택) 페이드 효과 유지하고 싶다면 남겨두기, 불필요하면 지워도 됨
                         val pageOffset =
                             ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction)
                                 .absoluteValue
@@ -238,7 +236,10 @@ private fun OneThingContentPagerView(
                     )
 
                     Text(
-                        text = stringResource(R.string.match_start_oneThing_nickName, item.nickName),
+                        text = stringResource(
+                            R.string.match_start_oneThing_nickName,
+                            item.nickName
+                        ),
                         style = AppTextStyles.SUBTITLE_16_24_SEMI,
                         color = ColorStyle.GRAY_800,
                         modifier = Modifier.fillMaxWidth(),
