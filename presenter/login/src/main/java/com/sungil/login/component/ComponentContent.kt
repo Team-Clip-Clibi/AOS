@@ -476,17 +476,16 @@ fun LoginPager(
     HorizontalPager(
         state = state,
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 20.dp),
+        contentPadding = PaddingValues(0.dp),
         pageSpacing = 20.dp
     ) { page ->
         Card(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(24.dp))
+                .padding(horizontal = 20.dp)
                 .graphicsLayer {
-                    val pageOffset = (
-                            (state.currentPage - page) + state.currentPageOffsetFraction
-                            ).absoluteValue
+                    val pageOffset = ((state.currentPage - page) + state.currentPageOffsetFraction)
+                        .absoluteValue
                     alpha = lerp(
                         start = 0.5f,
                         stop = 1f,
@@ -538,6 +537,7 @@ fun PageIndicator(
     numberOfPages: Int,
     selectedPage: Int = 0,
 ) {
+    if (numberOfPages <= 0) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -580,6 +580,7 @@ fun Indicator(
     Box(
         modifier = modifier
             .width(width)
+            .height(defaultRadius)
             .clip(CircleShape)
             .background(color = if (isSelected) selectedColor else defaultColor)
     )

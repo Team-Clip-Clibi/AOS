@@ -80,7 +80,7 @@ internal fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = ColorStyle.WHITE_100)
-                    .padding(start = 17.dp, end = 16.dp)
+                    .padding(start = 16.dp, end = 17.dp)
                     .navigationBarsPadding()
             ) {
                 Button(
@@ -154,8 +154,6 @@ internal fun LoginScreen(
                 .background(color = ColorStyle.WHITE_100)
                 .padding(
                     top = paddingValues.calculateTopPadding() + 40.dp,
-                    start = 17.dp,
-                    end = 16.dp,
                     bottom = paddingValues.calculateBottomPadding() + 52.dp
                 )
         ) {
@@ -163,13 +161,19 @@ internal fun LoginScreen(
                 text = stringResource(R.string.txt_login_title),
                 style = AppTextStyles.HEAD_28_40_BOLD,
                 color = ColorStyle.GRAY_800,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(
+                    start = 17.dp,
+                    end = 16.dp,
+                )
             )
             Text(
                 text = stringResource(R.string.txt_login_content),
                 style = AppTextStyles.SUBTITLE_16_24_SEMI,
                 color = ColorStyle.GRAY_600,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(
+                    start = 17.dp,
+                    end = 16.dp,
+                )
             )
             Spacer(modifier = Modifier.height(16.dp))
             LoginPager(
