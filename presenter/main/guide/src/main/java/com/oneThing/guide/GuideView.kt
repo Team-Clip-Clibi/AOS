@@ -223,9 +223,9 @@ fun TimeLineNodeManual(
                     text = data.content,
                     style = AppTextStyles.BODY_14_20_REGULAR,
                     color = ColorStyle.GRAY_800,
-                    modifier = Modifier.padding(start = 12.dp)
+                    modifier = Modifier.padding(start = 10.dp)
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
             }
             Spacer(modifier = Modifier.height(16.dp))
         }

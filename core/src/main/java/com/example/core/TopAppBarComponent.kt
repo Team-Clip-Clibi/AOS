@@ -30,7 +30,7 @@ fun TopAppBarNumber(
     currentPage: Int,
     totalPage: Int,
     onBackClick: () -> Unit,
-    isPageTextShow : Boolean = false
+    isPageTextShow: Boolean = false,
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier
@@ -45,14 +45,18 @@ fun TopAppBarNumber(
             )
         },
         navigationIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.ic_back_black),
-                contentDescription = "go back",
+            Box(
                 modifier = Modifier
-                    .padding(12.dp)
-                    .size(24.dp)
+                    .size(48.dp)
                     .clickable { onBackClick() }
-            )
+                    .padding(12.dp)) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_back_black),
+                    contentDescription = "go back",
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+            }
         },
         actions = {
             Text(

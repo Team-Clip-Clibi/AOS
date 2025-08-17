@@ -38,7 +38,7 @@
     <string name="txt_before_pay_sub_title">아래 내용을 확인하고, 결제하시면 신청이 완료됩니다.</string>
     <!--ErrorDialog-->
     <string name="txt_toss_dialog_title">원띵은 토스페이 결제만 가능해요</string>
-    <string name="txt_toss_dialog_sub_title">토스 앱이 설치되어 있지 않다면, 설치 후 결제를\n진행해주세요.</string>
+    <string name="txt_toss_dialog_sub_title">토스 앱이 없다면, 설치 후 결제를 진행해주세요</string>
     <!--msg-->
     <string name="msg_save_error">ERROR CODE : SAVE DATA ERROR</string>
     <string name="msg_select_one">선택 해 주세요</string>

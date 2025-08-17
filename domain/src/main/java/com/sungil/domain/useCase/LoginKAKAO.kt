@@ -25,17 +25,35 @@ class LoginKAKAO @Inject constructor(
 
     override suspend fun invoke(param: Param): Result {
         val kakaoId = database.getKaKaoId().trim()
+        if(kakaoId.isEmpty() && param.isDebug){
+            /**
+             * TODO 배포 이전 삭제
+             */
+            return handleLoginWithKakaoId("3975324589")
+        }
         when {
             kakaoId.isEmpty() -> {
                 if (!snsLoginRepository.checkKAKAOLogin(param.activity)) {
                     val webLogin = snsLoginRepository.loginKAKOWeb(param.activity)
                     if (webLogin.contains("error", ignoreCase = true)) {
+                        if(kakaoId.isEmpty() && param.isDebug){
+                            /**
+                             * TODO 배포 이전 삭제
+                             */
+                            return handleLoginWithKakaoId("3975324589")
+                        }
                         return Result.Fail("kakao Login failed: $webLogin")
                     }
                     return handleLoginWithKakaoId(webLogin)
                 }
                 val sdkLogin = snsLoginRepository.loginKAKAOSdk(param.activity)
                 if (sdkLogin.contains("error", ignoreCase = true)) {
+                    if(kakaoId.isEmpty() && param.isDebug){
+                        /**
+                         * TODO 배포 이전 삭제
+                         */
+                        return handleLoginWithKakaoId("3975324589")
+                    }
                     return Result.Fail("kakao Login failed: $sdkLogin")
                 }
                 return handleLoginWithKakaoId(sdkLogin)

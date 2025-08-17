@@ -57,7 +57,14 @@ internal fun DietView(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(24.dp))
-
+        ButtonLeftLarge(
+            text = stringResource(R.string.txt_diet_item_all),
+            isSelected = uiState.diet == DIET.ALL.displayName,
+            onClick = {
+                viewModel.diet(DIET.ALL.displayName)
+            }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
         ButtonLeftLarge(
             text = stringResource(R.string.txt_diet_item_vg),
             isSelected = uiState.diet == DIET.VG.displayName,
@@ -79,14 +86,6 @@ internal fun DietView(
             isSelected = uiState.diet == DIET.GF.displayName,
             onClick = {
                 viewModel.diet(DIET.GF.displayName)
-            }
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
-            text = stringResource(R.string.txt_diet_item_all),
-            isSelected = uiState.diet == DIET.ALL.displayName,
-            onClick = {
-                viewModel.diet(DIET.ALL.displayName)
             }
         )
         Spacer(modifier = Modifier.height(10.dp))

@@ -4,9 +4,9 @@
     <!-- 모임 준비  -->
     <string name="guide_ready_title">모임준비</string>
     <string name="guide_ready_title_first">프로필 최신화</string>
-    <string name="guide_ready_content_first">프로필 최신화 모임 전, 프로필 사진과 기본 정보를 최신 상태로 업데이트해 주세요.</string>
+    <string name="guide_ready_content_first">모임 전, 프로필 사진과 기본 정보를 최신 상태로 업데이트해 주세요.</string>
     <string name="guide_ready_title_sec">연락처 확인</string>
-    <string name="guide_ready_content_sec">연락처 확인 원활한 소통을 위해 이메일 및 전화번호가 정확한지 확인해 주세요.</string>
+    <string name="guide_ready_content_sec">원활한 소통을 위해 이메일 및 전화번호가 정확한지 확인해 주세요.</string>
     <string name="guide_ready_title_third">복장 및 매너</string>
     <string name="guide_ready_content_third">단정하고 편안한 복장으로 참석해 주세요.모든 참가자와 상호 존중하는 태도로 모임에 임해 주시기를 바랍니다.</string>
     <!-- 모임 중 행동 수칙  -->
