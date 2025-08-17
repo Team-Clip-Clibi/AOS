@@ -157,7 +157,7 @@ fun TopAppBarWithProgress(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(4.dp),
-                color = ColorStyle.PURPLE_100,
+                color = ColorStyle.PURPLE_400,
                 trackColor = ColorStyle.GRAY_200
             )
         } else {

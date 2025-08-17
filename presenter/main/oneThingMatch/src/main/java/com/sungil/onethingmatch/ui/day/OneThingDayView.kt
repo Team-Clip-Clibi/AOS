@@ -28,14 +28,6 @@ internal fun OneThingDayView(
     onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val subTextColor = when (uiState.error) {
-        UiError.MaxDateSelected -> ColorStyle.RED_100
-        else -> ColorStyle.GRAY_600
-    }
-    val subText = when (uiState.error) {
-        UiError.MaxDateSelected -> stringResource(R.string.txt_date_sub_title_error)
-        else -> stringResource(R.string.txt_date_sub_title)
-    }
     BackHandler(enabled = true) {
         onBackClick()
     }
@@ -57,9 +49,9 @@ internal fun OneThingDayView(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = subText,
+            text = stringResource(R.string.txt_date_sub_title),
             style = AppTextStyles.SUBTITLE_16_24_SEMI,
-            color = subTextColor,
+            color = ColorStyle.GRAY_600,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp)
