@@ -18,7 +18,6 @@ import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
-import com.sungil.onethingmatch.UiError
 import com.sungil.onethingmatch.component.OneThingDayList
 import com.sungil.onethingmatch.component.SelectDateList
 
