@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,34 +20,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.sungil.main.R
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
 import com.example.core.AppTextStyles
+import com.example.core.ButtonXXL
 
 @Composable
 internal fun ConversationMatchView(conversationData: List<String>, onClick: () -> Unit) {
     Scaffold(bottomBar = {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(bottom = 8.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(bottom = 8.dp)
+        ) {
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
                 color = ColorStyle.GRAY_200
             )
             Spacer(modifier = Modifier.height(10.dp))
-            ButtonXXLPurple400(
-                buttonText = stringResource(R.string.match_start_next_btn),
-                onClick = onClick,
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .wrapContentHeight()
                     .padding(start = 17.dp, end = 16.dp)
-            )
+            ) {
+                ButtonXXL(
+                    text = stringResource(R.string.match_start_next_btn),
+                    onClick = onClick,
+                )
+            }
         }
     }) { paddingValues ->
         Column(

@@ -31,61 +31,46 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 
 @Composable
-fun ButtonXXLPurple400(
+fun ButtonXXL(
     onClick: () -> Unit,
-    buttonText: String,
-    modifier: Modifier,
-    isEnable: Boolean = true
+    text: String,
+    isEnable: Boolean = true,
+    useBorder: Boolean = false,
+    borderColor: Color = ColorStyle.PURPLE_400,
+    enableTextColor: Color = ColorStyle.WHITE_100,
+    disEnableTextColor: Color = ColorStyle.GRAY_800,
+    enableButtonColor: Color = ColorStyle.PURPLE_400,
+    disEnableButtonColor: Color = ColorStyle.GRAY_200,
+    enableContentColor: Color = ColorStyle.WHITE_100,
+    disEnableContentColor: Color = ColorStyle.GRAY_200,
 ) {
     Button(
-        modifier = modifier.height(60.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .then(
+                if (useBorder) {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = borderColor,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                } else {
+                    Modifier
+                }
+            ),
         onClick = onClick,
         enabled = isEnable,
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isEnable) ColorStyle.PURPLE_400 else ColorStyle.GRAY_200,
-            contentColor = if (isEnable) ColorStyle.WHITE_100 else ColorStyle.GRAY_800
+            containerColor = if (isEnable) enableButtonColor else disEnableButtonColor,
+            contentColor = if (isEnable) enableContentColor else disEnableContentColor
         )
     ) {
         Text(
-            text = buttonText,
+            text = text,
+            color = if (isEnable) enableTextColor else disEnableTextColor,
             style = AppTextStyles.TITLE_20_28_SEMI,
-            color = when(isEnable){
-                true ->{
-                    ColorStyle.WHITE_100
-                }
-                else -> ColorStyle.GRAY_800
-            }
-        )
-    }
-}
-
-
-@Composable
-fun ButtonXXLWhite(
-    onClick: () -> Unit,
-    buttonText: String,
-    modifier: Modifier,
-) {
-    Button(
-        modifier = modifier
-            .height(60.dp)
-            .border(
-                width = 1.dp,
-                color = ColorStyle.PURPLE_400,
-                shape = RoundedCornerShape(size = 12.dp)
-            ),
-        onClick = onClick,
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = ColorStyle.WHITE_100,
-            contentColor = ColorStyle.PURPLE_400
-        )
-    ) {
-        Text(
-            text = buttonText,
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            color = ColorStyle.PURPLE_400
         )
     }
 }
