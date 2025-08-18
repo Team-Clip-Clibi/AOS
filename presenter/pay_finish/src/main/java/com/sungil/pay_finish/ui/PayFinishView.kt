@@ -70,7 +70,11 @@ internal fun PayFinishView(
                         .padding(start = 17.dp, end = 16.dp)
                 ) {
                     ButtonXXL(
-                        onClick = {},
+                        onClick = {
+                            /**
+                             * TODO 추후 토스 개발 완료 시 홈화면의 내모임으로 보내는 코드 작성
+                             */
+                        },
                         text = stringResource(R.string.btn_match),
                         useBorder = true,
                         enableButtonColor = ColorStyle.WHITE_100,
