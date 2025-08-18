@@ -6,6 +6,8 @@ const val ERROR_NOTIFY_SAVE = "Error save Notify"
 const val ERROR_RE_LOGIN = "reLogin"
 const val ERROR_NETWORK = "network error"
 const val ERROR_NOT_SIGNUP = "Not SignUp"
+const val UPDATE_APP = "Update App"
+
 //Banner
 const val BANNER = "LOGIN"
 

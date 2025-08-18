@@ -188,4 +188,6 @@ interface NetworkRepository {
         matchId: Int,
         matchType: String
     ) : NetworkResult<MatchProgress>
+
+    suspend fun requestAppVersion() : NetworkResult<String>
 }

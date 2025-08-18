@@ -366,7 +366,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestUpdateToken(refreshToken: String): Triple<Int, String?, String?> {
         val result = api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
-        return Triple(result.code() , result.body()?.accessToken ?: "", result.body()?.refreshToken)
+        return Triple(result.code(), result.body()?.accessToken ?: "", result.body()?.refreshToken)
     }
 
     override suspend fun requestOneThineNotification(accessToken: String): OneThineNotification {
@@ -519,16 +519,16 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     override fun requestMatchNotice(lastTime: String): Flow<PagingData<MatchNotice>> {
-       return Pager(
-           config = PagingConfig(pageSize = 50),
-           pagingSourceFactory = {
-               MatchNoticePagingSource(
-                   api = api,
-                   token = tokenManger,
-                   lastMeetingTime = lastTime
-               )
-           }
-       ).flow
+        return Pager(
+            config = PagingConfig(pageSize = 50),
+            pagingSourceFactory = {
+                MatchNoticePagingSource(
+                    api = api,
+                    token = tokenManger,
+                    lastMeetingTime = lastTime
+                )
+            }
+        ).flow
     }
 
     override suspend fun requestMatchDetail(
@@ -580,7 +580,7 @@ class NetworkRepositoryImpl @Inject constructor(
         token: String,
         matchId: Int,
         matchType: String,
-        lateTime : Int
+        lateTime: Int,
     ): NetworkResult<Int> {
         try {
             val sendLateMatch = api.sendLateMatch(
@@ -682,6 +682,21 @@ class NetworkRepositoryImpl @Inject constructor(
                 return NetworkResult.Error(code = request.code(), message = request.message())
             }
             return NetworkResult.Success(request.body()!!.toMatchProgress())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun requestAppVersion(): NetworkResult<String> {
+        try {
+            val appVersion = api.requestAppVersion()
+            if (!appVersion.isSuccessful) {
+                return NetworkResult.Error(code = appVersion.code(), message = appVersion.message())
+            }
+            if (appVersion.body() == null) {
+                return NetworkResult.Error(code = appVersion.code(), message = appVersion.message())
+            }
+            return NetworkResult.Success(appVersion.body()!!.requiredVersion)
         } catch (e: Exception) {
             return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }

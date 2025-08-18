@@ -1,6 +1,7 @@
 package com.sungil.domain.useCase
 
 import com.sungil.domain.UseCase
+import com.sungil.domain.model.NetworkResult
 import com.sungil.domain.repository.NetworkRepository
 import javax.inject.Inject
 
@@ -8,7 +9,7 @@ class CheckAppVersion @Inject constructor(private val networkRepository: Network
     UseCase<CheckAppVersion.Param, CheckAppVersion.Result> {
     data class Param(
         val isDebug: Boolean,
-        val version: String
+        val version: String,
     ) : UseCase.Param
 
     sealed interface Result : UseCase.Result {
@@ -17,10 +18,17 @@ class CheckAppVersion @Inject constructor(private val networkRepository: Network
     }
 
     override suspend fun invoke(param: Param): Result {
-        if(param.isDebug) return Result.Success
-        /**
-         * TODO 앱 버전 검사 로직 추가
-         */
-        return Result.Fail("please check version")
+        return when (val result = networkRepository.requestAppVersion()) {
+            is NetworkResult.Error -> {
+                Result.Fail("Fail to check Version")
+            }
+
+            is NetworkResult.Success -> {
+                if (param.version != result.data) {
+                    return Result.Fail("Update App")
+                }
+                return Result.Success
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.useCase.CheckAlreadySignUp
+import com.sungil.domain.useCase.CheckAppVersion
 import com.sungil.domain.useCase.CheckPermissionShow
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFcmToken
@@ -31,7 +32,8 @@ class LoginViewModel @Inject constructor(
     private val banner: GetBanner,
     private val permissionCheck: CheckPermissionShow,
     private val setPermission: SetPermissionCheck,
-    private val snsLogin: LoginKAKAO
+    private val snsLogin: LoginKAKAO,
+    private val version: CheckAppVersion,
 ) : ViewModel() {
     private val _actionFlow = MutableStateFlow(LoginViewState())
     val actionFlow: StateFlow<LoginViewState> = _actionFlow.asStateFlow()
@@ -54,6 +56,25 @@ class LoginViewModel @Inject constructor(
                         current.copy(banner = UiState.Error(result.message))
                     }
 
+                }
+            }
+        }
+    }
+
+    fun version(isDebug: Boolean, appVersion: String) {
+        viewModelScope.launch {
+            when (val result =
+                version.invoke(CheckAppVersion.Param(isDebug = isDebug, version = appVersion))) {
+                is CheckAppVersion.Result.Fail -> {
+                    _actionFlow.update { current ->
+                        current.copy(appVersionCheck = UiState.Error(result.message))
+                    }
+                }
+
+                CheckAppVersion.Result.Success -> {
+                    _actionFlow.update { current ->
+                        current.copy(appVersionCheck = UiState.Success("success"))
+                    }
                 }
             }
         }
@@ -206,12 +227,13 @@ class LoginViewModel @Inject constructor(
     data class LoginViewState(
         val userId: UiState<String> = UiState.Loading,
         val signUp: UiState<String> = UiState.Loading,
-        val kakaoLogin : UiState<String> = UiState.Loading,
+        val kakaoLogin: UiState<String> = UiState.Loading,
         val fcmToken: UiState<String> = UiState.Loading,
         val notification: UiState<String> = UiState.Loading,
         val banner: UiState<List<BannerData>> = UiState.Loading,
         val permissionShow: UiState<Boolean> = UiState.Loading,
-        val permissionSet: UiState<Boolean> = UiState.Loading
+        val permissionSet: UiState<Boolean> = UiState.Loading,
+        val appVersionCheck: UiState<String> = UiState.Loading,
     )
 
 }

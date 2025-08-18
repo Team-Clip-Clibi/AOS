@@ -20,19 +20,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.ColorStyle
+import com.example.core.CustomDialogOneButton
 import com.example.core.CustomSnackBar
 import com.sungil.login.ERROR_NETWORK
 import com.sungil.login.ERROR_NOTIFY_SAVE
 import com.sungil.login.ERROR_RE_LOGIN
 import com.sungil.login.LoginViewModel
 import com.sungil.login.R
+import com.sungil.login.UPDATE_APP
 
 @Composable
 internal fun SplashScreen(
@@ -40,22 +45,28 @@ internal fun SplashScreen(
     login: () -> Unit,
     notification: () -> Unit,
     home: () -> Unit,
+    isDebug: Boolean,
+    appVersion: String,
+    playStore: () -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
+    var updateDialogShow by remember { mutableStateOf(false) }
     val uiState by viewModel.actionFlow.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(uiState.permissionShow) {
-        when(val result = uiState.permissionShow){
+        when (val result = uiState.permissionShow) {
             is LoginViewModel.UiState.Success -> {
-                when(result.data){
-                    true ->{
+                when (result.data) {
+                    true -> {
                         viewModel.getToken()
                     }
+
                     false -> {
                         notification()
                     }
                 }
             }
+
             else -> Unit
         }
     }
@@ -93,10 +104,11 @@ internal fun SplashScreen(
     LaunchedEffect(uiState.fcmToken) {
         when (val fcmToken = uiState.fcmToken) {
             is LoginViewModel.UiState.Error -> {
-                when(fcmToken.error){
+                when (fcmToken.error) {
                     ERROR_RE_LOGIN -> {
                         viewModel.banner()
                     }
+
                     else -> {
                         snackBarHostState.showSnackbar(
                             message = context.getString(R.string.msg_app_error_fcm),
@@ -104,6 +116,29 @@ internal fun SplashScreen(
                         )
                     }
                 }
+            }
+
+            is LoginViewModel.UiState.Success -> {
+                viewModel.version(
+                    isDebug = isDebug,
+                    appVersion = appVersion
+                )
+            }
+
+            else -> Unit
+        }
+    }
+    LaunchedEffect(uiState.appVersionCheck) {
+        when (val result = uiState.appVersionCheck) {
+            is LoginViewModel.UiState.Error -> {
+                if (result.error == UPDATE_APP) {
+                    updateDialogShow = true
+                    return@LaunchedEffect
+                }
+                snackBarHostState.showSnackbar(
+                    message = result.error,
+                    duration = SnackbarDuration.Short
+                )
             }
 
             is LoginViewModel.UiState.Success -> {
@@ -192,6 +227,19 @@ internal fun SplashScreen(
                     painter = painterResource(id = R.drawable.ic_splash_screen),
                     contentDescription = "splash screen"
                 )
+                if (updateDialogShow) {
+                    CustomDialogOneButton(
+                        onDismiss = {
+                            updateDialogShow = false
+                        },
+                        buttonClick = {
+                            playStore()
+                        },
+                        titleText = stringResource(R.string.dialog_update_title),
+                        contentText = stringResource(R.string.dialog_update_content),
+                        buttonText = stringResource(R.string.dialog_login_button)
+                    )
+                }
             }
         }
     }

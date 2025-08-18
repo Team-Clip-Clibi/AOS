@@ -17,7 +17,9 @@ internal fun LoginNav(
     home: () -> Unit,
     isDebug : Boolean,
     activity: LoginActivity,
-    signUp : () -> Unit
+    signUp : () -> Unit,
+    appVersion : String,
+    playStore : () -> Unit
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -33,7 +35,10 @@ internal fun LoginNav(
                     }
                 },
                 notification = notification,
-                home = home
+                home = home,
+                appVersion = appVersion,
+                isDebug = isDebug,
+                playStore = playStore
             )
         }
 
