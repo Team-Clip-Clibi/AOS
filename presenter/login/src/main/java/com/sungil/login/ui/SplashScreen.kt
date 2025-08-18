@@ -233,7 +233,10 @@ internal fun SplashScreen(
                             updateDialogShow = false
                         },
                         buttonClick = {
-                            playStore()
+                            /**
+                             * TODO 추후 플레이스토어로 이동하는 코드 작성
+                             */
+                            viewModel.getUserId()
                         },
                         titleText = stringResource(R.string.dialog_update_title),
                         contentText = stringResource(R.string.dialog_update_content),
