@@ -1,6 +1,7 @@
 package com.sungil.network.http
 
 import com.sungil.network.BuildConfig
+import com.sungil.network.model.AppVersionDTO
 import com.sungil.network.model.AuthToken
 import com.sungil.network.model.Banner
 import com.sungil.network.model.Diet
@@ -411,4 +412,9 @@ interface HttpApi {
         @Path("matchingType") type: String,
         @Path("id") id: Int,
     ): Response<MatchProgressDTO>
+    /**
+     * APP Version check
+     */
+    @GET(BuildConfig.VERSION_CHECK_URL)
+    suspend fun requestAppVersion() : Response<AppVersionDTO>
 }
