@@ -76,28 +76,32 @@ fun ButtonXXL(
 }
 
 @Composable
-fun ButtonPurple100MEDIUM(
+fun ButtonM(
     onClick: () -> Unit,
-    buttonText: String,
-    modifier: Modifier,
+    text: String,
+    containerColor: Color = ColorStyle.PURPLE_400,
+    contentColor: Color = ColorStyle.PURPLE_400,
+    textColor: Color = ColorStyle.WHITE_100,
 ) {
     Button(
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
             .height(48.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = ColorStyle.PURPLE_400,
-            contentColor = ColorStyle.PURPLE_400
+            containerColor = containerColor,
+            contentColor = contentColor
         ),
         onClick = onClick,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Text(
-            text = buttonText,
+            text = text,
             style = AppTextStyles.SUBTITLE_16_24_SEMI,
-            color = ColorStyle.WHITE_100
+            color = textColor
         )
     }
 }
+
 
 
 @Composable

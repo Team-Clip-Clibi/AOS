@@ -95,11 +95,9 @@ fun CustomDialogOneButton(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                ButtonPurple100MEDIUM(
+                ButtonM(
                     onClick = buttonClick,
-                    buttonText = buttonText,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    text = buttonText,
                 )
             }
         }
@@ -145,39 +143,17 @@ fun CustomDialogTwoButton(
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = ColorStyle.PURPLE_400
-                    ),
+                ButtonM(
                     onClick = buttonClick,
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text(
-                        text = buttonText,
-                        color = ColorStyle.WHITE_100,
-                        style = AppTextStyles.SUBTITLE_16_24_SEMI
-                    )
-                }
+                    text = buttonText
+                )
                 Spacer(modifier = Modifier.height(10.dp))
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
+                ButtonM(
                     onClick = onDismiss,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = ColorStyle.GRAY_200
-                    )
-                ) {
-                    Text(
-                        text = dismissButtonText,
-                        color = ColorStyle.GRAY_800,
-                        style = AppTextStyles.SUBTITLE_16_24_SEMI
-                    )
-                }
+                    text = dismissButtonText,
+                    containerColor = ColorStyle.GRAY_200,
+                    textColor = ColorStyle.GRAY_800
+                )
             }
         }
     }
