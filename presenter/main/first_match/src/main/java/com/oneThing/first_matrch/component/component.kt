@@ -14,8 +14,9 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.core.ButtonCenterLarge
+import com.example.core.ButtonL
 import com.example.core.ColorStyle
 import com.example.core.TopAppBarNumber
 import com.oneThing.first_matrch.JOB
@@ -34,12 +35,16 @@ fun JobGridSelector(
     ) {
         items(JOB.entries.toList()) { job ->
             if (job != JOB.NONE) {
-                ButtonCenterLarge(
+                ButtonL(
                     onClick = {
                         onJobToggle(job)
                     },
-                    checked = job == selectJobs,
-                    text = job.displayName
+                    isSelected = job == selectJobs,
+                    text = job.displayName,
+                    buttonColor = if(job == selectJobs) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+                    disEnableButtonColor = ColorStyle.GRAY_100,
+                    borderUse = job == selectJobs,
+                    borderColor = if(job == selectJobs) ColorStyle.PURPLE_200 else Color.Transparent
                 )
             }
         }

@@ -1,6 +1,5 @@
 package com.sungil.editprofile.ui.signout
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
-import com.example.core.ButtonLeftLarge
+import com.example.core.ButtonL
 import com.example.core.ColorStyle
 import com.example.core.TextFieldComponent
 import com.sungil.editprofile.ProfileEditViewModel
@@ -44,7 +43,7 @@ internal fun SignOutMainView(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(uiState.success, uiState.error) {
-        when (val error = uiState.error) {
+        when (uiState.error) {
             is UiError.Error -> {
                 snackBarHost.showSnackbar(
                     message = context.getString(R.string.txt_delete_fail),
@@ -77,49 +76,67 @@ internal fun SignOutMainView(
             color = ColorStyle.GRAY_800
         )
         Spacer(modifier = Modifier.height(24.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_sign_out_content_service),
-            isSelected = uiState.signOut == SignOutData.SERVICE.name,
             onClick = {
                 viewModel.changeSignOut(SignOutData.SERVICE)
-            }
+            },
+            isSelected = uiState.signOut == SignOutData.SERVICE.name,
+            borderUse = uiState.signOut == SignOutData.SERVICE.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.signOut == SignOutData.SERVICE.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_sign_out_content_apply),
-            isSelected = uiState.signOut == SignOutData.APPLY.name,
             onClick = {
                 viewModel.changeSignOut(SignOutData.APPLY)
-            }
+            },
+            isSelected = uiState.signOut == SignOutData.APPLY.name,
+            borderUse = uiState.signOut == SignOutData.APPLY.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.signOut == SignOutData.APPLY.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_sign_out_content_not_good),
-            isSelected = uiState.signOut == SignOutData.NOT_GOOD.name,
             onClick = {
                 viewModel.changeSignOut(SignOutData.NOT_GOOD)
-            }
+            },
+            isSelected = uiState.signOut == SignOutData.NOT_GOOD.name,
+            borderUse = uiState.signOut == SignOutData.NOT_GOOD.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.signOut == SignOutData.NOT_GOOD.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_sign_out_content_not_need),
-            isSelected = uiState.signOut == SignOutData.NOT_NEED.name,
             onClick = {
                 viewModel.changeSignOut(SignOutData.NOT_NEED)
-            }
+            },
+            isSelected = uiState.signOut == SignOutData.NOT_NEED.name,
+            borderUse = uiState.signOut == SignOutData.NOT_NEED.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.signOut == SignOutData.NOT_NEED.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_sign_out_content_etc),
-            isSelected = uiState.signOut == SignOutData.ETC.name,
             onClick = {
                 viewModel.changeSignOut(SignOutData.ETC)
-            }
+            },
+            isSelected = uiState.signOut == SignOutData.ETC.name,
+            borderUse = uiState.signOut == SignOutData.ETC.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.signOut == SignOutData.ETC.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-
         HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
-
         Spacer(modifier = Modifier.height(10.dp))
         if (uiState.signOut == SignOutData.ETC.name) {
             TextFieldComponent(

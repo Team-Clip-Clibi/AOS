@@ -454,9 +454,12 @@ fun NoticePage(
         )
         if (buttonShow && !latButtonShow) {
             Spacer(modifier = Modifier.height(10.dp))
-            ButtonLWhite(
+            ButtonL(
                 text = buttonText,
-                onClick = onClick
+                onClick = onClick,
+                buttonColor = ColorStyle.WHITE_100,
+                borderUse = true,
+                borderColor = ColorStyle.GRAY_300
             )
         }
         if (buttonShow && latButtonShow) {
