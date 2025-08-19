@@ -699,12 +699,13 @@ fun ReviewImageView(
     Column(
         modifier = Modifier
             .width(60.dp)
-            .height(60.dp),
+            .height(86.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
+                .fillMaxWidth()
+                .height(61.dp)
                 .background(
                     color = ColorStyle.GRAY_200,
                     shape = RoundedCornerShape(size = 12.dp)
@@ -716,7 +717,7 @@ fun ReviewImageView(
                 painter = painterResource(image),
                 contentDescription = content,
                 tint = if (isSelect) ColorStyle.PURPLE_400 else ColorStyle.GRAY_400,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(40.dp)
             )
         }
 
