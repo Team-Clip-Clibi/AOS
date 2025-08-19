@@ -39,7 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import com.example.core.AppTextStyles
-import com.example.core.ButtonLWhite
+import com.example.core.ButtonL
 import com.example.core.TopAppBarNumber
 import com.sungil.domain.model.MatchDate
 import com.sungil.editprofile.JOB
@@ -179,9 +179,15 @@ fun BottomButtonView(onClick: () -> Unit) {
             .fillMaxWidth()
             .padding(start = 17.dp, end = 16.dp)
     ) {
-        ButtonLWhite(text = stringResource(R.string.match_detail_btn_cancel), onClick = {
-            onClick()
-        })
+        ButtonL(
+            text = stringResource(R.string.match_detail_btn_cancel),
+            onClick = {
+                onClick()
+            },
+            buttonColor = ColorStyle.WHITE_100,
+            borderUse = true,
+            borderColor = ColorStyle.GRAY_300
+        )
     }
 }
 

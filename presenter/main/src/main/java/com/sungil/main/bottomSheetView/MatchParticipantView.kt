@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -21,34 +22,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core.ButtonXXLPurple400
 import com.example.core.ColorStyle
 import com.sungil.main.R
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.util.fastForEachIndexed
 import com.example.core.AppTextStyles
+import com.example.core.ButtonXXL
 
 @Composable
 internal fun MatchParticipantView(onClick: () -> Unit, participant: List<String>) {
     Scaffold(
         bottomBar = {
-            Column(modifier = Modifier.fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(bottom = 8.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(bottom = 8.dp)
+            ) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     thickness = 1.dp,
                     color = ColorStyle.GRAY_200
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                ButtonXXLPurple400(
-                    buttonText = stringResource(R.string.match_start_next_btn),
-                    onClick = onClick,
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 17.dp, end = 16.dp),
-                )
+                        .wrapContentHeight()
+                        .padding(start = 17.dp, end = 16.dp)
+                ) {
+                    ButtonXXL(
+                        text = stringResource(R.string.match_start_next_btn),
+                        onClick = onClick,
+                    )
+                }
             }
         }
     ) { paddingValues ->
@@ -113,7 +121,7 @@ private fun ParticipantsView(data: List<String>) {
                 horizontalArrangement = Arrangement.spacedBy(14.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                PersonNumberView(index = (index +1).toString())
+                PersonNumberView(index = (index + 1).toString())
                 Text(
                     text = person,
                     style = AppTextStyles.TITLE_20_28_SEMI,
@@ -125,14 +133,13 @@ private fun ParticipantsView(data: List<String>) {
 }
 
 
-
 @Composable
 private fun PersonNumberView(index: String) {
     Column(
         modifier = Modifier
             .width(40.dp)
             .height(40.dp)
-            .background(color = ColorStyle.WHITE_100 , shape = RoundedCornerShape(16.dp)),
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(16.dp)),
         verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
-import com.example.core.ButtonLeftLarge
+import com.example.core.ButtonL
 import com.example.core.ColorStyle
 import com.example.signup.FEMALE
 import com.example.signup.MALE
@@ -72,28 +72,37 @@ internal fun DetailView(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_info_male),
             isSelected = userInfo.gender == MALE,
             onClick = {
                 viewModel.inputGender(MALE)
-            }
+            },
+            borderUse = userInfo.gender == MALE,
+            borderColor = if (userInfo.gender == MALE) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_info_female),
             isSelected = userInfo.gender == FEMALE,
             onClick = {
                 viewModel.inputGender(FEMALE)
-            }
+            },
+            borderUse = userInfo.gender == FEMALE,
+            borderColor = if (userInfo.gender == FEMALE) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_info_non_sex),
             isSelected = userInfo.gender == NON_BINARY,
             onClick = {
                 viewModel.inputGender(NON_BINARY)
-            }
+            },
+            borderUse = userInfo.gender == NON_BINARY,
+            borderColor = if (userInfo.gender == NON_BINARY) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -152,7 +161,7 @@ internal fun DetailView(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
-        ){
+        ) {
             CustomSpinnerBox(
                 text = userInfo.city.ifEmpty { stringResource(R.string.txt_info_city) },
                 onclick = {

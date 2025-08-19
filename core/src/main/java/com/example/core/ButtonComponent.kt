@@ -1,10 +1,8 @@
 package com.example.core
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,92 +25,130 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun ButtonXXLPurple400(
+fun ButtonXXL(
     onClick: () -> Unit,
-    buttonText: String,
-    modifier: Modifier,
-    isEnable: Boolean = true
+    text: String,
+    isEnable: Boolean = true,
+    useBorder: Boolean = false,
+    borderColor: Color = ColorStyle.PURPLE_400,
+    enableTextColor: Color = ColorStyle.WHITE_100,
+    disEnableTextColor: Color = ColorStyle.GRAY_800,
+    enableButtonColor: Color = ColorStyle.PURPLE_400,
+    disEnableButtonColor: Color = ColorStyle.GRAY_200,
+    enableContentColor: Color = ColorStyle.WHITE_100,
+    disEnableContentColor: Color = ColorStyle.GRAY_200,
 ) {
     Button(
-        modifier = modifier.height(60.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .then(
+                if (useBorder) {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = borderColor,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                } else {
+                    Modifier
+                }
+            ),
         onClick = onClick,
         enabled = isEnable,
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isEnable) ColorStyle.PURPLE_400 else ColorStyle.GRAY_200,
-            contentColor = if (isEnable) ColorStyle.WHITE_100 else ColorStyle.GRAY_800
+            containerColor = if (isEnable) enableButtonColor else disEnableButtonColor,
+            contentColor = if (isEnable) enableContentColor else disEnableContentColor
         )
     ) {
         Text(
-            text = buttonText,
+            text = text,
+            color = if (isEnable) enableTextColor else disEnableTextColor,
             style = AppTextStyles.TITLE_20_28_SEMI,
-            color = when(isEnable){
-                true ->{
-                    ColorStyle.WHITE_100
-                }
-                else -> ColorStyle.GRAY_800
-            }
-        )
-    }
-}
-
-
-@Composable
-fun ButtonXXLWhite(
-    onClick: () -> Unit,
-    buttonText: String,
-    modifier: Modifier,
-) {
-    Button(
-        modifier = modifier
-            .height(60.dp)
-            .border(
-                width = 1.dp,
-                color = ColorStyle.PURPLE_400,
-                shape = RoundedCornerShape(size = 12.dp)
-            ),
-        onClick = onClick,
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = ColorStyle.WHITE_100,
-            contentColor = ColorStyle.PURPLE_400
-        )
-    ) {
-        Text(
-            text = buttonText,
-            style = AppTextStyles.TITLE_20_28_SEMI,
-            color = ColorStyle.PURPLE_400
         )
     }
 }
 
 @Composable
-fun ButtonPurple100MEDIUM(
+fun ButtonM(
     onClick: () -> Unit,
-    buttonText: String,
-    modifier: Modifier,
+    text: String,
+    containerColor: Color = ColorStyle.PURPLE_400,
+    contentColor: Color = ColorStyle.PURPLE_400,
+    textColor: Color = ColorStyle.WHITE_100,
 ) {
     Button(
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
             .height(48.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = ColorStyle.PURPLE_400,
-            contentColor = ColorStyle.PURPLE_400
+            containerColor = containerColor,
+            contentColor = contentColor
         ),
         onClick = onClick,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Text(
-            text = buttonText,
+            text = text,
             style = AppTextStyles.SUBTITLE_16_24_SEMI,
-            color = ColorStyle.WHITE_100
+            color = textColor
         )
     }
 }
 
+@Composable
+fun ButtonL(
+    onClick: () -> Unit,
+    text: String,
+    textColor: Color = ColorStyle.GRAY_800,
+    textCenter: Boolean = true,
+    isEnable: Boolean = true,
+    isSelected: Boolean = true,
+    borderUse: Boolean = false,
+    borderColor: Color = ColorStyle.PURPLE_200,
+    buttonColor: Color = ColorStyle.PURPLE_400,
+    disEnableButtonColor: Color = ColorStyle.GRAY_300,
+    contentColor: Color = Color.Black,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .then(
+                if (borderUse) {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = borderColor,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                } else {
+                    Modifier
+                }
+            ),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isEnable || isSelected) buttonColor else disEnableButtonColor,
+            contentColor = contentColor
+        ),
+        onClick = onClick,
+        enabled = isEnable,
+        contentPadding = PaddingValues(
+            start = 17.dp,
+            end = 16.dp
+        )
+    ) {
+        Text(
+            text = text,
+            color = textColor,
+            style = AppTextStyles.BODY_14_20_MEDIUM,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = if (textCenter) TextAlign.Center else TextAlign.Start
+        )
+    }
+}
 
 @Composable
 fun ButtonCheckBoxLeftL(
@@ -184,73 +219,7 @@ fun CircularCheckBoxLarge(
     }
 }
 
-@Composable
-fun ButtonCenterLarge(
-    text: String,
-    checked: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedButton(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (checked) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
-            contentColor = Color.Black
-        ),
-        border = BorderStroke(
-            1.dp,
-            if (checked) ColorStyle.PURPLE_200 else Color.Transparent
-        ),
-        shape = RoundedCornerShape(8.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp)
-    ) {
-        Text(
-            text = text,
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = ColorStyle.GRAY_800
-        )
-    }
-}
 
-@Composable
-fun ButtonLeftLarge(
-    text: String,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-) {
-    val backgroundColor = if (isSelected) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100
-    val borderModifier = if (isSelected) {
-        Modifier.border(
-            width = 1.dp,
-            color = ColorStyle.PURPLE_200,
-            shape = RoundedCornerShape(8.dp)
-        )
-    } else Modifier
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(backgroundColor, shape = RoundedCornerShape(8.dp))
-            .then(borderModifier)
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                onClick()
-            },
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(start = 17.dp),
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = ColorStyle.GRAY_800
-        )
-    }
-}
 
 @Composable
 fun ButtonSmall(
@@ -288,99 +257,3 @@ fun ButtonSmall(
     }
 }
 
-@Composable
-fun ButtonL(
-    text: String,
-    isEnable: Boolean = true,
-    onClick: () -> Unit,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            when (isEnable) {
-                true -> ColorStyle.PURPLE_400
-                false -> ColorStyle.GRAY_300
-            }
-        ),
-        onClick = onClick,
-        enabled = isEnable
-    ) {
-        Text(
-            text = text,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = when (isEnable) {
-                true -> ColorStyle.WHITE_100
-                false -> ColorStyle.GRAY_800
-            }
-        )
-    }
-}
-
-@Composable
-fun ButtonLWhite(
-    text: String,
-    isEnable: Boolean = true,
-    onClick: () -> Unit,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .border(
-                width = 1.dp,
-                color = ColorStyle.GRAY_300,
-                shape = RoundedCornerShape(size = 8.dp)
-            ),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            ColorStyle.WHITE_100
-        ),
-        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
-        onClick = onClick,
-        enabled = isEnable
-    ) {
-        Text(
-            text = text,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            color =  ColorStyle.GRAY_800
-        )
-    }
-}
-
-@Composable
-fun ButtonLargeCustom(
-    text: String,
-    isEnable: Boolean = true,
-    modifier: Modifier = Modifier,
-    buttonColor: Color,
-    onClick: () -> Unit,
-    textColor: Color,
-) {
-    Button(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            buttonColor
-        ),
-        contentPadding = PaddingValues(start = 17.dp, top = 10.dp, end = 16.dp, bottom = 10.dp),
-        onClick = onClick,
-        enabled = isEnable
-    ) {
-        Text(
-            text = text,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = textColor
-        )
-    }
-}

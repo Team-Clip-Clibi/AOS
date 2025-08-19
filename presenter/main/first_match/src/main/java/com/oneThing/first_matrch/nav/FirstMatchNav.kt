@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -30,9 +31,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.core.ButtonXXLPurple400
+import com.example.core.ButtonXXL
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
+import com.example.core.TopAppBarWithProgress
 import com.oneThing.first_matrch.DIET
 import com.oneThing.first_matrch.DomainError
 import com.oneThing.first_matrch.FirstMatchViewModel
@@ -44,7 +46,6 @@ import com.oneThing.first_matrch.NAV_LANGUAGE
 import com.oneThing.first_matrch.R
 import com.oneThing.first_matrch.UiError
 import com.oneThing.first_matrch.UiSuccess
-import com.oneThing.first_matrch.component.TopAppBarWithProgress
 import com.oneThing.first_matrch.ui.diet.DietView
 import com.oneThing.first_matrch.ui.intro.FirstMatchIntroView
 import com.oneThing.first_matrch.ui.job.JobView
@@ -152,50 +153,54 @@ internal fun FirstMatchNav(
                     color = ColorStyle.GRAY_200
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                ButtonXXLPurple400(
-                    onClick = {
-                        when (currentRoute) {
-                            NAV_INTRO -> {
-                                navController.navigate(NAV_JOB) {
-                                    popUpTo(NAV_JOB) { inclusive = true }
-                                }
-                            }
-
-                            NAV_JOB -> {
-                                if (uiState.dataChange) viewModel.updateJob()
-                                else navController.navigate(NAV_DIET) {
-                                    popUpTo(NAV_DIET) { inclusive = true }
-                                }
-                            }
-
-                            NAV_DIET -> {
-                                if (uiState.dataChange) viewModel.updateDiet()
-                                else navController.navigate(NAV_LANGUAGE) {
-                                    popUpTo(NAV_LANGUAGE) { inclusive = true }
-                                }
-                            }
-
-                            NAV_LANGUAGE -> {
-                                if (uiState.dataChange) viewModel.updateLanguage()
-                                else goMatchPage()
-                            }
-                        }
-                    },
-                    buttonText = when (currentRoute) {
-                        NAV_LANGUAGE -> stringResource(R.string.btn_finish)
-                        else -> stringResource(R.string.btn_next)
-                    },
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 17.dp),
-                    isEnable = when (currentRoute) {
-                        NAV_INTRO -> true
-                        NAV_JOB -> uiState.job != JOB.NONE
-                        NAV_DIET -> uiState.diet != DIET.NONE.displayName
-                        NAV_LANGUAGE -> uiState.language != ""
-                        else -> false
-                    },
-                )
+                        .wrapContentHeight()
+                        .padding(start = 17.dp, end = 16.dp)
+                ) {
+                    ButtonXXL(
+                        onClick = {
+                            when (currentRoute) {
+                                NAV_INTRO -> {
+                                    navController.navigate(NAV_JOB) {
+                                        popUpTo(NAV_JOB) { inclusive = true }
+                                    }
+                                }
+
+                                NAV_JOB -> {
+                                    if (uiState.dataChange) viewModel.updateJob()
+                                    else navController.navigate(NAV_DIET) {
+                                        popUpTo(NAV_DIET) { inclusive = true }
+                                    }
+                                }
+
+                                NAV_DIET -> {
+                                    if (uiState.dataChange) viewModel.updateDiet()
+                                    else navController.navigate(NAV_LANGUAGE) {
+                                        popUpTo(NAV_LANGUAGE) { inclusive = true }
+                                    }
+                                }
+
+                                NAV_LANGUAGE -> {
+                                    if (uiState.dataChange) viewModel.updateLanguage()
+                                    else goMatchPage()
+                                }
+                            }
+                        },
+                        text = when (currentRoute) {
+                            NAV_LANGUAGE -> stringResource(R.string.btn_finish)
+                            else -> stringResource(R.string.btn_next)
+                        },
+                        isEnable = when (currentRoute) {
+                            NAV_INTRO -> true
+                            NAV_JOB -> uiState.job != JOB.NONE
+                            NAV_DIET -> uiState.diet != DIET.NONE.displayName
+                            NAV_LANGUAGE -> uiState.language != ""
+                            else -> false
+                        },
+                    )
+                }
             }
         },
         snackbarHost = {

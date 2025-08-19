@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
-import com.example.core.ButtonLeftLarge
+import com.example.core.ButtonL
 import com.example.core.ColorStyle
 import com.example.core.TextFieldComponent
 import com.sungil.editprofile.DIET
@@ -94,44 +94,65 @@ internal fun DietChangeMainView(
                 bottom = paddingValues.calculateBottomPadding()
             )
     ) {
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_diet_all),
-            isSelected = uiState.diet == DIET.ALL.displayName,
             onClick = {
                 viewModel.changeDiet(DIET.ALL)
-            }
+            },
+            isSelected = uiState.diet == DIET.ALL.displayName,
+            borderUse = uiState.diet == DIET.ALL.displayName,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.diet == DIET.ALL.displayName) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_diet_vg),
-            isSelected = uiState.diet == DIET.VG.displayName,
             onClick = {
                 viewModel.changeDiet(DIET.VG)
-            }
+            },
+            isSelected = uiState.diet == DIET.VG.displayName,
+            borderUse = uiState.diet == DIET.VG.displayName,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.diet == DIET.VG.displayName) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_diet_vt),
-            isSelected = uiState.diet == DIET.VT.displayName,
             onClick = {
                 viewModel.changeDiet(DIET.VT)
-            }
+            },
+            isSelected = uiState.diet == DIET.VT.displayName,
+            borderUse = uiState.diet == DIET.VT.displayName,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.diet == DIET.VT.displayName) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_diet_gf),
-            isSelected = uiState.diet == DIET.GF.displayName,
             onClick = {
                 viewModel.changeDiet(DIET.GF)
-            }
+            },
+            isSelected = uiState.diet == DIET.GF.displayName,
+            borderUse = uiState.diet == DIET.GF.displayName,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.diet == DIET.GF.displayName) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(Modifier.height(10.dp))
-        ButtonLeftLarge(
+        Spacer(Modifier.height(10.dp))
+        ButtonL(
             text = stringResource(R.string.txt_diet_etc),
-            isSelected = uiState.diet == DIET.ETC.displayName,
             onClick = {
                 viewModel.changeDiet(DIET.ETC)
-            }
+            },
+            isSelected = uiState.diet == DIET.ETC.displayName,
+            borderUse = uiState.diet == DIET.ETC.displayName,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.diet == DIET.ETC.displayName) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
         HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)

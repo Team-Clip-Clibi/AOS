@@ -28,7 +28,7 @@ import com.example.core.ColorStyle
 import com.sungil.main.MainViewModel
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -38,7 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.core.AppTextStyles
-import com.example.core.ButtonLargeCustom
+import com.example.core.ButtonL
 import com.sungil.domain.model.MatchData
 import com.sungil.main.R
 import com.sungil.main.component.MyPageItem
@@ -54,7 +54,7 @@ internal fun MyPageViewScreen(
     snackBarHostState: SnackbarHostState
 ) {
     val userState by viewModel.userState.collectAsState()
-    var lastBackPressed by remember { mutableStateOf(0L) }
+    var lastBackPressed by remember { mutableLongStateOf(0L) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     BackHandler {
@@ -136,12 +136,12 @@ private fun ProfileBoxView(userState: MainViewModel.MainViewState, profileEdit: 
                 color = ColorStyle.GRAY_700
             )
             Spacer(modifier = Modifier.height(16.dp))
-            ButtonLargeCustom(
+            ButtonL(
                 text = stringResource(R.string.btn_myPage_edit_profile),
-                buttonColor = ColorStyle.GRAY_200,
                 onClick = {
                     profileEdit()
                 },
+                buttonColor = ColorStyle.GRAY_200,
                 textColor = ColorStyle.GRAY_800
             )
         }

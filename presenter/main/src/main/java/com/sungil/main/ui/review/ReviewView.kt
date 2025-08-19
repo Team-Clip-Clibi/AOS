@@ -40,7 +40,7 @@ import com.sungil.main.ReviewGoodItem
 import com.sungil.main.component.ReviewItemContent
 import com.sungil.main.component.ReviewTextField
 import com.example.core.ButtonCheckBoxLeftL
-import com.example.core.ButtonXXLPurple400
+import com.example.core.ButtonXXL
 import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.REVIEW_BEST_BTN
@@ -185,9 +185,8 @@ internal fun ReviewView(
                     Spacer(modifier = Modifier.height(22.dp))
                 }
             }
-            ButtonXXLPurple400(
-                buttonText = stringResource(R.string.btn_finish),
-                modifier = Modifier.fillMaxWidth(),
+            ButtonXXL(
+                text = stringResource(R.string.btn_finish),
                 onClick = {
                     viewModel.sendReview(
                         matchId = matchId,
