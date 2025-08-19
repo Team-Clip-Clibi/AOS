@@ -46,40 +46,6 @@ import com.example.core.TopAppBarNumber
 import com.oneThing.random.R
 import kotlinx.coroutines.delay
 
-@Composable
-fun TopAppBarWithProgress(
-    title: String,
-    currentPage: Int,
-    totalPage: Int,
-    onBackClick: () -> Unit,
-) {
-    val animatedProgress by animateFloatAsState(
-        targetValue = if (currentPage >= 0) currentPage / totalPage.toFloat() else 0f,
-        animationSpec = tween(durationMillis = 500),
-        label = "progress"
-    )
-
-    Column {
-        TopAppBarNumber(
-            title = title,
-            currentPage = if (currentPage >= 0) currentPage else 0,
-            totalPage = totalPage,
-            onBackClick = onBackClick
-        )
-        if (currentPage >= 0) {
-            LinearProgressIndicator(
-                progress = { animatedProgress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4.dp),
-                color = ColorStyle.PURPLE_400,
-                trackColor = ColorStyle.GRAY_200
-            )
-        } else {
-            Spacer(modifier = Modifier.height(0.dp))
-        }
-    }
-}
 
 @Composable
 fun BottomBar(

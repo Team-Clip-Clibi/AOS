@@ -34,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.core.ButtonXXL
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
+import com.example.core.TopAppBarWithProgress
 import com.sungil.onethingmatch.Budget
 import com.sungil.onethingmatch.BuildConfig
 import com.sungil.onethingmatch.CATEGORY
@@ -53,7 +54,6 @@ import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.UiError
 import com.sungil.onethingmatch.component.NotifyMeeting
-import com.sungil.onethingmatch.component.TopAppBarWithProgress
 import com.sungil.onethingmatch.ui.budget.BudgetView
 import com.sungil.onethingmatch.ui.categort.CategoryView
 import com.sungil.onethingmatch.ui.day.OneThingDayView

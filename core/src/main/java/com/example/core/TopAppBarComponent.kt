@@ -1,10 +1,16 @@
 package com.example.core
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,9 +19,12 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -38,19 +47,25 @@ fun TopAppBarNumber(
             .height(60.dp)
             .border(width = 1.dp, color = ColorStyle.GRAY_200),
         title = {
-            Text(
-                text = title,
-                style = AppTextStyles.TITLE_20_28_SEMI,
-                textAlign = TextAlign.Center,
-                color = ColorStyle.GRAY_800
-            )
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = title,
+                    style = AppTextStyles.TITLE_20_28_SEMI,
+                    textAlign = TextAlign.Center,
+                    color = ColorStyle.GRAY_800
+                )
+            }
         },
         navigationIcon = {
             Box(
-                modifier = Modifier
+                modifier = Modifier.fillMaxHeight()
                     .size(48.dp)
                     .clickable { onBackClick() }
-                    .padding(12.dp)) {
+                    .padding(12.dp),
+                contentAlignment = Alignment.Center) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_back_black),
                     contentDescription = "go back",
@@ -138,3 +153,40 @@ fun TopAppBarWithCloseButton(
         )
     }
 }
+
+@Composable
+fun TopAppBarWithProgress(
+    title: String,
+    currentPage: Int,
+    totalPage: Int,
+    onBackClick: () -> Unit,
+) {
+    val animatedProgress by animateFloatAsState(
+        targetValue = if (currentPage >= 0) currentPage / totalPage.toFloat() else 0f,
+        animationSpec = tween(durationMillis = 500),
+        label = "progress"
+    )
+
+    Column {
+        TopAppBarNumber(
+            title = title,
+            currentPage = if (currentPage >= 0) currentPage else 0,
+            totalPage = totalPage,
+            onBackClick = onBackClick
+        )
+        if (currentPage >= 0) {
+            LinearProgressIndicator(
+                progress = { animatedProgress },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp),
+                color = ColorStyle.PURPLE_400,
+                trackColor = ColorStyle.GRAY_200
+            )
+        } else {
+            Spacer(modifier = Modifier.height(0.dp))
+        }
+    }
+}
+
+

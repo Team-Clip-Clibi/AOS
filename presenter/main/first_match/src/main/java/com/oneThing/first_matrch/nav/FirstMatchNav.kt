@@ -34,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.core.ButtonXXL
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
+import com.example.core.TopAppBarWithProgress
 import com.oneThing.first_matrch.DIET
 import com.oneThing.first_matrch.DomainError
 import com.oneThing.first_matrch.FirstMatchViewModel
@@ -45,7 +46,6 @@ import com.oneThing.first_matrch.NAV_LANGUAGE
 import com.oneThing.first_matrch.R
 import com.oneThing.first_matrch.UiError
 import com.oneThing.first_matrch.UiSuccess
-import com.oneThing.first_matrch.component.TopAppBarWithProgress
 import com.oneThing.first_matrch.ui.diet.DietView
 import com.oneThing.first_matrch.ui.intro.FirstMatchIntroView
 import com.oneThing.first_matrch.ui.job.JobView
