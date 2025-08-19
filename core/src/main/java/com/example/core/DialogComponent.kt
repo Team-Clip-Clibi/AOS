@@ -67,7 +67,7 @@ fun CustomDialogOneButton(
                     shape = RoundedCornerShape(24.dp)
                 )
                 .width(324.dp)
-                .height(194.dp)
+                .wrapContentHeight()
                 .background(
                     color = ColorStyle.WHITE_100,
                     shape = RoundedCornerShape(24.dp)
@@ -76,7 +76,8 @@ fun CustomDialogOneButton(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .wrapContentHeight()
                     .background(color = ColorStyle.WHITE_100)
             ) {
                 Text(
