@@ -324,7 +324,7 @@ fun NotifyMeeting() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp)
-            .background(color = ColorStyle.GRAY_100, shape = RoundedCornerShape(size = 4.dp))
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 4.dp))
     ) {
         Row(
             modifier = Modifier
