@@ -35,6 +35,7 @@ fun TopAppBarNumber(
     CenterAlignedTopAppBar(
         modifier = Modifier
             .fillMaxWidth()
+            .height(60.dp)
             .border(width = 1.dp, color = ColorStyle.GRAY_200),
         title = {
             Text(
@@ -86,7 +87,7 @@ fun TopAppBarWithCloseButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .height(48.dp),
+                .height(60.dp),
             title = {
                 Text(
                     text = title,
