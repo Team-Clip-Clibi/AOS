@@ -1,6 +1,7 @@
 package com.sungil.onethingmatch.ui.day
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +34,7 @@ internal fun OneThingDayView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = ColorStyle.WHITE_100)
             .padding(
                 top = 32.dp,
                 start = 17.dp
