@@ -1,5 +1,6 @@
 package com.sungil.main.ui.review
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -67,6 +68,10 @@ internal fun ReviewView(
     val writeReview = uiState.writeReview
     val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    BackHandler(enabled = true) {
+        viewModel.initParticipants()
+        onClose()
+    }
     LaunchedEffect(writeReview) {
         when (val result = writeReview) {
             is MainViewModel.UiState.Error -> {
