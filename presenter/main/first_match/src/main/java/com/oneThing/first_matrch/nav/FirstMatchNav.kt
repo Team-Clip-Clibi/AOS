@@ -135,7 +135,7 @@ internal fun FirstMatchNav(
             TopAppBarWithProgress(
                 title = stringResource(R.string.top_app_bar_first_match),
                 currentPage = pageInfo,
-                totalPage = 4,
+                totalPage = 3,
                 onBackClick = {
                     if (!navController.popBackStack()) home()
                 }
