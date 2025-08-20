@@ -24,7 +24,7 @@ enum class CATEGORY {
 }
 sealed class BottomView(val title: Int, val icon: Int = -1, val screenRoute: String) {
     data object Home : BottomView(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
-    data object MatchView : BottomView(R.string.nav_calendar, R.drawable.ic_calendar, MATCH)
+    data object MatchView : BottomView(R.string.nav_match, R.drawable.ic_calendar, MATCH)
     data object MyPage : BottomView(R.string.nav_my, R.drawable.ic_my, NAV_MY)
 }
 
