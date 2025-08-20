@@ -17,7 +17,7 @@
     <string name="btn_home_oneThing">원띵 모임</string>
     <string name="btn_home_oneThing_content">대화하고 싶은 나만의 주제를 나눠요</string>
     <string name="btn_home_random">랜덤 모임</string>
-    <string name="btn_home_random_content">매주 월요일 7시</string>
+    <string name="btn_home_random_content">매주 금요일 7시</string>
     <string name="btn_home_light">번개 모임</string>
     <string name="btn_home_light_content">오픈 예정이에요</string>
     <string name="msg_not_service">앗! 해당 서비스는 아직 개발중이에요</string>
