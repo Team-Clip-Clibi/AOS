@@ -37,7 +37,6 @@ import com.sungil.main.MainViewModel
 import com.sungil.main.R
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
