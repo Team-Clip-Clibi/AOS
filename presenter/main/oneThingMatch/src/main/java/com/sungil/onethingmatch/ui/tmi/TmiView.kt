@@ -18,10 +18,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
+import com.example.core.SlidingTextBox
 import com.example.core.TextFieldComponent
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
-import com.sungil.onethingmatch.component.SlidingTextBox
 
 @Composable
 internal fun TmiView(

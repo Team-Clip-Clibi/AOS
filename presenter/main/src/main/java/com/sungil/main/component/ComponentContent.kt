@@ -1,9 +1,15 @@
 package com.sungil.main.component
 
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -257,6 +263,62 @@ fun HomeViewTopBar(
                 .size(24.dp)
                 .clickable { click() }
         )
+    }
+}
+
+@Composable
+fun NoticeBar(notification: List<NotificationData>, onClick: (String) -> Unit) {
+    if (notification.isEmpty()) {
+        return
+    }
+    val index = remember { mutableIntStateOf(0) }
+    val currentNotify = notification[index.intValue]
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(2000L)
+            index.intValue = (index.intValue + 1) % notification.size
+        }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(34.dp)
+            .background(color = ColorStyle.GRAY_200)
+            .padding(start = 17.dp, top = 8.dp, end = 8.dp, bottom = 6.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        AnimatedContent(
+            targetState = currentNotify,
+            transitionSpec = {
+                slideInVertically { height -> height } + fadeIn() togetherWith
+                        slideOutVertically { height -> -height } + fadeOut()
+            },
+            label = "subject"
+        ) { notify ->
+            Row(
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .clickable { onClick(notify.link) },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = if (notify.noticeType == CONTENT_NOTICE) stringResource(R.string.notify_notice) else stringResource(
+                        R.string.notify_article
+                    ),
+                    style = AppTextStyles.CAPTION_12_18_SEMI,
+                    color = if (notify.noticeType == CONTENT_NOTICE) ColorStyle.RED_100 else ColorStyle.GRAY_800
+                )
+
+                Spacer(Modifier.width(12.dp))
+
+                Text(
+                    text = notify.content,
+                    style = AppTextStyles.CAPTION_12_18_SEMI,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
     }
 }
 
@@ -604,7 +666,9 @@ fun AutoSlidingBanner(
                     .crossfade(true)
                     .build(),
                 contentDescription = "banner",
-                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp))
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
             )
         }
         PageIndicator(

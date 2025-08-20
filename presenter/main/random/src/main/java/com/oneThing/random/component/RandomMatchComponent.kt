@@ -1,11 +1,5 @@
 package com.oneThing.random.component
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,9 +19,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,7 +30,6 @@ import com.example.core.AppTextStyles
 import com.example.core.ButtonXXL
 import com.example.core.ColorStyle
 import com.oneThing.random.R
-import kotlinx.coroutines.delay
 
 
 @Composable
@@ -112,43 +102,6 @@ fun DuplicateBottomBar(
                     text = stringResource(R.string.random_duplicate_button_home),
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun SlidingTextBox(textList: List<String>) {
-    val index = remember { mutableIntStateOf(0) }
-    val currentText = textList.getOrNull(index.intValue) ?: ""
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(2000L)
-            index.intValue = (index.intValue + 1) % textList.size
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(32.dp)
-            .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(size = 4.dp))
-            .padding(start = 12.dp, top = 6.dp, end = 12.dp, bottom = 6.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        AnimatedContent(
-            targetState = currentText,
-            transitionSpec = {
-                slideInVertically { height -> height } + fadeIn() togetherWith
-                        slideOutVertically { height -> -height } + fadeOut()
-            },
-            label = "subject"
-        ) { text ->
-            Text(
-                text = text,
-                style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = ColorStyle.GRAY_800
-            )
         }
     }
 }

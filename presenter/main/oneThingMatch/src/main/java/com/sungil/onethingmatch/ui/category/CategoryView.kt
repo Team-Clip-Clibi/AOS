@@ -1,4 +1,4 @@
-package com.sungil.onethingmatch.ui.categort
+package com.sungil.onethingmatch.ui.category
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
