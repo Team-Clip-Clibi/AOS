@@ -565,7 +565,7 @@ fun CustomHomeButton(
 @Composable
 fun AutoSlidingBanner(
     image: List<BannerData>,
-    intervalMillis: Long = 3000L,
+    intervalMillis: Long = 4000L,
     scrollDuration: Int = 500,
 ) {
     val pagerState = rememberPagerState(pageCount = { image.size })
