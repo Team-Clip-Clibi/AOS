@@ -28,12 +28,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.core.AppTextStyles
+import com.example.core.ColorStyle
 import com.sungil.report.R
 
 
@@ -52,7 +54,7 @@ fun CustomTopBar(
             Text(
                 text = title,
                 style = AppTextStyles.TITLE_20_28_SEMI,
-                color = Color(0xFF000000),
+                color = ColorStyle.BLACK_100,
                 textAlign = TextAlign.Center
             )
         },
@@ -68,7 +70,7 @@ fun CustomTopBar(
         },
         actions = {},
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.White
+            containerColor = ColorStyle.WHITE_100
         )
     )
 }
@@ -95,7 +97,7 @@ fun CustomSnackBar(data: SnackbarData) {
         Text(
             text = data.visuals.message,
             style = AppTextStyles.CAPTION_12_18_SEMI,
-            color = Color(0xFFFFFFFF)
+            color = ColorStyle.WHITE_100
         )
     }
 }
@@ -103,9 +105,9 @@ fun CustomSnackBar(data: SnackbarData) {
 @Composable
 fun CustomReportItem(
     title: String,
-    textColor: Long,
+    textColor: Color,
     subTitle: String,
-    subTitleColor: Long,
+    subTitleColor: Color,
     buttonClick: () -> Unit,
 ) {
     Row(
@@ -118,7 +120,7 @@ fun CustomReportItem(
         Text(
             text = title,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            color = Color(textColor)
+            color = textColor
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -130,7 +132,7 @@ fun CustomReportItem(
             Text(
                 text = subTitle,
                 style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = Color(subTitleColor)
+                color = subTitleColor
             )
 
             Spacer(modifier = Modifier.width(4.dp))
@@ -140,7 +142,8 @@ fun CustomReportItem(
                 contentDescription = "상세정보",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable { buttonClick() }
+                    .clickable { buttonClick() },
+                colorFilter = ColorFilter.tint(ColorStyle.GRAY_400)
             )
         }
     }
@@ -150,7 +153,7 @@ fun CustomReportItem(
 fun CustomGrayButton(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color, // 이건 텍스트 색
+    color: Color,
     clickable: () -> Unit,
 ) {
     Button(
@@ -158,8 +161,8 @@ fun CustomGrayButton(
         modifier = modifier.height(48.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFEFEFEF), // ✅ 버튼 배경을 회색으로!
-            contentColor = color // ✅ 텍스트 색상
+            containerColor = ColorStyle.GRAY_200,
+            contentColor = color
         )
     ) {
         Text(
@@ -186,11 +189,11 @@ fun CustomTextField(
         placeholder = {
             Text(
                 text = placeholder,
-                color = Color(0xFF666666),
+                color = ColorStyle.GRAY_600,
                 style = AppTextStyles.SUBTITLE_16_24_SEMI
             )
         },
-        textStyle =AppTextStyles.SUBTITLE_16_24_SEMI ,
+        textStyle = AppTextStyles.SUBTITLE_16_24_SEMI,
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -217,9 +220,10 @@ fun CustomTitleText(
     Text(
         text = text,
         style = AppTextStyles.TITLE_20_28_SEMI,
-        color = Color(0xFF171717)
+        color = ColorStyle.GRAY_800
     )
 }
+
 @Composable
 fun CustomButton(
     text: String,
@@ -239,11 +243,11 @@ fun CustomButton(
 
             when (enable) {
                 true -> {
-                    Color(0xFF6700CE)
+                    ColorStyle.PURPLE_400
                 }
 
                 false -> {
-                    Color(0xFFEFEFEF)
+                    ColorStyle.GRAY_200
                 }
             }
 
@@ -257,9 +261,9 @@ fun CustomButton(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
             color = if (enable) {
-                Color(0xFFFFFFFF)
+                ColorStyle.WHITE_100
             } else {
-                Color(0xFF171717)
+                ColorStyle.GRAY_800
             }
         )
     }
@@ -278,27 +282,28 @@ fun CustomDialog(
             modifier = Modifier
                 .border(
                     width = 1.dp,
-                    color = Color(0xFFF7F7F7),
+                    color = ColorStyle.GRAY_100,
                     shape = RoundedCornerShape(size = 24.dp)
                 )
                 .width(324.dp)
                 .height(194.dp)
                 .background(
-                    color = Color(0xFFFFFFFF),
+                    color = ColorStyle.WHITE_100,
                     shape = RoundedCornerShape(size = 24.dp)
                 )
                 .padding(24.dp),
 
             ) {
             Column(
-                modifier = Modifier.fillMaxSize()
-                    .background(Color(0xFFFFFFFF)),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ColorStyle.WHITE_100),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = titleText,
                     style = AppTextStyles.TITLE_20_28_SEMI,
-                    color = Color(0xFF171717),
+                    color = ColorStyle.GRAY_800,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -306,7 +311,7 @@ fun CustomDialog(
                 Text(
                     text = contentText,
                     style = AppTextStyles.BODY_14_20_MEDIUM,
-                    color = Color(0xFF666666),
+                    color = ColorStyle.GRAY_600,
                     textAlign = TextAlign.Center,
                 )
 
@@ -318,12 +323,15 @@ fun CustomDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
-                        .background(color = Color(0xFF6700CE), shape = RoundedCornerShape(size = 12.dp))
+                        .background(
+                            color = Color(0xFF6700CE),
+                            shape = RoundedCornerShape(size = 12.dp)
+                        )
                 ) {
                     Text(
                         text = buttonText,
                         style = AppTextStyles.SUBTITLE_16_24_SEMI,
-                        color = Color(0xFFFFFFFF),
+                        color = ColorStyle.WHITE_100,
                     )
                 }
             }

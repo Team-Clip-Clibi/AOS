@@ -51,4 +51,7 @@ object ColorStyle {
 
     //Transparent
     val COLOR_TRANSPARENT = Color(0x00000000)
+
+    //Black
+    val BLACK_100 = Color(0xFF000000)
 }
