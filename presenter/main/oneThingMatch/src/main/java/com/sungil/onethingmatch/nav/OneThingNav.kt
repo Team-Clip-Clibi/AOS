@@ -55,7 +55,7 @@ import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.UiError
 import com.sungil.onethingmatch.component.NotifyMeeting
 import com.sungil.onethingmatch.ui.budget.BudgetView
-import com.sungil.onethingmatch.ui.categort.CategoryView
+import com.sungil.onethingmatch.ui.category.CategoryView
 import com.sungil.onethingmatch.ui.day.OneThingDayView
 import com.sungil.onethingmatch.ui.intro.IntroView
 import com.sungil.onethingmatch.ui.location.LocationView

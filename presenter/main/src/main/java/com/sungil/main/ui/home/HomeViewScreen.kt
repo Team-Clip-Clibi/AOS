@@ -35,8 +35,8 @@ import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.ERROR_SAVE_ERROR
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
-import com.sungil.main.component.NotificationBarListStable
 import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -49,6 +49,7 @@ import com.sungil.domain.model.UserData
 import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.MeetingCardList
+import com.sungil.main.component.NoticeBar
 import kotlinx.coroutines.launch
 
 @Composable
@@ -64,12 +65,12 @@ internal fun HomeViewScreen(
     val context = LocalContext.current
     val state by viewModel.userState.collectAsState()
     val notificationState = state.notificationResponseState
-    var lastBackPressed by remember { mutableStateOf(0L) }
+    var lastBackPressed by remember { mutableLongStateOf(0L) }
     val scope = rememberCoroutineScope()
     BackHandler {
         val now = System.currentTimeMillis()
         if (now - lastBackPressed <= 2000L) {
-            (context as? Activity)?.finish() // 또는 finishAffinity()로 완전 종료
+            (context as? Activity)?.finish()
         } else {
             lastBackPressed = now
             scope.launch {
@@ -126,9 +127,9 @@ private fun NotifyView(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         if (notificationState is MainViewModel.UiState.Success && notificationState.data.isNotEmpty()) {
-            NotificationBarListStable(
-                notifications = notificationState.data,
-                notifyClick = { notifyClick(notificationState.data.first().link) },
+            NoticeBar(
+                notification = notificationState.data,
+                onClick = { notifyClick(notificationState.data.first().link) },
             )
         }
     }

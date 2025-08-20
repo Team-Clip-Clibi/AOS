@@ -117,43 +117,6 @@ fun DuplicateBottomBar(
 }
 
 @Composable
-fun SlidingTextBox(textList: List<String>) {
-    val index = remember { mutableIntStateOf(0) }
-    val currentText = textList.getOrNull(index.intValue) ?: ""
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(2000L)
-            index.intValue = (index.intValue + 1) % textList.size
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(32.dp)
-            .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(size = 4.dp))
-            .padding(start = 12.dp, top = 6.dp, end = 12.dp, bottom = 6.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        AnimatedContent(
-            targetState = currentText,
-            transitionSpec = {
-                slideInVertically { height -> height } + fadeIn() togetherWith
-                        slideOutVertically { height -> -height } + fadeOut()
-            },
-            label = "subject"
-        ) { text ->
-            Text(
-                text = text,
-                style = AppTextStyles.BODY_14_20_MEDIUM,
-                color = ColorStyle.GRAY_800
-            )
-        }
-    }
-}
-
-@Composable
 fun EventView(
     title: String,
     content: String,
