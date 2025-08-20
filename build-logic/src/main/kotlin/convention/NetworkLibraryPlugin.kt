@@ -68,6 +68,7 @@ class NetworkLibraryPlugin : Plugin<Project> {
                 val matchProgress: String = properties.getProperty("matchProgress", "")
                 val progress: String = properties.getProperty("progress", "")
                 val versionCheck: String = properties.getProperty("versionCheck", "")
+                val postPone: String = properties.getProperty("postpone", "")
 
                 buildConfigField("String", "BASE_URL", baseUrl)
                 buildConfigField("String", "PHONE_NUMBER_CHECK_FIRST", phoneNumberCheckFirst)
@@ -106,6 +107,8 @@ class NetworkLibraryPlugin : Plugin<Project> {
                 buildConfigField("String", "MATCH_PROGRESS_MATCH_URL", matchProgress)
                 buildConfigField("String", "MATCH_PROGRESS_PROGRESS_URL", progress)
                 buildConfigField("String", "VERSION_CHECK_URL", versionCheck)
+                buildConfigField("String", "REVIEW_POSTPONE_URL", postPone)
+
             }
             buildFeatures.buildConfig = true
             compileOptions {
