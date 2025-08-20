@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -97,7 +98,7 @@ fun CustomProfileItemWithImage(
 @Composable
 fun CustomProfileItemWithMore(
     title: String,
-    textColor:Color,
+    textColor: Color,
     subTitle: String,
     subTitleColor: Color,
     buttonClick: () -> Unit,
@@ -134,7 +135,8 @@ fun CustomProfileItemWithMore(
                 contentDescription = "상세정보",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable { buttonClick() }
+                    .clickable { buttonClick() },
+                colorFilter = ColorFilter.tint(ColorStyle.GRAY_400)
             )
         }
     }

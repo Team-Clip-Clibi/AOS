@@ -124,7 +124,7 @@ internal fun EditProfileMainView(
             Section {
                 CustomLittleTitleText(
                     text = stringResource(R.string.txt_title_oneThing_info),
-                    color = ColorStyle.GRAY_200
+                    color = ColorStyle.GRAY_600
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CustomProfileItemWithMore(
