@@ -720,4 +720,23 @@ class NetworkRepositoryImpl @Inject constructor(
             return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }
     }
+
+    override suspend fun requestNotWriteReview(token: String): NetworkResult<List<Triple<Int, String, String>>> {
+        try {
+            val request = api.requestNotWriteReviewData(token)
+            if (!request.isSuccessful) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            if (request.body() == null) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            val reviewData: List<Triple<Int, String, String>> =
+                request.body()!!.map { (id, time, type) ->
+                    Triple(id, time, type)
+                }
+            return NetworkResult.Success(reviewData)
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
 }

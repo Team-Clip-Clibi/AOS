@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ReviewDTO(
-    val matchingId : String,
+    val matchingId : Int,
     val meetingTime : String,
     val matchingType : String
 )

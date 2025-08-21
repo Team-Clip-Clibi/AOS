@@ -10,6 +10,7 @@ import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchProgressUiModel
 import com.sungil.domain.model.MatchTrigger
+import com.sungil.domain.model.NotWriteReview
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.Participants
@@ -23,6 +24,7 @@ import com.sungil.domain.useCase.GetMatchDetail
 import com.sungil.domain.useCase.GetMatchNotice
 import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
+import com.sungil.domain.useCase.GetNotWriteReview
 import com.sungil.domain.useCase.GetNotification
 import com.sungil.domain.useCase.GetNotificationStatus
 import com.sungil.domain.useCase.GetParticipants
@@ -62,7 +64,8 @@ class MainViewModel @Inject constructor(
     private val alarmStatus: GetNotificationStatus,
     private val setAlarmStatus: SetNotifyState,
     private val setPermission: SetPermissionCheck,
-    private val homeBanner: GetHomeBanner
+    private val homeBanner: GetHomeBanner,
+    private val notWriteReview: GetNotWriteReview,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -113,6 +116,7 @@ class MainViewModel @Inject constructor(
         getLatestMatch()
         alarm()
         homeBanner()
+        notWriteReview()
     }
 
     fun requestUserInfo() {
@@ -387,9 +391,28 @@ class MainViewModel @Inject constructor(
                         state.copy(homeBanner = UiState.Error(result.errorMessage))
                     }
                 }
+
                 is GetHomeBanner.Result.Success -> {
                     _userState.update { state ->
                         state.copy(homeBanner = UiState.Success(result.data))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun notWriteReview() {
+        viewModelScope.launch {
+            when (val result = notWriteReview.invoke()) {
+                is GetNotWriteReview.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(notWriteReview = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is GetNotWriteReview.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(notWriteReview = UiState.Success(result.data))
                     }
                 }
             }
@@ -613,12 +636,12 @@ class MainViewModel @Inject constructor(
         _userState.value.progressMatchInfo = UiState.Loading
     }
 
-    fun removeHomeBannerData(id : Int){
+    fun removeHomeBannerData(id: Int) {
         _userState.update { state ->
-            val next = when(val hbData = state.homeBanner){
-                is UiState.Success -> UiState.Success(hbData.data.filterNot { banner -> banner.id ==  id})
-                is UiState.Error   -> hbData
-                UiState.Loading    -> hbData
+            val next = when (val hbData = state.homeBanner) {
+                is UiState.Success -> UiState.Success(hbData.data.filterNot { banner -> banner.id == id })
+                is UiState.Error -> hbData
+                UiState.Loading -> hbData
             }
             state.copy(homeBanner = next)
         }
@@ -655,7 +678,8 @@ class MainViewModel @Inject constructor(
         val unAttendMember: ArrayList<String> = arrayListOf(),
         val writeReview: UiState<Int> = UiState.Loading,
         var progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
-        var homeBanner: UiState<List<HomeBanner>> = UiState.Loading
+        var homeBanner: UiState<List<HomeBanner>> = UiState.Loading,
+        var notWriteReview: UiState<ArrayList<NotWriteReview>> = UiState.Loading,
     )
 
 }

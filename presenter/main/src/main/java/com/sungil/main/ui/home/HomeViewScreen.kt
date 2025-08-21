@@ -46,6 +46,7 @@ import com.example.core.AppTextStyles
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.NotWriteReview
 import com.sungil.domain.model.UserData
 import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
@@ -63,7 +64,7 @@ internal fun HomeViewScreen(
     notifyClick: (String) -> Unit,
     randomMatchClick: () -> Unit,
     reLogin: () -> Unit,
-    goMatchView: () -> Unit
+    goMatchView: () -> Unit,
 ) {
     val context = LocalContext.current
     val state by viewModel.userState.collectAsState()
@@ -102,6 +103,7 @@ internal fun HomeViewScreen(
     val matchState = state.matchState
     val banner = state.banner
     val homeBanner = state.homeBanner
+    val notWriteReview = state.notWriteReview
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -129,6 +131,12 @@ internal fun HomeViewScreen(
             viewModel = viewModel
         )
         BannerView(banner = banner)
+        DialogNotWriteReview(
+            notWriteReview = notWriteReview,
+            context = context,
+            snackBarHostState = snackBarHostState,
+            viewModel = viewModel
+        )
     }
 }
 
@@ -400,5 +408,42 @@ private fun HandleMatchClick(
 
             else -> Unit
         }
+    }
+}
+
+@Composable
+private fun DialogNotWriteReview(
+    notWriteReview: MainViewModel.UiState<ArrayList<NotWriteReview>>,
+    context: Context,
+    snackBarHostState: SnackbarHostState,
+    viewModel: MainViewModel,
+) {
+    LaunchedEffect(notWriteReview) {
+        when (notWriteReview) {
+            is MainViewModel.UiState.Error -> {
+                when (notWriteReview.message) {
+                    ERROR_RE_LOGIN -> {
+
+                    }
+
+                    ERROR_NETWORK_ERROR -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    else -> snackBarHostState.showSnackbar(
+                        message = notWriteReview.message,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+
+            else -> Unit
+        }
+    }
+    if (notWriteReview is MainViewModel.UiState.Success && notWriteReview.data.isNotEmpty()) {
+
     }
 }

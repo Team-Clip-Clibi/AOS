@@ -61,7 +61,7 @@ interface NetworkRepository {
 
     suspend fun requestUserData(accessToken: String): UserInfo?
 
-    suspend fun requestUpdateFcmToken(accessToken: String ,fcmToken : String): Int
+    suspend fun requestUpdateFcmToken(accessToken: String, fcmToken: String): Int
 
     suspend fun requestUpdateJob(accessToken: String, data: String): Int
 
@@ -144,9 +144,9 @@ interface NetworkRepository {
     ): Int
 
     fun requestMatchingData(
-        matchStatus : String,
-        lastTime : String
-    ) : Flow<PagingData<MatchingData>>
+        matchStatus: String,
+        lastTime: String,
+    ): Flow<PagingData<MatchingData>>
 
     fun requestMatchNotice(
         lastTime: String,
@@ -155,41 +155,43 @@ interface NetworkRepository {
     suspend fun requestMatchDetail(
         token: String,
         matchingId: Int,
-        matchType : String
+        matchType: String,
     ): NetworkResult<MatchDetail>
 
     suspend fun sendLateMatch(
         token: String,
         matchId: Int,
         matchType: String,
-        lateTime : Int
+        lateTime: Int,
     ): NetworkResult<Int>
 
     suspend fun sendReviewData(
-        token : String,
+        token: String,
         mood: String,
-        positivePoints : String,
-        negativePoints : String,
-        reviewContent : String,
-        noShowMembers : String,
-        allAttend : Boolean,
-        matchId : Int,
-        matchType: String
-    ) : NetworkResult<Int>
+        positivePoints: String,
+        negativePoints: String,
+        reviewContent: String,
+        noShowMembers: String,
+        allAttend: Boolean,
+        matchId: Int,
+        matchType: String,
+    ): NetworkResult<Int>
 
     suspend fun requestParticipants(
         token: String,
         matchId: Int,
         matchType: String,
-    ) : NetworkResult<List<Participants>>
+    ): NetworkResult<List<Participants>>
 
     suspend fun requestProgressMatch(
-        token : String,
+        token: String,
         matchId: Int,
-        matchType: String
-    ) : NetworkResult<MatchProgress>
+        matchType: String,
+    ): NetworkResult<MatchProgress>
 
-    suspend fun requestAppVersion() : NetworkResult<String>
+    suspend fun requestAppVersion(): NetworkResult<String>
 
-    suspend fun requestHomeBanner(token : String) : NetworkResult<List<Pair<Int , String>>>
+    suspend fun requestHomeBanner(token: String): NetworkResult<List<Pair<Int, String>>>
+
+    suspend fun requestNotWriteReview(token: String): NetworkResult<List<Triple<Int, String, String>>>
 }
