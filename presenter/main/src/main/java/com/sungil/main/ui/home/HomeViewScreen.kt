@@ -43,11 +43,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import com.example.core.AppTextStyles
+import com.example.core.CustomDialogTwoButton
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.NotWriteReview
+import com.sungil.domain.model.Participants
 import com.sungil.domain.model.UserData
+import com.sungil.editprofile.ERROR_NETWORK
+import com.sungil.editprofile.ERROR_TOKEN_EXPIRE
+import com.sungil.main.MatchType
+import com.sungil.main.Participant
 import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
 import com.sungil.main.component.HomeBannerUi
@@ -65,6 +71,7 @@ internal fun HomeViewScreen(
     randomMatchClick: () -> Unit,
     reLogin: () -> Unit,
     goMatchView: () -> Unit,
+    review: (Int , String , List<Participants>) -> Unit
 ) {
     val context = LocalContext.current
     val state by viewModel.userState.collectAsState()
@@ -104,6 +111,10 @@ internal fun HomeViewScreen(
     val banner = state.banner
     val homeBanner = state.homeBanner
     val notWriteReview = state.notWriteReview
+    val participant = state.participants
+    val reviewLater = state.writeReviewLater
+    val dialogInfo by viewModel.dialogIndex.collectAsState()
+    val dialogShow by viewModel.actionInFlight.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -135,7 +146,13 @@ internal fun HomeViewScreen(
             notWriteReview = notWriteReview,
             context = context,
             snackBarHostState = snackBarHostState,
-            viewModel = viewModel
+            viewModel = viewModel,
+            review = review,
+            participant =participant,
+            reLogin = reLogin,
+            index = dialogInfo,
+            reviewLater = reviewLater,
+            dialogShow = dialogShow
         )
     }
 }
@@ -414,16 +431,22 @@ private fun HandleMatchClick(
 @Composable
 private fun DialogNotWriteReview(
     notWriteReview: MainViewModel.UiState<ArrayList<NotWriteReview>>,
+    participant: MainViewModel.UiState<Participant>,
+    reviewLater: MainViewModel.UiState<String>,
     context: Context,
     snackBarHostState: SnackbarHostState,
     viewModel: MainViewModel,
+    reLogin: () -> Unit,
+    index: Int,
+    review: (Int, String, List<Participants>) -> Unit,
+    dialogShow : Boolean
 ) {
     LaunchedEffect(notWriteReview) {
         when (notWriteReview) {
             is MainViewModel.UiState.Error -> {
                 when (notWriteReview.message) {
                     ERROR_RE_LOGIN -> {
-
+                        reLogin()
                     }
 
                     ERROR_NETWORK_ERROR -> {
@@ -443,7 +466,95 @@ private fun DialogNotWriteReview(
             else -> Unit
         }
     }
-    if (notWriteReview is MainViewModel.UiState.Success && notWriteReview.data.isNotEmpty()) {
+    LaunchedEffect(participant) {
+        when (participant) {
+            is MainViewModel.UiState.Error -> {
+                when (participant.message) {
+                    ERROR_TOKEN_EXPIRE -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        reLogin()
+                    }
 
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+
+            is MainViewModel.UiState.Success -> {
+                viewModel.plusHomeBanner()
+                review(
+                    participant.data.matchId,
+                    participant.data.matchType,
+                    participant.data.person
+                )
+            }
+
+            else -> Unit
+        }
+    }
+
+    LaunchedEffect(reviewLater) {
+        when (reviewLater) {
+            is MainViewModel.UiState.Error -> {
+                /**
+                 * TODO  배포 시 삭제
+                 */
+                viewModel.plusHomeBanner()
+                when (reviewLater.message) {
+                    ERROR_TOKEN_EXPIRE -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        reLogin()
+                    }
+
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+                viewModel.initReviewLater()
+            }
+
+            is MainViewModel.UiState.Success -> {
+                viewModel.plusHomeBanner()
+            }
+
+            else -> Unit
+        }
+    }
+    if (notWriteReview is MainViewModel.UiState.Success && notWriteReview.data.isNotEmpty() && dialogShow) {
+        CustomDialogTwoButton(
+            onDismiss = {
+                viewModel.reviewLater(
+                    matchId = notWriteReview.data[index].id,
+                    matchType = notWriteReview.data[index].type
+                )
+            },
+            buttonClick = {
+                viewModel.getParticipants(
+                    matchId = notWriteReview.data[index].id,
+                    matchType = notWriteReview.data[index].type
+                )
+            },
+            titleText = stringResource(R.string.review_dialog_title),
+            contentText = "${notWriteReview.data[index].simpleTime}일 ${
+                MatchType.fromRoute(
+                    notWriteReview.data[index].type
+                ).matchType
+            }",
+            buttonText = stringResource(R.string.review_dialog_btn_okay),
+            dismissButtonText = stringResource(R.string.review_dialog_btn_cancel)
+        )
     }
 }

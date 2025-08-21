@@ -194,4 +194,6 @@ interface NetworkRepository {
     suspend fun requestHomeBanner(token: String): NetworkResult<List<Pair<Int, String>>>
 
     suspend fun requestNotWriteReview(token: String): NetworkResult<List<Triple<Int, String, String>>>
+
+    suspend fun requestReviewLater(token: String , matchId: Int , matchType: String) : NetworkResult<Int>
 }

@@ -35,6 +35,7 @@ import com.sungil.domain.useCase.SendLateMatch
 import com.sungil.domain.useCase.SendMatchReview
 import com.sungil.domain.useCase.SetNotifyState
 import com.sungil.domain.useCase.SetPermissionCheck
+import com.sungil.domain.useCase.WriteReviewLater
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,6 +67,7 @@ class MainViewModel @Inject constructor(
     private val setPermission: SetPermissionCheck,
     private val homeBanner: GetHomeBanner,
     private val notWriteReview: GetNotWriteReview,
+    private val reviewLater : WriteReviewLater
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -103,9 +105,15 @@ class MainViewModel @Inject constructor(
     private var _lightDialogShow = MutableStateFlow(false)
     val lightDialogShow: StateFlow<Boolean> = _lightDialogShow.asStateFlow()
 
+    private val _actionInFlight = MutableStateFlow(false)
+    val actionInFlight = _actionInFlight.asStateFlow()
     private var participantsData: List<String> = emptyList()
     private var matchId: Int = 0
     private var matchType: String = ""
+
+    private var _dialogIndex = MutableStateFlow(0)
+    val dialogIndex = _dialogIndex.asStateFlow()
+
 
     init {
         requestUserInfo()
@@ -401,6 +409,50 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun plusHomeBanner() {
+        _actionInFlight.value = false
+        val list = (_userState.value.notWriteReview as? UiState.Success)?.data ?: return
+        if (list.isEmpty()) return
+        if (list.size <= _dialogIndex.value + 1) return
+        _dialogIndex.value += 1
+        _userState.update { state ->
+            state.copy(
+                participants = UiState.Loading,
+                writeReviewLater = UiState.Loading
+            )
+        }
+        _actionInFlight.value = true
+    }
+
+    fun initReviewLater(){
+        _userState.update { state ->
+            state.copy(writeReviewLater = UiState.Loading)
+        }
+    }
+
+    fun reviewLater(matchId: Int, matchType: String) {
+        viewModelScope.launch {
+            when (val result = reviewLater.invoke(
+                WriteReviewLater.Param(
+                    matchId = matchId,
+                    matchType = matchType
+                )
+            )) {
+                is WriteReviewLater.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(writeReviewLater = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is WriteReviewLater.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(writeReviewLater = UiState.Success("Success"))
+                    }
+                }
+            }
+        }
+    }
+
     private fun notWriteReview() {
         viewModelScope.launch {
             when (val result = notWriteReview.invoke()) {
@@ -414,6 +466,8 @@ class MainViewModel @Inject constructor(
                     _userState.update { state ->
                         state.copy(notWriteReview = UiState.Success(result.data))
                     }
+                    _dialogIndex.value = 0
+                    _actionInFlight.value = true
                 }
             }
         }
@@ -648,6 +702,7 @@ class MainViewModel @Inject constructor(
     }
 
     sealed interface UiState<out T> {
+
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
         data class Error(val message: String) : UiState<Nothing>
@@ -680,6 +735,7 @@ class MainViewModel @Inject constructor(
         var progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
         var homeBanner: UiState<List<HomeBanner>> = UiState.Loading,
         var notWriteReview: UiState<ArrayList<NotWriteReview>> = UiState.Loading,
+        var writeReviewLater : UiState<String> = UiState.Loading
     )
 
 }

@@ -97,6 +97,14 @@ fun MainNavigation(
                             popUpTo(it) { saveState = true }
                         }
                     }
+                },
+                review = { matchId, matchType, participants ->
+                    viewModel.setReviewData(
+                        participants = participants.map { it -> it.nickName },
+                        matchId = matchId,
+                        matchType = matchType
+                    )
+                    navController.navigate(MainView.REVIEW.route)
                 }
             )
         }
