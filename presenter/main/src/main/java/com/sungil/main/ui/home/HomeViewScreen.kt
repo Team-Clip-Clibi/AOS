@@ -63,6 +63,7 @@ internal fun HomeViewScreen(
     notifyClick: (String) -> Unit,
     randomMatchClick: () -> Unit,
     reLogin: () -> Unit,
+    goMatchView: () -> Unit
 ) {
     val context = LocalContext.current
     val state by viewModel.userState.collectAsState()
@@ -113,7 +114,8 @@ internal fun HomeViewScreen(
             viewModel = viewModel,
             snackBarHost = snackBarHostState,
             context = context,
-            reLogin = reLogin
+            reLogin = reLogin,
+            goMatchView = goMatchView
         )
         MatchView(
             userData = userData,
@@ -152,6 +154,7 @@ private fun HomeBannerView(
     snackBarHost: SnackbarHostState,
     context: Context,
     reLogin: () -> Unit,
+    goMatchView : () -> Unit
 ) {
     LaunchedEffect(homeBanner) {
         when (homeBanner) {
@@ -184,12 +187,15 @@ private fun HomeBannerView(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(top = 32.dp, bottom = 40.dp, start = 17.dp, end = 16.dp)
+                .padding(top = 32.dp, bottom = 8.dp, start = 17.dp, end = 16.dp)
         ) {
             HomeBannerUi(
                 data = homeBanner.data,
-                onClick = { bannerId ->
+                closePopUp = { bannerId ->
                     viewModel.removeHomeBannerData(bannerId)
+                },
+                goMyMatch = {
+                    goMatchView()
                 }
             )
         }

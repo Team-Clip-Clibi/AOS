@@ -7,8 +7,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
@@ -326,15 +324,12 @@ fun NoticeBar(notification: List<NotificationData>, onClick: (String) -> Unit) {
         }
     }
 }
-@Composable
-fun HomeBanner(data: ArrayList<HomeBanner>) {
-
-}
 
 @Composable
 fun HomeBannerUi(
     data: List<HomeBanner>,
-    onClick: (Int) -> Unit,
+    closePopUp: (Int) -> Unit,
+    goMyMatch: () -> Unit,
 ) {
     if (data.isEmpty()) return
     var index by remember { mutableIntStateOf(0) }
@@ -413,7 +408,8 @@ fun HomeBannerUi(
                             stringResource(R.string.notify_content_review)
                         else stringResource(R.string.notify_content_okay),
                         style = AppTextStyles.SUBTITLE_18_26_SEMI,
-                        color = ColorStyle.PURPLE_400
+                        color = ColorStyle.PURPLE_400,
+                        modifier = Modifier.clickable { goMyMatch() }
                     )
                     Text(
                         text = "$pos/$total",
@@ -441,7 +437,7 @@ fun HomeBannerUi(
                         visible = false
                         scope.launch {
                             delay(durationMs.toLong())
-                            onClick(item.id)
+                            closePopUp(item.id)
                             visible = true
                             delay(durationMs.toLong())
                             animating = false
@@ -453,101 +449,6 @@ fun HomeBannerUi(
                     contentDescription = "close_${currentType}"
                 )
             }
-        }
-    }
-}
-
-
-@Composable
-fun NotificationBarListStable(
-    notifications: List<NotificationData>,
-    notifyClick: (String) -> Unit,
-) {
-    var currentIndex by remember { mutableIntStateOf(0) }
-    var visible by remember { mutableStateOf(true) }
-
-    LaunchedEffect(notifications) {
-        while (true) {
-            delay(1800)
-            visible = false
-            delay(300)
-            currentIndex = (currentIndex + 1) % notifications.size
-            visible = true
-        }
-    }
-
-    val currentNotification = notifications[currentIndex]
-
-    val targetWidth = if (visible) 1f else 0.9f
-    val animatedWidthFraction by animateFloatAsState(
-        targetValue = targetWidth,
-        animationSpec = tween(300),
-        label = "widthFraction"
-    )
-
-    val animatedAlpha by animateFloatAsState(
-        targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(300),
-        label = "alpha"
-    )
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .graphicsLayer {
-                scaleX = animatedWidthFraction
-                alpha = animatedAlpha
-            }
-    ) {
-        CustomNotifyBar(
-            notifications = listOf(currentNotification),
-            notifyClick = notifyClick,
-        )
-    }
-}
-
-@Composable
-fun CustomNotifyBar(
-    notifications: List<NotificationData>,
-    notifyClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val currentIndex by remember { mutableIntStateOf(0) }
-    val currentNotification = notifications[currentIndex]
-
-    val titleColor =
-        if (currentNotification.noticeType == CONTENT_NOTICE) ColorStyle.RED_100 else ColorStyle.GRAY_800
-    val titleText = if (currentNotification.noticeType == CONTENT_NOTICE)
-        stringResource(R.string.notify_notice)
-    else
-        stringResource(R.string.notify_article)
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(34.dp)
-            .background(color = ColorStyle.GRAY_200)
-            .clickable { notifyClick(currentNotification.link) }
-            .padding(start = 17.dp, end = 8.5.dp)
-    ) {
-        Row(
-            modifier = Modifier.align(Alignment.CenterStart),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = titleText,
-                style = AppTextStyles.CAPTION_12_18_SEMI,
-                color = titleColor
-            )
-
-            Spacer(Modifier.width(12.dp))
-
-            Text(
-                text = currentNotification.content,
-                style = AppTextStyles.CAPTION_12_18_SEMI,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
         }
     }
 }

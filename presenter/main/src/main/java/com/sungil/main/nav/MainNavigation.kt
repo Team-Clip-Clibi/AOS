@@ -90,7 +90,14 @@ fun MainNavigation(
                 oneThingClick = oneThingClick,
                 randomMatchClick = randomMatchClick,
                 reLogin = login,
-                snackBarHostState = snackBarHostState
+                snackBarHostState = snackBarHostState,
+                goMatchView = {
+                    navController.navigate(BottomView.MatchView.screenRoute) {
+                        navController.graph.startDestinationRoute?.let {
+                            popUpTo(it) { saveState = true }
+                        }
+                    }
+                }
             )
         }
 
