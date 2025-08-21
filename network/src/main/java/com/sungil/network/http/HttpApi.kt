@@ -5,6 +5,7 @@ import com.sungil.network.model.AppVersionDTO
 import com.sungil.network.model.AuthToken
 import com.sungil.network.model.Banner
 import com.sungil.network.model.Diet
+import com.sungil.network.model.HomeBannerDTO
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
@@ -437,4 +438,12 @@ interface HttpApi {
     suspend fun requestNotWriteReviewData(
         @Header("Authorization") bearerToken: String,
     ): Response<List<ReviewDTO>>
+
+    /**
+     * 홈 화면 banner
+     */
+    @GET(BuildConfig.HOME_BANNER_URL)
+    suspend fun requestHomeBanner(
+        @Header("Authorization") bearerToken: String,
+    ): Response<List<HomeBannerDTO>>
 }

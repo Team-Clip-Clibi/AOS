@@ -21,7 +21,7 @@ class OneThinMatchActivity : ComponentActivity() {
         setContent {
             OneThingNav(
                 viewModel = viewModel,
-                home = { router.navigation(NAV_HOME) },
+                home = { finish() },
                 pay = { orderId, userId, amount, matchInfo ->
                     val bundle = Bundle().apply {
                         putString(BuildConfig.KEY_USER, userId)

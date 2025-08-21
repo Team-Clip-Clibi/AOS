@@ -22,7 +22,7 @@ class ProfileEditMainActivity : ComponentActivity() {
             ProfileEditNav(
                 viewModel,
                 goToLoginPage = { router.navigation(NAV_LOGOUT) },
-                goToMainPage = { router.navigation(NAV_MAIN) }
+                goToMainPage = { finish() }
             )
         }
     }

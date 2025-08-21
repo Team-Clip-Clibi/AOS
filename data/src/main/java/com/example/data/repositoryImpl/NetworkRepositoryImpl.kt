@@ -16,6 +16,7 @@ import com.sungil.database.token.TokenManager
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietData
 import com.sungil.domain.model.DietResponse
+import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.Love
 import com.sungil.domain.model.LoveResponse
@@ -697,6 +698,25 @@ class NetworkRepositoryImpl @Inject constructor(
                 return NetworkResult.Error(code = appVersion.code(), message = appVersion.message())
             }
             return NetworkResult.Success(appVersion.body()!!.requiredVersion)
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun requestHomeBanner(token: String): NetworkResult<List<Pair<Int, String>>> {
+        try {
+            val homeBanner = api.requestHomeBanner(token)
+            if (!homeBanner.isSuccessful) {
+                return NetworkResult.Error(code = homeBanner.code(), message = homeBanner.message())
+            }
+            if (homeBanner.body() == null) {
+                return NetworkResult.Error(code = homeBanner.code(), message = homeBanner.message())
+            }
+            val bannerData: List<Pair<Int, String>> =
+                homeBanner.body()!!.map { (id, notificationBannerType) ->
+                    id to notificationBannerType
+                }
+            return NetworkResult.Success(bannerData)
         } catch (e: Exception) {
             return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.sungil.domain.model.BannerData
+import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchProgressUiModel
@@ -15,6 +16,7 @@ import com.sungil.domain.model.Participants
 import com.sungil.domain.model.UserData
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFirstMatchInput
+import com.sungil.domain.useCase.GetHomeBanner
 import com.sungil.domain.useCase.GetLatestMatch
 import com.sungil.domain.useCase.GetMatch
 import com.sungil.domain.useCase.GetMatchDetail
@@ -60,6 +62,7 @@ class MainViewModel @Inject constructor(
     private val alarmStatus: GetNotificationStatus,
     private val setAlarmStatus: SetNotifyState,
     private val setPermission: SetPermissionCheck,
+    private val homeBanner: GetHomeBanner
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -109,9 +112,10 @@ class MainViewModel @Inject constructor(
         getBanner()
         getLatestMatch()
         alarm()
+        homeBanner()
     }
 
-    private fun requestUserInfo() {
+    fun requestUserInfo() {
         viewModelScope.launch {
             when (val result = userInfo.invoke()) {
                 is GetUserInfo.Result.Success -> {
@@ -130,7 +134,7 @@ class MainViewModel @Inject constructor(
     }
 
 
-    private fun oneThingNotify() {
+    fun oneThingNotify() {
         viewModelScope.launch {
             when (val result = oneThingNotify.invoke()) {
                 is GetNewNotification.Result.Fail -> {
@@ -149,7 +153,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun serviceNotify() {
+    fun serviceNotify() {
         viewModelScope.launch {
             when (val result = notify.invoke()) {
                 is GetNotification.Result.Fail -> {
@@ -167,7 +171,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun requestMatch() {
+    fun requestMatch() {
         viewModelScope.launch {
             when (val result = match.invoke()) {
                 is GetMatch.Result.Fail -> {
@@ -195,7 +199,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getLatestMatch() {
+    fun getLatestMatch() {
         viewModelScope.launch {
             when (val result = latestDay.invoke()) {
                 is GetLatestMatch.Result.Fail -> {
@@ -370,6 +374,23 @@ class MainViewModel @Inject constructor(
                         state.copy(progressMatchInfo = UiState.Success(result.data))
                     }
                     showBottomSheet()
+                }
+            }
+        }
+    }
+
+    fun homeBanner() {
+        viewModelScope.launch {
+            when (val result = homeBanner.invoke()) {
+                is GetHomeBanner.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(homeBanner = UiState.Error(result.errorMessage))
+                    }
+                }
+                is GetHomeBanner.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(homeBanner = UiState.Success(result.data))
+                    }
                 }
             }
         }
@@ -591,6 +612,18 @@ class MainViewModel @Inject constructor(
     fun initProgressMatch() {
         _userState.value.progressMatchInfo = UiState.Loading
     }
+
+    fun removeHomeBannerData(id : Int){
+        _userState.update { state ->
+            val next = when(val hbData = state.homeBanner){
+                is UiState.Success -> UiState.Success(hbData.data.filterNot { banner -> banner.id ==  id})
+                is UiState.Error   -> hbData
+                UiState.Loading    -> hbData
+            }
+            state.copy(homeBanner = next)
+        }
+    }
+
     sealed interface UiState<out T> {
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
@@ -622,6 +655,7 @@ class MainViewModel @Inject constructor(
         val unAttendMember: ArrayList<String> = arrayListOf(),
         val writeReview: UiState<Int> = UiState.Loading,
         var progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
+        var homeBanner: UiState<List<HomeBanner>> = UiState.Loading
     )
 
 }

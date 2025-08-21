@@ -40,4 +40,14 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.homeBanner()
+        viewModel.requestUserInfo()
+        viewModel.oneThingNotify()
+        viewModel.serviceNotify()
+        viewModel.requestMatch()
+        viewModel.getLatestMatch()
+    }
 }

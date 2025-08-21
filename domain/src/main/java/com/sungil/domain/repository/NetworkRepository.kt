@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.paging.PagingData
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietResponse
+import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.MatchData
@@ -190,4 +191,6 @@ interface NetworkRepository {
     ) : NetworkResult<MatchProgress>
 
     suspend fun requestAppVersion() : NetworkResult<String>
+
+    suspend fun requestHomeBanner(token : String) : NetworkResult<List<Pair<Int , String>>>
 }

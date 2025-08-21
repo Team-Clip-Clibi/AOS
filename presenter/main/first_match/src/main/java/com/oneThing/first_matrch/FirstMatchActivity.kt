@@ -36,7 +36,7 @@ class FirstMatchActivity : ComponentActivity() {
                     }
                 },
                 home = {
-                    router.navigation(NAV_HOME)
+                    finish()
                 }
             )
         }

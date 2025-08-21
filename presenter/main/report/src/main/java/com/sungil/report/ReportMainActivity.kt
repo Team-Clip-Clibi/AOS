@@ -22,7 +22,7 @@ class ReportMainActivity : ComponentActivity() {
             ReportNav(
                 viewModel = viewModel,
                 onProfilePage = {
-                    router.navigation(NAV_MAIN)
+                    finish()
                 }
             )
         }

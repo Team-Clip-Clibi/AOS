@@ -41,6 +41,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -76,12 +77,12 @@ internal fun MyMatchViewScreen(
     val latestDay = state.latestDay
     val userName = state.userDataState
     val context = LocalContext.current
-    var lastBackPressed by remember { mutableStateOf(0L) }
+    var lastBackPressed by remember { mutableLongStateOf(0L) }
     val scope = rememberCoroutineScope()
     BackHandler {
         val now = System.currentTimeMillis()
         if (now - lastBackPressed <= 2000L) {
-            (context as? Activity)?.finish() // 또는 finishAffinity()로 완전 종료
+            (context as? Activity)?.finish()
         } else {
             lastBackPressed = now
             scope.launch {

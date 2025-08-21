@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarDuration
@@ -43,10 +44,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import com.example.core.AppTextStyles
 import com.sungil.domain.model.BannerData
+import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.UserData
 import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
+import com.sungil.main.component.HomeBannerUi
 import com.sungil.main.component.MeetingCardList
 import com.sungil.main.component.NoticeBar
 import kotlinx.coroutines.launch
@@ -97,6 +100,7 @@ internal fun HomeViewScreen(
     val userData = state.userDataState
     val matchState = state.matchState
     val banner = state.banner
+    val homeBanner = state.homeBanner
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -104,6 +108,13 @@ internal fun HomeViewScreen(
             .verticalScroll(rememberScrollState())
     ) {
         NotifyView(notificationState = notificationState, notifyClick = notifyClick)
+        HomeBannerView(
+            homeBanner = homeBanner,
+            viewModel = viewModel,
+            snackBarHost = snackBarHostState,
+            context = context,
+            reLogin = reLogin
+        )
         MatchView(
             userData = userData,
             matchState = matchState,
@@ -135,12 +146,63 @@ private fun NotifyView(
 }
 
 @Composable
+private fun HomeBannerView(
+    homeBanner: MainViewModel.UiState<List<HomeBanner>>,
+    viewModel: MainViewModel,
+    snackBarHost: SnackbarHostState,
+    context: Context,
+    reLogin: () -> Unit,
+) {
+    LaunchedEffect(homeBanner) {
+        when (homeBanner) {
+            is MainViewModel.UiState.Error -> {
+                when (homeBanner.message) {
+                    ERROR_RE_LOGIN -> {
+                        reLogin()
+                    }
+
+                    ERROR_NETWORK_ERROR -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    else -> snackBarHost.showSnackbar(
+                        message = homeBanner.message,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+
+            }
+
+            else -> Unit
+        }
+    }
+    if (homeBanner is MainViewModel.UiState.Success && homeBanner.data.isNotEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(top = 32.dp, bottom = 40.dp, start = 17.dp, end = 16.dp)
+        ) {
+            HomeBannerUi(
+                data = homeBanner.data,
+                onClick = { bannerId ->
+                    viewModel.removeHomeBannerData(bannerId)
+                }
+            )
+        }
+    }
+}
+
+@Composable
 private fun MatchView(
     userData: MainViewModel.UiState<UserData>,
     matchState: MainViewModel.UiState<MatchData>,
     reLogin: () -> Unit,
     snackBarHost: SnackbarHostState,
-    context: Context
+    context: Context,
 ) {
     val visibleCards = remember { mutableStateListOf<MatchInfo>() }
     LaunchedEffect(matchState) {

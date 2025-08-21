@@ -1,5 +1,6 @@
 package com.sungil.onething.di
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -47,35 +48,35 @@ class Router(private val context: Context) : Router {
 
             "MainEditProfile" -> {
                 val intent = Intent(context, ProfileEditMainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
             }
 
             "report" -> {
                 val intent = Intent(context, ReportMainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
             }
 
             "low" -> {
                 val intent = Intent(context, LowActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
             }
 
             "alarm" -> {
                 val intent = Intent(context, AlarmMainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
             }
 
             "oneThing" -> {
                 val intent = Intent(context, OneThinMatchActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
             }
@@ -83,7 +84,7 @@ class Router(private val context: Context) : Router {
             "first_match" -> {
                 val intent = Intent(context, FirstMatchActivity::class.java).apply {
                     putExtras(args)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
             }
@@ -94,6 +95,9 @@ class Router(private val context: Context) : Router {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
+                if (context is Activity) {
+                    context.finish()
+                }
             }
 
             "pay_finish" -> {
@@ -102,12 +106,15 @@ class Router(private val context: Context) : Router {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
+                if (context is Activity) {
+                    context.finish()
+                }
             }
 
             "RandomMatch" -> {
                 val intent = Intent(context, RandomMatchActivity::class.java).apply {
                     putExtras(args)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
             }

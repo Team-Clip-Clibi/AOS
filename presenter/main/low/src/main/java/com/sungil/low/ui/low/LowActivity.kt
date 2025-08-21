@@ -18,7 +18,7 @@ class LowActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LowView(onBackClick = { router.navigation(NAV_MAIN) })
+            LowView(onBackClick = { finish() })
         }
     }
 }

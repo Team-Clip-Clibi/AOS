@@ -24,7 +24,7 @@ class AlarmMainActivity : ComponentActivity() {
             AlarmView(
                 viewModel = viewModel,
                 backClick = {
-                    router.navigation(NAV_MAIN)
+                    finish()
                 },
                 reLogin = {
                     router.navigation(NAV_LOGIN)
