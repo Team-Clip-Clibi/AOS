@@ -16,7 +16,6 @@ import com.sungil.database.token.TokenManager
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietData
 import com.sungil.domain.model.DietResponse
-import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.Love
 import com.sungil.domain.model.LoveResponse

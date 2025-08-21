@@ -4,7 +4,6 @@ import android.app.Activity
 import androidx.paging.PagingData
 import com.sungil.domain.model.BannerData
 import com.sungil.domain.model.DietResponse
-import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.JobList
 import com.sungil.domain.model.LoveResponse
 import com.sungil.domain.model.MatchData
