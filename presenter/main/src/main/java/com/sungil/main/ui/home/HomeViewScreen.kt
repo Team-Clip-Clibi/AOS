@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -61,6 +66,7 @@ import com.sungil.main.component.MeetingCardList
 import com.sungil.main.component.NoticeBar
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeViewScreen(
     viewModel: MainViewModel,
@@ -115,44 +121,59 @@ internal fun HomeViewScreen(
     val reviewLater = state.writeReviewLater
     val dialogInfo by viewModel.dialogIndex.collectAsState()
     val dialogShow by viewModel.actionInFlight.collectAsState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
+    val refresh by viewModel.refreshValue.collectAsState()
+    val pullState = rememberPullRefreshState(
+        refreshing = refresh,
+        onRefresh = { viewModel.refreshData() }
+    )
+    Box(
+        modifier = Modifier.fillMaxSize()
+            .pullRefresh(pullState)
             .background(color = ColorStyle.GRAY_100)
-            .verticalScroll(rememberScrollState())
     ) {
-        NotifyView(notificationState = notificationState, notifyClick = notifyClick)
-        HomeBannerView(
-            homeBanner = homeBanner,
-            viewModel = viewModel,
-            snackBarHost = snackBarHostState,
-            context = context,
-            reLogin = reLogin,
-            goMatchView = goMatchView
-        )
-        MatchView(
-            userData = userData,
-            matchState = matchState,
-            context = context,
-            reLogin = reLogin,
-            snackBarHost = snackBarHostState,
-        )
-        MatchButtonView(
-            randomMatchClick = randomMatchClick,
-            viewModel = viewModel
-        )
-        BannerView(banner = banner)
-        DialogNotWriteReview(
-            notWriteReview = notWriteReview,
-            context = context,
-            snackBarHostState = snackBarHostState,
-            viewModel = viewModel,
-            review = review,
-            participant =participant,
-            reLogin = reLogin,
-            index = dialogInfo,
-            reviewLater = reviewLater,
-            dialogShow = dialogShow
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            NotifyView(notificationState = notificationState, notifyClick = notifyClick)
+            HomeBannerView(
+                homeBanner = homeBanner,
+                viewModel = viewModel,
+                snackBarHost = snackBarHostState,
+                context = context,
+                reLogin = reLogin,
+                goMatchView = goMatchView
+            )
+            MatchView(
+                userData = userData,
+                matchState = matchState,
+                context = context,
+                reLogin = reLogin,
+                snackBarHost = snackBarHostState,
+            )
+            MatchButtonView(
+                randomMatchClick = randomMatchClick,
+                viewModel = viewModel
+            )
+            BannerView(banner = banner)
+            DialogNotWriteReview(
+                notWriteReview = notWriteReview,
+                context = context,
+                snackBarHostState = snackBarHostState,
+                viewModel = viewModel,
+                review = review,
+                participant = participant,
+                reLogin = reLogin,
+                index = dialogInfo,
+                reviewLater = reviewLater,
+                dialogShow = dialogShow
+            )
+        }
+        PullRefreshIndicator(
+            refreshing = refresh,
+            state = pullState,
+            modifier = Modifier.align(Alignment.TopCenter)
         )
     }
 }

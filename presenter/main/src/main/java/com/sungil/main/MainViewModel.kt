@@ -38,11 +38,15 @@ import com.sungil.domain.useCase.SetPermissionCheck
 import com.sungil.domain.useCase.WriteReviewLater
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import java.lang.Thread.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -105,6 +109,9 @@ class MainViewModel @Inject constructor(
     private var _lightDialogShow = MutableStateFlow(false)
     val lightDialogShow: StateFlow<Boolean> = _lightDialogShow.asStateFlow()
 
+    private var _refreshValue = MutableStateFlow(false)
+    val refreshValue : StateFlow<Boolean> = _refreshValue.asStateFlow()
+
     private val _actionInFlight = MutableStateFlow(false)
     val actionInFlight = _actionInFlight.asStateFlow()
     private var participantsData: List<String> = emptyList()
@@ -125,6 +132,70 @@ class MainViewModel @Inject constructor(
         alarm()
         homeBanner()
         notWriteReview()
+    }
+
+    fun refreshData() {
+        viewModelScope.launch {
+            if (_refreshValue.value) return@launch
+            _refreshValue.value = true
+            try {
+                supervisorScope {
+                    val jobOneThing = async {
+                        when (val result = oneThingNotify.invoke()) {
+                            is GetNewNotification.Result.Fail -> {
+                                _userState.update { state ->
+                                    state.copy(oneThingState = UiState.Error(result.errorMessage))
+                                }
+
+                            }
+
+                            is GetNewNotification.Result.Success -> {
+                                _userState.update { state ->
+                                    state.copy(oneThingState = UiState.Success(result.data))
+                                }
+                            }
+                        }
+                    }
+
+                    val jobMatch = async {
+                        when (val result = match.invoke()) {
+                            is GetMatch.Result.Fail -> {
+                                _userState.update { state ->
+                                    state.copy(matchState = UiState.Error(result.errorMessage))
+                                }
+                            }
+
+                            is GetMatch.Result.Success -> {
+                                _userState.update { state ->
+                                    state.copy(matchState = UiState.Success(result.data))
+                                }
+                                startMonitoringMatch(result.data)
+                            }
+                        }
+                    }
+                    val jobReviewWrite = async {
+                        when (val result = notWriteReview.invoke()) {
+                            is GetNotWriteReview.Result.Fail -> {
+                                _userState.update { state ->
+                                    state.copy(notWriteReview = UiState.Error(result.errorMessage))
+                                }
+                            }
+
+                            is GetNotWriteReview.Result.Success -> {
+                                _userState.update { state ->
+                                    state.copy(notWriteReview = UiState.Success(result.data))
+                                }
+                                _dialogIndex.value = 0
+                                _actionInFlight.value = true
+                            }
+                        }
+                    }
+                    awaitAll(jobOneThing, jobMatch, jobReviewWrite)
+                }
+            } finally {
+                _refreshValue.value = false
+            }
+        }
     }
 
     fun requestUserInfo() {
@@ -424,7 +495,7 @@ class MainViewModel @Inject constructor(
         _actionInFlight.value = true
     }
 
-    fun initReviewLater(){
+    fun initReviewLater() {
         _userState.update { state ->
             state.copy(writeReviewLater = UiState.Loading)
         }
@@ -735,7 +806,8 @@ class MainViewModel @Inject constructor(
         var progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
         var homeBanner: UiState<List<HomeBanner>> = UiState.Loading,
         var notWriteReview: UiState<ArrayList<NotWriteReview>> = UiState.Loading,
-        var writeReviewLater : UiState<String> = UiState.Loading
+        var writeReviewLater: UiState<String> = UiState.Loading,
+        var refreshData: UiState<Boolean> = UiState.Loading,
     )
 
 }
