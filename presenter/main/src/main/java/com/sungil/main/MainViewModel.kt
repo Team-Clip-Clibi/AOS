@@ -46,7 +46,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
-import java.lang.Thread.State
 import javax.inject.Inject
 
 @HiltViewModel
