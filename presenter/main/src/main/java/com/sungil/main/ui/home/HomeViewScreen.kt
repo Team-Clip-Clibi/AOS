@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,8 +14,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -35,22 +41,32 @@ import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.ERROR_SAVE_ERROR
 import com.sungil.main.MainViewModel
 import com.sungil.main.R
-import com.sungil.main.component.NotificationBarListStable
 import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import com.example.core.AppTextStyles
+import com.example.core.CustomDialogTwoButton
 import com.sungil.domain.model.BannerData
+import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.MatchData
+import com.sungil.domain.model.NotWriteReview
+import com.sungil.domain.model.Participants
 import com.sungil.domain.model.UserData
+import com.sungil.editprofile.ERROR_NETWORK
+import com.sungil.editprofile.ERROR_TOKEN_EXPIRE
+import com.sungil.main.MatchType
+import com.sungil.main.Participant
 import com.sungil.main.component.AutoSlidingBanner
 import com.sungil.main.component.CustomHomeButton
+import com.sungil.main.component.HomeBannerUi
 import com.sungil.main.component.MeetingCardList
+import com.sungil.main.component.NoticeBar
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeViewScreen(
     viewModel: MainViewModel,
@@ -60,16 +76,18 @@ internal fun HomeViewScreen(
     notifyClick: (String) -> Unit,
     randomMatchClick: () -> Unit,
     reLogin: () -> Unit,
+    goMatchView: () -> Unit,
+    review: (Int , String , List<Participants>) -> Unit
 ) {
     val context = LocalContext.current
     val state by viewModel.userState.collectAsState()
     val notificationState = state.notificationResponseState
-    var lastBackPressed by remember { mutableStateOf(0L) }
+    var lastBackPressed by remember { mutableLongStateOf(0L) }
     val scope = rememberCoroutineScope()
     BackHandler {
         val now = System.currentTimeMillis()
         if (now - lastBackPressed <= 2000L) {
-            (context as? Activity)?.finish() // 또는 finishAffinity()로 완전 종료
+            (context as? Activity)?.finish()
         } else {
             lastBackPressed = now
             scope.launch {
@@ -97,25 +115,66 @@ internal fun HomeViewScreen(
     val userData = state.userDataState
     val matchState = state.matchState
     val banner = state.banner
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
+    val homeBanner = state.homeBanner
+    val notWriteReview = state.notWriteReview
+    val participant = state.participants
+    val reviewLater = state.writeReviewLater
+    val dialogInfo by viewModel.dialogIndex.collectAsState()
+    val dialogShow by viewModel.actionInFlight.collectAsState()
+    val refresh by viewModel.refreshValue.collectAsState()
+    val pullState = rememberPullRefreshState(
+        refreshing = refresh,
+        onRefresh = { viewModel.refreshData() }
+    )
+    Box(
+        modifier = Modifier.fillMaxSize()
+            .pullRefresh(pullState)
             .background(color = ColorStyle.GRAY_100)
-            .verticalScroll(rememberScrollState())
     ) {
-        NotifyView(notificationState = notificationState, notifyClick = notifyClick)
-        MatchView(
-            userData = userData,
-            matchState = matchState,
-            context = context,
-            reLogin = reLogin,
-            snackBarHost = snackBarHostState,
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            NotifyView(notificationState = notificationState, notifyClick = notifyClick)
+            HomeBannerView(
+                homeBanner = homeBanner,
+                viewModel = viewModel,
+                snackBarHost = snackBarHostState,
+                context = context,
+                reLogin = reLogin,
+                goMatchView = goMatchView
+            )
+            MatchView(
+                userData = userData,
+                matchState = matchState,
+                context = context,
+                reLogin = reLogin,
+                snackBarHost = snackBarHostState,
+            )
+            MatchButtonView(
+                randomMatchClick = randomMatchClick,
+                viewModel = viewModel
+            )
+            BannerView(banner = banner)
+            DialogNotWriteReview(
+                notWriteReview = notWriteReview,
+                context = context,
+                snackBarHostState = snackBarHostState,
+                viewModel = viewModel,
+                review = review,
+                participant = participant,
+                reLogin = reLogin,
+                index = dialogInfo,
+                reviewLater = reviewLater,
+                dialogShow = dialogShow
+            )
+        }
+        PullRefreshIndicator(
+            refreshing = refresh,
+            state = pullState,
+            modifier = Modifier.align(Alignment.TopCenter)
         )
-        MatchButtonView(
-            randomMatchClick = randomMatchClick,
-            viewModel = viewModel
-        )
-        BannerView(banner = banner)
     }
 }
 
@@ -126,9 +185,64 @@ private fun NotifyView(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         if (notificationState is MainViewModel.UiState.Success && notificationState.data.isNotEmpty()) {
-            NotificationBarListStable(
-                notifications = notificationState.data,
-                notifyClick = { notifyClick(notificationState.data.first().link) },
+            NoticeBar(
+                notification = notificationState.data,
+                onClick = { notifyClick(notificationState.data.first().link) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeBannerView(
+    homeBanner: MainViewModel.UiState<List<HomeBanner>>,
+    viewModel: MainViewModel,
+    snackBarHost: SnackbarHostState,
+    context: Context,
+    reLogin: () -> Unit,
+    goMatchView : () -> Unit
+) {
+    LaunchedEffect(homeBanner) {
+        when (homeBanner) {
+            is MainViewModel.UiState.Error -> {
+                when (homeBanner.message) {
+                    ERROR_RE_LOGIN -> {
+                        reLogin()
+                    }
+
+                    ERROR_NETWORK_ERROR -> {
+                        snackBarHost.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    else -> snackBarHost.showSnackbar(
+                        message = homeBanner.message,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+
+            }
+
+            else -> Unit
+        }
+    }
+    if (homeBanner is MainViewModel.UiState.Success && homeBanner.data.isNotEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(top = 32.dp, bottom = 8.dp, start = 17.dp, end = 16.dp)
+        ) {
+            HomeBannerUi(
+                data = homeBanner.data,
+                closePopUp = { bannerId ->
+                    viewModel.removeHomeBannerData(bannerId)
+                },
+                goMyMatch = {
+                    goMatchView()
+                }
             )
         }
     }
@@ -140,7 +254,7 @@ private fun MatchView(
     matchState: MainViewModel.UiState<MatchData>,
     reLogin: () -> Unit,
     snackBarHost: SnackbarHostState,
-    context: Context
+    context: Context,
 ) {
     val visibleCards = remember { mutableStateListOf<MatchInfo>() }
     LaunchedEffect(matchState) {
@@ -332,5 +446,136 @@ private fun HandleMatchClick(
 
             else -> Unit
         }
+    }
+}
+
+@Composable
+private fun DialogNotWriteReview(
+    notWriteReview: MainViewModel.UiState<ArrayList<NotWriteReview>>,
+    participant: MainViewModel.UiState<Participant>,
+    reviewLater: MainViewModel.UiState<String>,
+    context: Context,
+    snackBarHostState: SnackbarHostState,
+    viewModel: MainViewModel,
+    reLogin: () -> Unit,
+    index: Int,
+    review: (Int, String, List<Participants>) -> Unit,
+    dialogShow : Boolean
+) {
+    LaunchedEffect(notWriteReview) {
+        when (notWriteReview) {
+            is MainViewModel.UiState.Error -> {
+                when (notWriteReview.message) {
+                    ERROR_RE_LOGIN -> {
+                        reLogin()
+                    }
+
+                    ERROR_NETWORK_ERROR -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+
+                    else -> snackBarHostState.showSnackbar(
+                        message = notWriteReview.message,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+
+            else -> Unit
+        }
+    }
+    LaunchedEffect(participant) {
+        when (participant) {
+            is MainViewModel.UiState.Error -> {
+                when (participant.message) {
+                    ERROR_TOKEN_EXPIRE -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        reLogin()
+                    }
+
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+
+            is MainViewModel.UiState.Success -> {
+                viewModel.plusHomeBanner()
+                review(
+                    participant.data.matchId,
+                    participant.data.matchType,
+                    participant.data.person
+                )
+            }
+
+            else -> Unit
+        }
+    }
+
+    LaunchedEffect(reviewLater) {
+        when (reviewLater) {
+            is MainViewModel.UiState.Error -> {
+                /**
+                 * TODO  배포 시 삭제
+                 */
+                viewModel.plusHomeBanner()
+                when (reviewLater.message) {
+                    ERROR_TOKEN_EXPIRE -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_re_login),
+                            duration = SnackbarDuration.Short
+                        )
+                        reLogin()
+                    }
+
+                    ERROR_NETWORK -> {
+                        snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.msg_network_error),
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+                viewModel.initReviewLater()
+            }
+
+            is MainViewModel.UiState.Success -> {
+                viewModel.plusHomeBanner()
+            }
+
+            else -> Unit
+        }
+    }
+    if (notWriteReview is MainViewModel.UiState.Success && notWriteReview.data.isNotEmpty() && dialogShow) {
+        CustomDialogTwoButton(
+            onDismiss = {
+                viewModel.reviewLater(
+                    matchId = notWriteReview.data[index].id,
+                    matchType = notWriteReview.data[index].type
+                )
+            },
+            buttonClick = {
+                viewModel.getParticipants(
+                    matchId = notWriteReview.data[index].id,
+                    matchType = notWriteReview.data[index].type
+                )
+            },
+            titleText = stringResource(R.string.review_dialog_title),
+            contentText = "${notWriteReview.data[index].simpleTime}일 ${
+                MatchType.fromRoute(
+                    notWriteReview.data[index].type
+                ).matchType
+            }",
+            buttonText = stringResource(R.string.review_dialog_btn_okay),
+            dismissButtonText = stringResource(R.string.review_dialog_btn_cancel)
+        )
     }
 }

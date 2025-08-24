@@ -26,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.core.CustomSnackBar
 import com.example.core.TopAppBarWithCloseButton
+import com.example.core.TopAppBarWithProgress
 import com.oneThing.random.BuildConfig
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
@@ -44,7 +45,6 @@ import com.oneThing.random.component.NAV_RANDOM_MATCH_INTRO
 import com.oneThing.random.component.NAV_RANDOM_TMI
 import com.oneThing.random.component.NAV_RANDOM_TOPIC
 import com.oneThing.random.component.NEXT_DATE_EMPTY
-import com.oneThing.random.component.TopAppBarWithProgress
 import com.oneThing.random.ui.DuplicateMatch
 import com.oneThing.random.ui.RandomBeforePay
 import com.oneThing.random.ui.RandomLocation

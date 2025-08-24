@@ -17,14 +17,18 @@
     <string name="btn_home_oneThing">원띵 모임</string>
     <string name="btn_home_oneThing_content">대화하고 싶은 나만의 주제를 나눠요</string>
     <string name="btn_home_random">랜덤 모임</string>
-    <string name="btn_home_random_content">매주 월요일 7시</string>
+    <string name="btn_home_random_content">매주 금요일 7시</string>
     <string name="btn_home_light">번개 모임</string>
     <string name="btn_home_light_content">오픈 예정이에요</string>
     <string name="msg_not_service">앗! 해당 서비스는 아직 개발중이에요</string>
     <string name="nav_home">홈</string>
-    <string name="nav_calendar">일정</string>
+    <string name="nav_match">내 모임</string>
     <string name="nav_my">마이</string>
     <string name="dialog_login_title">로그인이 필요해요</string>
     <string name="dialog_login_content">원띵 서비스를 이용하시려면 로그인이 필요해요.</string>
     <string name="dialog_login_button">로그인하러 가기</string>
+    <!--Splash-->
+    <string name="dialog_update_title">업데이트 안내</string>
+    <string name="dialog_update_content">새로운 버전이 출시되었습니다. 업데이트 후 이용해 주시기를 바랍니다.</string>
+    <string name="dialog_update_btn">업데이트</string>
 </resources>

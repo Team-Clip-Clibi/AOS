@@ -18,7 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core.ButtonLeftLarge
+import com.example.core.ButtonL
+import com.example.core.ColorStyle
 import com.sungil.editprofile.ERROR_FAIL_SAVE
 import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.editprofile.ERROR_TOKEN_NULL
@@ -95,28 +96,40 @@ internal fun ChangeLanguageMainView(
             )
             .verticalScroll(rememberScrollState())
     ) {
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_language_kor),
             isSelected = uiState.language == LANGUAGE.KOREAN.name,
             onClick = {
                 viewModel.setLanguage(LANGUAGE.KOREAN)
-            }
+            },
+            borderUse = uiState.language == LANGUAGE.KOREAN.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.language == LANGUAGE.KOREAN.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_language_eng),
             isSelected = uiState.language == LANGUAGE.ENGLISH.name,
             onClick = {
                 viewModel.setLanguage(LANGUAGE.ENGLISH)
-            }
+            },
+            borderUse = uiState.language == LANGUAGE.ENGLISH.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.language == LANGUAGE.ENGLISH.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_language_both),
             isSelected = uiState.language == LANGUAGE.BOTH.name,
             onClick = {
                 viewModel.setLanguage(LANGUAGE.BOTH)
-            }
+            },
+            borderUse = uiState.language == LANGUAGE.BOTH.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.language == LANGUAGE.BOTH.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
     }
 }

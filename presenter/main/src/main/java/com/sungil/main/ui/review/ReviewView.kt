@@ -1,15 +1,20 @@
 package com.sungil.main.ui.review
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
@@ -31,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import com.example.core.AppTextStyles
 import com.sungil.main.AllAttend
 import com.sungil.main.REVIEW_DISAPPOINTED_BTN
@@ -40,7 +46,7 @@ import com.sungil.main.ReviewGoodItem
 import com.sungil.main.component.ReviewItemContent
 import com.sungil.main.component.ReviewTextField
 import com.example.core.ButtonCheckBoxLeftL
-import com.example.core.ButtonXXLPurple400
+import com.example.core.ButtonXXL
 import com.sungil.editprofile.ERROR_NETWORK
 import com.sungil.main.ERROR_RE_LOGIN
 import com.sungil.main.REVIEW_BEST_BTN
@@ -67,10 +73,15 @@ internal fun ReviewView(
     val writeReview = uiState.writeReview
     val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+    BackHandler(enabled = true) {
+        viewModel.initParticipants()
+        onClose()
+    }
     LaunchedEffect(writeReview) {
-        when (val result = writeReview) {
+        when (writeReview) {
             is MainViewModel.UiState.Error -> {
-                when (result.message) {
+                when (writeReview.message) {
                     ERROR_NETWORK -> {
                         snackBarHostState.showSnackbar(
                             message = context.getString(R.string.msg_network_error),
@@ -104,6 +115,12 @@ internal fun ReviewView(
         modifier = Modifier
             .fillMaxSize()
             .background(color = ColorStyle.WHITE_100)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                focusManager.clearFocus()
+            }
             .padding(
                 start = 17.dp,
                 end = 16.dp,
@@ -185,9 +202,8 @@ internal fun ReviewView(
                     Spacer(modifier = Modifier.height(22.dp))
                 }
             }
-            ButtonXXLPurple400(
-                buttonText = stringResource(R.string.btn_finish),
-                modifier = Modifier.fillMaxWidth(),
+            ButtonXXL(
+                text = stringResource(R.string.btn_finish),
                 onClick = {
                     viewModel.sendReview(
                         matchId = matchId,
@@ -214,23 +230,28 @@ private fun TopView(viewModel: MainViewModel, review: Int) {
             color = ColorStyle.GRAY_700
         )
         Spacer(modifier = Modifier.height(32.dp))
-        Row(
+        val listState = rememberLazyListState()
+        val fling = rememberSnapFlingBehavior(listState)
+        LazyRow(
             modifier = Modifier.fillMaxWidth(),
+            state = listState,
+            flingBehavior = fling,
+            contentPadding = PaddingValues(horizontal = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally)
         ) {
-            ReviewIcon.entries.forEach { data ->
+            items(ReviewIcon.entries.size) { index ->
+                val data = ReviewIcon.entries[index]
                 ReviewImageView(
                     content = stringResource(data.content),
                     image = data.image,
                     isSelect = review == data.buttonInt,
-                    isClick = {
-                        viewModel.setReviewItem(data.buttonInt)
-                    }
+                    isClick = { viewModel.setReviewItem(data.buttonInt) }
                 )
             }
         }
     }
 }
+
 
 @Composable
 private fun BadReviewView(

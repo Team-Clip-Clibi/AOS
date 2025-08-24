@@ -4,17 +4,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.core.ColorStyle
 import com.sungil.report.R
 import com.sungil.report.REPORT
 import com.sungil.report.ReportViewModel
@@ -30,16 +28,16 @@ internal fun CategoryMainView(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFFFFF))
+            .background(ColorStyle.WHITE_100)
             .padding(top = paddingValues.calculateTopPadding() + 20.dp, start = 17.dp, end = 16.dp)
             .navigationBarsPadding()
             .verticalScroll(scrollState)
     ) {
         CustomReportItem(
             title = stringResource(R.string.txt_category_slang),
-            textColor = 0xFF171717,
+            textColor = ColorStyle.GRAY_800,
             subTitle = "",
-            subTitleColor = 0xFF171717,
+            subTitleColor = ColorStyle.GRAY_800,
             buttonClick = {
                 viewModel.setCategory(REPORT.SLANG)
                 content()
@@ -47,9 +45,9 @@ internal fun CategoryMainView(
         )
         CustomReportItem(
             title = stringResource(R.string.txt_category_crime),
-            textColor = 0xFF171717,
+            textColor = ColorStyle.GRAY_800,
             subTitle = "",
-            subTitleColor = 0xFF171717,
+            subTitleColor = ColorStyle.GRAY_800,
             buttonClick = {
                 viewModel.setCategory(REPORT.CRIME)
                 content()
@@ -57,9 +55,9 @@ internal fun CategoryMainView(
         )
         CustomReportItem(
             title = stringResource(R.string.txt_category_sex),
-            textColor = 0xFF171717,
+            textColor = ColorStyle.GRAY_800,
             subTitle = "",
-            subTitleColor = 0xFF171717,
+            subTitleColor = ColorStyle.GRAY_800,
             buttonClick = {
                 viewModel.setCategory(REPORT.SEX)
                 content()
@@ -67,9 +65,9 @@ internal fun CategoryMainView(
         )
         CustomReportItem(
             title = stringResource(R.string.txt_category_false),
-            textColor = 0xFF171717,
+            textColor = ColorStyle.GRAY_800,
             subTitle = "",
-            subTitleColor = 0xFF171717,
+            subTitleColor = ColorStyle.GRAY_800,
             buttonClick = {
                 viewModel.setCategory(REPORT.FALSE)
                 content()
@@ -77,9 +75,9 @@ internal fun CategoryMainView(
         )
         CustomReportItem(
             title = stringResource(R.string.txt_category_abuse),
-            textColor = 0xFF171717,
+            textColor = ColorStyle.GRAY_800,
             subTitle = "",
-            subTitleColor = 0xFF171717,
+            subTitleColor = ColorStyle.GRAY_800,
             buttonClick = {
                 viewModel.setCategory(REPORT.ABUSING)
                 content()
@@ -87,9 +85,9 @@ internal fun CategoryMainView(
         )
         CustomReportItem(
             title = stringResource(R.string.txt_category_etc),
-            textColor = 0xFF171717,
+            textColor = ColorStyle.GRAY_800,
             subTitle = "",
-            subTitleColor = 0xFF171717,
+            subTitleColor = ColorStyle.GRAY_800,
             buttonClick = {
                 viewModel.setCategory(REPORT.ETC)
                 content()

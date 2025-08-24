@@ -6,6 +6,8 @@ const val ERROR_NOTIFY_SAVE = "Error save Notify"
 const val ERROR_RE_LOGIN = "reLogin"
 const val ERROR_NETWORK = "network error"
 const val ERROR_NOT_SIGNUP = "Not SignUp"
+const val UPDATE_APP = "Update App"
+
 //Banner
 const val BANNER = "LOGIN"
 
@@ -22,7 +24,7 @@ enum class CATEGORY {
 }
 sealed class BottomView(val title: Int, val icon: Int = -1, val screenRoute: String) {
     data object Home : BottomView(R.string.nav_home, R.drawable.ic_home, NAV_HOME)
-    data object MatchView : BottomView(R.string.nav_calendar, R.drawable.ic_calendar, MATCH)
+    data object MatchView : BottomView(R.string.nav_match, R.drawable.ic_calendar, MATCH)
     data object MyPage : BottomView(R.string.nav_my, R.drawable.ic_my, NAV_MY)
 }
 

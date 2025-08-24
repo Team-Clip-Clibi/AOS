@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -30,9 +31,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.core.ButtonXXLPurple400
+import com.example.core.ButtonXXL
 import com.example.core.ColorStyle
 import com.example.core.CustomSnackBar
+import com.example.core.TopAppBarWithProgress
 import com.sungil.onethingmatch.Budget
 import com.sungil.onethingmatch.BuildConfig
 import com.sungil.onethingmatch.CATEGORY
@@ -52,9 +54,8 @@ import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
 import com.sungil.onethingmatch.UiError
 import com.sungil.onethingmatch.component.NotifyMeeting
-import com.sungil.onethingmatch.component.TopAppBarWithProgress
 import com.sungil.onethingmatch.ui.budget.BudgetView
-import com.sungil.onethingmatch.ui.categort.CategoryView
+import com.sungil.onethingmatch.ui.category.CategoryView
 import com.sungil.onethingmatch.ui.day.OneThingDayView
 import com.sungil.onethingmatch.ui.intro.IntroView
 import com.sungil.onethingmatch.ui.location.LocationView
@@ -114,6 +115,7 @@ fun OneThingNav(
                     }
                 }
             }
+
             else -> Unit
         }
 
@@ -159,92 +161,97 @@ fun OneThingNav(
                     color = ColorStyle.GRAY_200
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                ButtonXXLPurple400(
-                    onClick = {
-                        when (currentRoute) {
-                            NAV_INTRO -> {
-                                navController.navigate(NAV_CATEGORY) {
-                                    popUpTo(NAV_CATEGORY) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-
-                            NAV_CATEGORY -> {
-                                navController.navigate(NAV_SUBJECT) {
-                                    popUpTo(NAV_SUBJECT) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-
-                            NAV_SUBJECT -> {
-                                navController.navigate(NAV_LOCATION) {
-                                    popUpTo(NAV_LOCATION) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-
-                            NAV_LOCATION -> {
-                                navController.navigate(NAV_BUDGET) {
-                                    popUpTo(NAV_BUDGET) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-
-                            NAV_BUDGET -> {
-                                navController.navigate(NAV_TMI) {
-                                    popUpTo(NAV_TMI) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-
-                            NAV_TMI -> {
-                                navController.navigate(NAV_DATE) {
-                                    popUpTo(NAV_DATE) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-
-                            NAV_DATE -> {
-                                navController.navigate(NAV_BEFORE_PAY) {
-                                    popUpTo(NAV_BEFORE_PAY) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-                            NAV_BEFORE_PAY -> {
-                                viewModel.checkInstall()
-                            }
-                        }
-                    },
-                    buttonText = when (currentRoute) {
-                        NAV_DATE -> stringResource(R.string.btn_finish)
-                        else -> stringResource(R.string.btn_next)
-                    },
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 17.dp),
-                    isEnable = when (currentRoute) {
-                        NAV_INTRO -> true
-                        NAV_CATEGORY -> uiState.selectedCategories != CATEGORY.NONE
-                        NAV_SUBJECT -> uiState.topic.trim().isNotEmpty() &&
-                                uiState.topic.length <= 50
+                        .wrapContentHeight()
+                        .padding(start = 17.dp, end = 16.dp)
+                ) {
+                    ButtonXXL(
+                        onClick = {
+                            when (currentRoute) {
+                                NAV_INTRO -> {
+                                    navController.navigate(NAV_CATEGORY) {
+                                        popUpTo(NAV_CATEGORY) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
 
-                        NAV_LOCATION -> uiState.location != Location.NONE
-                        NAV_BUDGET -> uiState.budget != Budget.RANGE_NONE
-                        NAV_TMI -> uiState.tmi.trim()
-                            .isNotEmpty() && uiState.tmi.trim().length <= 50
+                                NAV_CATEGORY -> {
+                                    navController.navigate(NAV_SUBJECT) {
+                                        popUpTo(NAV_SUBJECT) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
 
-                        NAV_DATE -> uiState.selectDate.isNotEmpty()
-                        NAV_BEFORE_PAY -> true
-                        else -> false
-                    }
-                )
+                                NAV_SUBJECT -> {
+                                    navController.navigate(NAV_LOCATION) {
+                                        popUpTo(NAV_LOCATION) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+
+                                NAV_LOCATION -> {
+                                    navController.navigate(NAV_BUDGET) {
+                                        popUpTo(NAV_BUDGET) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+
+                                NAV_BUDGET -> {
+                                    navController.navigate(NAV_TMI) {
+                                        popUpTo(NAV_TMI) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+
+                                NAV_TMI -> {
+                                    navController.navigate(NAV_DATE) {
+                                        popUpTo(NAV_DATE) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+
+                                NAV_DATE -> {
+                                    navController.navigate(NAV_BEFORE_PAY) {
+                                        popUpTo(NAV_BEFORE_PAY) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+
+                                NAV_BEFORE_PAY -> {
+                                    viewModel.checkInstall()
+                                }
+                            }
+                        },
+                        text = when (currentRoute) {
+                            NAV_DATE -> stringResource(R.string.btn_finish)
+                            else -> stringResource(R.string.btn_next)
+                        },
+                        isEnable = when (currentRoute) {
+                            NAV_INTRO -> true
+                            NAV_CATEGORY -> uiState.selectedCategories != CATEGORY.NONE
+                            NAV_SUBJECT -> uiState.topic.trim().isNotEmpty() &&
+                                    uiState.topic.length <= 50
+
+                            NAV_LOCATION -> uiState.location != Location.NONE
+                            NAV_BUDGET -> uiState.budget != Budget.RANGE_NONE
+                            NAV_TMI -> uiState.tmi.trim()
+                                .isNotEmpty() && uiState.tmi.trim().length <= 50
+
+                            NAV_DATE -> uiState.selectDate.isNotEmpty()
+                            NAV_BEFORE_PAY -> true
+                            else -> false
+                        }
+                    )
+                }
             }
         },
         snackbarHost = {
@@ -275,7 +282,8 @@ fun OneThingNav(
                     bottom = paddingValues.calculateBottomPadding()
                 )
         ) {
-            composable(NAV_INTRO,
+            composable(
+                NAV_INTRO,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -293,7 +301,8 @@ fun OneThingNav(
                 )
             }
 
-            composable(NAV_CATEGORY,
+            composable(
+                NAV_CATEGORY,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -314,7 +323,8 @@ fun OneThingNav(
                 )
             }
 
-            composable(NAV_SUBJECT,
+            composable(
+                NAV_SUBJECT,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -332,7 +342,8 @@ fun OneThingNav(
                 )
             }
 
-            composable(NAV_LOCATION,
+            composable(
+                NAV_LOCATION,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -353,7 +364,8 @@ fun OneThingNav(
                 )
             }
 
-            composable(NAV_BUDGET,
+            composable(
+                NAV_BUDGET,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -374,7 +386,8 @@ fun OneThingNav(
                 )
             }
 
-            composable(NAV_TMI,
+            composable(
+                NAV_TMI,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -395,7 +408,8 @@ fun OneThingNav(
                 )
             }
 
-            composable(NAV_DATE,
+            composable(
+                NAV_DATE,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
@@ -416,7 +430,8 @@ fun OneThingNav(
                 )
             }
 
-            composable(NAV_BEFORE_PAY,
+            composable(
+                NAV_BEFORE_PAY,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,

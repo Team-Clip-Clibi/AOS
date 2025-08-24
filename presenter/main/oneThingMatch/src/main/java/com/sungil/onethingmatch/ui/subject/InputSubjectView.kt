@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
+import com.example.core.SlidingTextBox
 import com.example.core.TextFieldComponent
 import com.sungil.onethingmatch.OneThingViewModel
 import com.sungil.onethingmatch.R
-import com.sungil.onethingmatch.component.SlidingTextBox
 
 @Composable
 internal fun InputSubjectView(

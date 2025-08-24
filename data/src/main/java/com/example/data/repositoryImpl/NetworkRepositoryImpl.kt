@@ -366,7 +366,7 @@ class NetworkRepositoryImpl @Inject constructor(
 
     override suspend fun requestUpdateToken(refreshToken: String): Triple<Int, String?, String?> {
         val result = api.requestRefreshToken(mapOf("refreshToken" to refreshToken))
-        return Triple(result.code() , result.body()?.accessToken ?: "", result.body()?.refreshToken)
+        return Triple(result.code(), result.body()?.accessToken ?: "", result.body()?.refreshToken)
     }
 
     override suspend fun requestOneThineNotification(accessToken: String): OneThineNotification {
@@ -519,16 +519,16 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     override fun requestMatchNotice(lastTime: String): Flow<PagingData<MatchNotice>> {
-       return Pager(
-           config = PagingConfig(pageSize = 50),
-           pagingSourceFactory = {
-               MatchNoticePagingSource(
-                   api = api,
-                   token = tokenManger,
-                   lastMeetingTime = lastTime
-               )
-           }
-       ).flow
+        return Pager(
+            config = PagingConfig(pageSize = 50),
+            pagingSourceFactory = {
+                MatchNoticePagingSource(
+                    api = api,
+                    token = tokenManger,
+                    lastMeetingTime = lastTime
+                )
+            }
+        ).flow
     }
 
     override suspend fun requestMatchDetail(
@@ -580,7 +580,7 @@ class NetworkRepositoryImpl @Inject constructor(
         token: String,
         matchId: Int,
         matchType: String,
-        lateTime : Int
+        lateTime: Int,
     ): NetworkResult<Int> {
         try {
             val sendLateMatch = api.sendLateMatch(
@@ -682,6 +682,84 @@ class NetworkRepositoryImpl @Inject constructor(
                 return NetworkResult.Error(code = request.code(), message = request.message())
             }
             return NetworkResult.Success(request.body()!!.toMatchProgress())
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun requestAppVersion(): NetworkResult<String> {
+        try {
+            val appVersion = api.requestAppVersion()
+            if (!appVersion.isSuccessful) {
+                return NetworkResult.Error(code = appVersion.code(), message = appVersion.message())
+            }
+            if (appVersion.body() == null) {
+                return NetworkResult.Error(code = appVersion.code(), message = appVersion.message())
+            }
+            return NetworkResult.Success(appVersion.body()!!.requiredVersion)
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun requestHomeBanner(token: String): NetworkResult<List<Pair<Int, String>>> {
+        try {
+            val homeBanner = api.requestHomeBanner(token)
+            if (!homeBanner.isSuccessful) {
+                return NetworkResult.Error(code = homeBanner.code(), message = homeBanner.message())
+            }
+            if (homeBanner.body() == null) {
+                return NetworkResult.Error(code = homeBanner.code(), message = homeBanner.message())
+            }
+            val bannerData: List<Pair<Int, String>> =
+                homeBanner.body()!!.map { (id, notificationBannerType) ->
+                    id to notificationBannerType
+                }
+            return NetworkResult.Success(bannerData)
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun requestNotWriteReview(token: String): NetworkResult<List<Triple<Int, String, String>>> {
+        try {
+            val request = api.requestNotWriteReviewData(token)
+            if (!request.isSuccessful) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            if (request.body() == null) {
+                return NetworkResult.Error(code = request.code(), message = request.message())
+            }
+            val reviewData: List<Triple<Int, String, String>> =
+                request.body()!!.map { (id, time, type) ->
+                    Triple(id, time, type)
+                }
+            return NetworkResult.Success(reviewData)
+        } catch (e: Exception) {
+            return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
+        }
+    }
+
+    override suspend fun requestReviewLater(
+        token: String,
+        matchId: Int,
+        matchType: String
+    ): NetworkResult<Int> {
+        try {
+            val request = api.requestWritePostPone(
+                bearerToken = token,
+                id = matchId,
+                matchingType = matchType
+            )
+            if (!request.isSuccessful) return NetworkResult.Error(
+                code = request.code(),
+                message = request.message()
+            )
+            if (request.code() != 200) return NetworkResult.Error(
+                code = request.code(),
+                message = request.message()
+            )
+            return NetworkResult.Success(request.code())
         } catch (e: Exception) {
             return NetworkResult.Error(code = 500, message = e.localizedMessage, throwable = e)
         }

@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
-import com.example.core.ButtonLeftLarge
+import com.example.core.ButtonL
 import com.example.core.ColorStyle
 import com.sungil.editprofile.ERROR_FAIL_SAVE
 import com.sungil.editprofile.ERROR_FAIL_TO_UPDATE_LOVE
@@ -102,36 +102,52 @@ internal fun LoveStateMainView(
             color = ColorStyle.GRAY_800
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_love_single),
-            isSelected = uiState.loveState == LOVE.SINGLE.name,
             onClick = {
                 viewModel.changeLoveState(LOVE.SINGLE)
-            }
+            },
+            isSelected = uiState.loveState == LOVE.SINGLE.name,
+            borderUse = uiState.loveState == LOVE.SINGLE.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.loveState == LOVE.SINGLE.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_love_ing),
-            isSelected = uiState.loveState == LOVE.COUPLE.name,
             onClick = {
                 viewModel.changeLoveState(LOVE.COUPLE)
-            }
+            },
+            isSelected = uiState.loveState == LOVE.COUPLE.name,
+            borderUse = uiState.loveState == LOVE.COUPLE.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.loveState == LOVE.COUPLE.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_love_married),
-            isSelected = uiState.loveState == LOVE.MARRIAGE.name,
             onClick = {
                 viewModel.changeLoveState(LOVE.MARRIAGE)
-            }
+            },
+            isSelected = uiState.loveState == LOVE.MARRIAGE.name,
+            borderUse = uiState.loveState == LOVE.MARRIAGE.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.loveState == LOVE.MARRIAGE.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_love_no_show),
-            isSelected = uiState.loveState == LOVE.SECRET.name,
             onClick = {
                 viewModel.changeLoveState(LOVE.SECRET)
-            }
+            },
+            isSelected = uiState.loveState == LOVE.SECRET.name,
+            borderUse = uiState.loveState == LOVE.SECRET.name,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (uiState.loveState == LOVE.SECRET.name) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(24.dp))
         HorizontalDivider(
@@ -145,20 +161,28 @@ internal fun LoveStateMainView(
             color = ColorStyle.GRAY_800
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_love_same),
-            isSelected = MEETING.fromDisplayName(uiState.meetSame) == MEETING.SAME,
             onClick = {
                 viewModel.changeMeetState(MEETING.SAME)
-            }
+            },
+            isSelected = MEETING.fromDisplayName(uiState.meetSame) == MEETING.SAME,
+            borderUse = MEETING.fromDisplayName(uiState.meetSame) == MEETING.SAME,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (MEETING.fromDisplayName(uiState.meetSame) == MEETING.SAME) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
         Spacer(modifier = Modifier.height(10.dp))
-        ButtonLeftLarge(
+        ButtonL(
             text = stringResource(R.string.txt_love_never_mind),
-            isSelected = MEETING.fromDisplayName(uiState.meetSame) == MEETING.OKAY,
             onClick = {
                 viewModel.changeMeetState(MEETING.OKAY)
-            }
+            },
+            isSelected = MEETING.fromDisplayName(uiState.meetSame) == MEETING.OKAY,
+            borderUse = MEETING.fromDisplayName(uiState.meetSame) == MEETING.OKAY,
+            borderColor = ColorStyle.PURPLE_200,
+            buttonColor = if (MEETING.fromDisplayName(uiState.meetSame) == MEETING.OKAY) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
+            textCenter = false
         )
     }
 }

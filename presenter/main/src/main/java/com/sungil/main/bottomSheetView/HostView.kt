@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -21,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
-import com.example.core.ButtonXXLPurple400
+import com.example.core.ButtonXXL
 import com.example.core.ColorStyle
 import com.sungil.main.R
 
@@ -43,13 +44,17 @@ internal fun HostView(
                     color = ColorStyle.GRAY_200
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                ButtonXXLPurple400(
-                    buttonText = stringResource(R.string.match_start_next_btn),
-                    onClick = onClick,
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 17.dp, end = 16.dp),
-                )
+                        .wrapContentHeight()
+                        .padding(start = 17.dp, end = 16.dp)
+                ) {
+                    ButtonXXL(
+                        text = stringResource(R.string.match_start_next_btn),
+                        onClick = onClick,
+                    )
+                }
             }
         }
     ) { paddingValues ->

@@ -476,13 +476,12 @@ fun LoginPager(
     HorizontalPager(
         state = state,
         modifier = modifier,
-        contentPadding = PaddingValues(0.dp),
+        contentPadding = PaddingValues(20.dp),
         pageSpacing = 20.dp
     ) { page ->
         Card(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp)
                 .graphicsLayer {
                     val pageOffset = ((state.currentPage - page) + state.currentPageOffsetFraction)
                         .absoluteValue

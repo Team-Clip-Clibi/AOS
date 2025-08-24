@@ -45,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -67,7 +68,7 @@ fun CustomDialogOneButton(
                     shape = RoundedCornerShape(24.dp)
                 )
                 .width(324.dp)
-                .height(194.dp)
+                .wrapContentHeight()
                 .background(
                     color = ColorStyle.WHITE_100,
                     shape = RoundedCornerShape(24.dp)
@@ -76,7 +77,8 @@ fun CustomDialogOneButton(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .wrapContentHeight()
                     .background(color = ColorStyle.WHITE_100)
             ) {
                 Text(
@@ -95,11 +97,9 @@ fun CustomDialogOneButton(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                ButtonPurple100MEDIUM(
+                ButtonM(
                     onClick = buttonClick,
-                    buttonText = buttonText,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    text = buttonText,
                 )
             }
         }
@@ -145,39 +145,17 @@ fun CustomDialogTwoButton(
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = ColorStyle.PURPLE_400
-                    ),
+                ButtonM(
                     onClick = buttonClick,
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text(
-                        text = buttonText,
-                        color = ColorStyle.WHITE_100,
-                        style = AppTextStyles.SUBTITLE_16_24_SEMI
-                    )
-                }
+                    text = buttonText
+                )
                 Spacer(modifier = Modifier.height(10.dp))
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
+                ButtonM(
                     onClick = onDismiss,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = ColorStyle.GRAY_200
-                    )
-                ) {
-                    Text(
-                        text = dismissButtonText,
-                        color = ColorStyle.GRAY_800,
-                        style = AppTextStyles.SUBTITLE_16_24_SEMI
-                    )
-                }
+                    text = dismissButtonText,
+                    containerColor = ColorStyle.GRAY_200,
+                    textColor = ColorStyle.GRAY_800
+                )
             }
         }
     }
@@ -287,6 +265,7 @@ fun CustomDialogOneButton(
     buttonText: String,
     onClick: () -> Unit,
     onClickDetail: () -> Unit,
+    buttonTextColor : Color = ColorStyle.GRAY_800
 ) {
     Column(
         modifier = Modifier
@@ -371,6 +350,7 @@ fun CustomDialogOneButton(
                 text = buttonText,
                 isEnable = !reviewWrite,
                 onClick = onClick,
+                textColor = buttonTextColor
             )
         }
     }
@@ -478,9 +458,12 @@ fun NoticePage(
         )
         if (buttonShow && !latButtonShow) {
             Spacer(modifier = Modifier.height(10.dp))
-            ButtonLWhite(
+            ButtonL(
                 text = buttonText,
-                onClick = onClick
+                onClick = onClick,
+                buttonColor = ColorStyle.WHITE_100,
+                borderUse = true,
+                borderColor = ColorStyle.GRAY_300
             )
         }
         if (buttonShow && latButtonShow) {

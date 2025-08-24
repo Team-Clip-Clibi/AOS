@@ -5,22 +5,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.sungil.domain.model.BannerData
+import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.MatchData
 import com.sungil.domain.model.MatchDetail
 import com.sungil.domain.model.MatchProgressUiModel
 import com.sungil.domain.model.MatchTrigger
+import com.sungil.domain.model.NotWriteReview
 import com.sungil.domain.model.NotificationData
 import com.sungil.domain.model.OneThineNotify
 import com.sungil.domain.model.Participants
 import com.sungil.domain.model.UserData
 import com.sungil.domain.useCase.GetBanner
 import com.sungil.domain.useCase.GetFirstMatchInput
+import com.sungil.domain.useCase.GetHomeBanner
 import com.sungil.domain.useCase.GetLatestMatch
 import com.sungil.domain.useCase.GetMatch
 import com.sungil.domain.useCase.GetMatchDetail
 import com.sungil.domain.useCase.GetMatchNotice
 import com.sungil.domain.useCase.GetMatchingData
 import com.sungil.domain.useCase.GetNewNotification
+import com.sungil.domain.useCase.GetNotWriteReview
 import com.sungil.domain.useCase.GetNotification
 import com.sungil.domain.useCase.GetNotificationStatus
 import com.sungil.domain.useCase.GetParticipants
@@ -31,13 +35,17 @@ import com.sungil.domain.useCase.SendLateMatch
 import com.sungil.domain.useCase.SendMatchReview
 import com.sungil.domain.useCase.SetNotifyState
 import com.sungil.domain.useCase.SetPermissionCheck
+import com.sungil.domain.useCase.WriteReviewLater
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,6 +68,9 @@ class MainViewModel @Inject constructor(
     private val alarmStatus: GetNotificationStatus,
     private val setAlarmStatus: SetNotifyState,
     private val setPermission: SetPermissionCheck,
+    private val homeBanner: GetHomeBanner,
+    private val notWriteReview: GetNotWriteReview,
+    private val reviewLater : WriteReviewLater
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -97,9 +108,18 @@ class MainViewModel @Inject constructor(
     private var _lightDialogShow = MutableStateFlow(false)
     val lightDialogShow: StateFlow<Boolean> = _lightDialogShow.asStateFlow()
 
+    private var _refreshValue = MutableStateFlow(false)
+    val refreshValue : StateFlow<Boolean> = _refreshValue.asStateFlow()
+
+    private val _actionInFlight = MutableStateFlow(false)
+    val actionInFlight = _actionInFlight.asStateFlow()
     private var participantsData: List<String> = emptyList()
     private var matchId: Int = 0
     private var matchType: String = ""
+
+    private var _dialogIndex = MutableStateFlow(0)
+    val dialogIndex = _dialogIndex.asStateFlow()
+
 
     init {
         requestUserInfo()
@@ -109,9 +129,75 @@ class MainViewModel @Inject constructor(
         getBanner()
         getLatestMatch()
         alarm()
+        homeBanner()
+        notWriteReview()
     }
 
-    private fun requestUserInfo() {
+    fun refreshData() {
+        viewModelScope.launch {
+            if (_refreshValue.value) return@launch
+            _refreshValue.value = true
+            try {
+                supervisorScope {
+                    val jobOneThing = async {
+                        when (val result = oneThingNotify.invoke()) {
+                            is GetNewNotification.Result.Fail -> {
+                                _userState.update { state ->
+                                    state.copy(oneThingState = UiState.Error(result.errorMessage))
+                                }
+
+                            }
+
+                            is GetNewNotification.Result.Success -> {
+                                _userState.update { state ->
+                                    state.copy(oneThingState = UiState.Success(result.data))
+                                }
+                            }
+                        }
+                    }
+
+                    val jobMatch = async {
+                        when (val result = match.invoke()) {
+                            is GetMatch.Result.Fail -> {
+                                _userState.update { state ->
+                                    state.copy(matchState = UiState.Error(result.errorMessage))
+                                }
+                            }
+
+                            is GetMatch.Result.Success -> {
+                                _userState.update { state ->
+                                    state.copy(matchState = UiState.Success(result.data))
+                                }
+                                startMonitoringMatch(result.data)
+                            }
+                        }
+                    }
+                    val jobReviewWrite = async {
+                        when (val result = notWriteReview.invoke()) {
+                            is GetNotWriteReview.Result.Fail -> {
+                                _userState.update { state ->
+                                    state.copy(notWriteReview = UiState.Error(result.errorMessage))
+                                }
+                            }
+
+                            is GetNotWriteReview.Result.Success -> {
+                                _userState.update { state ->
+                                    state.copy(notWriteReview = UiState.Success(result.data))
+                                }
+                                _dialogIndex.value = 0
+                                _actionInFlight.value = true
+                            }
+                        }
+                    }
+                    awaitAll(jobOneThing, jobMatch, jobReviewWrite)
+                }
+            } finally {
+                _refreshValue.value = false
+            }
+        }
+    }
+
+    fun requestUserInfo() {
         viewModelScope.launch {
             when (val result = userInfo.invoke()) {
                 is GetUserInfo.Result.Success -> {
@@ -130,7 +216,7 @@ class MainViewModel @Inject constructor(
     }
 
 
-    private fun oneThingNotify() {
+    fun oneThingNotify() {
         viewModelScope.launch {
             when (val result = oneThingNotify.invoke()) {
                 is GetNewNotification.Result.Fail -> {
@@ -149,7 +235,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun serviceNotify() {
+    fun serviceNotify() {
         viewModelScope.launch {
             when (val result = notify.invoke()) {
                 is GetNotification.Result.Fail -> {
@@ -167,7 +253,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun requestMatch() {
+    fun requestMatch() {
         viewModelScope.launch {
             when (val result = match.invoke()) {
                 is GetMatch.Result.Fail -> {
@@ -195,7 +281,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getLatestMatch() {
+    fun getLatestMatch() {
         viewModelScope.launch {
             when (val result = latestDay.invoke()) {
                 is GetLatestMatch.Result.Fail -> {
@@ -370,6 +456,88 @@ class MainViewModel @Inject constructor(
                         state.copy(progressMatchInfo = UiState.Success(result.data))
                     }
                     showBottomSheet()
+                }
+            }
+        }
+    }
+
+    fun homeBanner() {
+        viewModelScope.launch {
+            when (val result = homeBanner.invoke()) {
+                is GetHomeBanner.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(homeBanner = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is GetHomeBanner.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(homeBanner = UiState.Success(result.data))
+                    }
+                }
+            }
+        }
+    }
+
+    fun plusHomeBanner() {
+        _actionInFlight.value = false
+        val list = (_userState.value.notWriteReview as? UiState.Success)?.data ?: return
+        if (list.isEmpty()) return
+        if (list.size <= _dialogIndex.value + 1) return
+        _dialogIndex.value += 1
+        _userState.update { state ->
+            state.copy(
+                participants = UiState.Loading,
+                writeReviewLater = UiState.Loading
+            )
+        }
+        _actionInFlight.value = true
+    }
+
+    fun initReviewLater() {
+        _userState.update { state ->
+            state.copy(writeReviewLater = UiState.Loading)
+        }
+    }
+
+    fun reviewLater(matchId: Int, matchType: String) {
+        viewModelScope.launch {
+            when (val result = reviewLater.invoke(
+                WriteReviewLater.Param(
+                    matchId = matchId,
+                    matchType = matchType
+                )
+            )) {
+                is WriteReviewLater.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(writeReviewLater = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is WriteReviewLater.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(writeReviewLater = UiState.Success("Success"))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun notWriteReview() {
+        viewModelScope.launch {
+            when (val result = notWriteReview.invoke()) {
+                is GetNotWriteReview.Result.Fail -> {
+                    _userState.update { state ->
+                        state.copy(notWriteReview = UiState.Error(result.errorMessage))
+                    }
+                }
+
+                is GetNotWriteReview.Result.Success -> {
+                    _userState.update { state ->
+                        state.copy(notWriteReview = UiState.Success(result.data))
+                    }
+                    _dialogIndex.value = 0
+                    _actionInFlight.value = true
                 }
             }
         }
@@ -591,7 +759,20 @@ class MainViewModel @Inject constructor(
     fun initProgressMatch() {
         _userState.value.progressMatchInfo = UiState.Loading
     }
+
+    fun removeHomeBannerData(id: Int) {
+        _userState.update { state ->
+            val next = when (val hbData = state.homeBanner) {
+                is UiState.Success -> UiState.Success(hbData.data.filterNot { banner -> banner.id == id })
+                is UiState.Error -> hbData
+                UiState.Loading -> hbData
+            }
+            state.copy(homeBanner = next)
+        }
+    }
+
     sealed interface UiState<out T> {
+
         data object Loading : UiState<Nothing>
         data class Success<T>(val data: T) : UiState<T>
         data class Error(val message: String) : UiState<Nothing>
@@ -622,6 +803,10 @@ class MainViewModel @Inject constructor(
         val unAttendMember: ArrayList<String> = arrayListOf(),
         val writeReview: UiState<Int> = UiState.Loading,
         var progressMatchInfo: UiState<MatchProgressUiModel> = UiState.Loading,
+        var homeBanner: UiState<List<HomeBanner>> = UiState.Loading,
+        var notWriteReview: UiState<ArrayList<NotWriteReview>> = UiState.Loading,
+        var writeReviewLater: UiState<String> = UiState.Loading,
+        var refreshData: UiState<Boolean> = UiState.Loading,
     )
 
 }

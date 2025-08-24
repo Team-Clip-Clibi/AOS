@@ -1,9 +1,11 @@
 package com.sungil.network.http
 
 import com.sungil.network.BuildConfig
+import com.sungil.network.model.AppVersionDTO
 import com.sungil.network.model.AuthToken
 import com.sungil.network.model.Banner
 import com.sungil.network.model.Diet
+import com.sungil.network.model.HomeBannerDTO
 import com.sungil.network.model.Job
 import com.sungil.network.model.Language
 import com.sungil.network.model.LoginRequest
@@ -32,6 +34,7 @@ import com.sungil.network.model.MatchNoticeDto
 import com.sungil.network.model.MatchProgressDTO
 import com.sungil.network.model.MatchReviewDTO
 import com.sungil.network.model.ParticipantsDTO
+import com.sungil.network.model.ReviewDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -411,4 +414,36 @@ interface HttpApi {
         @Path("matchingType") type: String,
         @Path("id") id: Int,
     ): Response<MatchProgressDTO>
+
+    /**
+     * APP Version check
+     */
+    @GET(BuildConfig.VERSION_CHECK_URL)
+    suspend fun requestAppVersion(): Response<AppVersionDTO>
+
+    /**
+     * 리뷰 나중에 작성 하기
+     */
+    @PATCH(BuildConfig.MATCH_REVIEW_URL + "/" + "{matchingId}" + "/" + "{matchingType}" + BuildConfig.REVIEW_POSTPONE_URL)
+    suspend fun requestWritePostPone(
+        @Header("Authorization") bearerToken: String,
+        @Path("matchingId") id: Int,
+        @Path("matchingType") matchingType: String,
+    ): Response<Int>
+
+    /**
+     * 리뷰 미작성 데이터
+     */
+    @GET(BuildConfig.MATCH_REVIEW_URL)
+    suspend fun requestNotWriteReviewData(
+        @Header("Authorization") bearerToken: String,
+    ): Response<List<ReviewDTO>>
+
+    /**
+     * 홈 화면 banner
+     */
+    @GET(BuildConfig.HOME_BANNER_URL)
+    suspend fun requestHomeBanner(
+        @Header("Authorization") bearerToken: String,
+    ): Response<List<HomeBannerDTO>>
 }

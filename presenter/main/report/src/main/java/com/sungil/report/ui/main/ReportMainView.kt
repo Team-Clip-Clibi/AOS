@@ -17,12 +17,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-
 import androidx.compose.ui.unit.dp
+import com.example.core.ColorStyle
 import com.sungil.report.R
-import com.sungil.report.ReportViewModel
 import com.sungil.report.ui.CustomGrayButton
 import com.sungil.report.ui.CustomReportItem
 import com.sungil.report.ui.CustomTitleText
@@ -36,7 +34,7 @@ internal fun ReportMainView(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFFFFF))
+            .background(ColorStyle.WHITE_100)
             .verticalScroll(scrollState)
             .navigationBarsPadding()
             .padding(
@@ -55,17 +53,17 @@ internal fun ReportMainView(
             Spacer(Modifier.height(24.dp))
             CustomReportItem(
                 title = stringResource(R.string.txt_main_content_match),
-                textColor = 0xFF171717,
+                textColor = ColorStyle.GRAY_800,
                 subTitle = "",
-                subTitleColor = 0xFF171717,
+                subTitleColor = ColorStyle.GRAY_800,
                 buttonClick = onCategory
             )
 
             CustomReportItem(
                 title = stringResource(R.string.txt_main_content_service),
-                textColor = 0xFF171717,
+                textColor = ColorStyle.GRAY_800,
                 subTitle = "",
-                subTitleColor = 0xFF171717,
+                subTitleColor = ColorStyle.GRAY_800,
                 buttonClick = onCategory
             )
             Spacer(Modifier.weight(1f))
@@ -83,14 +81,14 @@ internal fun ReportMainView(
                 CustomGrayButton(
                     text = stringResource(R.string.btn_main_guide),
                     modifier = Modifier.weight(1f),
-                    color = Color(0xFF171717),
+                    color = ColorStyle.GRAY_800,
                     clickable = {}
                 )
                 Spacer(Modifier.width(12.dp))
                 CustomGrayButton(
                     text = stringResource(R.string.btn_main_one),
                     modifier = Modifier.weight(1f),
-                    color = Color(0xFF171717),
+                    color = ColorStyle.GRAY_800,
                     clickable = {}
                 )
             }

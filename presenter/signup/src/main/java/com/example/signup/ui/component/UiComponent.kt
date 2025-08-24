@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -35,15 +36,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.signup.R
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -58,7 +53,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import com.example.core.AppTextStyles
-import com.example.core.ButtonXXLPurple400
+import com.example.core.ButtonXXL
 import com.example.core.ColorStyle
 import com.example.signup.City
 import com.example.signup.ISArea
@@ -95,7 +90,7 @@ fun CustomCheckBox(
             modifier = Modifier.weight(1f),
             text = text,
             style = AppTextStyles.SUBTITLE_16_24_SEMI,
-            color =  if (checked) ColorStyle.GRAY_800 else ColorStyle.GRAY_400
+            color = if (checked) ColorStyle.GRAY_800 else ColorStyle.GRAY_400
         )
         if (isIconShow) {
             Icon(
@@ -213,7 +208,7 @@ fun BottomSheetSelector(
     cityBottomSheet: Boolean,
     areaBottomSheet: Boolean,
     onSelect: (String) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     var selectedCity by remember { mutableStateOf<City?>(null) }
 
@@ -251,13 +246,14 @@ fun BottomSheetSelector(
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomBottomSheet(
     kind: String,
     onSelect: (String) -> Unit,
     onDismiss: () -> Unit,
-    selectedCity: City? = null
+    selectedCity: City? = null,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
@@ -381,14 +377,18 @@ fun BottomBar(
     ) {
         HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
         Spacer(modifier = Modifier.height(8.dp))
-        ButtonXXLPurple400(
-            onClick = onClick,
-            buttonText = buttonText,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 17.dp),
-            isEnable = isEnable
-        )
+                .wrapContentHeight()
+                .padding(start = 16.dp, end = 17.dp)
+        ) {
+            ButtonXXL(
+                onClick = onClick,
+                text = buttonText,
+                isEnable = isEnable
+            )
+        }
     }
 }
 
@@ -405,13 +405,17 @@ fun AlreadySignUpBottomBar(
     ) {
         HorizontalDivider(thickness = 1.dp, color = ColorStyle.GRAY_200)
         Spacer(modifier = Modifier.height(8.dp))
-        ButtonXXLPurple400(
-            onClick = onClick,
-            buttonText = stringResource(R.string.btn_signUp),
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 17.dp),
-        )
+                .wrapContentHeight()
+                .padding(start = 16.dp, end = 17.dp)
+        ) {
+            ButtonXXL(
+                onClick = onClick,
+                text = stringResource(R.string.btn_signUp),
+            )
+        }
         Spacer(modifier = Modifier.height(18.dp))
         UnderLineText(
             text = stringResource(R.string.btn_signUp_not_mine),

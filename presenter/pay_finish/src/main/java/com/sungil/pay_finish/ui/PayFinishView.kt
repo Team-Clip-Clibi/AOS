@@ -22,8 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core.AppTextStyles
-import com.example.core.ButtonXXLPurple400
-import com.example.core.ButtonXXLWhite
+import com.example.core.ButtonXXL
 import com.example.core.ColorStyle
 import com.example.core.TopAppBarWithCloseButton
 import com.sungil.pay_finish.BuildConfig
@@ -70,20 +69,21 @@ internal fun PayFinishView(
                         .background(color = ColorStyle.WHITE_100)
                         .padding(start = 17.dp, end = 16.dp)
                 ) {
-                    ButtonXXLWhite(
-                        onClick = {},
-                        buttonText = stringResource(R.string.btn_match),
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(60.dp)
+                    ButtonXXL(
+                        onClick = {
+                            /**
+                             * TODO 추후 토스 개발 완료 시 홈화면의 내모임으로 보내는 코드 작성
+                             */
+                        },
+                        text = stringResource(R.string.btn_match),
+                        useBorder = true,
+                        enableButtonColor = ColorStyle.WHITE_100,
+                        enableContentColor = ColorStyle.PURPLE_400,
                     )
                     Spacer(modifier = Modifier.width(10.dp))
-                    ButtonXXLPurple400(
+                    ButtonXXL(
                         onClick = onBackClick,
-                        buttonText = stringResource(R.string.btn_home),
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(60.dp)
+                        text = stringResource(R.string.btn_home),
                     )
                 }
             }
