@@ -36,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,9 +66,11 @@ import com.example.core.AppTextStyles
 import com.example.core.ColorStyle
 import com.sungil.domain.CATEGORY
 import com.sungil.domain.model.BannerData
+import com.sungil.domain.model.HomeBanner
 import com.sungil.domain.model.MatchInfo
 import com.sungil.domain.model.MatchProgressUiModel
 import com.sungil.domain.model.NotificationData
+import com.sungil.domain.model.NotificationType
 import com.sungil.main.BottomSheetView
 import com.sungil.main.CONTENT_NOTICE
 import com.sungil.main.R
@@ -323,37 +326,49 @@ fun NoticeBar(notification: List<NotificationData>, onClick: (String) -> Unit) {
 }
 
 @Composable
-fun NotificationBarListStable(
-    notifications: List<NotificationData>,
-    notifyClick: (String) -> Unit,
+fun HomeBannerUi(
+    data: List<HomeBanner>,
+    closePopUp: (Int) -> Unit,
+    goMyMatch: () -> Unit,
 ) {
-    var currentIndex by remember { mutableIntStateOf(0) }
+    if (data.isEmpty()) return
+    var index by remember { mutableIntStateOf(0) }
     var visible by remember { mutableStateOf(true) }
+    var animating by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
-    LaunchedEffect(notifications) {
-        while (true) {
-            delay(1800)
-            visible = false
-            delay(300)
-            currentIndex = (currentIndex + 1) % notifications.size
-            visible = true
-        }
+    LaunchedEffect(data) {
+        if (index > data.lastIndex) index = data.lastIndex.coerceAtLeast(0)
     }
 
-    val currentNotification = notifications[currentIndex]
-
+    val totals = remember { mutableStateMapOf<NotificationType, Int>() }
+    LaunchedEffect(Unit) {
+        if (totals.isEmpty()) {
+            totals.putAll(data.groupingBy { it.notificationBannerType }.eachCount())
+        }
+    }
+    val dismissed = remember { mutableStateMapOf<NotificationType, Int>() }
+    val durationMs = 200
     val targetWidth = if (visible) 1f else 0.9f
+
     val animatedWidthFraction by animateFloatAsState(
         targetValue = targetWidth,
-        animationSpec = tween(300),
+        animationSpec = tween(durationMs),
         label = "widthFraction"
     )
-
     val animatedAlpha by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(300),
+        animationSpec = tween(durationMs),
         label = "alpha"
     )
+
+    val safeIndex = index.coerceIn(0, data.lastIndex)
+    val item = data[safeIndex]
+    val currentType = item.notificationBannerType
+    val totalRaw = totals[currentType] ?: data.count { it.notificationBannerType == currentType }
+    val total = totalRaw.coerceAtLeast(1)
+    val posRaw = (dismissed[currentType] ?: 0) + 1
+    val pos = posRaw.coerceAtMost(total)
 
     Box(
         modifier = Modifier
@@ -363,55 +378,77 @@ fun NotificationBarListStable(
                 alpha = animatedAlpha
             }
     ) {
-        CustomNotifyBar(
-            notifications = listOf(currentNotification),
-            notifyClick = notifyClick,
-        )
-    }
-}
-
-@Composable
-fun CustomNotifyBar(
-    notifications: List<NotificationData>,
-    notifyClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val currentIndex by remember { mutableIntStateOf(0) }
-    val currentNotification = notifications[currentIndex]
-
-    val titleColor =
-        if (currentNotification.noticeType == CONTENT_NOTICE) ColorStyle.RED_100 else ColorStyle.GRAY_800
-    val titleText = if (currentNotification.noticeType == CONTENT_NOTICE)
-        stringResource(R.string.notify_notice)
-    else
-        stringResource(R.string.notify_article)
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(34.dp)
-            .background(color = ColorStyle.GRAY_200)
-            .clickable { notifyClick(currentNotification.link) }
-            .padding(start = 17.dp, end = 8.5.dp)
-    ) {
         Row(
-            modifier = Modifier.align(Alignment.CenterStart),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(82.dp)
+                .background(ColorStyle.WHITE_100, RoundedCornerShape(14.dp))
+                .padding(start = 18.dp, top = 16.dp, end = 10.dp, bottom = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = titleText,
-                style = AppTextStyles.CAPTION_12_18_SEMI,
-                color = titleColor
-            )
+            Column(Modifier.weight(1f)) {
+                Text(
+                    text = when (currentType) {
+                        NotificationType.MATCHING -> stringResource(R.string.notify_type_matching)
+                        NotificationType.MATCHING_INFO -> stringResource(R.string.notify_type_match_notice)
+                        NotificationType.REVIEW -> stringResource(R.string.notify_type_review)
+                        NotificationType.UNKNOWN -> "UNKNOWN"
+                    },
+                    style = AppTextStyles.BODY_14_20_MEDIUM,
+                    color = ColorStyle.GRAY_700
+                )
+                Spacer(Modifier.height(4.dp))
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (currentType == NotificationType.REVIEW)
+                            stringResource(R.string.notify_content_review)
+                        else stringResource(R.string.notify_content_okay),
+                        style = AppTextStyles.SUBTITLE_18_26_SEMI,
+                        color = ColorStyle.PURPLE_400,
+                        modifier = Modifier.clickable { goMyMatch() }
+                    )
+                    Text(
+                        text = "$pos/$total",
+                        color = ColorStyle.PURPLE_400,
+                        style = AppTextStyles.CAPTION_10_14_MEDIUM,
+                        modifier = Modifier
+                            .defaultMinSize(minWidth = 34.dp)
+                            .height(22.dp)
+                            .background(ColorStyle.PURPLE_100, RoundedCornerShape(20.dp))
+                            .padding(horizontal = 10.dp, vertical = 4.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
 
-            Spacer(Modifier.width(12.dp))
-
-            Text(
-                text = currentNotification.content,
-                style = AppTextStyles.CAPTION_12_18_SEMI,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            // 닫기 버튼
+            Column(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(34.dp)
+                    .padding(9.dp)
+                    .clickable(enabled = !animating) {
+                        dismissed[currentType] = (dismissed[currentType] ?: 0) + 1
+                        animating = true
+                        visible = false
+                        scope.launch {
+                            delay(durationMs.toLong())
+                            closePopUp(item.id)
+                            visible = true
+                            delay(durationMs.toLong())
+                            animating = false
+                        }
+                    }
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_close_gray),
+                    contentDescription = "close_${currentType}"
+                )
+            }
         }
     }
 }
@@ -1011,3 +1048,4 @@ fun MatchingBottomSheet(
         }
     }
 }
+

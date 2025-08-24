@@ -45,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -264,6 +265,7 @@ fun CustomDialogOneButton(
     buttonText: String,
     onClick: () -> Unit,
     onClickDetail: () -> Unit,
+    buttonTextColor : Color = ColorStyle.GRAY_800
 ) {
     Column(
         modifier = Modifier
@@ -348,6 +350,7 @@ fun CustomDialogOneButton(
                 text = buttonText,
                 isEnable = !reviewWrite,
                 onClick = onClick,
+                textColor = buttonTextColor
             )
         }
     }

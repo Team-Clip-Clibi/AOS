@@ -240,7 +240,7 @@ internal fun SplashScreen(
                         },
                         titleText = stringResource(R.string.dialog_update_title),
                         contentText = stringResource(R.string.dialog_update_content),
-                        buttonText = stringResource(R.string.dialog_login_button)
+                        buttonText = stringResource(R.string.dialog_update_btn)
                     )
                 }
             }

@@ -96,6 +96,11 @@
     <string name="dialog_light_title">서비스 준비 중이에요</string>
     <string name="dialog_light_content">빠른 시일내에 준비하여 찾아뵐게요</string>
     <string name="dialog_light_btn">확인</string>
+    <string name="notify_type_matching">모임 매칭이 완료되었어요! 매칭 결과를 확인해요</string>
+    <string name="notify_type_match_notice">최종 안내문이 도착했어요! 지금 확인해 보세요</string>
+    <string name="notify_type_review">오늘 모임은 어떠셨나요? 후기를 남겨주세요</string>
+    <string name="notify_content_okay">확인하기</string>
+    <string name="notify_content_review">후기 남기기</string>
     <!--MyMatch-->
     <string name="my_match_top_bar">내 모임</string>
     <string name="my_match_title">%1$s님의</string>

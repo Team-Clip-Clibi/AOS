@@ -24,7 +24,7 @@ class RandomMatchActivity : ComponentActivity() {
         setContent {
             RandomMatchNav(
                 onBack = {
-                    router.navigation(NAV_HOME)
+                    finish()
                 },
                 loginPage = {
                     router.navigation(NAV_LOGIN)

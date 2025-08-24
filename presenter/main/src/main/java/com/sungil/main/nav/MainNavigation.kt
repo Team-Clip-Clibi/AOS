@@ -90,7 +90,22 @@ fun MainNavigation(
                 oneThingClick = oneThingClick,
                 randomMatchClick = randomMatchClick,
                 reLogin = login,
-                snackBarHostState = snackBarHostState
+                snackBarHostState = snackBarHostState,
+                goMatchView = {
+                    navController.navigate(BottomView.MatchView.screenRoute) {
+                        navController.graph.startDestinationRoute?.let {
+                            popUpTo(it) { saveState = true }
+                        }
+                    }
+                },
+                review = { matchId, matchType, participants ->
+                    viewModel.setReviewData(
+                        participants = participants.map { it -> it.nickName },
+                        matchId = matchId,
+                        matchType = matchType
+                    )
+                    navController.navigate(MainView.REVIEW.route)
+                }
             )
         }
 

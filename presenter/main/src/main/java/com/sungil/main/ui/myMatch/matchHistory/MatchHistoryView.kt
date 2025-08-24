@@ -162,7 +162,8 @@ fun MatchView(
                             matchId = matchData.id,
                             matchType = matchData.matchingType
                         )
-                    }
+                    },
+                    buttonTextColor = if(matchData.isReviewWritten) ColorStyle.GRAY_800 else ColorStyle.WHITE_100
                 )
             }
         }
