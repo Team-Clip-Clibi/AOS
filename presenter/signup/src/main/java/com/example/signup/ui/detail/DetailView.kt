@@ -79,8 +79,10 @@ internal fun DetailView(
                 viewModel.inputGender(MALE)
             },
             borderUse = userInfo.gender == MALE,
-            borderColor = if (userInfo.gender == MALE) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
-            textCenter = false
+            borderColor = if (userInfo.gender == MALE) ColorStyle.PURPLE_200 else ColorStyle.GRAY_100,
+            textCenter = false,
+            buttonColor = ColorStyle.PURPLE_100,
+            disEnableButtonColor = ColorStyle.GRAY_100
         )
         Spacer(modifier = Modifier.height(10.dp))
         ButtonL(
@@ -90,8 +92,10 @@ internal fun DetailView(
                 viewModel.inputGender(FEMALE)
             },
             borderUse = userInfo.gender == FEMALE,
-            borderColor = if (userInfo.gender == FEMALE) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
-            textCenter = false
+            borderColor = if (userInfo.gender == FEMALE) ColorStyle.PURPLE_200 else ColorStyle.GRAY_100,
+            textCenter = false,
+            buttonColor = ColorStyle.PURPLE_100,
+            disEnableButtonColor = ColorStyle.GRAY_100
         )
         Spacer(modifier = Modifier.height(10.dp))
         ButtonL(
@@ -101,8 +105,10 @@ internal fun DetailView(
                 viewModel.inputGender(NON_BINARY)
             },
             borderUse = userInfo.gender == NON_BINARY,
-            borderColor = if (userInfo.gender == NON_BINARY) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100,
-            textCenter = false
+            borderColor = if (userInfo.gender == NON_BINARY) ColorStyle.PURPLE_200 else ColorStyle.GRAY_100,
+            textCenter = false,
+            buttonColor = ColorStyle.PURPLE_100,
+            disEnableButtonColor = ColorStyle.GRAY_100
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(

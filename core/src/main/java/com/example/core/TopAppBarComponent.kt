@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -40,51 +41,50 @@ fun TopAppBarNumber(
     onBackClick: () -> Unit,
     isPageTextShow: Boolean = false,
 ) {
-    CenterAlignedTopAppBar(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .border(width = 1.dp, color = ColorStyle.GRAY_200),
-        title = {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+            .wrapContentHeight()
+            .statusBarsPadding()
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(width = 1.dp, color = ColorStyle.GRAY_200),
+            title = {
                 Text(
                     text = title,
                     style = AppTextStyles.TITLE_20_28_SEMI,
                     textAlign = TextAlign.Center,
-                    color = ColorStyle.GRAY_800
+                    color = ColorStyle.GRAY_800,
+                    modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
                 )
-            }
-        },
-        navigationIcon = {
-            Box(
-                modifier = Modifier.fillMaxHeight()
-                    .size(48.dp)
-                    .clickable { onBackClick() }
-                    .padding(12.dp),
-                contentAlignment = Alignment.Center) {
+            },
+            navigationIcon = {
                 Image(
                     painter = painterResource(id = R.drawable.ic_back_black),
                     contentDescription = "go back",
                     modifier = Modifier
                         .size(24.dp)
+                        .clickable { onBackClick() }
+                        .padding(start = 5.dp, top = 10.dp, bottom = 10.dp)
                 )
-            }
-        },
-        actions = {
-            Text(
-                text = if (!isPageTextShow) "" else "$currentPage/$totalPage",
-                style = AppTextStyles.CAPTION_12_18_SEMI,
-                color = ColorStyle.PURPLE_400,
-                modifier = Modifier.padding(end = 16.dp)
+            },
+            actions = {
+                Text(
+                    text = if (!isPageTextShow) "" else "$currentPage/$totalPage",
+                    style = AppTextStyles.CAPTION_12_18_SEMI,
+                    color = ColorStyle.PURPLE_400,
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .padding(end = 16.dp, top = 10.dp, bottom = 10.dp)
+                )
+            },
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = ColorStyle.WHITE_100
             )
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = ColorStyle.WHITE_100
         )
-    )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

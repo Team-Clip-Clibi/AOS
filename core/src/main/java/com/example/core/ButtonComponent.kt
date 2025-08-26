@@ -110,7 +110,7 @@ fun ButtonL(
     borderUse: Boolean = false,
     borderColor: Color = ColorStyle.PURPLE_200,
     buttonColor: Color = ColorStyle.PURPLE_400,
-    disEnableButtonColor: Color = ColorStyle.GRAY_300,
+    disEnableButtonColor: Color = ColorStyle.GRAY_100,
     contentColor: Color = Color.Black,
 ) {
     Button(
@@ -130,7 +130,7 @@ fun ButtonL(
             ),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isEnable || isSelected) buttonColor else disEnableButtonColor,
+            containerColor = if (isSelected) buttonColor else disEnableButtonColor,
             contentColor = contentColor
         ),
         onClick = onClick,
