@@ -3,16 +3,20 @@ package com.example.core
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,13 +26,83 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+
+@Composable
+fun TopAppbar(
+    title: String,
+    currentPage: Int,
+    totalPage: Int,
+    onBackClick: () -> Unit,
+    isPageShow: Boolean = false,
+    isBackVisible: Boolean = true,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .height(48.dp)
+            .background(color = ColorStyle.WHITE_100)
+            .drawBehind {
+                val strokeWidth = 1.dp.toPx()
+                val y = size.height - strokeWidth / 2
+                drawLine(
+                    color = ColorStyle.GRAY_100,
+                    start = Offset(0f, y),
+                    end = Offset(size.width, y),
+                    strokeWidth = strokeWidth
+                )
+            }
+            .padding(start = 5.dp, end = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (isBackVisible) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_back_black),
+                    contentDescription = "go back",
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding(12.dp)
+                        .clickable { onBackClick() }
+                )
+            } else {
+                Spacer(modifier = Modifier.width(48.dp))
+            }
+            Spacer(Modifier.weight(1f))
+            if (isPageShow) {
+                Text(
+                    text = "$currentPage/$totalPage",
+                    style = AppTextStyles.CAPTION_12_18_SEMI,
+                    color = ColorStyle.PURPLE_400
+                )
+            }
+        }
+
+        Text(
+            text = title,
+            style = AppTextStyles.TITLE_20_28_SEMI,
+            color = ColorStyle.GRAY_800,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
+/**
+ * TODO 이거 대채하라 위에거로
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarNumber(

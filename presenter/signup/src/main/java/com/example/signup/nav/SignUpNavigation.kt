@@ -26,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.core.CustomSnackBar
 import com.example.core.TopAppBarNumber
+import com.example.core.TopAppbar
 import com.example.signup.ERROR_ALREADY_SIGN_UP
 import com.example.signup.ERROR_DATA_NOT_INPUT
 import com.example.signup.ERROR_NETWORK_ERROR
@@ -213,7 +214,7 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
     Scaffold(
         topBar = {
             if(currentRoute != NAV_SIGN_UP_FINISH){
-                TopAppBarNumber(
+                TopAppbar(
                     title = stringResource(R.string.txt_topBar_title),
                     currentPage = when (currentRoute) {
                         NAV_PHONE -> 1
@@ -226,7 +227,7 @@ internal fun SignUpNavigation(viewModel: SignUpViewModel, loginPage: () -> Unit,
                     onBackClick = {
                         if (!navController.popBackStack()) loginPage()
                     },
-                    isPageTextShow = when (currentRoute) {
+                    isPageShow = when (currentRoute) {
                         NAV_TERM -> false
                         NAV_ALREADY_SIGN_UP -> false
                         else -> true
