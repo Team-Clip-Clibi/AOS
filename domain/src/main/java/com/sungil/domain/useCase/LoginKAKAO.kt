@@ -74,7 +74,7 @@ class LoginKAKAO @Inject constructor(
         )
         return when (statusCode) {
             400 -> {
-                database.saveSingUpKey(false)
+                database.saveKaKaoId(kakaoId)
                 Result.Fail("Not SignUp")
             }
 
@@ -83,13 +83,13 @@ class LoginKAKAO @Inject constructor(
                     return Result.Fail("Not SignUp")
                 }
                 database.setToken(accessToken, refreshToken)
+                database.saveKaKaoId(kakaoId)
                 if (!database.getUserDataStatus()) {
                     return Result.Success("SignUp")
                 }
                 val userInfo = networkRepository.requestUserData(TOKEN_FORM + accessToken)
                     ?: return Result.Fail("Network Error")
                 if (userInfo.data.nickName == null || userInfo.data.userName.isEmpty() || userInfo.data.phoneNumber.isEmpty()) {
-                    database.saveSingUpKey(false)
                     return Result.Fail("Not SignUp")
                 }
                 val saved = database.saveUserInfo(
