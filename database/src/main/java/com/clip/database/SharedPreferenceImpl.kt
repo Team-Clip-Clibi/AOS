@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import androidx.core.content.edit
 
 class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val context: Context) :
     SharedPreference {
@@ -36,9 +37,9 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
 
     override suspend fun deleteKAKAOId(): Boolean {
         return try {
-            val editor = preference.edit()
-            editor.remove(BuildConfig.TOKEN_KEY)
-            editor.apply()
+            preference.edit {
+                remove(BuildConfig.TOKEN_KEY)
+            }
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -48,9 +49,9 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
 
     override suspend fun saveSignUp(data: Boolean): Boolean {
         return try {
-            val editor = preference.edit()
-            editor.putBoolean(BuildConfig.signUpKey, data)
-            editor.apply()
+            preference.edit {
+                putBoolean(BuildConfig.signUpKey, data)
+            }
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -69,9 +70,9 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
 
     override suspend fun saveFcmToken(data: String): Boolean {
         return try {
-            val editor = preference.edit()
-            editor.putString(BuildConfig.fcmKey, data)
-            editor.apply()
+            preference.edit {
+                putString(BuildConfig.fcmKey, data)
+            }
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -94,7 +95,7 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
 
     override suspend fun updateFcmToken(data: String): Boolean {
         return try {
-            preference.edit().putString(BuildConfig.fcmKey, data).apply()
+            preference.edit { putString(BuildConfig.fcmKey, data) }
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -104,7 +105,7 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
 
     override suspend fun setNotificationState(data: Boolean): Boolean {
         return try {
-            preference.edit().putBoolean(BuildConfig.NOTIFYKEY, data).apply()
+            preference.edit { putBoolean(BuildConfig.NOTIFYKEY, data) }
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -124,7 +125,7 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
 
     override suspend fun saveFirstMatchInput(): Boolean {
         return try {
-            preference.edit().putBoolean(BuildConfig.MATCH_KEY, true).apply()
+            preference.edit { putBoolean(BuildConfig.MATCH_KEY, true) }
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -153,7 +154,7 @@ class SharedPreferenceImpl @Inject constructor(@ApplicationContext private val c
 
     override suspend fun setPermissionShowCheck(key: String, data: Boolean): Boolean {
         return try {
-            preference.edit().putBoolean(key, data).apply()
+            preference.edit { putBoolean(key, data) }
             true
         } catch (e: Exception) {
             e.printStackTrace()

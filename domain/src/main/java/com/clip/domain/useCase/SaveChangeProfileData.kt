@@ -20,7 +20,7 @@ class SaveChangeProfileData @Inject constructor(private val database: DatabaseRe
     }
 
     override suspend fun invoke(param: Param): Result {
-        val beforeUserData = database.getUserInfo() ?: return Result.Fail("data is null")
+        val beforeUserData = database.getUserInfo()
         beforeUserData.nickName = param.nickName
         beforeUserData.job = param.job
         beforeUserData.loveState = param.loveState

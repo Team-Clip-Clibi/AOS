@@ -20,7 +20,6 @@ data class MatchNotice(
 ) {
     val simpleTime = matchTime.toSimpleTime()
     val detailTime = matchTime.toDetailDate()
-    val week = matchTime.getWeek()
 
     private fun String.toSimpleTime(): String {
         return try {
@@ -38,16 +37,6 @@ data class MatchNotice(
             parsed.format(formatter)
         } catch (e: Exception) {
             this
-        }
-    }
-    private fun String.getWeek(): String {
-        return try {
-            val dateTime = Instant.parse(this).atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
-            val date = dateTime.toLocalDate()
-            val dayOfWeek = date.dayOfWeek
-            dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN)
-        } catch (e: Exception) {
-            "EE"
         }
     }
 }

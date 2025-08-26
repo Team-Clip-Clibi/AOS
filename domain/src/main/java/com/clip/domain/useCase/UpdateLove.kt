@@ -23,9 +23,6 @@ class UpdateLove @Inject constructor(
     override suspend fun invoke(param: Param): Result {
         val token = database.getToken()
         val userData = database.getUserInfo()
-        if (token.first == null || userData == null) {
-            return Result.Fail("token is null")
-        }
         val result = network.requestUpdateLoveState(
             TOKEN_FORM + token.first,
             love = param.love,

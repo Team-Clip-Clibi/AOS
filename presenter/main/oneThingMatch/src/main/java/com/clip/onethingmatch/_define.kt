@@ -1,6 +1,6 @@
 package com.clip.onethingmatch
 
-const val NAV_HOME = "Main"
+
 const val NAV_PAY = "pay"
 
 const val NAV_INTRO = "intro"

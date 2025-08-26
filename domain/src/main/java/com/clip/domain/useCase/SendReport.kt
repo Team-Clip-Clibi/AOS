@@ -22,9 +22,6 @@ class SendReport @Inject constructor(
 
     override suspend fun invoke(param: Param): Result {
         val token = database.getToken()
-        if (token.first == null) {
-            return Result.Fail("token is null")
-        }
         val report = network.requestReport(
             accessToken = TOKEN_FORM + token.first,
             content = param.content,

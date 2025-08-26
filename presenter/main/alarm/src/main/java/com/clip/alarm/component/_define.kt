@@ -5,7 +5,7 @@ enum class NotificationType {
     EVENT,
     NOTICE
 }
-const val NAV_MAIN = "Main"
+
 const val NAV_LOGIN = "Login"
 
 const val ERROR_SERVER = "serverError"

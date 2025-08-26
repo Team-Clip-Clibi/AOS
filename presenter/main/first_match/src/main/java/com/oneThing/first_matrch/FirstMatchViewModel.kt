@@ -130,23 +130,6 @@ class FirstMatchViewModel @Inject constructor(
         }
     }
 
-    fun saveFirstMatch(){
-        viewModelScope.launch {
-            when(val result = saveMatchInput.invoke()){
-                is SaveFirstMatchInput.Result.Fail -> {
-                    _uiState.update { current ->
-                        current.copy(error = UiError.Error(result.message))
-                    }
-                }
-                is SaveFirstMatchInput.Result.Success -> {
-                    _uiState.update { current ->
-                        current.copy(success = UiSuccess.Success(result.message))
-                    }
-                }
-            }
-        }
-    }
-
     fun initSuccessError() {
         _uiState.update { current ->
             current.copy(error = UiError.None, success = UiSuccess.None, dataChange = false)
