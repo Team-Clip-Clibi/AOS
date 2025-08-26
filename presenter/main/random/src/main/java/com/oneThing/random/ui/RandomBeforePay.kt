@@ -15,9 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core.AppTextStyles
-import com.example.core.ColorStyle
-import com.example.core.CustomDialogOneButton
+import com.clip.core.AppTextStyles
+import com.clip.core.ColorStyle
+import com.clip.core.CustomDialogOneButton
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
 import com.oneThing.random.UiError

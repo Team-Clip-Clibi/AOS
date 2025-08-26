@@ -14,7 +14,7 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.sungil.main"
+    namespace = "com.clip.main"
 
     defaultConfig {
         val matchKey: String = properties.getProperty("matchKey", "")

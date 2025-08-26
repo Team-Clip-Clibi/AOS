@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oneThing.random.component.Location
 import com.oneThing.random.component.RandomMatch
-import com.sungil.domain.useCase.CheckRandomMatchDuplicate
-import com.sungil.domain.useCase.CheckTossInstall
-import com.sungil.domain.useCase.GetRandomMatch
+import com.clip.domain.useCase.CheckRandomMatchDuplicate
+import com.clip.domain.useCase.CheckTossInstall
+import com.clip.domain.useCase.GetRandomMatch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

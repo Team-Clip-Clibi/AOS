@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.core.ButtonL
-import com.example.core.ColorStyle
+import com.clip.core.ButtonL
+import com.clip.core.ColorStyle
 import com.oneThing.first_matrch.JOB
 
 @Composable

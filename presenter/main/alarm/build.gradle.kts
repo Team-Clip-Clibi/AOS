@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.alarm"
+    namespace = "com.clip.alarm"
 }
 
 dependencies {

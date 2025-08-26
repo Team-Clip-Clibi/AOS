@@ -9,7 +9,7 @@ import com.oneThing.random.component.NAV_HOME
 import com.oneThing.random.component.NAV_LOGIN
 import com.oneThing.random.component.NAV_PAY
 import com.oneThing.random.nav.RandomMatchNav
-import com.sungil.domain.model.Router
+import com.clip.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

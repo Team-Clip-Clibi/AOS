@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:187754812363:android:28fcbdf7ccad57d117dc4e",
+        "android_client_info": {
+          "package_name": "com.clip.onething"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-ZE-FCcrUza1kTUskiT-vdc4IvF2Tk_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:187754812363:android:069f2d69ac9548f017dc4e",
         "android_client_info": {
           "package_name": "com.sungil.onething"

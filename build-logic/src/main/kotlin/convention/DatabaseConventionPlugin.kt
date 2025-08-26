@@ -19,7 +19,7 @@ class DatabaseConventionPlugin : Plugin<Project> {
         pluginManager.apply("org.jetbrains.kotlin.kapt")
         pluginManager.apply("com.google.devtools.ksp")
         extensions.getByType<LibraryExtension>().apply {
-            namespace = "com.sungil.database"
+            namespace = "com.clip.database"
             compileSdk = 35
             defaultConfig {
                 minSdk = 31

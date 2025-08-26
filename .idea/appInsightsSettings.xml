@@ -9,8 +9,8 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.sungil.onething" />
-                  <option name="mobileSdkAppId" value="1:187754812363:android:069f2d69ac9548f017dc4e" />
+                  <option name="appId" value="com.clip.onething" />
+                  <option name="mobileSdkAppId" value="1:187754812363:android:28fcbdf7ccad57d117dc4e" />
                   <option name="projectId" value="onething-e6252" />
                   <option name="projectNumber" value="187754812363" />
                 </ConnectionSetting>

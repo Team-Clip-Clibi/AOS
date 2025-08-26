@@ -25,11 +25,11 @@ class ApplicationConventionPlugin : Plugin<Project> {
         pluginManager.apply("com.google.devtools.ksp")
 
         extensions.getByType<BaseAppModuleExtension>().apply {
-            namespace = "com.sungil.onething"
+            namespace = "com.clip.onething"
             compileSdk = 35
 
             defaultConfig.apply {
-                applicationId = "com.sungil.onething"
+                applicationId = "com.clip.onething"
                 minSdk = 31
                 targetSdk = 35
                 versionCode = 1

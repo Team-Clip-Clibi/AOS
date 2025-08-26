@@ -18,7 +18,7 @@ class DesignSystemLibraryPlugin : Plugin<Project> {
         pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
 
         extensions.getByType<LibraryExtension>().apply {
-            namespace = "com.example.core"
+            namespace = "com.clip.core"
             compileSdk = 35
             defaultConfig {
                 minSdk = 31
