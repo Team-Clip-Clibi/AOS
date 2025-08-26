@@ -36,7 +36,7 @@ class GetBanner @Inject constructor(
         when (banner.first) {
             200 -> {
                 if (banner.second.isEmpty()) {
-                    return Result.Fail("no banner")
+                    return Result.Success(emptyList())
                 }
                 val data = reMakeHeadText(banner.second)
                 return Result.Success(data)
