@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.signup"
+    namespace = "com.clip.signup"
 }
 
 dependencies {

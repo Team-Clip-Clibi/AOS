@@ -13,7 +13,7 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.sungil.pay_finish"
+    namespace = "com.clip.pay_finish"
 
     defaultConfig {
         val matchKey: String = properties.getProperty("matchKey", "")

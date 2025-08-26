@@ -13,7 +13,7 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.sungil.login"
+    namespace = "com.clip.login"
 
     defaultConfig {
         val notifyPermission: String = properties.getProperty("notifyPermssion", "")

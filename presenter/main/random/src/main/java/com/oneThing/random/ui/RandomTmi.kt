@@ -16,10 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.core.AppTextStyles
-import com.example.core.ColorStyle
-import com.example.core.SlidingTextBox
-import com.example.core.TextFieldComponent
+import com.clip.core.AppTextStyles
+import com.clip.core.ColorStyle
+import com.clip.core.SlidingTextBox
+import com.clip.core.TextFieldComponent
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
 

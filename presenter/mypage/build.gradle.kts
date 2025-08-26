@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.mypage"
+    namespace = "com.clip.mypage"
     compileSdk = 35
 
     defaultConfig {

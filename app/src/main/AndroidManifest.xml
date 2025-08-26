@@ -14,7 +14,7 @@
         android:theme="@style/Theme.OneThing"
         tools:targetApi="31">
         <activity
-            android:name="com.sungil.login.LoginActivity"
+            android:name="com.clip.login.LoginActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.OneThing">
@@ -41,36 +41,36 @@
         </activity>
 
         <activity
-            android:name="com.example.signup.SignUpActivity"
+            android:name="com.clip.signup.SignUpActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity
-            android:name="com.sungil.main.MainActivity"
+            android:name="com.clip.main.MainActivity"
             android:exported="true" />
 
         <activity
-            android:name="com.sungil.editprofile.ProfileEditMainActivity"
+            android:name="com.clip.editprofile.ProfileEditMainActivity"
             android:exported="true" />
 
         <activity
-            android:name="com.sungil.report.ReportMainActivity"
+            android:name="com.clip.report.ReportMainActivity"
             android:exported="true" />
 
         <activity
-            android:name="com.sungil.low.ui.low.LowActivity"
+            android:name="com.clip.low.ui.low.LowActivity"
             android:exported="true" />
 
         <activity
-            android:name="com.sungil.alarm.AlarmMainActivity"
+            android:name="com.clip.alarm.AlarmMainActivity"
             android:exported="true" />
 
         <activity
-            android:name="com.sungil.onethingmatch.OneThinMatchActivity"
+            android:name="com.clip.onethingmatch.OneThinMatchActivity"
             android:exported="true" />
 
         <activity
-            android:name="com.sungil.billing.BillingActivity"
+            android:name="com.clip.billing.BillingActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
@@ -80,7 +80,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity
-            android:name="com.sungil.pay_finish.PayFinishActivity"
+            android:name="com.clip.pay_finish.PayFinishActivity"
             android:exported="false" />
 
         <activity
@@ -96,7 +96,7 @@
             android:exported="true" />
 
         <service
-            android:name="com.example.fcm.FirebaseMessage"
+            android:name="com.clip.fcm.FirebaseMessage"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

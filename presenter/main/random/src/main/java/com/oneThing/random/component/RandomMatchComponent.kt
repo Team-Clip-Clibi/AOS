@@ -26,9 +26,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.core.AppTextStyles
-import com.example.core.ButtonXXL
-import com.example.core.ColorStyle
+import com.clip.core.AppTextStyles
+import com.clip.core.ButtonXXL
+import com.clip.core.ColorStyle
 import com.oneThing.random.R
 
 

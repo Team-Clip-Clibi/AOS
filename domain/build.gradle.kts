@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.domain"
+    namespace = "com.clip.domain"
 }
 
 dependencies {

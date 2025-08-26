@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sungil.low"
+    namespace = "com.clip.low"
 }
 
 dependencies {

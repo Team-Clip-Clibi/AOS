@@ -1,0 +1,317 @@
+package com.clip.onethingmatch.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.clip.core.AppTextStyles
+import com.clip.core.ColorStyle
+import com.clip.domain.model.WeekData
+import com.clip.onethingmatch.CATEGORY
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import com.clip.domain.MATCHTIME
+import com.clip.onethingmatch.R
+
+
+@Composable
+fun CategoryItemView(
+    category: CATEGORY,
+    isSelect: Boolean,
+    onClick: () -> Unit,
+) {
+    val modifier = when (isSelect) {
+        true -> {
+            Modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .border(
+                    width = 1.dp,
+                    color = ColorStyle.PURPLE_200,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .background(color = ColorStyle.PURPLE_100, shape = RoundedCornerShape(8.dp))
+                .padding(10.dp)
+        }
+
+        false -> {
+            Modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .background(ColorStyle.GRAY_100, shape = RoundedCornerShape(8.dp))
+                .padding(10.dp)
+        }
+    }
+    Box(
+        modifier = modifier
+            .clickable { onClick() }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(category.imageId),
+                contentDescription = "message",
+                contentScale = ContentScale.None,
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(40.dp)
+            )
+            Text(
+                text = category.displayName,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_800
+            )
+        }
+    }
+}
+
+@Composable
+fun OneThingDayList(
+    selectData: Set<WeekData>,
+    item: List<WeekData>,
+    onItemSelect: (WeekData) -> Unit,
+) {
+    val flattened = item.flatMap { day ->
+        day.timeSlots.map { slot ->
+            day.copy(timeSlots = listOf(slot))
+        }
+    }
+
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        items(flattened) { current ->
+            OneThingDayAdapter(
+                isSelect = selectData.contains(current),
+                onClick = { onItemSelect(current) },
+                date = current.date,
+                dayOfWeek = current.dayOfWeek,
+                timeSlots = current.timeSlots.firstOrNull() ?: ""
+            )
+        }
+    }
+}
+
+@Composable
+fun OneThingDayAdapter(
+    isSelect: Boolean,
+    onClick: () -> Unit,
+    date: String,
+    dayOfWeek: String,
+    timeSlots: String,
+) {
+    val cardColor = if (isSelect) ColorStyle.PURPLE_100 else ColorStyle.GRAY_100
+    val borderColor = if (isSelect) ColorStyle.PURPLE_200 else Color.Transparent
+    val bottomColor = if (isSelect) ColorStyle.PURPLE_200 else ColorStyle.GRAY_200
+
+    Column(
+        modifier = Modifier
+            .width(88.dp)
+            .height(108.dp)
+            .background(color = cardColor, shape = RoundedCornerShape(8.dp))
+            .border(1.dp, borderColor, shape = RoundedCornerShape(8.dp))
+            .clickable { onClick() }
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = dayOfWeek,
+                style = AppTextStyles.BODY_14_20_MEDIUM,
+                color = ColorStyle.GRAY_800
+            )
+            Text(
+                text = date,
+                style = AppTextStyles.SUBTITLE_18_26_SEMI,
+                color = ColorStyle.GRAY_800
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(32.dp)
+                .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
+                .background(bottomColor),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = when(timeSlots){
+                    MATCHTIME.LUNCH.name -> stringResource(R.string.txt_date_launch)
+                    MATCHTIME.DINNER.name -> stringResource(R.string.txt_date_dinner)
+                    else -> stringResource(R.string.txt_date_dinner)
+                },
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = ColorStyle.GRAY_700
+            )
+        }
+    }
+}
+
+@Composable
+fun SelectDateList(
+    selectItem : Set<WeekData>,
+    onRemoveClick : (WeekData) -> Unit,
+    modifier : Modifier
+){
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(selectItem.toList()){ item->
+            SelectDate(
+                onClick = {onRemoveClick(item)},
+                date = item.date,
+                dayOfWeek = item.dayOfWeek,
+                timeSlots = item.timeSlots.firstOrNull() ?: ""
+            )
+        }
+    }
+}
+
+@Composable
+fun SelectDate(
+    onClick: () -> Unit,
+    date: String,
+    dayOfWeek: String,
+    timeSlots: String,
+) {
+    val timeDate =  when(timeSlots){
+        MATCHTIME.LUNCH.name -> stringResource(R.string.txt_date_launch)
+        MATCHTIME.DINNER.name -> stringResource(R.string.txt_date_dinner)
+        else -> stringResource(R.string.txt_date_dinner)
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "$date($dayOfWeek) · $timeDate",
+                style = AppTextStyles.BODY_14_20_REGULAR,
+                color = ColorStyle.GRAY_800
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_close),
+                contentDescription = "close",
+                tint = ColorStyle.GRAY_300,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable { onClick() }
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = ColorStyle.GRAY_200
+        )
+    }
+}
+
+@Composable
+fun EventView(
+    title: String,
+    content: String,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .height(68.dp)
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 12.dp))
+            .padding(start = 16.dp, end = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_discount),
+            contentDescription = "discount",
+            tint = Color.Unspecified,
+            modifier = Modifier.size(36.dp)
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = title,
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = ColorStyle.PURPLE_400
+            )
+            Text(
+                text = content,
+                style = AppTextStyles.SUBTITLE_16_24_SEMI,
+                color = ColorStyle.GRAY_800
+            )
+        }
+    }
+}
+
+@Composable
+fun NotifyMeeting() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp)
+            .background(color = ColorStyle.WHITE_100, shape = RoundedCornerShape(size = 4.dp))
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, start = 12.dp, end = 12.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_notify),
+                contentDescription = "notify",
+                modifier = Modifier
+                    .width(18.dp)
+                    .height(18.dp),
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = stringResource(R.string.txt_notify_meeting_title),
+                style = AppTextStyles.CAPTION_12_18_SEMI,
+                color = ColorStyle.PURPLE_400,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.txt_notify_meeting_content),
+            style = AppTextStyles.CAPTION_10_14_MEDIUM,
+            color = ColorStyle.GRAY_600,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 40.dp, end = 12.dp)
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+
+    }
+}

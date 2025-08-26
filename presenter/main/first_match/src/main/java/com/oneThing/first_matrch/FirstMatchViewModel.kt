@@ -2,11 +2,11 @@ package com.oneThing.first_matrch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sungil.domain.useCase.GetUserInfo
-import com.sungil.domain.useCase.SaveFirstMatchInput
-import com.sungil.domain.useCase.UpdateDiet
-import com.sungil.domain.useCase.UpdateJob
-import com.sungil.domain.useCase.UpdateLanguage
+import com.clip.domain.useCase.GetUserInfo
+import com.clip.domain.useCase.SaveFirstMatchInput
+import com.clip.domain.useCase.UpdateDiet
+import com.clip.domain.useCase.UpdateJob
+import com.clip.domain.useCase.UpdateLanguage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -122,23 +122,6 @@ class FirstMatchViewModel @Inject constructor(
                 }
 
                 is UpdateLanguage.Result.Success -> {
-                    _uiState.update { current ->
-                        current.copy(success = UiSuccess.Success(result.message))
-                    }
-                }
-            }
-        }
-    }
-
-    fun saveFirstMatch(){
-        viewModelScope.launch {
-            when(val result = saveMatchInput.invoke()){
-                is SaveFirstMatchInput.Result.Fail -> {
-                    _uiState.update { current ->
-                        current.copy(error = UiError.Error(result.message))
-                    }
-                }
-                is SaveFirstMatchInput.Result.Success -> {
                     _uiState.update { current ->
                         current.copy(success = UiSuccess.Success(result.message))
                     }

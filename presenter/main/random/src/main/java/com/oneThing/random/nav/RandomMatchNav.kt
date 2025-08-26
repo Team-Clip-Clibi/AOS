@@ -24,9 +24,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.core.CustomSnackBar
-import com.example.core.TopAppBarWithCloseButton
-import com.example.core.TopAppBarWithProgress
+import com.clip.core.CustomSnackBar
+import com.clip.core.TopAppBarWithCloseButton
+import com.clip.core.TopAppBarWithProgress
 import com.oneThing.random.BuildConfig
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel

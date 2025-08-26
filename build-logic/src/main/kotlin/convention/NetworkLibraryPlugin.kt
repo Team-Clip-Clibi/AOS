@@ -18,7 +18,7 @@ class NetworkLibraryPlugin : Plugin<Project> {
         pluginManager.apply("org.jetbrains.kotlin.kapt")
         pluginManager.apply("com.google.dagger.hilt.android")
         extensions.getByType<LibraryExtension>().apply {
-            namespace = "com.sungil.network"
+            namespace = "com.clip.network"
             compileSdk = 35
             defaultConfig {
                 minSdk = 31

@@ -15,10 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core.AppTextStyles
-import com.example.core.ButtonL
-import com.example.core.ColorStyle
-import com.example.core.TextFieldComponent
+import com.clip.core.AppTextStyles
+import com.clip.core.ButtonL
+import com.clip.core.ColorStyle
+import com.clip.core.TextFieldComponent
 import com.oneThing.first_matrch.DIET
 import com.oneThing.first_matrch.FirstMatchViewModel
 import com.oneThing.first_matrch.R

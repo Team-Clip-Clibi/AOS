@@ -1,0 +1,35 @@
+package com.clip.domain.useCase
+
+import com.clip.domain.TOKEN_FORM
+import com.clip.domain.UseCase
+import com.clip.domain.repository.DatabaseRepository
+import com.clip.domain.repository.NetworkRepository
+import javax.inject.Inject
+
+class SignOut @Inject constructor(
+    private val network: NetworkRepository,
+    private val database: DatabaseRepository,
+) {
+    sealed interface Result : UseCase.Result {
+        data class Success(val message: String) : Result
+        data class Fail(val errorMessage: String) : Result
+    }
+
+    suspend fun invoke(): Result {
+        val deleteKakaoId = database.deleteKaKaoId()
+        val deleteUserInfo = database.deleteUserIfo()
+        val token = database.getToken()
+        val requestSignOut = network.requestSignOut(
+            TOKEN_FORM + token.second
+        )
+        if (requestSignOut != 200) {
+            return Result.Fail("network error")
+        }
+        val deleteToken = database.removeToken()
+        val signInActivate = database.saveSingUpKey(false)
+        if (!deleteKakaoId || !deleteUserInfo || !deleteToken || !signInActivate) {
+            return Result.Fail("delete fail")
+        }
+        return Result.Success("good bye")
+    }
+}

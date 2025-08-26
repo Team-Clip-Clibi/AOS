@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.oneThing.first_matrch.nav.FirstMatchNav
-import com.sungil.domain.model.Router
+import com.clip.domain.model.Router
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

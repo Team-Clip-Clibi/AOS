@@ -13,7 +13,7 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.sungil.onethingmatch"
+    namespace = "com.clip.onethingmatch"
 
     defaultConfig {
         val userIdKey: String = properties.getProperty("userIdKey", "")
