@@ -49,5 +49,6 @@ class MainActivity : ComponentActivity() {
         viewModel.serviceNotify()
         viewModel.requestMatch()
         viewModel.getLatestMatch()
+        viewModel.setFirstMatchInit()
     }
 }
