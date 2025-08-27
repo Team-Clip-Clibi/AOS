@@ -27,7 +27,7 @@ private fun MatchNoticeDto.toMatchNotice(): MatchNotice {
         matchType = this.matchingType,
         restaurantName = this.restaurantName,
         restaurantAddress = this.location,
-        menuCategory = this.menuCategory,
+        menuCategory = this.menu,
         jonInfos = this.jobInfos.map {
             Job(
                 jobName = it.jobName,
@@ -35,6 +35,7 @@ private fun MatchNoticeDto.toMatchNotice(): MatchNotice {
             )
         },
         diet = this.dietaryList,
-        category = this.myOneThingContent
+        category = this.myOneThingContent,
+        cuisineType = this.cuisineType
     )
 }

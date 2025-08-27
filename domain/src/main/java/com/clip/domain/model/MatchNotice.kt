@@ -3,7 +3,6 @@ package com.clip.domain.model
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.util.Locale
 
 data class MatchNotice(
@@ -13,10 +12,11 @@ data class MatchNotice(
     val matchType: String,
     val restaurantName: String,
     val restaurantAddress: String,
+    val cuisineType: String,
     val menuCategory: String,
     val jonInfos: List<Job>,
     val diet: List<String>,
-    val category : String
+    val category: String,
 ) {
     val simpleTime = matchTime.toSimpleTime()
     val detailTime = matchTime.toDetailDate()

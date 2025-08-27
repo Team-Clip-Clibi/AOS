@@ -43,7 +43,8 @@ class MatchNoticePagingSource @Inject constructor(
                         matchType = "ONE_THING",
                         restaurantName = "한옥마루 강남점",
                         restaurantAddress = "서울 강남구 강남대로 106번길 25",
-                        menuCategory = "양식(파스타 및 피자)",
+                        cuisineType = "양식",
+                        menuCategory = "파스타 및 피자",
                         jonInfos = listOf(
                             Job(
                                 "학생",
@@ -75,7 +76,8 @@ class MatchNoticePagingSource @Inject constructor(
                         matchType = "RANDOM",
                         restaurantName = "한옥마루 강남점",
                         restaurantAddress = "서울 강남구 강남대로 106번길 25",
-                        menuCategory = "양식(파스타 및 피자)",
+                        cuisineType = "양식",
+                        menuCategory = "파스타 및 피자",
                         jonInfos = listOf(
                             Job(
                                 "학생",

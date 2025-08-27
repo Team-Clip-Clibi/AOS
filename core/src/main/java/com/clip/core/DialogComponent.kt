@@ -423,7 +423,7 @@ fun NoticePage(
             color = ColorStyle.GRAY_800,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         NoticeItemView(
             image = painterResource(R.drawable.ic_match_notice_calendar),
             text = dateDetail,

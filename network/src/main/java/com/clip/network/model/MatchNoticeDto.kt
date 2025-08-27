@@ -11,7 +11,8 @@ data class MatchNoticeDto(
     val myOneThingContent: String,
     val restaurantName: String,
     val location: String,
-    val menuCategory: String,
+    val menu: String,
+    val cuisineType : String,
     val jobInfos: List<JobInfo>,
     val dietaryList: List<String>,
 )
