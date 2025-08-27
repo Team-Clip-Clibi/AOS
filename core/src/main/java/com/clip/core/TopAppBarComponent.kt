@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,13 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,13 +30,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
-
-
 @Composable
 fun TopAppbar(
     title: String,
-    currentPage: Int,
-    totalPage: Int,
+    currentPage: Int = 0,
+    totalPage: Int = 0,
     onBackClick: () -> Unit,
     isPageShow: Boolean = false,
     isBackVisible: Boolean = true,
@@ -51,7 +43,7 @@ fun TopAppbar(
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .height(48.dp)
+            .height(60.dp)
             .background(color = ColorStyle.WHITE_100)
             .drawBehind {
                 val strokeWidth = 1.dp.toPx()
@@ -82,7 +74,7 @@ fun TopAppbar(
                 Spacer(modifier = Modifier.width(48.dp))
             }
             Spacer(Modifier.weight(1f))
-            if (isPageShow) {
+            if (isPageShow && totalPage != 0) {
                 Text(
                     text = "$currentPage/$totalPage",
                     style = AppTextStyles.CAPTION_12_18_SEMI,
@@ -101,126 +93,69 @@ fun TopAppbar(
     }
 }
 
-/**
- * TODO 이거 대채하라 위에거로
- */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarNumber(
-    title: String,
-    currentPage: Int,
-    totalPage: Int,
-    onBackClick: () -> Unit,
-    isPageTextShow: Boolean = false,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .statusBarsPadding()
-    ) {
-        CenterAlignedTopAppBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(width = 1.dp, color = ColorStyle.GRAY_200),
-            title = {
-                Text(
-                    text = title,
-                    style = AppTextStyles.TITLE_20_28_SEMI,
-                    textAlign = TextAlign.Center,
-                    color = ColorStyle.GRAY_800,
-                    modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
-                )
-            },
-            navigationIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_back_black),
-                    contentDescription = "go back",
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable { onBackClick() }
-                        .padding(start = 5.dp, top = 10.dp, bottom = 10.dp)
-                )
-            },
-            actions = {
-                Text(
-                    text = if (!isPageTextShow) "" else "$currentPage/$totalPage",
-                    style = AppTextStyles.CAPTION_12_18_SEMI,
-                    color = ColorStyle.PURPLE_400,
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .padding(end = 16.dp, top = 10.dp, bottom = 10.dp)
-                )
-            },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = ColorStyle.WHITE_100
-            )
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBarWithCloseButton(
+fun TopAppbarClose(
     title: String,
     onBackClick: () -> Unit,
     isNavigationShow: Boolean = true,
     isActionShow: Boolean = true,
-    tint : Color = ColorStyle.GRAY_300
+    tint: Color = ColorStyle.GRAY_300,
 ) {
-    Column {
-        CenterAlignedTopAppBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .height(60.dp),
-            title = {
-                Text(
-                    text = title,
-                    style = AppTextStyles.TITLE_20_28_SEMI,
-                    textAlign = TextAlign.Center,
-                    color = ColorStyle.GRAY_800,
-                    modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .height(60.dp)
+            .background(color = ColorStyle.WHITE_100)
+            .drawBehind {
+                val strokeWidth = 1.dp.toPx()
+                val y = size.height - strokeWidth / 2
+                drawLine(
+                    color = ColorStyle.GRAY_200,
+                    start = Offset(0f, y),
+                    end = Offset(size.width, y),
+                    strokeWidth = strokeWidth
                 )
-            },
-            navigationIcon = {
-                if (isNavigationShow) {
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .clickable { onBackClick() }
-                            .padding(12.dp)) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_back_gray),
-                            contentDescription = "go back",
-                            modifier = Modifier
-                                .padding(12.dp)
-                                .size(24.dp)
-                        )
-                    }
-                }
-            },
-            actions = {
-                if (isActionShow) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_close),
-                        contentDescription = "close",
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .size(24.dp)
-                            .clickable { onBackClick() },
-                        colorFilter = ColorFilter.tint(tint)
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = ColorStyle.WHITE_100
-            )
-        )
-
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = ColorStyle.GRAY_200
+            }
+            .padding(start = 5.dp, end = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (isNavigationShow) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_back_black),
+                    contentDescription = "close",
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .size(48.dp)
+                        .clickable { onBackClick() },
+                )
+            } else {
+                Spacer(modifier = Modifier.width(48.dp))
+            }
+            Spacer(Modifier.weight(1f))
+            if (isActionShow) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_close),
+                    contentDescription = "close",
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .size(48.dp)
+                        .clickable { onBackClick() },
+                    colorFilter = ColorFilter.tint(tint)
+                )
+            } else {
+                Spacer(modifier = Modifier.width(48.dp))
+            }
+        }
+        Text(
+            text = title,
+            style = AppTextStyles.TITLE_20_28_SEMI,
+            textAlign = TextAlign.Center,
+            color = ColorStyle.GRAY_800,
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }
@@ -239,7 +174,7 @@ fun TopAppBarWithProgress(
     )
 
     Column {
-        TopAppBarNumber(
+        TopAppbar(
             title = title,
             currentPage = if (currentPage >= 0) currentPage else 0,
             totalPage = totalPage,

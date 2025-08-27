@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.clip.core.CustomSnackBar
-import com.clip.core.TopAppBarWithCloseButton
 import com.clip.main.MainViewModel
 import com.clip.main.BottomView
 import com.clip.main.MainView
@@ -38,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import com.clip.core.CustomDialogImageOneButton
 import com.clip.core.CustomDialogTwoButton
+import com.clip.core.TopAppbarClose
 import com.clip.editprofile.ERROR_NETWORK
 import com.clip.editprofile.ERROR_TOKEN_EXPIRE
 import com.clip.main.component.MatchingBottomSheet
@@ -93,7 +93,7 @@ fun MainScreenView(
         topBar = {
             when (currentRoute) {
                 MainView.REVIEW.route -> {
-                    TopAppBarWithCloseButton(
+                    TopAppbarClose(
                         title = stringResource(R.string.review_app_bar),
                         onBackClick = {
                             viewModel.initParticipants()
@@ -104,7 +104,7 @@ fun MainScreenView(
                 }
 
                 MainView.ALARM.route -> {
-                    TopAppBarWithCloseButton(
+                    TopAppbarClose(
                         title = stringResource(R.string.alarm_top_bar),
                         onBackClick = {
                             navController.popBackStack()

@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.clip.core.ColorStyle
-import com.clip.core.TopAppBarWithCloseButton
 import com.clip.main.MainViewModel
 import com.clip.main.R
 import androidx.compose.material3.Text
@@ -29,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import com.clip.core.TopAppbarClose
 import com.clip.main.MATCH_KEY_APPLIED
 import com.clip.main.MATCH_KEY_CANCELLED
 import com.clip.main.MatchType
@@ -39,10 +39,9 @@ internal fun PayDetailView(viewModel: MainViewModel, onBack: () -> Unit) {
     val detail = (viewState.matchDetail as MainViewModel.UiState.Success).data
     Scaffold(
         topBar = {
-            TopAppBarWithCloseButton(
+            TopAppbarClose(
                 title = stringResource(R.string.pay_detail_info),
                 onBackClick = onBack,
-                isNavigationShow = true,
                 isActionShow = false
             )
         }

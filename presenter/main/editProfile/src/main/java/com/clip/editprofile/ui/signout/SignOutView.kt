@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.clip.core.ButtonXXL
 import com.clip.core.ColorStyle
 import com.clip.core.CustomSnackBar
-import com.clip.core.TopAppBarNumber
+import com.clip.core.TopAppbar
 import com.clip.editprofile.ProfileEditViewModel
 import com.clip.editprofile.R
 
@@ -36,11 +36,8 @@ internal fun SignOutView(
     val snackBarHostState = remember { SnackbarHostState() }
     Scaffold(
         topBar = {
-            TopAppBarNumber(
+            TopAppbar(
                 title = stringResource(R.string.top_sign_out),
-                currentPage = 0,
-                totalPage = 0,
-                isPageTextShow = false,
                 onBackClick = {
                     viewModel.initSuccessError()
                     onBackClick()

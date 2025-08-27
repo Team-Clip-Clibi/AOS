@@ -40,7 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import com.clip.core.AppTextStyles
 import com.clip.core.ButtonL
-import com.clip.core.TopAppBarNumber
+import com.clip.core.TopAppbar
 import com.clip.domain.model.MatchDate
 import com.clip.editprofile.JOB
 import com.clip.main.CATEGORY
@@ -56,14 +56,12 @@ internal fun MeetDetailView(viewModel: MainViewModel, onBack: () -> Unit, payDet
 
     Scaffold(
         topBar = {
-            TopAppBarNumber(
+            TopAppbar(
                 title = stringResource(R.string.match_detail_top_bar),
                 onBackClick = {
                     viewModel.setMatchDetailInit()
                     onBack()
-                },
-                currentPage = 0,
-                totalPage = 0
+                }
             )
         },
         snackbarHost = {

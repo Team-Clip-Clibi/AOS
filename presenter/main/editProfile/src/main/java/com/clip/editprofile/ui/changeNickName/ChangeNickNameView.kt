@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.clip.core.ButtonXXL
 import com.clip.core.ColorStyle
 import com.clip.core.CustomSnackBar
-import com.clip.core.TopAppBarWithCloseButton
+import com.clip.core.TopAppbarClose
 import com.clip.editprofile.ProfileEditViewModel
 import com.clip.editprofile.R
 
@@ -37,14 +37,13 @@ internal fun ChangeNickNameView(
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
         topBar = {
-            TopAppBarWithCloseButton(
+            TopAppbarClose(
                 title = stringResource(R.string.top_bar_change_nick_name),
                 onBackClick = {
                     viewModel.initSuccessError()
                     onBackClick()
                 },
                 isNavigationShow = false,
-                isActionShow = true,
             )
         },
         snackbarHost = {

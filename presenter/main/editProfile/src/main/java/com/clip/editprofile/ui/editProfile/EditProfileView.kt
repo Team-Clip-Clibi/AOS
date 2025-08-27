@@ -3,7 +3,7 @@ package com.clip.editprofile.ui.editProfile
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.clip.core.TopAppBarNumber
+import com.clip.core.TopAppbar
 import com.clip.editprofile.ProfileEditViewModel
 import com.clip.editprofile.R
 
@@ -21,10 +21,8 @@ internal fun EditProfileView(
 ) {
     Scaffold(
         topBar = {
-            TopAppBarNumber(
+            TopAppbar(
                 title = stringResource(R.string.top_bar_profile),
-                currentPage = 0,
-                totalPage =  0,
                 onBackClick = actionButtonClick,
             )
         }

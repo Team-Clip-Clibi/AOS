@@ -25,8 +25,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.clip.core.CustomSnackBar
-import com.clip.core.TopAppBarWithCloseButton
 import com.clip.core.TopAppBarWithProgress
+import com.clip.core.TopAppbarClose
 import com.oneThing.random.BuildConfig
 import com.oneThing.random.R
 import com.oneThing.random.RandomMatchViewModel
@@ -157,12 +157,11 @@ internal fun RandomMatchNav(
         topBar = {
             when (currentRoute) {
                 NAV_RANDOM_MATCH_DUPLICATE -> {
-                    TopAppBarWithCloseButton(
+                    TopAppbarClose(
                         title = stringResource(R.string.top_app_bar_random_match),
                         onBackClick = {
                             if (!navController.popBackStack()) onBack()
                         },
-                        isNavigationShow = false,
                         isActionShow = true
                     )
                 }

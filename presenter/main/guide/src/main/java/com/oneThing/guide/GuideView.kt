@@ -34,12 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.clip.core.AppTextStyles
 import com.clip.core.ColorStyle
-import com.clip.core.TopAppBarWithCloseButton
+import com.clip.core.TopAppbarClose
 
 @Composable
 internal fun GuideView(onClose: () -> Unit) {
     Scaffold(topBar = {
-        TopAppBarWithCloseButton(
+        TopAppbarClose(
             title = stringResource(R.string.top_meet_guide),
             onBackClick = { onClose() },
             isNavigationShow = false,

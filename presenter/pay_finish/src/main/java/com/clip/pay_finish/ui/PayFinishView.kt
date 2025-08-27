@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.clip.core.AppTextStyles
 import com.clip.core.ButtonXXL
 import com.clip.core.ColorStyle
-import com.clip.core.TopAppBarWithCloseButton
+import com.clip.core.TopAppbarClose
 import com.clip.pay_finish.BuildConfig
 import com.clip.pay_finish.R
 
@@ -35,7 +35,7 @@ internal fun PayFinishView(
 ) {
     Scaffold(
         topBar = {
-            TopAppBarWithCloseButton(
+            TopAppbarClose(
                 title = when (orderType) {
                     BuildConfig.ONE_THING -> {
                         stringResource(R.string.top_bar_oneThing)
