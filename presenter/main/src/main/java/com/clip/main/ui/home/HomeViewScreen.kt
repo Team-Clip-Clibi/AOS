@@ -387,7 +387,7 @@ private fun BannerView(banner: MainViewModel.UiState<List<BannerData>>) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 40.dp, start = 17.dp, end = 16.dp, bottom = 32.dp)
+                .padding(top = 40.dp, bottom = 32.dp)
         ) {
             AutoSlidingBanner(
                 image = banner.data

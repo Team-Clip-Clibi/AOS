@@ -684,18 +684,16 @@ fun AutoSlidingBanner(
             }
         }
     }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        HorizontalPager(
-            state = pagerState,
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.fillMaxWidth(),
+        pageSpacing = 35.dp
+    ) { page ->
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-        ) { page ->
+                .padding(start = 17.dp, end = 16.dp)
+        ) {
             val context = LocalContext.current
             AsyncImage(
                 model = ImageRequest.Builder(context)
@@ -708,16 +706,26 @@ fun AutoSlidingBanner(
                     .clip(RoundedCornerShape(8.dp))
             )
         }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         PageIndicator(
             numberOfPages = image.size,
             selectedPage = pagerState.currentPage,
             modifier = Modifier.padding(bottom = 2.dp),
-            selectedColor = ColorStyle.PURPLE_400 ,
+            selectedColor = ColorStyle.PURPLE_400,
             defaultColor = ColorStyle.GRAY_400,
             space = 6.dp,
         )
     }
 }
+
+
 @Composable
 fun PageIndicator(
     numberOfPages: Int,
