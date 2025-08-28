@@ -81,35 +81,6 @@ fun ButtonXXL(
             style = AppTextStyles.TITLE_20_28_SEMI,
         )
     }
-//    Button(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(60.dp)
-//            .then(
-//                if (useBorder) {
-//                    Modifier.border(
-//                        width = 1.dp,
-//                        color = borderColor,
-//                        shape = RoundedCornerShape(12.dp)
-//                    )
-//                } else {
-//                    Modifier
-//                }
-//            ),
-//        onClick = onClick,
-//        enabled = isEnable,
-//        shape = RoundedCornerShape(12.dp),
-//        colors = ButtonDefaults.buttonColors(
-//            containerColor = if (isEnable) enableButtonColor else disEnableButtonColor,
-//            contentColor = if (isEnable) enableContentColor else disEnableContentColor
-//        )
-//    ) {
-//        Text(
-//            text = text,
-//            color = if (isEnable) enableTextColor else disEnableTextColor,
-//            style = AppTextStyles.TITLE_20_28_SEMI,
-//        )
-//    }
 }
 
 @Composable
@@ -153,7 +124,6 @@ fun ButtonL(
     borderColor: Color = ColorStyle.PURPLE_200,
     buttonColor: Color = ColorStyle.PURPLE_400,
     disEnableButtonColor: Color = ColorStyle.GRAY_100,
-    contentColor: Color = Color.Black,
 ) {
     Column(
         modifier = Modifier

@@ -11,10 +11,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.clip.core.CustomSnackBar
+import com.clip.core.TopAppbarClose
 import com.clip.report.R
 import com.clip.report.ReportViewModel
-import com.clip.report.ui.CustomSnackBar
-import com.clip.report.ui.CustomTopBar
 
 @Composable
 internal fun CategoryView(
@@ -29,9 +29,10 @@ internal fun CategoryView(
 
     Scaffold(
         topBar = {
-            CustomTopBar(
+            TopAppbarClose(
                 title = stringResource(R.string.top_category),
-                onBackClick = { onBackClick() }
+                onBackClick = { onBackClick() },
+                isActionShow = false
             )
         },
         snackbarHost = {

@@ -24,14 +24,13 @@ internal fun CategoryMainView(
     paddingValues: PaddingValues,
     content : () -> Unit
 ) {
-    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(ColorStyle.WHITE_100)
             .padding(top = paddingValues.calculateTopPadding() + 20.dp, start = 17.dp, end = 16.dp)
             .navigationBarsPadding()
-            .verticalScroll(scrollState)
+            .verticalScroll(rememberScrollState())
     ) {
         CustomReportItem(
             title = stringResource(R.string.txt_category_slang),
