@@ -78,7 +78,7 @@ internal fun PayFinishView(
                         text = stringResource(R.string.btn_match),
                         useBorder = true,
                         enableButtonColor = ColorStyle.WHITE_100,
-                        enableContentColor = ColorStyle.PURPLE_400,
+                        enableTextColor = ColorStyle.PURPLE_400,
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     ButtonXXL(

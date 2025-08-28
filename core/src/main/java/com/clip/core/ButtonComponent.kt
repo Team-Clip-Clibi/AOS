@@ -3,7 +3,12 @@ package com.clip.core
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
@@ -38,38 +46,70 @@ fun ButtonXXL(
     disEnableTextColor: Color = ColorStyle.GRAY_800,
     enableButtonColor: Color = ColorStyle.PURPLE_400,
     disEnableButtonColor: Color = ColorStyle.GRAY_200,
-    enableContentColor: Color = ColorStyle.WHITE_100,
-    disEnableContentColor: Color = ColorStyle.GRAY_200,
 ) {
-    Button(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
+            .background(
+                color = if (isEnable) enableButtonColor else disEnableButtonColor,
+                shape = RoundedCornerShape(12.dp)
+            )
             .then(
-                if (useBorder) {
+                if(useBorder){
                     Modifier.border(
                         width = 1.dp,
                         color = borderColor,
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(8.dp)
                     )
-                } else {
+                }else{
                     Modifier
                 }
+            )
+            .clickable(
+                onClick = onClick,
+                enabled = isEnable,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
             ),
-        onClick = onClick,
-        enabled = isEnable,
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (isEnable) enableButtonColor else disEnableButtonColor,
-            contentColor = if (isEnable) enableContentColor else disEnableContentColor
-        )
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = text,
-            color = if (isEnable) enableTextColor else disEnableTextColor,
+            color = if(isEnable) enableTextColor else disEnableTextColor,
             style = AppTextStyles.TITLE_20_28_SEMI,
         )
     }
+//    Button(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(60.dp)
+//            .then(
+//                if (useBorder) {
+//                    Modifier.border(
+//                        width = 1.dp,
+//                        color = borderColor,
+//                        shape = RoundedCornerShape(12.dp)
+//                    )
+//                } else {
+//                    Modifier
+//                }
+//            ),
+//        onClick = onClick,
+//        enabled = isEnable,
+//        shape = RoundedCornerShape(12.dp),
+//        colors = ButtonDefaults.buttonColors(
+//            containerColor = if (isEnable) enableButtonColor else disEnableButtonColor,
+//            contentColor = if (isEnable) enableContentColor else disEnableContentColor
+//        )
+//    ) {
+//        Text(
+//            text = text,
+//            color = if (isEnable) enableTextColor else disEnableTextColor,
+//            style = AppTextStyles.TITLE_20_28_SEMI,
+//        )
+//    }
 }
 
 @Composable
@@ -77,19 +117,21 @@ fun ButtonM(
     onClick: () -> Unit,
     text: String,
     containerColor: Color = ColorStyle.PURPLE_400,
-    contentColor: Color = ColorStyle.PURPLE_400,
     textColor: Color = ColorStyle.WHITE_100,
 ) {
-    Button(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = contentColor
-        ),
-        onClick = onClick,
-        shape = RoundedCornerShape(12.dp)
+            .height(48.dp)
+            .background(color = containerColor, shape = RoundedCornerShape(12.dp))
+            .clickable(
+                onClick = onClick,
+                enabled = true,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = text,
@@ -113,10 +155,14 @@ fun ButtonL(
     disEnableButtonColor: Color = ColorStyle.GRAY_100,
     contentColor: Color = Color.Black,
 ) {
-    Button(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
+            .clip(shape = RoundedCornerShape(8.dp))
+            .background(
+                color = if (isSelected) buttonColor else disEnableButtonColor,
+            )
             .then(
                 if (borderUse) {
                     Modifier.border(
@@ -127,25 +173,21 @@ fun ButtonL(
                 } else {
                     Modifier
                 }
-            ),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSelected) buttonColor else disEnableButtonColor,
-            contentColor = contentColor
-        ),
-        onClick = onClick,
-        enabled = isEnable,
-        contentPadding = PaddingValues(
-            start = 17.dp,
-            end = 16.dp
-        )
+            )
+            .clickable(
+                onClick = onClick,
+                enabled = isEnable,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            )
+            .padding(start = 17.dp, end = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = if (textCenter) Alignment.CenterHorizontally else Alignment.Start
     ) {
         Text(
             text = text,
             color = textColor,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = if (textCenter) TextAlign.Center else TextAlign.Start
         )
     }
 }
@@ -220,35 +262,33 @@ fun CircularCheckBoxLarge(
 }
 
 
-
 @Composable
 fun ButtonSmall(
     text: String,
     isEnable: Boolean = true,
     onClick: () -> Unit,
 ) {
-    Button(
+    Column(
         modifier = Modifier
             .width(104.dp)
-            .height(36.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(
-            when (isEnable) {
-                true -> ColorStyle.PURPLE_100
-                false -> ColorStyle.GRAY_200
-            }
-        ),
-        onClick = onClick,
-        enabled = isEnable
+            .height(36.dp)
+            .background(
+                color = if (isEnable) ColorStyle.PURPLE_100 else ColorStyle.GRAY_200,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable(
+                onClick = onClick,
+                enabled = isEnable,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            )
+            .padding(start = 20.dp, end = 20.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment=  Alignment.CenterHorizontally
     ) {
         Text(
             text = text,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
             style = AppTextStyles.BODY_14_20_MEDIUM,
-            modifier = Modifier
-                .width(52.dp)
-                .height(20.dp),
             color = when (isEnable) {
                 true -> ColorStyle.PURPLE_400
                 false -> ColorStyle.GRAY_800

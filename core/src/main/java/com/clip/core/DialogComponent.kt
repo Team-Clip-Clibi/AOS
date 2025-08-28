@@ -1,5 +1,6 @@
 package com.clip.core
 
+import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -350,7 +351,10 @@ fun CustomDialogOneButton(
                 text = buttonText,
                 isEnable = !reviewWrite,
                 onClick = onClick,
-                textColor = buttonTextColor
+                textColor = buttonTextColor,
+                isSelected = !reviewWrite,
+                buttonColor = ColorStyle.PURPLE_400,
+                disEnableButtonColor = ColorStyle.GRAY_300
             )
         }
     }

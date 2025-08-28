@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.clip.core.AppTextStyles
+import com.clip.core.ButtonL
 import com.clip.core.ColorStyle
 import com.clip.editprofile.JOB
 import com.clip.editprofile.R
@@ -191,7 +192,7 @@ fun GraySpacer() {
 fun JobGridSelector(
     selectedJobs: JOB,
     onJobToggle: (JOB) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -200,32 +201,19 @@ fun JobGridSelector(
         modifier = modifier
     ) {
         items(JOB.entries.toList()) { job ->
-            val isSelected = selectedJobs == job
-            if(job != JOB.NONE){
-                OutlinedButton(
+            if (job != JOB.NONE) {
+                ButtonL(
                     onClick = {
                         onJobToggle(job)
                     },
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = if (isSelected) Color(0xFFF9F0FF) else Color(0xFFF7F7F7),
-                        contentColor = Color.Black
-                    ),
-                    border = BorderStroke(
-                        1.dp,
-                        if (isSelected) Color(0xFFD3ADF7) else Color.Transparent
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier
-                        .width(175.dp)
-                        .height(48.dp)
-
-                ) {
-                    Text(
-                        text = job.displayName,
-                        style = AppTextStyles.BODY_14_20_MEDIUM,
-                        color = Color(0xFF171717)
-                    )
-                }
+                    text = job.displayName,
+                    textColor = ColorStyle.GRAY_800,
+                    isSelected = selectedJobs == job,
+                    borderUse = selectedJobs == job,
+                    borderColor = ColorStyle.PURPLE_200,
+                    buttonColor = ColorStyle.PURPLE_100,
+                    disEnableButtonColor = ColorStyle.GRAY_100
+                )
             }
         }
     }

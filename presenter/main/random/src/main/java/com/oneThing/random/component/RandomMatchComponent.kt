@@ -93,7 +93,7 @@ fun DuplicateBottomBar(
                     text = stringResource(R.string.random_duplicate_button_meet),
                     useBorder = true,
                     enableButtonColor = ColorStyle.WHITE_100,
-                    enableContentColor = ColorStyle.PURPLE_400
+                    enableTextColor = ColorStyle.PURPLE_400
                 )
             }
             Box(modifier = Modifier.weight(1f)) {
