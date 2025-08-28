@@ -21,11 +21,18 @@ android {
         val oneThing: String = properties.getProperty("oneThing", "")
         val random: String = properties.getProperty("random", "")
         val notifyPermission: String = properties.getProperty("notifyPermssion", "")
+        val userIdKey: String = properties.getProperty("userIdKey", "")
+        val orderKey: String = properties.getProperty("orderKey", "")
+        val amountKey: String = properties.getProperty("amountKey", "")
 
         buildConfigField("String", "NOTIFY_PERMISSION_KEY", notifyPermission)
         buildConfigField("String", "ONE_THING", oneThing)
         buildConfigField("String", "RANDOM", random)
         buildConfigField("String", "KEY_MATCH", matchKey)
+        buildConfigField("String", "KEY_ORDER", orderKey)
+        buildConfigField("String", "KEY_USER", userIdKey)
+        buildConfigField("String", "KEY_AMOUNT", amountKey)
+        buildConfigField("String", "MATCH_INFO", oneThing)
     }
 }
 

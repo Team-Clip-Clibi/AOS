@@ -122,6 +122,21 @@ class FirstMatchViewModel @Inject constructor(
                 }
 
                 is UpdateLanguage.Result.Success -> {
+                    finishFirstMatch()
+                }
+            }
+        }
+    }
+
+   private fun finishFirstMatch(){
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val result = saveMatchInput.invoke()){
+                is SaveFirstMatchInput.Result.Fail -> {
+                    _uiState.update { current ->
+                        current.copy(error = UiError.Error(result.message))
+                    }
+                }
+                is SaveFirstMatchInput.Result.Success -> {
                     _uiState.update { current ->
                         current.copy(success = UiSuccess.Success(result.message))
                     }

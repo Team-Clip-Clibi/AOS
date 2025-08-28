@@ -150,6 +150,11 @@ enum class CATEGORY(val displayName: String) {
     }
 }
 
+enum class NAV_ROOT {
+    HOME,
+    ONE_THING
+}
+
 val bottomNavItems = listOf(
     BottomView.Home,
     BottomView.MatchView,
