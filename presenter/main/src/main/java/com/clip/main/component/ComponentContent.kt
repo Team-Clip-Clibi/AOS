@@ -41,6 +41,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -665,9 +666,17 @@ fun AutoSlidingBanner(
     intervalMillis: Long = 4000L,
     scrollDuration: Int = 500,
 ) {
-    val pagerState = rememberPagerState(pageCount = { image.size })
+    if (image.isEmpty()) return
 
-    LaunchedEffect(Unit) {
+    val loop = image.size > 1
+    val pages = if (loop) listOf(image.last()) + image + listOf(image.first()) else image
+    val initialPage = if (loop) 1 else 0
+    val pagerState = rememberPagerState(
+        initialPage = initialPage,
+        pageCount = { pages.size }
+    )
+    LaunchedEffect(loop, intervalMillis, scrollDuration, pagerState) {
+        if (!loop) return@LaunchedEffect
         while (true) {
             delay(intervalMillis)
             if (!pagerState.isScrollInProgress) {
@@ -679,8 +688,23 @@ fun AutoSlidingBanner(
                         easing = FastOutSlowInEasing
                     )
                 )
+                if (nextPage == pages.lastIndex) {
+                    pagerState.scrollToPage(1)
+                }
             }
         }
+    }
+    LaunchedEffect(pagerState) {
+        if (!loop) return@LaunchedEffect
+        snapshotFlow { pagerState.currentPage to pagerState.isScrollInProgress }
+            .collect { (page, scrolling) ->
+                if (!scrolling) {
+                    when (page) {
+                        0 -> pagerState.scrollToPage(image.size)
+                        pages.lastIndex -> pagerState.scrollToPage(1)
+                    }
+                }
+            }
     }
     HorizontalPager(
         state = pagerState,
@@ -705,6 +729,9 @@ fun AutoSlidingBanner(
             )
         }
     }
+    val selectedRealIndex =
+        if (loop) (pagerState.currentPage - 1 + image.size) % image.size
+        else pagerState.currentPage
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -714,7 +741,7 @@ fun AutoSlidingBanner(
     ) {
         PageIndicator(
             numberOfPages = image.size,
-            selectedPage = pagerState.currentPage,
+            selectedPage = selectedRealIndex,
             modifier = Modifier.padding(bottom = 2.dp),
             selectedColor = ColorStyle.PURPLE_400,
             defaultColor = ColorStyle.GRAY_400,
