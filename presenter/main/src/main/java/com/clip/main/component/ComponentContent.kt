@@ -342,10 +342,8 @@ fun HomeBannerUi(
     }
 
     val totals = remember { mutableStateMapOf<NotificationType, Int>() }
-    LaunchedEffect(Unit) {
-        if (totals.isEmpty()) {
-            totals.putAll(data.groupingBy { it.notificationBannerType }.eachCount())
-        }
+    if (totals.isEmpty()) {
+        totals.putAll(data.groupingBy { it.notificationBannerType }.eachCount())
     }
     val dismissed = remember { mutableStateMapOf<NotificationType, Int>() }
     val durationMs = 200

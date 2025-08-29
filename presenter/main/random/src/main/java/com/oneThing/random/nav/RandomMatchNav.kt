@@ -53,7 +53,7 @@ import com.oneThing.random.ui.RandomTmi
 import com.oneThing.random.ui.RandomTopic
 
 @Composable
-internal fun RandomMatchNav(
+fun RandomMatchNav(
     onBack: () -> Unit,
     loginPage: () -> Unit,
     viewModel: RandomMatchViewModel,

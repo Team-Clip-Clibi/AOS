@@ -150,6 +150,18 @@ enum class CATEGORY(val displayName: String) {
     }
 }
 
+enum class ROOT {
+    HOME,
+    ONE_THING,
+    RANDOM_MATCH,
+    EDIT_PROFILE,
+    REPORT,
+    GUIDE,
+    LOW,
+    ALARM,
+    FIRST_MATCH
+}
+
 val bottomNavItems = listOf(
     BottomView.Home,
     BottomView.MatchView,
@@ -159,15 +171,7 @@ val bottomNavItems = listOf(
 const val NAV_HOME = "home"
 const val MATCH = "match"
 const val NAV_MY = "my"
-const val NAV_GUIDE = "guide"
-const val NAV_EDIT_PROFILE = "MainEditProfile"
-const val NAV_REPORT = "report"
-const val NAV_LOW = "low"
-const val NAV_ALARM = "alarm"
-const val NAV_ONE_THING = "oneThing"
-const val NAV_FIRST_MATCH = "first_match"
 const val NAV_LOGIN = "Login"
-const val NAV_RANDOM_MATCH = "RandomMatch"
 
 const val ERROR_RE_LOGIN = "reLogin"
 const val ERROR_SAVE_ERROR = "save error"

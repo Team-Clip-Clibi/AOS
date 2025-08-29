@@ -52,7 +52,7 @@ import com.oneThing.first_matrch.ui.job.JobView
 import com.oneThing.first_matrch.ui.language.LanguageView
 
 @Composable
-internal fun FirstMatchNav(
+fun FirstMatchNav(
     viewModel: FirstMatchViewModel,
     goMatchPage: () -> Unit,
     home: () -> Unit,

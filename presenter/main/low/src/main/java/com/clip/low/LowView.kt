@@ -16,7 +16,7 @@ import com.clip.low.ui.CustomTopBar
 import com.clip.low.ui.low.LowMainView
 
 @Composable
-internal fun LowView(
+fun LowView(
     onBackClick: () -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
