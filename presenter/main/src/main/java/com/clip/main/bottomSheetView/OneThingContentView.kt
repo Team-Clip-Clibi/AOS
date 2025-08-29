@@ -1,5 +1,6 @@
 package com.clip.main.bottomSheetView
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -34,6 +36,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.util.lerp
 import com.clip.core.AppTextStyles
@@ -137,6 +142,13 @@ private fun OneThingContentPagerView(
     data: List<OneThingMap>,
     currentPage: MutableState<Int>,
 ) {
+
+    val windowInfo = LocalWindowInfo.current
+    val density = LocalDensity.current
+    val containerWidthDp = with(density) {
+        windowInfo.containerSize.width.toDp()
+    }
+    val sidePadding = ((containerWidthDp - 280.dp) / 2).coerceAtLeast(0.dp)
     val colors = listOf(
         ColorStyle.ORANGE_100, ColorStyle.GREEN_100, ColorStyle.BLUE_100, ColorStyle.YELLOW_100,
         ColorStyle.PURPLE_200, ColorStyle.CORAL_100, ColorStyle.MINT_100, ColorStyle.PINK_100
@@ -157,11 +169,9 @@ private fun OneThingContentPagerView(
     ) {
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp),
-                contentPadding = PaddingValues(20.dp),
-                pageSpacing = 12.dp
+                pageSize = PageSize.Fixed(280.dp),
+                contentPadding = PaddingValues(horizontal = sidePadding),
+                pageSpacing = 12.dp,
             ) { page ->
                 val item = data[page]
                 val bg = colors[page % colors.size]
