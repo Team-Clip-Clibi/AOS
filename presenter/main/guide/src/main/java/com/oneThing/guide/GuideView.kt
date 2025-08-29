@@ -37,7 +37,7 @@ import com.clip.core.ColorStyle
 import com.clip.core.TopAppbarClose
 
 @Composable
-internal fun GuideView(onClose: () -> Unit) {
+fun GuideView(onClose: () -> Unit) {
     Scaffold(topBar = {
         TopAppbarClose(
             title = stringResource(R.string.top_meet_guide),

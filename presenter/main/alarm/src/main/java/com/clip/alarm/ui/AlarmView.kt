@@ -21,7 +21,7 @@ import com.clip.alarm.component.CustomTopBar
 
 
 @Composable
-internal fun AlarmView(
+fun AlarmView(
     viewModel: AlarmViewModel,
     backClick: () -> Unit,
     reLogin : () -> Unit

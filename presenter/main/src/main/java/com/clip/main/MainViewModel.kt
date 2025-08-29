@@ -70,7 +70,7 @@ class MainViewModel @Inject constructor(
     private val setPermission: SetPermissionCheck,
     private val homeBanner: GetHomeBanner,
     private val notWriteReview: GetNotWriteReview,
-    private val reviewLater : WriteReviewLater
+    private val reviewLater: WriteReviewLater,
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow(MainViewState())
@@ -344,6 +344,12 @@ class MainViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun initFirstMatch() {
+        _userState.update { state ->
+            state.copy(firstMatch = UiState.Loading)
         }
     }
 
@@ -659,11 +665,7 @@ class MainViewModel @Inject constructor(
             state.copy(matchDetail = UiState.Loading)
         }
     }
-    fun setFirstMatchInit() {
-        _userState.update { state ->
-            state.copy(firstMatch = UiState.Loading)
-        }
-    }
+
 
     fun setUnAttendMember(data: String) {
         val currentItem = _userState.value

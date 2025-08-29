@@ -5,19 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.clip.signup.SignUpActivity
-import com.oneThing.first_matrch.FirstMatchActivity
-import com.oneThing.guide.GuideActivity
-import com.oneThing.random.RandomMatchActivity
-import com.clip.alarm.AlarmMainActivity
 import com.clip.billing.BillingActivity
 import com.clip.domain.model.Router
-import com.clip.editprofile.ProfileEditMainActivity
 import com.clip.login.LoginActivity
-import com.clip.low.ui.low.LowActivity
 import com.clip.main.MainActivity
-import com.clip.onethingmatch.OneThinMatchActivity
+import com.clip.onething.NAV_LOGIN
+import com.clip.onething.NAV_MAIN
+import com.clip.onething.NAV_PAY
+import com.clip.onething.NAV_PAY_FINISH
+
+import com.clip.onething.NAV_SIGN_UP
 import com.clip.pay_finish.PayFinishActivity
-import com.clip.report.ReportMainActivity
 
 /**
  * TODO ENUM 값으로 변경해라
@@ -25,71 +23,28 @@ import com.clip.report.ReportMainActivity
 class Router(private val context: Context) : Router {
     override fun navigation(target: String, args: Bundle) {
         when (target) {
-            "SignUp" -> {
+            NAV_SIGN_UP -> {
                 val intent = Intent(context, SignUpActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
             }
 
-            "Login" -> {
+            NAV_LOGIN -> {
                 val intent = Intent(context, LoginActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
             }
 
-            "Main" -> {
+            NAV_MAIN -> {
                 val intent = Intent(context, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 context.startActivity(intent)
             }
 
-            "MainEditProfile" -> {
-                val intent = Intent(context, ProfileEditMainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-            }
-
-            "report" -> {
-                val intent = Intent(context, ReportMainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-            }
-
-            "low" -> {
-                val intent = Intent(context, LowActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-            }
-
-            "alarm" -> {
-                val intent = Intent(context, AlarmMainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-            }
-
-            "oneThing" -> {
-                val intent = Intent(context, OneThinMatchActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-            }
-
-            "first_match" -> {
-                val intent = Intent(context, FirstMatchActivity::class.java).apply {
-                    putExtras(args)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-            }
-
-            "pay" -> {
+            NAV_PAY -> {
                 val intent = Intent(context, BillingActivity::class.java).apply {
                     putExtras(args)
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -100,7 +55,7 @@ class Router(private val context: Context) : Router {
                 }
             }
 
-            "pay_finish" -> {
+            NAV_PAY_FINISH -> {
                 val intent = Intent(context, PayFinishActivity::class.java).apply {
                     putExtras(args)
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -111,19 +66,6 @@ class Router(private val context: Context) : Router {
                 }
             }
 
-            "RandomMatch" -> {
-                val intent = Intent(context, RandomMatchActivity::class.java).apply {
-                    putExtras(args)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-            }
-            "guide" -> {
-                val intent = Intent(context, GuideActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-            }
             else -> {
                 throw IllegalArgumentException("Unsupported target: $target")
             }

@@ -13,7 +13,7 @@ import com.clip.report.ui.content.ContentView
 import com.clip.report.ui.main.ReportView
 
 @Composable
-internal fun ReportNav(
+fun ReportNav(
     viewModel: ReportViewModel,
     onProfilePage: () -> Unit,
 ) {

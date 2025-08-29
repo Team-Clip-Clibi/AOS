@@ -150,9 +150,16 @@ enum class CATEGORY(val displayName: String) {
     }
 }
 
-enum class NAV_ROOT {
+enum class ROOT {
     HOME,
-    ONE_THING
+    ONE_THING,
+    RANDOM_MATCH,
+    EDIT_PROFILE,
+    REPORT,
+    GUIDE,
+    LOW,
+    ALARM,
+    FIRST_MATCH
 }
 
 val bottomNavItems = listOf(

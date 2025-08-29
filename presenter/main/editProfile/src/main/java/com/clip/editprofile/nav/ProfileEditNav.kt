@@ -21,7 +21,7 @@ import com.clip.editprofile.ui.loveState.LoveStateView
 import com.clip.editprofile.ui.signout.SignOutView
 
 @Composable
-internal fun ProfileEditNav(
+fun ProfileEditNav(
     viewModel: ProfileEditViewModel,
     goToLoginPage: () -> Unit,
     goToMainPage: () -> Unit,

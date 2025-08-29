@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!--    <uses-permission android:name="android.permission.INTERNET"/>-->
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -32,8 +31,10 @@
             tools:replace="android:theme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="oauth"
                     android:scheme="kakao4d1dbfdfed5d66ba9fe3aef7eb4e0dca" />
@@ -49,25 +50,6 @@
             android:name="com.clip.main.MainActivity"
             android:exported="true" />
 
-        <activity
-            android:name="com.clip.editprofile.ProfileEditMainActivity"
-            android:exported="true" />
-
-        <activity
-            android:name="com.clip.report.ReportMainActivity"
-            android:exported="true" />
-
-        <activity
-            android:name="com.clip.low.ui.low.LowActivity"
-            android:exported="true" />
-
-        <activity
-            android:name="com.clip.alarm.AlarmMainActivity"
-            android:exported="true" />
-
-        <activity
-            android:name="com.clip.onethingmatch.OneThinMatchActivity"
-            android:exported="true" />
 
         <activity
             android:name="com.clip.billing.BillingActivity"
@@ -83,17 +65,6 @@
             android:name="com.clip.pay_finish.PayFinishActivity"
             android:exported="false" />
 
-        <activity
-            android:name="com.oneThing.first_matrch.FirstMatchActivity"
-            android:exported="true" />
-
-        <activity
-            android:name="com.oneThing.random.RandomMatchActivity"
-            android:exported="true" />
-
-        <activity
-            android:name="com.oneThing.guide.GuideActivity"
-            android:exported="true" />
 
         <service
             android:name="com.clip.fcm.FirebaseMessage"
