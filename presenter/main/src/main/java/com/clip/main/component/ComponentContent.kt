@@ -667,7 +667,6 @@ fun AutoSlidingBanner(
     scrollDuration: Int = 500,
 ) {
     if (image.isEmpty()) return
-
     val loop = image.size > 1
     val pages = if (loop) listOf(image.last()) + image + listOf(image.first()) else image
     val initialPage = if (loop) 1 else 0
@@ -680,20 +679,21 @@ fun AutoSlidingBanner(
         while (true) {
             delay(intervalMillis)
             if (!pagerState.isScrollInProgress) {
-                val nextPage = (pagerState.currentPage + 1) % image.size
+                val next = pagerState.currentPage + 1
                 pagerState.animateScrollToPage(
-                    page = nextPage,
+                    page = next,
                     animationSpec = tween(
                         durationMillis = scrollDuration,
                         easing = FastOutSlowInEasing
                     )
                 )
-                if (nextPage == pages.lastIndex) {
+                if (next == pages.lastIndex) {
                     pagerState.scrollToPage(1)
                 }
             }
         }
     }
+
     LaunchedEffect(pagerState) {
         if (!loop) return@LaunchedEffect
         snapshotFlow { pagerState.currentPage to pagerState.isScrollInProgress }
@@ -706,6 +706,7 @@ fun AutoSlidingBanner(
                 }
             }
     }
+
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxWidth(),
@@ -719,7 +720,7 @@ fun AutoSlidingBanner(
             val context = LocalContext.current
             AsyncImage(
                 model = ImageRequest.Builder(context)
-                    .data(image[page].image)
+                    .data(pages[page].image) // pages 사용
                     .crossfade(true)
                     .build(),
                 contentDescription = "banner",
@@ -729,9 +730,11 @@ fun AutoSlidingBanner(
             )
         }
     }
+
     val selectedRealIndex =
         if (loop) (pagerState.currentPage - 1 + image.size) % image.size
         else pagerState.currentPage
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -749,6 +752,7 @@ fun AutoSlidingBanner(
         )
     }
 }
+
 
 
 @Composable

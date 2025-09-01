@@ -14,10 +14,15 @@ import kotlinx.coroutines.flow.flow
 import java.time.Duration
 import java.time.ZonedDateTime
 import javax.inject.Inject
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.isActive
+import java.util.concurrent.atomic.AtomicReference
 
 class DeviceImpl @Inject constructor(@ApplicationContext private val application: Context) :
     Device {
-
+    private val activeMonitorJob = AtomicReference<Job?>(null)
     override suspend fun requestVibrate() {
         val vibrator = application.getSystemService(Vibrator::class.java)
         val vibrationEffect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
@@ -25,7 +30,7 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
     }
 
     override suspend fun getOsVersion(): Int {
-        return when(android.os.Build.VERSION.SDK_INT){
+        return when (android.os.Build.VERSION.SDK_INT) {
             29 -> 10
             30 -> 11
             31, 32 -> 12
@@ -37,11 +42,11 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
     }
 
     override suspend fun checkTossInstall(): Boolean {
-        return try{
+        return try {
             application.packageManager.getPackageInfo("viva.republica.toss", 0)
             true
-        }catch (e : PackageManager.NameNotFoundException){
-            Log.d(javaClass.name.toString() , "error message : ${e.printStackTrace()}")
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.d(javaClass.name.toString(), "error message : ${e.printStackTrace()}")
             false
         }
     }
@@ -52,15 +57,14 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
         meetType: String,
     ): Flow<MatchTriggerDTO> = flow {
         val targetTime = ZonedDateTime.parse(meetTime)
+        val thisJob = currentCoroutineContext()[Job]!!
+        activeMonitorJob.getAndSet(thisJob)
+            ?.cancel(CancellationException("superseded by new monitor request"))
         var timeUpEmitted = false
-
-        while (true) {
+        while (currentCoroutineContext().isActive) {
             val now = ZonedDateTime.now()
             val secondsDiff = Duration.between(targetTime, now).seconds
-            Log.d(
-                javaClass.name,
-                "Meeting ID: $meetId 지난 시간: $secondsDiff 초"
-            )
+            Log.d(javaClass.name, "Meeting ID: $meetId 지난 시간: $secondsDiff 초")
             if (!timeUpEmitted && secondsDiff >= 0) {
                 requestVibrate()
                 emit(
@@ -73,6 +77,7 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
                 )
                 timeUpEmitted = true
             }
+
             if (timeUpEmitted && secondsDiff >= 120) {
                 emit(
                     MatchTriggerDTO(
@@ -86,7 +91,6 @@ class DeviceImpl @Inject constructor(@ApplicationContext private val application
             }
             delay(1000L)
         }
+        activeMonitorJob.compareAndSet(thisJob, null)
     }
-
-
 }
